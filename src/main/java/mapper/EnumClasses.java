@@ -1,0 +1,615 @@
+package mapper;
+
+import org.neo4j.graphdb.RelationshipType;
+
+/**
+ * Suggestions, bug reports, etc. please contact: son.nguyen@tum.de
+ *
+ */
+public class EnumClasses {
+	public enum PointRelTypes implements RelationshipType {
+
+	}
+
+	public enum GMLRelTypes implements RelationshipType {
+		HREF_FEATURE, // for multi threaded chunk reading
+
+		INHERITS,
+
+		LOD_REPRESENTATION,
+		GEOMETRY_PROPERTY,
+		EXTERIOR,
+		LOD_GEOMETRY,
+		LIST_MEMBER,
+
+		// AbstractGML
+		ID,
+		DESCRIPTION,
+		NAME,
+		CODE,
+		META_DATA_PROPERTY,
+		LOCAL_PROPERTIES,
+		PARENT,
+
+		// AbstractGeometry
+		ABSTRACT_GEOMETRY,
+		GID,
+		SRS_DIMENSION,
+		SRS_NAME,
+		AXIS_LABELS,
+		UOM_LABELS,
+
+		// Association
+		OBJECT,
+
+		// AbstractSurfacePatch
+		INTERPOLATION,
+
+		// AbstractCurve, Solid, Surface
+		CURVE_MEMBER,
+		SOLID_MEMBER,
+		SURFACE_MEMBER,
+		SEGMENTS,
+
+		// MultiCurve
+		CURVE_MEMBERS,
+
+		// AbstractCurveSegment
+		NUM_DERIVATIVE_AT_START,
+		NUM_DERIVATIVE_AT_END,
+		NUM_DERIVATIVE_INTERIOR,
+
+		// GeometricComplex
+		ELEMENT,
+
+		// Grid
+		LIMITS,
+		AXIS_NAME,
+		DIMENSION,
+		GRID_ENVELOPE,
+		LOW,
+		HIGH,
+
+		// LinearRing
+		CONTROL_POINTS,
+		POS_LIST,
+		COORDINATES,
+		COORD,
+
+		// DirectPosition
+		VALUE,
+
+		// DirectPositionList
+		COUNT,
+
+		// Coordinates
+		DECIMAL,
+		CS,
+		TS,
+
+		// Coord
+		X,
+		Y,
+		Z,
+
+		// PosOrPointPropertyOrPointRep, OrCoord
+		POS,
+		POINT_PROPERTY,
+		POINT_PEP,
+
+		// MultiGeometry
+		GEOMETRY_MEMBER,
+		GEOMETRY_MEMBERS,
+
+		// MultiLineString
+		LINE_STRING_MEMBER,
+
+		// MultiPoint
+		POINT_MEMBER,
+		POINT_MEMBERS,
+
+		// MultiPolygon
+		POLYGON_MEMBER,
+
+		// MultiSolid
+		SOLID_MEMBERS,
+
+		// MultiSurface
+		SURFACE_MEMBERS,
+
+		// OrientableCurve, Surface
+		BASE_CURVE,
+		ORIENTATION,
+		BASE_SURFACE,
+
+		// _TexturedSurface
+		APPEARANCE,
+		MODULE,
+
+		// Polygon
+		INTERIOR,
+
+		// RectifiedGrid
+		ORIGIN,
+		OFFSET_VECTOR,
+
+		// Surface
+		PATCHES,
+
+		// Tin
+		STOP_LINES,
+		BREAK_LINES,
+		MAX_LENGTH,
+		CONTROL_POINT,
+
+		// Measure
+		UOM,
+
+		// ControlPoint
+		GEOMETRIC_POSITION_GROUP,
+
+		// AbstractBoundarySurface
+		LOD2_MULTI_SURFACE,
+		LOD3_MULTI_SURFACE,
+		LOD4_MULTI_SURFACE,
+		OPENING,
+		ADE,
+
+		// AbstractBuilding
+		FUNCTION,
+		USAGE,
+		YEAR_OF_CONSTRUCTION,
+		YEAR_OF_DEMOLITION,
+		ROOF_TYPE,
+		MEASURED_HEIGHT,
+		STOREYS_ABOVE_GROUND,
+		STOREYS_BELOW_GROUND,
+		STOREY_HEIGHTS_ABOVE_GROUND,
+		STOREY_HEIGHTS_BELOW_GROUND,
+		LOD1_SOLID,
+		LOD2_SOLID,
+		LOD3_SOLID,
+		LOD4_SOLID,
+		LOD1_TERRAIN_INTERSECTION,
+		LOD2_TERRAIN_INTERSECTION,
+		LOD3_TERRAIN_INTERSECTION,
+		LOD4_TERRAIN_INTERSECTION,
+		LOD2_MULTI_CURVE,
+		LOD3_MULTI_CURVE,
+		LOD4_MULTI_CURVE,
+		LOD0_FOOT_PRINT,
+		LOD0_ROOF_EDGE,
+		LOD1_MULTI_SURFACE,
+		OUTER_BUILDING_INSTALLATION,
+		INTERIOR_BUILDING_INSTALLATION,
+		BOUNDED_BY_SURFACE,
+		BUILDING_PART,
+		INTERIOR_ROOM,
+		ADDRESS,
+
+		// DoubleOrNullList
+		DOUBLE_OR_NULL,
+
+		// DoubleOrNull
+		_DOUBLE,
+		_NULL,
+
+		// FeatureProperty<>
+		GENERIC_ADE_COMPONENT,
+
+		// AbstractCityObject
+		CREATION_DATE,
+		TERMINATION_DATE,
+		EXTERNAL_REFERENCE,
+		GENERIC_ATTRIBUTE,
+		GENERALIZES_TO,
+		RELATIVE_TO_TERRAIN,
+		RELATIVE_TO_WATER,
+
+		// ExternalReference
+		INFORMATION_SYSTEM,
+		EXTERNAL_OBJECT,
+
+		// ExternalObject
+		URI,
+
+		// AbstractCoverage
+		RANGE_SET,
+
+		// RangeSet
+		VALUE_ARRAY,
+		SCALAR_VALUE_LIST,
+		DATA_BLOCK,
+		FILE,
+
+		// ScalarValueList
+		BOOLEAN_LIST,
+		CATEGORY_LIST,
+		QUANTITY_LIST,
+		COUNT_LIST,
+
+		// BooleanOrNullList
+		BOOLEAN_OR_NULL,
+
+		// BooleanOrNull
+		_BOOLEAN,
+
+		// CodeOrNullList
+		NAME_OR_NULL,
+		CODE_SPACE,
+
+		// IntegerOrNullList
+		INTEGER_OR_NULL,
+
+		// IntegerOrNull
+		_INTEGER,
+
+		// DataBlock
+		RANGE_PARAMETERS,
+		TUPLE_LIST,
+		DOUBLE_OR_NULL_TUPLE_LIST,
+
+		// File,
+		FILE_NAME,
+		FILE_STRUCTURE,
+		MIME_TYPE,
+		COMPRESSION,
+
+		// CoverageFunction
+		MAPPING_RULE,
+		GRID_FUNCTION,
+
+		// GridFunction
+		SEQUENCE_RULE,
+		START_POINT,
+
+		// SequenceRule
+		ORDER,
+
+		// AbstractDiscreteCoverage
+		COVERAGE_FUNCTION,
+
+		// AbstractFeature
+		BOUNDED_BY,
+		LOCATION,
+
+		// BoundingShape
+		ENVELOPE,
+
+		// Envelope
+		LOWER_CORNER,
+		UPPER_CORNER,
+
+		// LocationProperty
+		LOCATION_KEYWORD,
+		LOCATION_STRING,
+
+		// AbstractFeatureCollection
+		FEATURE_MEMBER,
+		FEATURE_MEMBERS,
+
+		// Building.AbstractOpening
+		LOD3_IMPLICIT_REPRESENTATION,
+		LOD4_IMPLICIT_REPRESENTATION,
+
+		// AbstractReliefComponent
+		LOD,
+		EXTENT,
+
+		// AbstractSurfaceData
+		IS_FRONT,
+
+		// AbstractTexture
+		IMAGE_URI,
+		TEXTURE_TYPE,
+		WRAP_MODE,
+		BORDER_COLOR,
+
+		// ColorPlusOpacity
+		COLOR,
+		OPACITY,
+
+		// Color
+		RED,
+		GREEN,
+		BLUE,
+
+		// Appearance
+		THEME,
+		SURFACE_DATA_MEMBER,
+
+		// GeoreferencedTexture
+		PREFER_WORLD_FILE,
+		REFERENCE_POINT,
+		TARGET,
+
+		// TransformationMatrix2x2
+		MATRIX,
+
+		// Matrix
+		NR_OF_COLS,
+		NR_OF_ROWS,
+		MATRIX_CONTENT,
+
+		// X3DMaterial
+		AMBIENT_INTENSITY,
+		DIFFUSE_COLOR,
+		EMISSIVE_COLOR,
+		SPECULAR_COLOR,
+		SHININESS,
+		TRANSPARENCY,
+		IS_SMOOTH,
+
+		// Building
+		CLAZZ,
+		LOD4_GEOMETRY,
+
+		// BuildingInstallation
+		LOD2_GEOMETRY,
+		LOD3_GEOMETRY,
+		LOD2_IMPLICIT_REPRESENTATION,
+
+		// Room
+		INTERIOR_FURNITURE,
+		ROOM_INSTALLATION,
+
+		// CityFurniture
+		LOD1_GEOMETRY,
+		LOD1_IMPLICIT_REPRESENTATION,
+
+		// CityObjectGroup
+		GROUP_MEMBER,
+		GROUP_PARENT,
+		GEOMETRY,
+
+		// CityObjectGroupMember
+		GROUP_ROLE,
+
+		// Address
+		XAL_ADDRESS,
+		MULTI_POINT,
+
+		// CityModel
+		CITY_OBJECT_MEMBER,
+		APPERANCE_MEMBER,
+
+		// GenericCityObject
+		LOD0_GEOMETRY,
+		LOD0_TERRAIN_INTERSECTION,
+		LOD0_IMPLICIT_REPRESENTATION,
+
+		// LandUse
+		LOD0_MULTI_SURFACE,
+
+		// BreakLineRelief
+		RIDGE_OR_VALLEY_LINES,
+
+		// CompositeValue
+		VALUE_COMPONENT,
+		VALUE_COMPONENTS,
+
+		// TextCoordGen
+		WORLD_TO_TEXTURE,
+
+		// TextCoordList,
+		TEXTURE_COORDINATES,
+
+		// TextureCoordinates
+		RING,
+
+		// ImpliciteGeometry
+		TRANSFORMATION_MATRIX,
+		LIBRARY_OBJECT,
+		RELATIVE_GEOMETRY,
+
+		// _SimpleTexture
+		TEXTURE_MAP,
+		_TEXTURE_TYPE,
+		REPEAT,
+
+		// ADEComponent
+		CONTENT,
+
+		// Value
+		VALUE_OBJECT,
+		GENEREIC_VALUE_OBJECT,
+
+		// ValueObject
+		SCALAR_VALUE,
+		VALUE_EXTENT,
+		COMPOSITE_VALUE,
+
+		// ScalarValue
+		CATEGORY,
+		QUANTITY,
+
+		// ValueExtent
+		CATEGORY_EXTENT,
+		QUANTITY_EXTENT,
+		COUNT_EXTENT,
+
+		// Tester
+		OLD_CITY_MODEL,
+		NEW_CITY_MODEL,
+
+		// Module
+		DEPENDENCIES,
+		ELEMENT_MAP,
+		PROPERTY_SET,
+
+		// Relief
+		RELIEF_POINTS,
+		GRID,
+		TIN,
+
+		// HollowSpace
+		HOLLOW_SPACE_INSTALLATION,
+
+		// ReliefFeature
+		RELIEF_COMPONENT,
+
+		// RectifiedGridCoverage
+		RECTIFIED_GRID_DOMAIN,
+
+		// AddressDetails
+		POSTAL_SERVICE_ELEMENTS,
+		ADDRESS_LINES,
+		COUNTRY,
+		ADMINISTRATIVE_AREA,
+		LOCALITY,
+		THOROUGHFARE,
+
+		// AddressLines
+		ADDRESS_LINE,
+
+		// AdministrativeArea
+		ADMINISTRATIVE_AREA_NAME,
+		SUB_ADMINISTRATIVE_AREA,
+		POST_OFFICE,
+		POSTAL_CODE,
+
+		// Code
+		MODEL_TYPE,
+
+		// StringOrRef
+		ACTUATE,
+		ARCROLE,
+		HREF,
+		REMOTE_SCHEMA,
+		ROLE,
+		SHOW,
+		TITLE,
+		TYPE,
+
+		// MetaDataProperty
+		ABOUT,
+
+		// AbstractModule
+		VERSION,
+		NAMESPACE_URI,
+		NAMESPACE_PREFIX,
+		SCHEMA_LOCATION,
+
+		// Country
+		COUNTRY_NAME_CODE,
+		COUNTRY_NAME,
+
+		// Department
+		DEPARTMENT_NAME,
+		MAIL_STOP,
+
+		// DependentLocality
+		DEPENDENT_LOCALITY_NAME,
+		DEPENDENT_LOCALITY_NUMBER,
+		POST_BOX,
+		LARGE_MAIL_USER,
+		POSTAL_ROUTE,
+		PREMISE,
+		DEPENDENT_LOCALITY,
+
+		// DependentThoroughfare
+		THOROUGHFARE_NAME,
+		THOROUGHFARE_PRE_DIRECTION,
+		THOROUGHFARE_POST_DIRECTION,
+		THOROUGHFARE_LEADING_TYPE,
+		THOROUGHFARE_TRAILING_TYPE,
+
+		// Firm
+		FIRM_NAME,
+		DEPARTMENT,
+
+		// IndexMap
+		LOOKUP_TABLE,
+
+		// LargeMailUser
+		LARGE_MAIL_USER_NAME,
+		BUILDING_NAME,
+		LARGE_MAIL_USER_IDENTIFIER,
+
+		// Locality
+		LOCALITY_NAME,
+
+		// MailStop
+		MAIL_STOP_NAME,
+		MAIL_STOP_NUMBER,
+
+		// PosOrPointPropertyOrPointRep
+		POINT_REP,
+
+		// PostalCode
+		POSTAL_CODE_NUMBER,
+		POSTAL_CODE_NUMBER_EXTENSION,
+		POST_TOWN,
+
+		// PostalRoute
+		POSTAL_ROUTE_NAME,
+		POSTAL_ROUTE_NUMBER,
+
+		// PostalServiceElements
+		ADDRESS_INDETIFIER,
+		ENDORSEMENT_LINE_CODE,
+		KEY_LINE_CODE,
+		BARCODE,
+		SORTING_CODE,
+		ADDRESS_LATITUDE,
+		ADDRESS_LATITUDE_DIRECTION,
+		ADDRESS_LONGITUDE,
+		ADDRESS_LONGITUDE_DIRECTION,
+		SUPPLEMENTARY_POSTAL_SERVICE_DATA,
+
+		// PostBox
+		POST_BOX_NUMBER,
+		POST_BOX_NUMBER_PREFIX,
+		POST_BOX_NUMBER_SUFFIX,
+		POST_BOX_NUMBER_EXTENSION,
+		FIRM,
+
+		// PostOffice
+		POST_OFFICE_NAME,
+		POST_OFFICE_NUMBER,
+
+		// PostTown
+		POST_TOWN_NAME,
+		POST_TOWN_SUFFIX,
+
+		// Premise
+		PREMISE_NAME,
+		PREMISE_NUMBER,
+		PREMISE_NUMBER_PREFIX,
+		PREMISE_NUMBER_SUFFIX,
+		SUB_PREMISE,
+		PREMISE_LOCATION,
+		PREMISE_NUMBER_RANGE,
+
+		// PremiseNumberRange
+		PREMISE_NUMBER_RANGE_FROM,
+		PREMISE_NUMBER_RANGE_TO,
+
+		// SubAdministrativeArea
+		SUB_ADMINISTRATIVE_AREA_NAME,
+
+		// SubPremise
+		SUB_PREMISE_NAME,
+		SUB_PREMISE_NUMBER,
+		SUB_PREMISE_NUMBER_PREFIX,
+		SUB_PREMISE_NUMBER_SUFFIX,
+		SUB_PREMISE_LOCATION,
+
+		// Thoroughfare
+		NUMBER_OR_RANGE,
+		THOROUGHFARE_NUMBER_PREFIX,
+		THOROUGHFARE_NUMBER_SUFFIX,
+		DEPENDENT_THOROUGHFARE,
+
+		// ThoroughfareNumberFromContent
+		THOROUGHFARE_NUMBER,
+
+		// ThoroughfareNumberOrRange
+		THOROUGHFARE_NUMBER_RANGE,
+
+		// ThoroughfareNumberRange
+		THOROUGHFARE_NUMBER_FROM,
+		THOROUGHFARE_NUMBER_TO,
+
+	}
+}

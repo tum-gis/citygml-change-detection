@@ -1,0 +1,1217 @@
+node {
+  diameter: 50px;
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  border-width: 2px;
+  text-color-internal: #FFFFFF;
+  font-size: 10px;
+}
+
+relationship {
+  color: #A5ABB6;
+  shaft-width: 1px;
+  font-size: 8px;
+  padding: 3px;
+  text-color-external: #000000;
+  text-color-internal: #FFFFFF;
+  caption: '<type>';
+}
+
+node.Building {
+  color: #68BDF6;
+  border-color: #5CA8DB;
+  text-color-internal: #FFFFFF;
+  caption: '{name}';
+}
+
+node.Surface {
+  color: #6DCE9E;
+  border-color: #60B58B;
+  text-color-internal: #FFFFFF;
+  caption: '{gmlid}';
+}
+
+node.BUILDING_GROUND_SURFACE {
+  color: #FF756E;
+  border-color: #E06760;
+  text-color-internal: #FFFFFF;
+  caption: '{gmlid}';
+}
+
+node.BUILDING_WALL_SURFACE {
+  color: #DE9BF9;
+  border-color: #BF85D6;
+  text-color-internal: #FFFFFF;
+  caption: '{gmlid}';
+}
+
+node.BUILDING_ROOF_SURFACE {
+  color: #FB95AF;
+  border-color: #E0849B;
+  text-color-internal: #FFFFFF;
+  caption: '{gmlid}';
+}
+
+node.BUILDING {
+  color: #6DCE9E;
+  border-color: #60B58B;
+  text-color-internal: #FFFFFF;
+  caption: '{name}';
+}
+
+node.MULTI_SURFACE_PROPERTY {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.MULTI_SURFACE {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.POLYGON {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.SURFACE_PROPERTY {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.LINEAR_RING {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.EXTERIOR {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.DIRECT_POSITION_LIST {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{srsDimension}';
+}
+
+node.Person {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{info}';
+}
+
+node.Mitte {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{mit}';
+}
+
+node.User {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{username}';
+}
+
+node.ROOT {
+  color: #68BDF6;
+  border-color: #5CA8DB;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.BUILDING_BOUNDARY_SURFACE_PROPERTY {
+  color: #FFD86E;
+  border-color: #EDBA39;
+  text-color-internal: #604A0E;
+  caption: '{gmlid}';
+}
+
+node.STRING_OR_REF {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{title}';
+}
+
+node.XLINK_ACTUATE {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{value}';
+}
+
+node.XLINK_SHOW {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{value}';
+}
+
+node.XLINK_TYPE {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{value}';
+}
+
+node.MODEL_OBJECT {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.MODEL_TYPE {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{value}';
+}
+
+node.CODE_OR_NULL_LIST {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.CODE {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{value}';
+}
+
+node.META_DATA_PROPERTY_OR_NULL_LIST {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.META_DATA {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.BOUNDING_SHAPE {
+  color: #FB95AF;
+  border-color: #E0849B;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.LOCATION_PROPERTY {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.GREGORIAN_CALENDAR {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.EXTERNAL_REFERENCE_OR_NULL_LIST {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.ABSTRACT_GENERIC_ATTRIBUTE_OR_NULL_LIST {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.GENERALIZATION_RELATION_OR_NULL_LIST {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.RELATIVE_TO_TERRAIN {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.RELATIVE_TO_WATER {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.APPEARANCE_PROPERTY_OR_NULL_LIST {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.LENGTH {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{uom}';
+}
+
+node.MEASURE_OR_NULL_LIST {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{uom}';
+}
+
+node.DOUBLE_OR_NULL_INTERNAL_LIST {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.DOUBLE_OR_NULL {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{_double}';
+}
+
+node.NULL {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.SOLID_PROPERTY {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.MULTI_CURVE_PROPERTY {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.BUILDING_INSTALLATION_PROPERTY_OR_NULL_LIST {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.BOUNDARY_SURFACE_PROPERTY_OR_NULL_LIST {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.ABSTRACT_BUILDING_BOUNDARY_SURFACE {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{id}';
+}
+
+node.STRING_OR_NULL_LIST {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.SURFACE_PROPERTY_OR_NULL_LIST {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.ABSTRACT_SURFACE {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{title}';
+}
+
+node.SURFACE_ARRAY_PROPERTY {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.OPENING_PROPERTY_OR_NULL_LIST {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.BUILDING_MODULE {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{version}';
+}
+
+node.BUILDING_PART_PROPERTY_OR_NULL_LIST {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.INTERIOR_ROOM_PROPERTY_OR_NULL_LIST {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.ADDRESS_PROPERTY_OR_NULL_LIST {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.ABSTRACT_FEATURE_COLLECTION {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.LIST {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.Core {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.STRING {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{value}';
+}
+
+node.ENVELOPE {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.ABSTRACT_FEATURE {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.INTEGER {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{value}';
+}
+
+node.DOUBLE {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{value}';
+}
+
+node.FEATURE_PROPERTY {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+relationship.BOUNDED_BY_SURFACE {
+  color: #FFD86E;
+  border-color: #EDBA39;
+  text-color-internal: #604A0E;
+}
+
+relationship.YEAR_OF_CONSTRUCTION {
+  color: #68BDF6;
+  border-color: #5CA8DB;
+  text-color-internal: #FFFFFF;
+}
+
+relationship.SURFACE_MEMBER {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+}
+
+node.DIRECT_POSITION {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.CITY_MODEL {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.CITY_OBJECT_MEMBER {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+relationship.GRAPH_DATABASE {
+  color: #68BDF6;
+  border-color: #5CA8DB;
+  text-color-internal: #FFFFFF;
+  shaft-width: 38px;
+}
+
+node.ASSOCIATION_BY_REP_OR_REF {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.ASSOCIATION_BY_REP {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.ABSTRACT_BUILDING {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.MEASURE {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.DOUBLE_OR_NULL_LIST {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.ABSTRACT_SITE {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.ABSTRACT_CITY_OBJECT {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.ABSTRACT_GML {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.GEOMETRY_PROPERTY {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.ABSTRACT_RING_PROPERTY {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.INLINE_GEOMETRY_PROPERTY {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.ABSTRACT_RING {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.ABSTRACT_GEOMETRY {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.ABSTRACT_GEOMETRIC_PRIMITIVE {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.ABSTRACT_GEOMETRIC_AGGREGATE {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+relationship.ID {
+  color: #FFD86E;
+  border-color: #EDBA39;
+  text-color-internal: #604A0E;
+}
+
+node.CORE_MODULE {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.ABSTRACT_CITY_GML_MODULE {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.ABSTRACT_MODULE {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.MODULE {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.HASH_MAP {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{Address}';
+}
+
+node.GML_CORE_MODULE {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{schemaLocation}';
+}
+
+node.ABSTRACT_GML_MODULE {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.XAL_CORE_MODULE {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+relationship.NEW_CITY_MODEL {
+  color: #68BDF6;
+  border-color: #5CA8DB;
+  text-color-internal: #FFFFFF;
+  shaft-width: 13px;
+}
+
+relationship.OLD_CITY_MODEL {
+  color: #68BDF6;
+  border-color: #5CA8DB;
+  text-color-internal: #FFFFFF;
+  shaft-width: 13px;
+}
+
+node.ROOT_MAPPER {
+  color: #68BDF6;
+  border-color: #5CA8DB;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+  diameter: 80px;
+}
+
+node.ROOT_MATCHER {
+  color: #68BDF6;
+  border-color: #5CA8DB;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+  diameter: 80px;
+}
+
+node.UPDATE {
+  color: #68BDF6;
+  border-color: #5CA8DB;
+  text-color-internal: #FFFFFF;
+  caption: '{propertyName}';
+}
+
+relationship.CONSISTS_OF {
+  color: #6DCE9E;
+  border-color: #60B58B;
+  text-color-internal: #FFFFFF;
+  caption: '<type>';
+  shaft-width: 2px;
+}
+
+relationship.OLD_NODE {
+  color: #6DCE9E;
+  border-color: #60B58B;
+  text-color-internal: #FFFFFF;
+  shaft-width: 2px;
+}
+
+relationship.NEW_NODE {
+  shaft-width: 2px;
+  color: #6DCE9E;
+  border-color: #60B58B;
+  text-color-internal: #FFFFFF;
+}
+
+node.DELETE {
+  color: #FF756E;
+  border-color: #E06760;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.INSERT {
+  color: #6DCE9E;
+  border-color: #60B58B;
+  text-color-internal: #FFFFFF;
+  caption: '{propertyName}';
+}
+
+node.UPDATE_PROPERTY {
+  color: #68BDF6;
+  border-color: #5CA8DB;
+  text-color-internal: #FFFFFF;
+  caption: '{propertyName}';
+}
+
+node.DELETE_PROPERTY {
+  color: #FF756E;
+  border-color: #E06760;
+  text-color-internal: #FFFFFF;
+  caption: '{propertyName}';
+}
+
+node.INSERT_PROPERTY {
+  color: #6DCE9E;
+  border-color: #60B58B;
+  text-color-internal: #FFFFFF;
+  caption: '{propertyName}';
+}
+
+node.DELETE_NODE {
+  color: #FF756E;
+  border-color: #E06760;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.INSERT_NODE {
+  color: #6DCE9E;
+  border-color: #60B58B;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.WARNING_DUPLICATE_NODE {
+  color: #DE9BF9;
+  border-color: #BF85D6;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.WARNING_REP_CHANGED_PROPERTY {
+  color: #FFD86E;
+  border-color: #EDBA39;
+  text-color-internal: #604A0E;
+  caption: '{propertyName}';
+}
+
+node.WARNING_DUPLICATED_NODE {
+  color: #FFD86E;
+  border-color: #EDBA39;
+  text-color-internal: #604A0E;
+  caption: '{message}';
+}
+
+node.INTERIOR {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+relationship.NODE {
+  color: #6DCE9E;
+  border-color: #60B58B;
+  text-color-internal: #FFFFFF;
+  shaft-width: 2px;
+}
+
+node.POS_OR_POINT_PROPERTY_OR_POINT_REP {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.POINT_PROPERTY {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.POINT {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{id}';
+}
+
+node.SOLID {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{id}';
+}
+
+node.COMPOSITE_SURFACE {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{id}';
+}
+
+node.MULTI_CURVE {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.CURVE_PROPERTY {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.LINE_STRING {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.EXTERNAL_REFERENCE {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{informationSystem}';
+}
+
+node.EXTERNAL_OBJECT {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{name}';
+}
+
+node.STRING_ATTRIBUTE {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{name}';
+}
+
+node.GENERICS_MODULE {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{schemaLocation}';
+}
+
+node.ROOT_XLINK {
+  color: #68BDF6;
+  border-color: #5CA8DB;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+  diameter: 80px;
+}
+
+node.XLINK {
+  color: #DE9BF9;
+  border-color: #BF85D6;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+relationship.XLINK_MATCHED {
+  color: #6DCE9E;
+  border-color: #60B58B;
+  text-color-internal: #FFFFFF;
+  shaft-width: 2px;
+}
+
+node.ROOT_TMP {
+  color: #68BDF6;
+  border-color: #5CA8DB;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+  diameter: 80px;
+}
+
+node.CONTENT_MATCHED {
+  color: #DE9BF9;
+  border-color: #BF85D6;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.GEOMETRY_MATCHED {
+  color: #FFD86E;
+  border-color: #EDBA39;
+  text-color-internal: #604A0E;
+  caption: '<id>';
+}
+
+relationship.CONTENT_MATCHED {
+  color: #6DCE9E;
+  border-color: #60B58B;
+  text-color-internal: #FFFFFF;
+}
+
+node.CITY_GML {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.BUILDING_PART {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{id}';
+}
+
+node.DOUBLE_ATTRIBUTE {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{name}';
+}
+
+node.ADDRESS_PROPERTY {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{href}';
+}
+
+node.ADDRESS {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.XAL_ADDRESS_PROPERTY {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.ADDRESS_DETAILS {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.COUNTRY {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.COUNTRY_NAME {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{content}';
+}
+
+node.LOCALITY {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{type}';
+}
+
+node.LOCALITY_NAME {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{content}';
+}
+
+node.THOROUGHFARE {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{type}';
+}
+
+node.POSTAL_CODE {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.BUILDING_PART_PROPERTY {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.ROOT_EDITOR {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.RELIEF_FEATURE {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{lod}';
+}
+
+node.TIN_RELIEF {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{lod}';
+}
+
+node.RELIEF_COMPONENT_PROPERTY {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.TIN_PROPERTY {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.TRIANGULATED_SURFACE {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{id}';
+}
+
+node.TRIANGLE_PATCH_ARRAY_PROPERTY {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.TRIANGLE {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.SURFACE_INTERPOLATION {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{value}';
+}
+
+node.THOROUGHFARE_NUMBER_OR_RANGE {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.THOROUGHFARE_NUMBER {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{content}';
+}
+
+node.THOROUGHFARE_NAME {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{content}';
+}
+
+node.POSTAL_CODE_NUMBER {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{content}';
+}
+
+node.MULTI_POINT_PROPERTY {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.MULTI_POINT {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.ADE_COMPONENT {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.INT_ATTRIBUTE {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '{name}';
+}
+
+node.APPEARANCE_PROPERTY {
+  color: #A5ABB6;
+  border-color: #9AA1AC;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+}
+
+node.OLD_ROOT_TILE {
+  color: #68BDF6;
+  border-color: #5CA8DB;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+  diameter: 80px;
+}
+
+node.CITY_TILE {
+  color: #68BDF6;
+  border-color: #5CA8DB;
+  text-color-internal: #FFFFFF;
+  caption: '{id}';
+}
+
+node.NEW_ROOT_TILE {
+  color: #68BDF6;
+  border-color: #5CA8DB;
+  text-color-internal: #FFFFFF;
+  caption: '<id>';
+  diameter: 80px;
+}
+
+relationship.TILE_CONSISTS_OF {
+  color: #68BDF6;
+  border-color: #5CA8DB;
+  text-color-internal: #FFFFFF;
+}
+
