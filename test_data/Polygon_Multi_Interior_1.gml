@@ -58,12 +58,12 @@ xsi:schemaLocation="http://www.opengis.net/citygml/building/2.0 http://schemas.o
                   </gml:exterior>
 				  <gml:interior>
                     <gml:LinearRing>
-						<gml:posList srsDimension="3">3.0 3.0 0.0 1.0 3.0 0.0 1.0 2.0 0.0 3.0 2.0 0.0 3.0 3.0 0.0</gml:posList>
+						<gml:posList srsDimension="3">3.00000001 3.00000001 0.0 1.00000001 3.00000001 0.0 1.00000001 2.00000001 0.0 3.00000001 2.00000001 0.0 3.00000001 3.00000001 0.0</gml:posList>
                     </gml:LinearRing>
                   </gml:interior>
 				  <gml:interior>
                     <gml:LinearRing>
-						<gml:posList srsDimension="3">2.0 2.0 0.0 1.0 2.0 0.0 1.0 1.0 0.0 2.0 1.0 0.0 2.0 2.0 0.0</gml:posList>
+						<gml:posList srsDimension="3">2.00000001 2.00000001 0.0 1.00000001 2.00000001 0.0 1.00000001 1.00000001 0.0 2.00000001 1.00000001 0.0 2.00000001 2.00000001 0.0</gml:posList>
                     </gml:LinearRing>
                   </gml:interior>
                 </gml:Polygon>
