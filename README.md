@@ -13,9 +13,10 @@ The (ongoing) implementation of this research is stored and maintained in this r
 # System Requirements
 
 
-## Minimum Software Requirements
+The application employs the graph database **Neo4j** as a means to store and process CityGML datasets. The system must thus meet the **_minimum_** requirements listed in [Neo4j Operations Manual](https://neo4j.com/docs/operations-manual/current/installation/requirements/).
 
-The application employs the graph database **Neo4j** as a means to store and process CityGML datasets. The system must thus meet the minimum requirements listed in [Neo4j Operations Manual](https://neo4j.com/docs/operations-manual/current/installation/requirements/)
+
+## Minimum Software Requirements
 
 - **Java**:
 
@@ -85,11 +86,9 @@ Intel Core i3
 *Recommended: 200GB SSD via SATA or PCIe*
 
 
-# Installation and Setup Configurations
+# Installation
 
-## Installation
-
-### Windows
+## Windows
 
 1. Import this project into IDE of choice (such as Eclipse, NetBeans, etc. ) using Maven. The required artifacts can be found in [pom.xml](pom.xml). 
 
@@ -101,19 +100,19 @@ Intel Core i3
 
 Alternatively, the application can be executed in command line (see Linux).
 
-### Linux
+## Linux
 
 For Linux and all other platforms, the folder [portable](portable/) was generated to contain executable Jar file and its dependencies. The Jar file can be executed in command line (see Setup Configurations).
 
-## Setup Configurations
+# Setup Configurations
 
-### Windows
+## Windows
 
 The run configurations in selected IDE may contain the following options:
 
 	-Xms8192m -Xmx8192m -XX:+UseG1GC
 
-`-Xms` and `_Xmx` indicate the initial and maximum amount of main memory (heap space) assigned to the application. In this example, both the initial and maximum heap space are 8192MB or 8GB.
+`-Xms` and `-Xmx` indicate the initial and maximum amount of main memory (heap space) assigned to the application. In this example, both the initial and maximum heap space are 8192MB or 8GB.
 
 `-XX:+UseG1GC` means that the concurrent garbage collector `G1GC` is employed. Note that to save memory, the JVM employs the Compressed Ordinary Object Pointer (OOP) feature that compresses object references. This feature is enabled by default in latest versions of JDK. The compressed OOPs is activated in 64-bit JVM if the value of flag `-Xmx` is undefined or smaller than 32 GB. Therefore, a maximum heap space size value of 32 GB and beyond shall deactivate the compressed OOP and thus might cause marginal or negative gains in performance, unless the increase in size is significant (64GB or above) as stated in [Neo4j Operations Manual](https://neo4j.com/docs/operations-manual/current/).
 
@@ -121,13 +120,13 @@ The application settings are stored by default in [Default.txt](saved_settings/D
 
 Alternatively, the application can be also configured in command line (see Linux).
 	
-### Linux:
+## Linux:
 
 Navigate to the folder [portable](portable/). Then execute the following command:
 
 	java -Xms8192m -Xmx8192m -XX:+UseG1GC -jar Filename.jar -SETTINGS="PathToSettings.txt"
 	
-The options `-Xms` and `Xmx` are explained previously (see Windows).
+The options `-Xms` and `-Xmx` are explained previously (see Windows).
 
 The name `Filename.jar` is the location of the executable Jar file. This can be absolute or relative path.
 
