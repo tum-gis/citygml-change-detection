@@ -96,7 +96,7 @@ Intel Core i3
 
 3. After the project has been built, navigate to [Controller.java](src/main/java/controller/Controller.java).
 
-4. Change the test file names to suit your needs. The test files are located by default in folder [test_data](test_data/). The default settings are stored in [Default.txt](saved_settings/Default.txt). Log files is written in folder [logs](logs/). R-tree signature pictures of tested CityGML documents can be found in folder [rtrees](saved_pictures/rtrees/).
+4. Change the test file names to suit your needs. The test files are located by default in folder [test_data](test_data/). The default settings are stored in [Default.txt](saved_settings/Default.txt). Log files are written in folder [logs](logs/). R-tree signature pictures of tested CityGML documents can be found in folder [rtrees](saved_pictures/rtrees/).
 
 Alternatively, the application can be executed in command line (see Linux).
 
