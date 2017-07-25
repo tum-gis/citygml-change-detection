@@ -1,0 +1,54 @@
+# Message for later use
+USER_MESSAGE=TestRun.
+
+###############################
+#DATABASE AND PROGRAM SETTINGS#
+###############################
+# Relative location (leave empty for current location)
+HOME_LOCATION=
+# Relative location in home location
+TEST_DATA_LOCATION=test_data/
+# Relative location in test data location
+#OLD_CITY_MODEL_LOCATION=Polygon_Multi_Interior_0.gml
+#NEW_CITY_MODEL_LOCATION=Polygon_Multi_Interior_1.gml
+# Relative location in home location
+DB_LOCATION=neo4jDB/
+# Relative location in home location
+LOG_LOCATION=logs/Default.log
+WFS_SERVER=http://10.162.246.159:8080/citydb-wfs-qeop/wfs
+# Relative location in home location
+RTREE_IMAGE_LOCATION=saved_pictures/rtrees/
+
+##################
+#MAPPING SETTINGS#
+##################
+ENABLE_MULTI_THREADED_MAPPING=true
+NR_OF_PRODUCERS=1
+CONSUMERS_PRO_PRODUCER=7
+ENABLE_INDICES=false
+SPLIT_PER_COLLECTION_MEMBER=true
+NR_OF_COMMIT_BUILDINGS=10
+NR_OF_COMMIT_FEATURES=100
+NR_OF_COMMMIT_TRANS=5000
+LOG_EVERY_N_BUILDINGS=100
+
+###################
+#MATCHING SETTINGS#
+###################
+MATCHING_STRATEGY=RTREE
+ENABLE_MULTI_THREADED_MATCHING=true
+MAX_RTREE_NODE_REFERENCES=10
+TILE_UNIT_X=100
+TILE_UNIT_Y=100
+ERR_TOLERANCE=1e-7
+TILE_BORDER_DISTANCE=5
+BUILDING_SHARED_VOL_PERCENTAGE_THRESHOLD=0.9
+CREATE_MATCHED_CONTENT_NODE=true
+CREATE_MATCHED_GEOMETRY_NODE=true
+THREAD_TIME_OUT=500000
+
+###################
+#UPDATING SETTINGS#
+###################
+ENABLE_EDITORS=false
+EXECUTE_OPTIONAL=false
