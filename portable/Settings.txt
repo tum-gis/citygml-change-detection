@@ -1,16 +1,16 @@
 # Message for later use
-USER_MESSAGE=TestRun.
+USER_MESSAGE=MatchBuildingsBySharedVol.
 
 ###############################
 #DATABASE AND PROGRAM SETTINGS#
 ###############################
-# Relative location (leave empty for current location)
+# Absolute location
 HOME_LOCATION=
 # Relative location in home location
 TEST_DATA_LOCATION=test_data/
 # Relative location in test data location
-#OLD_CITY_MODEL_LOCATION=Polygon_Multi_Interior_0.gml
-#NEW_CITY_MODEL_LOCATION=Polygon_Multi_Interior_1.gml
+OLD_CITY_MODEL_LOCATION=BerlinMoabitETRS89Old.gml
+NEW_CITY_MODEL_LOCATION=BerlinMoabitETRS89New.gml
 # Relative location in home location
 DB_LOCATION=neo4jDB/
 # Relative location in home location
@@ -42,9 +42,10 @@ TILE_UNIT_X=100
 TILE_UNIT_Y=100
 ERR_TOLERANCE=1e-7
 TILE_BORDER_DISTANCE=5
+MATCH_BUILDINGS_BY_SHARED_VOLUME=false
 BUILDING_SHARED_VOL_PERCENTAGE_THRESHOLD=0.9
-CREATE_MATCHED_CONTENT_NODE=true
-CREATE_MATCHED_GEOMETRY_NODE=true
+CREATE_MATCHED_CONTENT_NODE=false
+CREATE_MATCHED_GEOMETRY_NODE=false
 THREAD_TIME_OUT=500000
 
 ###################

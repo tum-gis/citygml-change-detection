@@ -466,7 +466,9 @@ public class GraphUtil {
 			return null;
 		}
 
-		double buildingVolume = GeometryUtil.calcBoxVol(lowerCorner, upperCorner);
+		double buildingVolume = SETTINGS.MATCH_BUILDINGS_BY_SHARED_VOLUME
+				? GeometryUtil.calcBoxVol(lowerCorner, upperCorner)
+				: GeometryUtil.calcFootprint(lowerCorner, upperCorner);
 
 		// in case more buildings have the same bounding box
 		ArrayList<Node> foundBuildings = new ArrayList<Node>();
@@ -480,8 +482,12 @@ public class GraphUtil {
 			double[] tmpLowerCorner = tmpLowerUpperCorner[0];
 			double[] tmpUpperCorner = tmpLowerUpperCorner[1];
 
-			double otherVolume = GeometryUtil.calcBoxVol(tmpLowerCorner, tmpUpperCorner);
-			double tmpSharedVolume = GeometryUtil.calcSharedVolOfBoxes(lowerCorner, upperCorner, tmpLowerCorner, tmpUpperCorner);
+			double otherVolume = SETTINGS.MATCH_BUILDINGS_BY_SHARED_VOLUME
+					? GeometryUtil.calcBoxVol(tmpLowerCorner, tmpUpperCorner)
+					: GeometryUtil.calcFootprint(tmpLowerCorner, tmpUpperCorner);
+			double tmpSharedVolume = SETTINGS.MATCH_BUILDINGS_BY_SHARED_VOLUME
+					? GeometryUtil.calcSharedVolOfBoxes(lowerCorner, upperCorner, tmpLowerCorner, tmpUpperCorner)
+					: GeometryUtil.calcSharedFootprint(lowerCorner, upperCorner, tmpLowerCorner, tmpUpperCorner);
 
 			double buildingRatio = tmpSharedVolume / buildingVolume;
 			double otherRatio = tmpSharedVolume / otherVolume;
