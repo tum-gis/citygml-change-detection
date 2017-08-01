@@ -586,8 +586,8 @@ public class Controller {
 				|| SETTINGS.NEW_CITY_MODEL_LOCATION == null || SETTINGS.NEW_CITY_MODEL_LOCATION.isEmpty()) {
 
 			controller = new Controller(
-					SETTINGS.TEST_DATA_LOCATION + "BerlinMoabitETRS89Old.gml",
-					SETTINGS.TEST_DATA_LOCATION + "BerlinMoabitETRS89New.gml");
+					SETTINGS.TEST_DATA_LOCATION + "Polygon_Multi_Interior_0.gml",
+					SETTINGS.TEST_DATA_LOCATION + "Polygon_Multi_Interior_1.gml");
 		} else {
 			controller = new Controller(
 					SETTINGS.OLD_CITY_MODEL_LOCATION,

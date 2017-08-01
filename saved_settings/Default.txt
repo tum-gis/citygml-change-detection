@@ -4,7 +4,7 @@ USER_MESSAGE=Default.
 ###############################
 #DATABASE AND PROGRAM SETTINGS#
 ###############################
-# Absolute location
+# Relative location (leave empty for current location)
 HOME_LOCATION=
 # Relative location in home location
 TEST_DATA_LOCATION=test_data/
