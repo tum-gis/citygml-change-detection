@@ -252,7 +252,9 @@ public class Controller {
 
 		sb.append(String.format("%-40s", "\t > Tile border size:") + SETTINGS.TILE_BORDER_DISTANCE + "\n");
 
-		sb.append(String.format("%-40s", "\t > Shared volume threshold:") + SETTINGS.BUILDING_SHARED_VOL_PERCENTAGE_THRESHOLD * 100 + "%" + "\n");
+		sb.append(String.format("%-40s", "\t > Match buildings by shared volume:") + SETTINGS.MATCH_BUILDINGS_BY_SHARED_VOLUME + "\n");
+		
+		sb.append(String.format("%-40s", "\t > Shared " + (SETTINGS.MATCH_BUILDINGS_BY_SHARED_VOLUME ? "volume" : "footprint") + " threshold" + ":") + SETTINGS.BUILDING_SHARED_VOL_PERCENTAGE_THRESHOLD * 100 + "%" + "\n");
 
 		sb.append(String.format("%-40s", "\t > Create matched content nodes:") + SETTINGS.CREATE_MATCHED_CONTENT_NODE + "\n");
 
@@ -584,8 +586,8 @@ public class Controller {
 				|| SETTINGS.NEW_CITY_MODEL_LOCATION == null || SETTINGS.NEW_CITY_MODEL_LOCATION.isEmpty()) {
 
 			controller = new Controller(
-					SETTINGS.TEST_DATA_LOCATION + "Polygon_Multi_Interior_0.gml",
-					SETTINGS.TEST_DATA_LOCATION + "Polygon_Multi_Interior_1.gml");
+					SETTINGS.TEST_DATA_LOCATION + "BerlinMoabitETRS89Old.gml",
+					SETTINGS.TEST_DATA_LOCATION + "BerlinMoabitETRS89New.gml");
 		} else {
 			controller = new Controller(
 					SETTINGS.OLD_CITY_MODEL_LOCATION,

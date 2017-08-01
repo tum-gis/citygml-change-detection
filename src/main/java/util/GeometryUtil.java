@@ -331,6 +331,24 @@ public class GeometryUtil {
 
 		return diffX * diffY * diffZ;
 	}
+	
+	public static double calcSharedFootprint(String[] lowerCornerA, String[] upperCornerA,
+			String[] lowerCornerB, String[] upperCornerB) {
+		double[] lA = { Double.parseDouble(lowerCornerA[0]), Double.parseDouble(lowerCornerA[1]), Double.parseDouble(lowerCornerA[2]) };
+		double[] uA = { Double.parseDouble(upperCornerA[0]), Double.parseDouble(upperCornerA[1]), Double.parseDouble(upperCornerA[2]) };
+		double[] lB = { Double.parseDouble(lowerCornerB[0]), Double.parseDouble(lowerCornerB[1]), Double.parseDouble(lowerCornerB[2]) };
+		double[] uB = { Double.parseDouble(upperCornerB[0]), Double.parseDouble(upperCornerB[1]), Double.parseDouble(upperCornerB[2]) };
+
+		return calcSharedFootprint(lA, uA, lB, uB);
+	}
+
+	public static double calcSharedFootprint(double[] lowerCornerA, double[] upperCornerA,
+			double[] lowerCornerB, double[] upperCornerB) {
+		double diffX = Math.max(Math.min(upperCornerA[0], upperCornerB[0]) - Math.max(lowerCornerA[0], lowerCornerB[0]), 0);
+		double diffY = Math.max(Math.min(upperCornerA[1], upperCornerB[1]) - Math.max(lowerCornerA[1], lowerCornerB[1]), 0);
+
+		return diffX * diffY;
+	}
 
 	public static double calcBoxVol(String[] lowerCorner, String[] upperCorner) {
 		double[] l = { Double.parseDouble(lowerCorner[0]), Double.parseDouble(lowerCorner[1]), Double.parseDouble(lowerCorner[2]) };
@@ -350,6 +368,20 @@ public class GeometryUtil {
 		}
 
 		return diffX * diffY * diffZ;
+	}
+	
+	public static double calcFootprint(String[] lowerCorner, String[] upperCorner) {
+		double[] l = { Double.parseDouble(lowerCorner[0]), Double.parseDouble(lowerCorner[1]), Double.parseDouble(lowerCorner[2]) };
+		double[] u = { Double.parseDouble(upperCorner[0]), Double.parseDouble(upperCorner[1]), Double.parseDouble(upperCorner[2]) };
+
+		return calcFootprint(l, u);
+	}
+	
+	public static double calcFootprint(double[] lowerCorner, double[] upperCorner) {
+		double diffX = upperCorner[0] - lowerCorner[0];
+		double diffY = upperCorner[1] - lowerCorner[1];
+
+		return diffX * diffY;
 	}
 
 	/*

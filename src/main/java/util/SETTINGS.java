@@ -33,6 +33,7 @@ public class SETTINGS {
 	public static final String KEY_TILE_UNIT_Y = "TILE_UNIT_Y";
 	public static final String KEY_ERR_TOLERANCE = "ERR_TOLERANCE";
 	public static final String KEY_TILE_BORDER_DISTANCE = "TILE_BORDER_DISTANCE";
+	public static final String KEY_MATCH_BUILDINGS_BY_SHARED_VOLUME = "MATCH_BUILDINGS_BY_SHARED_VOLUME";
 	public static final String KEY_BUILDING_SHARED_VOL_PERCENTAGE_THRESHOLD = "BUILDING_SHARED_VOL_PERCENTAGE_THRESHOLD";
 	public static final String KEY_CREATE_MATCHED_CONTENT_NODE = "CREATE_MATCHED_CONTENT_NODE";
 	public static final String KEY_CREATE_MATCHED_GEOMETRY_NODE = "CREATE_MATCHED_GEOMETRY_NODE";
@@ -48,42 +49,38 @@ public class SETTINGS {
 	/*
 	 * Message for later use
 	 */
-	public static final String USER_MESSAGE = ARGUMENTS.get(KEY_USER_MESSAGE).toString();
+	public static final String USER_MESSAGE = getValueWithDefault(KEY_USER_MESSAGE, "Default message.");
 
 	/*
 	 * Database and Program settings
 	 */
-	public static final String HOME_LOCATION = ARGUMENTS.get(KEY_HOME_LOCATION).toString();
-	// public static final String HOME_LOCATION = "C:\\Users\\Son Nguyen\\Desktop\\TestJar\\";
-	// public static final String HOME_LOCATION = "/home/nguyen/GitWorkspace/CityGML2Neo4j/";
+	public static final String HOME_LOCATION = getValueWithDefault(KEY_HOME_LOCATION, "");
 
-	public static final String TEST_DATA_LOCATION = HOME_LOCATION + ARGUMENTS.get(KEY_TEST_DATA_LOCATION).toString();
+	public static final String TEST_DATA_LOCATION = HOME_LOCATION + getValueWithDefault(KEY_TEST_DATA_LOCATION, "test_data/");
 
-	public static final String OLD_CITY_MODEL_LOCATION = ARGUMENTS.get(KEY_OLD_CITY_MODEL_LOCATION) == null ? ("")
-			: (TEST_DATA_LOCATION + ARGUMENTS.get(KEY_OLD_CITY_MODEL_LOCATION).toString());
+	public static final String OLD_CITY_MODEL_LOCATION = TEST_DATA_LOCATION + getValueWithDefault(KEY_OLD_CITY_MODEL_LOCATION, "");
 
-	public static final String NEW_CITY_MODEL_LOCATION = ARGUMENTS.get(KEY_NEW_CITY_MODEL_LOCATION) == null ? ("")
-			: TEST_DATA_LOCATION + ARGUMENTS.get(KEY_NEW_CITY_MODEL_LOCATION).toString();
+	public static final String NEW_CITY_MODEL_LOCATION = TEST_DATA_LOCATION +getValueWithDefault(KEY_NEW_CITY_MODEL_LOCATION, "");
 
-	public static final String DB_LOCATION = HOME_LOCATION + ARGUMENTS.get(KEY_DB_LOCATION).toString();
+	public static final String DB_LOCATION = HOME_LOCATION + getValueWithDefault(KEY_DB_LOCATION, "neo4jDB/");
 
-	public static final String LOG_LOCATION = HOME_LOCATION + ARGUMENTS.get(KEY_LOG_LOCATION).toString();
+	public static final String LOG_LOCATION = HOME_LOCATION + getValueWithDefault(KEY_LOG_LOCATION, "logs/Default.log");
 
-	public static final String WFS_SERVER = ARGUMENTS.get(KEY_WFS_SERVER).toString();
+	public static final String WFS_SERVER = getValueWithDefault(KEY_WFS_SERVER, "http://10.162.246.159:8080/citydb-wfs-qeop/wfs");
 
-	public static final String RTREE_IMAGE_LOCATION = HOME_LOCATION + ARGUMENTS.get(KEY_RTREE_IMAGE_LOCATION).toString();
+	public static final String RTREE_IMAGE_LOCATION = HOME_LOCATION + getValueWithDefault(KEY_RTREE_IMAGE_LOCATION, "saved_pictures/rtrees/");
 
 	/*
 	 * Mapper settings
 	 */
-	public static final boolean ENABLE_MULTI_THREADED_MAPPING = Boolean.parseBoolean(ARGUMENTS.get(KEY_ENABLE_MULTI_THREADED_MAPPING).toString());
+	public static final boolean ENABLE_MULTI_THREADED_MAPPING = getValueWithDefault(KEY_ENABLE_MULTI_THREADED_MAPPING, true);
 
 	/**
 	 * Number of producers in multi-threaded mapping. Between 1 and number of physical cores.
 	 */
 	public static final int NR_OF_PRODUCERS = Math.max(1,
 			Math.min(Runtime.getRuntime().availableProcessors(),
-					Integer.parseInt(ARGUMENTS.get(KEY_NR_OF_PRODUCERS).toString())));
+					getValueWithDefault(KEY_NR_OF_PRODUCERS, 1)));
 
 	/**
 	 * Number of consumers pro producer.
@@ -94,7 +91,7 @@ public class SETTINGS {
 	 */
 	public static final int CONSUMERS_PRO_PRODUCER = Math.max(1,
 			Math.min((Runtime.getRuntime().availableProcessors() * 2 - NR_OF_PRODUCERS) / NR_OF_PRODUCERS,
-					Integer.parseInt(ARGUMENTS.get(KEY_CONSUMERS_PRO_PRODUCER).toString())));
+					getValueWithDefault(KEY_CONSUMERS_PRO_PRODUCER, Runtime.getRuntime().availableProcessors() * 2 - NR_OF_PRODUCERS) / NR_OF_PRODUCERS));
 	/**
 	 * Set to true to use Neo4j's indices on IDs and hrefs. This costs storage and might slow down the mapper.
 	 * 
@@ -102,25 +99,25 @@ public class SETTINGS {
 	 * 
 	 * Also works when multiple nodes reference to the same element (ie. have the same href).
 	 */
-	public static final boolean ENABLE_INDICES = Boolean.parseBoolean(ARGUMENTS.get(KEY_ENABLE_INDICES).toString());;
+	public static final boolean ENABLE_INDICES = getValueWithDefault(KEY_ENABLE_INDICES, false);
 
 	/**
 	 * True if only buildings should be split while importing, else all features will be split.
 	 */
-	public static final boolean SPLIT_PER_COLLECTION_MEMBER = Boolean.parseBoolean(ARGUMENTS.get(KEY_SPLIT_PER_COLLECTION_MEMBER).toString());;
+	public static final boolean SPLIT_PER_COLLECTION_MEMBER = getValueWithDefault(KEY_SPLIT_PER_COLLECTION_MEMBER, true);
 
-	public static final int NR_OF_COMMIT_BUILDINGS = Integer.parseInt(ARGUMENTS.get(KEY_NR_OF_COMMIT_BUILDINGS).toString());
+	public static final int NR_OF_COMMIT_BUILDINGS = getValueWithDefault(KEY_NR_OF_COMMIT_BUILDINGS, 10);
 	/**
 	 * If SPLIT_PER_COLLECTION_MEMBER is true, should be smaller than 1000 (buildings). Or else 1000 (features).
 	 */
-	public static final int NR_OF_COMMIT_FEATURES = SPLIT_PER_COLLECTION_MEMBER ? NR_OF_COMMIT_BUILDINGS : Integer.parseInt(ARGUMENTS.get(KEY_NR_OF_COMMIT_FEATURES).toString());
+	public static final int NR_OF_COMMIT_FEATURES = SPLIT_PER_COLLECTION_MEMBER ? NR_OF_COMMIT_BUILDINGS : getValueWithDefault(KEY_NR_OF_COMMIT_FEATURES, 100);
 
-	public static final int NR_OF_COMMMIT_TRANS = Integer.parseInt(ARGUMENTS.get(KEY_NR_OF_COMMMIT_TRANS).toString());
+	public static final int NR_OF_COMMMIT_TRANS = getValueWithDefault(KEY_NR_OF_COMMMIT_TRANS, 5000);
 
 	/**
 	 * For logging purposes.
 	 */
-	public static final int LOG_EVERY_N_BUILDINGS = Integer.parseInt(ARGUMENTS.get(KEY_LOG_EVERY_N_BUILDINGS).toString());
+	public static final int LOG_EVERY_N_BUILDINGS = getValueWithDefault(KEY_LOG_EVERY_N_BUILDINGS, 100);
 
 	/*
 	 * Matcher settings
@@ -155,27 +152,26 @@ public class SETTINGS {
 		}
 	}
 
-	public static final MatchingStrategies MATCHING_STRATEGY = MatchingStrategies.valueOf(ARGUMENTS.get(KEY_MATCHING_STRATEGY).toString());
+	public static final MatchingStrategies MATCHING_STRATEGY = getValueWithDefault(KEY_MATCHING_STRATEGY, MatchingStrategies.RTREE);
 
-	public static final boolean ENABLE_MULTI_THREADED_MATCHING = MATCHING_STRATEGY.equals(MatchingStrategies.TILES) ? true
-			: Boolean.parseBoolean(ARGUMENTS.get(KEY_ENABLE_MULTI_THREADED_MATCHING).toString());
+	public static final boolean ENABLE_MULTI_THREADED_MATCHING = getValueWithDefault(KEY_ENABLE_MULTI_THREADED_MATCHING, true);
 
 	/**
 	 * The maximum number of entries of an internal RTree node
 	 */
-	public static final int MAX_RTREE_NODE_REFERENCES = Integer.parseInt(ARGUMENTS.get(KEY_MAX_RTREE_NODE_REFERENCES).toString());
+	public static final int MAX_RTREE_NODE_REFERENCES = getValueWithDefault(KEY_MAX_RTREE_NODE_REFERENCES, 10);
 
 	/**
 	 * Width value of tiles. A tile must not be smaller than a building.
 	 */
-	public static final double TILE_UNIT_X = Integer.parseInt(ARGUMENTS.get(KEY_TILE_UNIT_X).toString());
+	public static final double TILE_UNIT_X = getValueWithDefault(KEY_TILE_UNIT_X, 100);
 
 	/**
 	 * Height value of tiles. A tile must not be smaller than a building.
 	 */
-	public static final double TILE_UNIT_Y = Integer.parseInt(ARGUMENTS.get(KEY_TILE_UNIT_Y).toString());
+	public static final double TILE_UNIT_Y = getValueWithDefault(KEY_TILE_UNIT_Y, 100);
 
-	public static final double ERR_TOLERANCE = Double.parseDouble(ARGUMENTS.get(KEY_ERR_TOLERANCE).toString());
+	public static final double ERR_TOLERANCE = getValueWithDefault(KEY_ERR_TOLERANCE, 1e-7);
 
 	/**
 	 * Spatially, buildings are assigned to their respective tiles. However, if a building's bounding shape is located too near to a tile border,
@@ -186,33 +182,114 @@ public class SETTINGS {
 	 * 
 	 * should be moved to the border group.
 	 */
-	public static final double TILE_BORDER_DISTANCE = Integer.parseInt(ARGUMENTS.get(KEY_TILE_BORDER_DISTANCE).toString());
+	public static final double TILE_BORDER_DISTANCE = getValueWithDefault(KEY_TILE_BORDER_DISTANCE, 5);
 
+	/**
+	 * True if buildings are matched using their shared volume, otherwise only their footprints are compared.
+	 * If this field does not exist, the default value is true.
+	 */
+	public static final boolean MATCH_BUILDINGS_BY_SHARED_VOLUME = getValueWithDefault(KEY_MATCH_BUILDINGS_BY_SHARED_VOLUME, true);
+	
 	/**
 	 * To match building spatially, the ratios shared_vol/this_vol and shared_vol/other_vol must both be greater or equal this threshold.
 	 */
-	public static final double BUILDING_SHARED_VOL_PERCENTAGE_THRESHOLD = Double.parseDouble(ARGUMENTS.get(KEY_BUILDING_SHARED_VOL_PERCENTAGE_THRESHOLD).toString());
+	public static final double BUILDING_SHARED_VOL_PERCENTAGE_THRESHOLD = getValueWithDefault(KEY_BUILDING_SHARED_VOL_PERCENTAGE_THRESHOLD, 0.9);
 
 	/**
 	 * Enable or disable auxiliary nodes that indicate two graph nodes have been successfully matched in terms of their contents.
 	 * 
 	 * Enabling this option will increase the total number of nodes but will reduce matching runtime.
 	 */
-	public static final boolean CREATE_MATCHED_CONTENT_NODE = Boolean.parseBoolean(ARGUMENTS.get(KEY_CREATE_MATCHED_CONTENT_NODE).toString());
+	public static final boolean CREATE_MATCHED_CONTENT_NODE = getValueWithDefault(KEY_CREATE_MATCHED_CONTENT_NODE, false);
 
 	/**
 	 * Enable or disable auxiliary nodes that indicate two graph nodes have been successfully matched in terms of their geometry.
 	 * 
 	 * Enabling this option will increase the total number of nodes but will reduce matching runtime.
 	 */
-	public static final boolean CREATE_MATCHED_GEOMETRY_NODE = Boolean.parseBoolean(ARGUMENTS.get(KEY_CREATE_MATCHED_GEOMETRY_NODE).toString());
+	public static final boolean CREATE_MATCHED_GEOMETRY_NODE = getValueWithDefault(KEY_CREATE_MATCHED_GEOMETRY_NODE, false);
 
-	public static final int THREAD_TIME_OUT = Integer.parseInt(ARGUMENTS.get(KEY_THREAD_TIME_OUT).toString()); // in seconds
+	public static final int THREAD_TIME_OUT = getValueWithDefault(KEY_THREAD_TIME_OUT, 500000); // in seconds
 
 	/*
 	 * Editor settings
 	 */
-	public static final boolean ENABLE_EDITORS = Boolean.parseBoolean(ARGUMENTS.get(KEY_ENABLE_EDITORS).toString());
+	public static final boolean ENABLE_EDITORS = getValueWithDefault(KEY_ENABLE_EDITORS, false);
 
-	public static final boolean EXECUTE_OPTIONAL = Boolean.parseBoolean(ARGUMENTS.get(KEY_EXECUTE_OPTIONAL).toString());
+	public static final boolean EXECUTE_OPTIONAL = getValueWithDefault(KEY_EXECUTE_OPTIONAL, false);
+	
+	/**
+	 * Auxiliary function that fetches declared configurations. If they do not exist, use default values instead.
+	 * 
+	 * @param key
+	 * @param defaultValue
+	 * @return
+	 */
+	private static int getValueWithDefault(String key, int defaultValue) {
+		if (ARGUMENTS.get(key) == null || ARGUMENTS.get(key).isEmpty()) {
+			return defaultValue;
+		}
+		
+		return Integer.parseInt(ARGUMENTS.get(key).toString());
+	}
+	
+	/**
+	 * Auxiliary function that fetches declared configurations. If they do not exist, use default values instead.
+	 * 
+	 * @param key
+	 * @param defaultValue
+	 * @return
+	 */
+	private static double getValueWithDefault(String key, double defaultValue) {
+		if (ARGUMENTS.get(key) == null || ARGUMENTS.get(key).isEmpty()) {
+			return defaultValue;
+		}
+		
+		return Double.parseDouble(ARGUMENTS.get(key).toString());
+	}
+	
+	/**
+	 * Auxiliary function that fetches declared configurations. If they do not exist, use default values instead.
+	 * 
+	 * @param key
+	 * @param defaultValue
+	 * @return
+	 */
+	private static boolean getValueWithDefault(String key, boolean defaultValue) {
+		if (ARGUMENTS.get(key) == null || ARGUMENTS.get(key).isEmpty()) {
+			return defaultValue;
+		}
+		
+		return Boolean.parseBoolean(ARGUMENTS.get(key).toString());
+	}
+	
+	/**
+	 * Auxiliary function that fetches declared configurations. If they do not exist, use default values instead.
+	 * 
+	 * @param key
+	 * @param defaultValue
+	 * @return
+	 */
+	private static String getValueWithDefault(String key, String defaultValue) {
+		if (ARGUMENTS.get(key) == null || ARGUMENTS.get(key).isEmpty()) {
+			return defaultValue;
+		}
+		
+		return ARGUMENTS.get(key).toString();
+	}
+	
+	/**
+	 * Auxiliary function that fetches declared configurations. If they do not exist, use default values instead.
+	 * 
+	 * @param key
+	 * @param defaultValue
+	 * @return
+	 */
+	private static MatchingStrategies getValueWithDefault(String key, MatchingStrategies defaultValue) {
+		if (ARGUMENTS.get(key) == null || ARGUMENTS.get(key).isEmpty()) {
+			return defaultValue;
+		}
+		
+		return MatchingStrategies.valueOf(ARGUMENTS.get(key).toString());
+	}
 }
