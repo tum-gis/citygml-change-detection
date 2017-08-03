@@ -39,16 +39,17 @@ import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 
 import editor.Editor;
+import exporter.EditOperationExporter;
 import mapper.EnumClasses.GMLRelTypes;
 import mapper.Mapper;
 import matcher.Matcher;
-import matcher.Matcher.DeletePropertyNodeProperties;
-import matcher.Matcher.DeleteRelationshipNodeProperties;
+import matcher.EditOperationEnums.DeletePropertyNodeProperties;
+import matcher.EditOperationEnums.DeleteRelationshipNodeProperties;
 import matcher.Matcher.EditOperators;
 import matcher.Matcher.EditRelTypes;
-import matcher.Matcher.InsertPropertyNodeProperties;
-import matcher.Matcher.InsertRelationshipNodeProperties;
-import matcher.Matcher.UpdatePropertyNodeProperties;
+import matcher.EditOperationEnums.InsertPropertyNodeProperties;
+import matcher.EditOperationEnums.InsertRelationshipNodeProperties;
+import matcher.EditOperationEnums.UpdatePropertyNodeProperties;
 import util.GraphUtil;
 import util.MapUtil;
 import util.ReadCMDUtil;
@@ -65,6 +66,8 @@ public class Controller {
 	private Node matcherRootNode;
 	private Node editorRootNode;
 
+	private EditOperationExporter exporter;
+	
 	private Logger logger;
 	private SimpleDateFormat df;
 
@@ -75,8 +78,6 @@ public class Controller {
 
 	private long mapperRunTime = 0;
 	private long matcherRunTime = 0;
-
-	private StringBuilder createdEditors;
 
 	public Controller(String oldFilename, String newFilename) {
 		// Initialize a new Neo4j session with default input
@@ -207,7 +208,11 @@ public class Controller {
 
 		sb.append(String.format("%-40s", "\t > Database location:") + SETTINGS.DB_LOCATION + "\n");
 
-		sb.append(String.format("%-40s", "\t > Log location") + SETTINGS.LOG_LOCATION + "\n");
+		sb.append(String.format("%-40s", "\t > Log location:") + SETTINGS.LOG_LOCATION + "\n");
+		
+		sb.append(String.format("%-40s", "\t > Export location:") + SETTINGS.EXPORT_LOCATION + "\n");
+		
+		sb.append(String.format("%-40s", "\t > CSV delimiter:") + SETTINGS.CSV_DELIMITER + "\n");
 
 		sb.append(String.format("%-40s", "\t > WFS server:") + SETTINGS.WFS_SERVER + "\n");
 
@@ -390,95 +395,19 @@ public class Controller {
 
 		// statistics
 		this.matcherRunTime = calculateRunTime(startTime, "MATCHING");
-
-		// edit operators
-		int count = 1;
-		this.createdEditors = new StringBuilder();
-		this.createdEditors.append("\n\t                          CREATED EDIT OPERATORS\n");
-		this.createdEditors.append("\t           n.* : optional transaction for geometrically equivalent\n");
-		this.createdEditors.append("\t                   objects with different representations\n");
-		this.createdEditors.append("\t ------------------------------------------------------------------------ \n");
-		try (Transaction tx = graphDb.beginTx()) {
-			for (Iterator<Node> nodeIt = GraphUtil.findChildrenOfNode(matcherRootNode, EditRelTypes.CONSISTS_OF).iterator(); nodeIt.hasNext();) {
-				Node node = (Node) nodeIt.next();
-				this.createdEditors.append("\t" + String.format("%2d", (count++)) + ".");
-				this.createdEditors.append((node.getProperty("isOptional").toString().equals("true") ? "* " : "  "));
-				this.createdEditors.append(node.getLabels().toString() + "\n");
-
-				String[] properties = null;
-				if (node.hasLabel(Label.label(EditOperators.UPDATE_PROPERTY + ""))) {
-					properties = new String[] {
-							UpdatePropertyNodeProperties.PROPERTY_NAME.toString(),
-							UpdatePropertyNodeProperties.OLD_VALUE.toString(),
-							UpdatePropertyNodeProperties.NEW_VALUE.toString(),
-							UpdatePropertyNodeProperties.IS_GENERIC.toString(),
-							UpdatePropertyNodeProperties.MESSAGE.toString(),
-							"",
-							UpdatePropertyNodeProperties.OLD_NEAREST_ID.toString(),
-							UpdatePropertyNodeProperties.OLD_BUILDING_ID.toString(),
-					};
-				} else if (node.hasLabel(Label.label(EditOperators.DELETE_PROPERTY + ""))) {
-					properties = new String[] {
-							DeletePropertyNodeProperties.PROPERTY_NAME.toString(),
-							DeletePropertyNodeProperties.MESSAGE.toString(),
-							"",
-							DeletePropertyNodeProperties.OLD_NEAREST_ID.toString(),
-							DeletePropertyNodeProperties.OLD_BUILDING_ID.toString(),
-					};
-				} else if (node.hasLabel(Label.label(EditOperators.INSERT_PROPERTY + ""))) {
-					properties = new String[] {
-							InsertPropertyNodeProperties.PROPERTY_NAME.toString(),
-							InsertPropertyNodeProperties.NEW_VALUE.toString(),
-							InsertPropertyNodeProperties.MESSAGE.toString(),
-							"",
-							InsertPropertyNodeProperties.OLD_NEAREST_ID.toString(),
-							InsertPropertyNodeProperties.OLD_BUILDING_ID.toString(),
-					};
-				} else if (node.hasLabel(Label.label(EditOperators.DELETE_NODE + ""))) {
-					properties = new String[] {
-							DeleteRelationshipNodeProperties.IS_GENERIC.toString(),
-							DeleteRelationshipNodeProperties.MESSAGE.toString(),
-							"",
-							DeleteRelationshipNodeProperties.OLD_NEAREST_ID.toString(),
-							DeleteRelationshipNodeProperties.OLD_BUILDING_ID.toString(),
-					};
-				} else if (node.hasLabel(Label.label(EditOperators.INSERT_NODE + ""))) {
-					properties = new String[] {
-							InsertRelationshipNodeProperties.RELATIONSHIP_TYPE.toString(),
-							InsertRelationshipNodeProperties.IS_GENERIC.toString(),
-							InsertRelationshipNodeProperties.MESSAGE.toString(),
-							"",
-							InsertRelationshipNodeProperties.OLD_NEAREST_ID.toString(),
-							InsertRelationshipNodeProperties.NEW_NEAREST_ID.toString(),
-							InsertRelationshipNodeProperties.OLD_BUILDING_ID.toString(),
-							InsertRelationshipNodeProperties.NEW_BUILDING_ID.toString(),
-					};
-				}
-
-				for (String key : properties) {
-					this.createdEditors.append(key.contentEquals("") ? "\n" : "\t\t > " + key + " = " + node.getProperty(key) + "\n");
-				}
-
-				this.createdEditors.append("\n");
-
-				for (RelationshipType relType : EditRelTypes.values()) {
-					if (node.hasRelationship(Direction.OUTGOING, relType)) {
-						this.createdEditors.append("\t\t -- " + relType + " --> ");
-						Node otherNode = node.getSingleRelationship(relType, Direction.OUTGOING).getOtherNode(node);
-						this.createdEditors.append(otherNode.getLabels().toString() + "\n");
-
-						Iterator<Entry<String, Object>> it = otherNode.getAllProperties().entrySet().iterator();
-						while (it.hasNext()) {
-							Map.Entry<String, Object> pair = (Map.Entry<String, Object>) it.next();
-							this.createdEditors.append("\t\t\t\t > " + pair.getKey() + " = " + pair.getValue() + "\n");
-						}
-					}
-				}
-
-				this.createdEditors.append("\t\t -------------------------------------------------------- \n");
-			}
-			tx.success();
+	}
+	
+	private void export(String exportFolder, String delimiter) {
+		this.exporter = new EditOperationExporter(delimiter);
+		if ((exportFolder.charAt(exportFolder.length() - 1) != '/')
+				&& (exportFolder.charAt(exportFolder.length() - 1) != '\\')) {
+			exportFolder += "/";
 		}
+		
+		String tmpLog = "Exporting created edit operations to " + exportFolder + " ...\n";		
+		tmpLog += this.exporter.exportEditOperationsToCSV(graphDb, matcherRootNode, exportFolder);
+		
+		logger.info(tmpLog);
 	}
 
 	private void update() throws XMLStreamException, InterruptedException, ClientProtocolException, IOException {
@@ -548,27 +477,28 @@ public class Controller {
 		// MATCHER
 		stats.append("\n\t _______________________________________________________________________ \n"
 				+ "\t| " + String.format("%-70s", "MATCHER ...") + " |\n");
-		totalNrOfNodes = 0;
+		totalNrOfNodes = this.exporter.getTotalNrOfEditOperations();
 
 		// it = CityGML2Neo4jMatcher.getStats().entrySet().iterator();
-		try (Transaction tx = graphDb.beginTx()) {
-			it = GraphUtil.countAllNodesWithLabels(graphDb, tx, editorLabels, null).entrySet().iterator();
-			tx.success();
-		}
+		// try (Transaction tx = graphDb.beginTx()) {
+		// it = GraphUtil.countAllNodesWithLabels(graphDb, tx, editorLabels,
+		// null).entrySet().iterator();
+		// tx.success();
+		// }
 
+		it = MapUtil.sortByValue(this.exporter.getNrOfEditOperations()).entrySet().iterator();
 		while (it.hasNext()) {
 			Map.Entry<String, Long> pair = (Map.Entry<String, Long>) it.next();
-			stats.append("\t| " + String.format("%-60s", "Number of " + pair.getKey() + " nodes: ") + String.format("%10d", pair.getValue()) + " |\n");
-			totalNrOfNodes += (Long) pair.getValue();
+			stats.append("\t| " + String.format("%-60s", "Number of " + pair.getKey() + " nodes: ")
+					+ String.format("%10d", pair.getValue()) + " |\n");
+			// totalNrOfNodes += (Long) pair.getValue();
 		}
 
 		stats.append("\t| " + String.format("%-70s", "") + " |\n"
 				+ "\t| " + String.format("%-40s", "TOTAL NUMBER OF CREATED NODES: ") + String.format("%30s", totalNrOfNodes + " nodes") + " |\n"
-				+ "\t| " + String.format("%-40s", "OF WHICH ARE OPTIONAL: ") + String.format("%30s", Matcher.getNrOfOptionalTransactions() + "/" + totalNrOfNodes + " nodes") + " |\n"
+				+ "\t| " + String.format("%-40s", "OF WHICH ARE OPTIONAL: ") + String.format("%30s", this.exporter.getNrOfOptionalTransactions() + " nodes") + " |\n"
 				+ "\t| " + String.format("%-50s", "MATCHER'S ELAPSED TIME: ") + String.format("%20s", this.matcherRunTime + " seconds") + " |\n");
 		stats.append("\t ________________________________________________________________________/\n");
-
-		stats.append("\n" + this.createdEditors);
 
 		logger.info(stats.toString());
 		logger.info("END OF LOGFILE.");
@@ -608,6 +538,11 @@ public class Controller {
 		 * Match mapped CityGML instances
 		 */
 		controller.match();
+		
+		/*
+		 * Export edit operations to CSV files
+		 */
+		controller.export(SETTINGS.EXPORT_LOCATION, SETTINGS.CSV_DELIMITER);
 
 		/*
 		 * Execute WFS-Transactions

@@ -1,4 +1,13 @@
-# Message for later use
+#############
+#INSTRUCTION#
+#############
+# Lines starting with '#' are comments and will not be parsed.
+# Otherwise, each line defines a variable containing its name 
+# and value separated by a '=' letter. Values can be changed.
+# Empty values of non-existing variables shall be set with
+# default values. Do NOT change names of existing variables.
+
+# Test message
 USER_MESSAGE=Default.
 
 ###############################
@@ -6,17 +15,21 @@ USER_MESSAGE=Default.
 ###############################
 # Relative location (leave empty for current location)
 HOME_LOCATION=
-# Relative location in home location
+# Location of datasets to be matched
 TEST_DATA_LOCATION=test_data/
-# Relative location in test data location
-#OLD_CITY_MODEL_LOCATION=Polygon_Multi_Interior_0.gml
-#NEW_CITY_MODEL_LOCATION=Polygon_Multi_Interior_1.gml
-# Relative location in home location
+# Name of old and new CityGML dataset in TEST_DATA_LOCATION
+OLD_CITY_MODEL_LOCATION=Polygon_Multi_Interior_0.gml
+NEW_CITY_MODEL_LOCATION=Polygon_Multi_Interior_1.gml
+# Location of Neo4j graph database
 DB_LOCATION=neo4jDB/
-# Relative location in home location
+# Location of log files
 LOG_LOCATION=logs/Default.log
+# Location of exported CSV storing edit operations
+EXPORT_LOCATION=export/
+CSV_DELIMITER=;
+# URL/Address of WFS server
 WFS_SERVER=http://10.162.246.159:8080/citydb-wfs-qeop/wfs
-# Relative location in home location
+# Location of R-tree signature images
 RTREE_IMAGE_LOCATION=saved_pictures/rtrees/
 
 ##################

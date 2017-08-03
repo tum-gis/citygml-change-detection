@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -37,6 +38,11 @@ import mapper.Mapper.InnerTileNodeProperties;
 import mapper.Mapper.InternalMappingProperties;
 import mapper.Mapper.TileNodes;
 import mapper.Mapper.TileOrBorderRootNodeProperties;
+import matcher.EditOperationEnums.DeletePropertyNodeProperties;
+import matcher.EditOperationEnums.DeleteRelationshipNodeProperties;
+import matcher.EditOperationEnums.InsertPropertyNodeProperties;
+import matcher.EditOperationEnums.InsertRelationshipNodeProperties;
+import matcher.EditOperationEnums.UpdatePropertyNodeProperties;
 import util.BooleanObject;
 import util.GeometryUtil;
 import util.GraphUtil;
@@ -85,119 +91,10 @@ public class Matcher {
 		RTREE_DATA, // relationship from an neo4j spatial RTREE node to a citygml data node e.g. building's bounding shape
 	}
 
-	// Update property
-	public enum UpdatePropertyNodeProperties {
-		PROPERTY_NAME("propertyName"),
-		OLD_VALUE("oldValue"),
-		NEW_VALUE("newValue"),
-		MESSAGE("message"),
-		OLD_NEAREST_ID("oldNearestId"),
-		OLD_BUILDING_ID("oldBuildingId"),
-		IS_OPTIONAL("isOptional"),
-		IS_GENERIC("isGeneric"),;
-
-		private final String text;
-
-		private UpdatePropertyNodeProperties(final String text) {
-			this.text = text;
-		}
-
-		@Override
-		public String toString() {
-			return text;
-		}
-	}
-
-	// Delete property
-	public enum DeletePropertyNodeProperties {
-		PROPERTY_NAME("propertyName"),
-		MESSAGE("message"),
-		OLD_NEAREST_ID("oldNearestId"),
-		OLD_BUILDING_ID("oldBuildingId"),
-		IS_OPTIONAL("isOptional"),;
-
-		private final String text;
-
-		private DeletePropertyNodeProperties(final String text) {
-			this.text = text;
-		}
-
-		@Override
-		public String toString() {
-			return text;
-		}
-	}
-
-	// Insert property
-	public enum InsertPropertyNodeProperties {
-		PROPERTY_NAME("propertyName"),
-		NEW_VALUE("newValue"),
-		MESSAGE("message"),
-		OLD_NEAREST_ID("oldNearestId"),
-		OLD_BUILDING_ID("oldBuildingId"),
-		IS_OPTIONAL("isOptional"),;
-
-		private final String text;
-
-		private InsertPropertyNodeProperties(final String text) {
-			this.text = text;
-		}
-
-		@Override
-		public String toString() {
-			return text;
-		}
-	}
-
-	// Delete node
-	public enum DeleteRelationshipNodeProperties {
-		MESSAGE("message"),
-		OLD_NEAREST_ID("oldNearestId"),
-		OLD_BUILDING_ID("oldBuildingId"),
-		IS_OPTIONAL("isOptional"),
-		IS_GENERIC("isGeneric"),;
-
-		private final String text;
-
-		private DeleteRelationshipNodeProperties(final String text) {
-			this.text = text;
-		}
-
-		@Override
-		public String toString() {
-			return text;
-		}
-	}
-
-	// Insert node
-	public enum InsertRelationshipNodeProperties {
-		RELATIONSHIP_TYPE("relationshipType"),
-		MESSAGE("message"),
-		NEW_NEAREST_ID("newNearestId"),
-		NEW_BUILDING_ID("newBuildingId"),
-		OLD_NEAREST_ID("oldNearestId"),
-		OLD_BUILDING_ID("oldBuildingId"),
-		IS_OPTIONAL("isOptional"),
-		IS_GENERIC("isGeneric"),;
-
-		private final String text;
-
-		private InsertRelationshipNodeProperties(final String text) {
-			this.text = text;
-		}
-
-		@Override
-		public String toString() {
-			return text;
-		}
-	}
-
 	private boolean enableLogger = true;
 	private boolean warningOnDuplicatedNodes = false;
 
 	private boolean suppressLogger = false;
-
-	private final double SHARED_VOL_THRESHOLD = 0.98;
 
 	// private Node rootTmp; // save info about matched nodes
 
@@ -211,7 +108,7 @@ public class Matcher {
 	private String newFilename;
 
 	// private static HashMap<String, Long> stats = new HashMap<String, Long>(); // statistics
-	private static long nrOfOptionalTransactions = 0;
+	// private static long nrOfOptionalTransactions = 0;
 
 	private long countTrans = 0;
 	private long countBuildings = 0;
@@ -234,7 +131,7 @@ public class Matcher {
 	}
 
 	private Node createNodeWithLabel(ModelClassEnum label) {
-		return createNodeWithLabel(label + "");
+		return createNodeWithLabel(label.toString());
 	}
 
 	private Node createNodeWithLabel(String label) {
@@ -282,9 +179,9 @@ public class Matcher {
 	// return stats;
 	// }
 
-	public static long getNrOfOptionalTransactions() {
-		return nrOfOptionalTransactions;
-	}
+	// public static long getNrOfOptionalTransactions() {
+	// return nrOfOptionalTransactions;
+	// }
 
 	/*
 	 * Auxiliary functions
@@ -405,7 +302,7 @@ public class Matcher {
 		}
 
 		// test if an exact same node already exists (due to XLINKs)
-		for (Node node : GraphUtil.findParentsOfNode(oldNode, Label.label(EditOperators.UPDATE_PROPERTY + ""))) {
+		for (Node node : GraphUtil.findParentsOfNode(oldNode, Label.label(EditOperators.UPDATE_PROPERTY.toString()))) {
 			Object val = node.getProperty(UpdatePropertyNodeProperties.PROPERTY_NAME.toString(), null);
 			if (val != null && (val + "").equals(propertyName + "")) {
 				return;
@@ -413,23 +310,28 @@ public class Matcher {
 		}
 
 		Node result = createNodeWithLabel(EditOperators.UPDATE_PROPERTY);
-
+		result.setProperty(UpdatePropertyNodeProperties.OP_ID.toString(), UUID.randomUUID().toString());
+		
+		result.setProperty(UpdatePropertyNodeProperties.OLD_PARENT_NODE_TYPE.toString(), GraphUtil.getLabelString(oldNode));
+		Object parent_node_gmlid = oldNode.getProperty("id", null);
+		result.setProperty(UpdatePropertyNodeProperties.OLD_PARENT_NODE_GMLID.toString(), parent_node_gmlid == null ? "" : parent_node_gmlid.toString());
+		
+		String oldNearestId = retrieveNearestId(oldNode);
+		result.setProperty(UpdatePropertyNodeProperties.OF_OLD_NEAREST_GMLID.toString(), oldNearestId);
+		result.setProperty(UpdatePropertyNodeProperties.OF_OLD_BUILDING_GMLID.toString(), retrieveBuildingId(oldNode, oldNearestId));
+		
 		result.setProperty(UpdatePropertyNodeProperties.PROPERTY_NAME.toString(), propertyName);
 		result.setProperty(UpdatePropertyNodeProperties.OLD_VALUE.toString(), oldValue);
 		result.setProperty(UpdatePropertyNodeProperties.NEW_VALUE.toString(), newValue);
-
+		
+		result.setProperty(UpdatePropertyNodeProperties.IS_OPTIONAL.toString(), isOptional);
+		// if (isOptional) {
+		// nrOfOptionalTransactions++;
+		// }
+		
 		result.setProperty(UpdatePropertyNodeProperties.MESSAGE.toString(), "Property has been updated in the new city model.");
 
-		result.setProperty(UpdatePropertyNodeProperties.IS_OPTIONAL.toString(), isOptional);
-		if (isOptional) {
-			nrOfOptionalTransactions++;
-		}
-
-		result.setProperty(UpdatePropertyNodeProperties.IS_GENERIC.toString(), oldNode.hasRelationship(Direction.INCOMING, GMLRelTypes.GENERIC_ATTRIBUTE));
-
-		String oldNearestId = retrieveNearestId(oldNode);
-		result.setProperty(UpdatePropertyNodeProperties.OLD_BUILDING_ID.toString(), retrieveBuildingId(oldNode, oldNearestId));
-		result.setProperty(UpdatePropertyNodeProperties.OLD_NEAREST_ID.toString(), oldNearestId);
+		// result.setProperty(UpdatePropertyNodeProperties.IS_GENERIC.toString(), oldNode.hasRelationship(Direction.INCOMING, GMLRelTypes.GENERIC_ATTRIBUTE));
 
 		result.createRelationshipTo(oldNode, EditRelTypes.OLD_NODE);
 
@@ -443,27 +345,33 @@ public class Matcher {
 		}
 
 		// test if an exact same node already exists (due to XLINKs)
-		for (Node node : GraphUtil.findParentsOfNode(oldNode, Label.label(EditOperators.DELETE_PROPERTY + ""))) {
+		for (Node node : GraphUtil.findParentsOfNode(oldNode, Label.label(EditOperators.DELETE_PROPERTY.toString()))) {
 			Object val = node.getProperty(DeletePropertyNodeProperties.PROPERTY_NAME.toString(), null);
 			if (val != null && (val + "").equals(propertyName + "")) {
 				return;
 			}
 		}
 
-		Node result = createNodeWithLabel(EditOperators.DELETE_PROPERTY);
+		Node result = createNodeWithLabel(EditOperators.DELETE_PROPERTY);		
+		result.setProperty(DeletePropertyNodeProperties.OP_ID.toString(), UUID.randomUUID().toString());
+		
+		result.setProperty(DeletePropertyNodeProperties.OLD_PARENT_NODE_TYPE.toString(), GraphUtil.getLabelString(oldNode));
+		Object parent_node_gmlid = oldNode.getProperty("id", null);
+		result.setProperty(DeletePropertyNodeProperties.OLD_PARENT_NODE_GMLID.toString(), parent_node_gmlid == null ? "" : parent_node_gmlid.toString());
+		
+		String oldNearestId = retrieveNearestId(oldNode);
+		result.setProperty(DeletePropertyNodeProperties.OF_OLD_NEAREST_GMLID.toString(), oldNearestId);
+		result.setProperty(DeletePropertyNodeProperties.OF_OLD_BUILDING_GMLID.toString(), retrieveBuildingId(oldNode, oldNearestId));
 
 		result.setProperty(DeletePropertyNodeProperties.PROPERTY_NAME.toString(), propertyName);
+		result.setProperty(DeletePropertyNodeProperties.OLD_VALUE.toString(), oldNode.getProperty((String) propertyName).toString());
+		
+		result.setProperty(DeletePropertyNodeProperties.IS_OPTIONAL.toString(), isOptional);
+		// if (isOptional) {
+		// nrOfOptionalTransactions++;
+		// }
 
 		result.setProperty(DeletePropertyNodeProperties.MESSAGE.toString(), "Property has been deleted from the old city model.");
-
-		result.setProperty(DeletePropertyNodeProperties.IS_OPTIONAL.toString(), isOptional);
-		if (isOptional) {
-			nrOfOptionalTransactions++;
-		}
-
-		String oldNearestId = retrieveNearestId(oldNode);
-		result.setProperty(DeletePropertyNodeProperties.OLD_BUILDING_ID.toString(), retrieveBuildingId(oldNode, oldNearestId));
-		result.setProperty(DeletePropertyNodeProperties.OLD_NEAREST_ID.toString(), oldNearestId);
 
 		result.createRelationshipTo(oldNode, EditRelTypes.OLD_NODE);
 
@@ -477,7 +385,7 @@ public class Matcher {
 		}
 
 		// test if an exact same node already exists (due to XLINKs)
-		for (Node node : GraphUtil.findParentsOfNode(oldNode, Label.label(EditOperators.INSERT_PROPERTY + ""))) {
+		for (Node node : GraphUtil.findParentsOfNode(oldNode, Label.label(EditOperators.INSERT_PROPERTY.toString()))) {
 			Object val = node.getProperty(InsertPropertyNodeProperties.PROPERTY_NAME.toString(), null);
 			if (val != null && (val + "").equals(propertyName + "")) {
 				return;
@@ -485,20 +393,25 @@ public class Matcher {
 		}
 
 		Node result = createNodeWithLabel(EditOperators.INSERT_PROPERTY);
+		result.setProperty(InsertPropertyNodeProperties.OP_ID.toString(), UUID.randomUUID().toString());
+		
+		result.setProperty(InsertPropertyNodeProperties.OLD_PARENT_NODE_TYPE.toString(), GraphUtil.getLabelString(oldNode));
+		Object parent_node_gmlid = oldNode.getProperty("id", null);
+		result.setProperty(InsertPropertyNodeProperties.OLD_PARENT_NODE_GMLID.toString(), parent_node_gmlid == null ? "" : parent_node_gmlid.toString());
+		
+		String oldNearestId = retrieveNearestId(oldNode);
+		result.setProperty(InsertPropertyNodeProperties.OF_OLD_NEAREST_GMLID.toString(), oldNearestId);
+		result.setProperty(InsertPropertyNodeProperties.OF_OLD_BUILDING_GMLID.toString(), retrieveBuildingId(oldNode, oldNearestId));
 
 		result.setProperty(InsertPropertyNodeProperties.PROPERTY_NAME.toString(), propertyName);
 		result.setProperty(InsertPropertyNodeProperties.NEW_VALUE.toString(), newValue);
+		
+		result.setProperty(InsertPropertyNodeProperties.IS_OPTIONAL.toString(), isOptional);
+		// if (isOptional) {
+		// nrOfOptionalTransactions++;
+		// }
 
 		result.setProperty(InsertPropertyNodeProperties.MESSAGE.toString(), "Property has been inserted to the new city model.");
-
-		result.setProperty(InsertPropertyNodeProperties.IS_OPTIONAL.toString(), isOptional);
-		if (isOptional) {
-			nrOfOptionalTransactions++;
-		}
-
-		String oldNearestId = retrieveNearestId(oldNode);
-		result.setProperty(InsertPropertyNodeProperties.OLD_BUILDING_ID.toString(), retrieveBuildingId(oldNode, oldNearestId));
-		result.setProperty(InsertPropertyNodeProperties.OLD_NEAREST_ID.toString(), oldNearestId);
 
 		result.createRelationshipTo(oldNode, EditRelTypes.OLD_NODE);
 
@@ -546,19 +459,24 @@ public class Matcher {
 		}
 
 		Node result = createNodeWithLabel(EditOperators.DELETE_NODE);
-
-		result.setProperty(DeleteRelationshipNodeProperties.MESSAGE.toString(), "Sub graph has been deleted from the old city model.");
+		result.setProperty(DeleteRelationshipNodeProperties.OP_ID.toString(), UUID.randomUUID().toString());
+		
+		result.setProperty(DeleteRelationshipNodeProperties.DELETE_NODE_TYPE.toString(), GraphUtil.getLabelString(oldNode));
+		Object delete_node_gmlid = oldNode.getProperty("id", null);
+		result.setProperty(DeleteRelationshipNodeProperties.DELETE_NODE_GMLID.toString(), delete_node_gmlid == null ? "" : delete_node_gmlid.toString());
+		
+		String oldNearestId = retrieveNearestId(oldNode);
+		result.setProperty(DeleteRelationshipNodeProperties.OF_OLD_NEAREST_GMLID.toString(), oldNearestId);
+		result.setProperty(DeleteRelationshipNodeProperties.OF_OLD_BUILDING_GMLID.toString(), retrieveBuildingId(oldNode, oldNearestId));
 
 		result.setProperty(DeleteRelationshipNodeProperties.IS_OPTIONAL.toString(), isOptional);
-		if (isOptional) {
-			nrOfOptionalTransactions++;
-		}
+		// if (isOptional) {
+		// nrOfOptionalTransactions++;
+		// }
+		
+		result.setProperty(DeleteRelationshipNodeProperties.MESSAGE.toString(), "Sub graph has been deleted from the old city model.");
 
-		result.setProperty(DeleteRelationshipNodeProperties.IS_GENERIC.toString(), oldNode.hasRelationship(Direction.INCOMING, GMLRelTypes.GENERIC_ATTRIBUTE));
-
-		String oldNearestId = retrieveNearestId(oldNode);
-		result.setProperty(DeleteRelationshipNodeProperties.OLD_BUILDING_ID.toString(), retrieveBuildingId(oldNode, oldNearestId));
-		result.setProperty(DeleteRelationshipNodeProperties.OLD_NEAREST_ID.toString(), oldNearestId);
+		// result.setProperty(DeleteRelationshipNodeProperties.IS_GENERIC.toString(), oldNode.hasRelationship(Direction.INCOMING, GMLRelTypes.GENERIC_ATTRIBUTE));
 
 		result.createRelationshipTo(oldNode, EditRelTypes.OLD_NODE);
 
@@ -606,7 +524,7 @@ public class Matcher {
 
 		// test if an exact same node already exists (due to XLINKs)
 		for (Node node : GraphUtil.findParentsOfNode(oldNode, Label.label(EditOperators.INSERT_NODE + ""))) {
-			Object val = node.getProperty(InsertRelationshipNodeProperties.RELATIONSHIP_TYPE.toString(), null);
+			Object val = node.getProperty(InsertRelationshipNodeProperties.INSERT_RELATIONSHIP_TYPE.toString(), null);
 			if (val != null && (val + "").equals(relType + "")
 					&& GraphUtil.findFirstChildOfNode(node, EditRelTypes.NEW_NODE).equals(newNode)) {
 				return;
@@ -614,24 +532,30 @@ public class Matcher {
 		}
 
 		Node result = createNodeWithLabel(EditOperators.INSERT_NODE);
+		result.setProperty(InsertRelationshipNodeProperties.OP_ID.toString(), UUID.randomUUID().toString());
 
-		result.setProperty(InsertRelationshipNodeProperties.RELATIONSHIP_TYPE.toString(), relType.toString());
+		result.setProperty(InsertRelationshipNodeProperties.INSERT_RELATIONSHIP_TYPE.toString(), relType.toString());
+		
+		result.setProperty(InsertRelationshipNodeProperties.INSERT_NODE_TYPE.toString(), GraphUtil.getLabelString(oldNode));
+		Object insert_node_gmlid = oldNode.getProperty("id", null);
+		result.setProperty(InsertRelationshipNodeProperties.INSERT_NODE_GMLID.toString(), insert_node_gmlid == null ? "" : insert_node_gmlid.toString());
+		
+		String oldNearestId = retrieveNearestId(oldNode);
+		result.setProperty(InsertRelationshipNodeProperties.OF_OLD_NEAREST_GMLID.toString(), oldNearestId);
+		result.setProperty(InsertRelationshipNodeProperties.OF_OLD_BUILDING_GMLID.toString(), retrieveBuildingId(oldNode, oldNearestId));
+		
+		String newNearestId = retrieveNearestId(newNode);
+		result.setProperty(InsertRelationshipNodeProperties.OF_NEW_NEAREST_GMLID.toString(), newNearestId);
+		result.setProperty(InsertRelationshipNodeProperties.OF_NEW_BUILDING_GMLID.toString(), retrieveBuildingId(newNode, newNearestId));
+		
+		result.setProperty(InsertRelationshipNodeProperties.IS_OPTIONAL.toString(), isOptional);
+		// if (isOptional) {
+		// nrOfOptionalTransactions++;
+		// }
 
 		result.setProperty(InsertRelationshipNodeProperties.MESSAGE.toString(), "Sub graph has been inserted to the new city model.");
 
-		result.setProperty(InsertRelationshipNodeProperties.IS_OPTIONAL.toString(), isOptional);
-		if (isOptional) {
-			nrOfOptionalTransactions++;
-		}
-
-		result.setProperty(InsertRelationshipNodeProperties.IS_GENERIC.toString(), newNode.hasRelationship(Direction.INCOMING, GMLRelTypes.GENERIC_ATTRIBUTE));
-
-		String oldNearestId = retrieveNearestId(oldNode);
-		String newNearestId = retrieveNearestId(newNode);
-		result.setProperty(InsertRelationshipNodeProperties.OLD_BUILDING_ID.toString(), retrieveBuildingId(oldNode, oldNearestId));
-		result.setProperty(InsertRelationshipNodeProperties.NEW_BUILDING_ID.toString(), retrieveBuildingId(newNode, newNearestId));
-		result.setProperty(InsertRelationshipNodeProperties.OLD_NEAREST_ID.toString(), oldNearestId);
-		result.setProperty(InsertRelationshipNodeProperties.NEW_NEAREST_ID.toString(), newNearestId);
+		// result.setProperty(InsertRelationshipNodeProperties.IS_GENERIC.toString(), newNode.hasRelationship(Direction.INCOMING, GMLRelTypes.GENERIC_ATTRIBUTE));
 
 		result.createRelationshipTo(newNode, EditRelTypes.NEW_NODE);
 		result.createRelationshipTo(oldNode, EditRelTypes.INSERT_PARENT);

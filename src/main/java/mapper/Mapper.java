@@ -1,6 +1,7 @@
 package mapper;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.citygml4j.geometry.Matrix;
 import org.citygml4j.model.citygml.CityGML;
 import org.citygml4j.model.citygml.CityGMLClass;
@@ -1040,9 +1042,23 @@ public class Mapper implements MappingComponent {
 				DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss_");
 				String dateString = dateFormat.format(new Date());
 
-				logger.info("Exporting RTree signatures as images ...");
+				String tmpLog = "Exporting RTree signatures as images ...\n";
 				String imageName = SETTINGS.RTREE_IMAGE_LOCATION + dateString + (isOld ? "old" : "new") + "_city_model_M" + SETTINGS.MAX_RTREE_NODE_REFERENCES + ".png";
+				
+				// redirect System.out.print/ln to logger
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				PrintStream ps = new PrintStream(baos);
+				PrintStream old = System.out;
+				System.setOut(ps);
 				GraphUtil.exportRTreeImage(buildingLayer, graphDb, imageName);
+				System.out.flush();
+				System.setOut(old);
+				String[] tmpLines = baos.toString().split("\n");
+				for (String tmpLine : tmpLines) {
+					tmpLog += String.format("%20s", "") + tmpLine;
+				}
+
+				logger.info(tmpLog);
 			}
 
 			mapperTx.success();
