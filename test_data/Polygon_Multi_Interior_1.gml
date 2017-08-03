@@ -9,7 +9,7 @@ xmlns:xlink="http://www.w3.org/1999/xlink"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 xsi:schemaLocation="http://www.opengis.net/citygml/building/2.0 http://schemas.opengis.net/citygml/building/2.0/building.xsd http://www.opengis.net/citygml/generics/2.0 http://schemas.opengis.net/citygml/generics/2.0/generics.xsd">
   <cityObjectMember>
-    <bldg:Building gml:id="BUILDING">
+    <bldg:Building gml:id="BUILDING_GMLID">
 	  <gml:boundedBy>
         <gml:Envelope srsName="" srsDimension="3">
 		  <gml:lowerCorner>0.0 0.0 0.0</gml:lowerCorner>
@@ -42,11 +42,11 @@ xsi:schemaLocation="http://www.opengis.net/citygml/building/2.0 http://schemas.o
 	  -->
 	  
       <bldg:boundedBy>
-        <bldg:GroundSurface gml:id="GROUND_SURFACE">
+        <bldg:GroundSurface gml:id="GROUND_SURFACE_GMLID">
           <bldg:lod2MultiSurface>
             <gml:MultiSurface>
               <gml:surfaceMember>
-                <gml:Polygon gml:id="POLYGON">
+                <gml:Polygon gml:id="POLYGON_GMLID">
                   <gml:exterior>
                     <gml:LinearRing>
 						<gml:pos>4.0 4.0 0.0</gml:pos>

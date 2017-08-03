@@ -15,6 +15,8 @@ public class SETTINGS {
 	public static final String KEY_NEW_CITY_MODEL_LOCATION = "NEW_CITY_MODEL_LOCATION";
 	public static final String KEY_DB_LOCATION = "DB_LOCATION";
 	public static final String KEY_LOG_LOCATION = "LOG_LOCATION";
+	public static final String KEY_EXPORT_LOCATION = "EXPORT_LOCATION";
+	public static final String KEY_CSV_DELIMITER = "CSV_DELIMITER";
 	public static final String KEY_WFS_SERVER = "WFS_SERVER";
 	public static final String KEY_RTREE_IMAGE_LOCATION = "RTREE_IMAGE_LOCATION";
 	public static final String KEY_ENABLE_MULTI_THREADED_MAPPING = "ENABLE_MULTI_THREADED_MAPPING";
@@ -65,6 +67,10 @@ public class SETTINGS {
 	public static final String DB_LOCATION = HOME_LOCATION + getValueWithDefault(KEY_DB_LOCATION, "neo4jDB/");
 
 	public static final String LOG_LOCATION = HOME_LOCATION + getValueWithDefault(KEY_LOG_LOCATION, "logs/Default.log");
+	
+	public static final String EXPORT_LOCATION = HOME_LOCATION + getValueWithDefault(KEY_EXPORT_LOCATION, "logs/");
+	
+	public static final String CSV_DELIMITER = getValueWithDefault(KEY_CSV_DELIMITER, ";");
 
 	public static final String WFS_SERVER = getValueWithDefault(KEY_WFS_SERVER, "http://10.162.246.159:8080/citydb-wfs-qeop/wfs");
 

@@ -28,12 +28,12 @@ import org.neo4j.graphdb.Transaction;
 import org.xml.sax.SAXException;
 
 import mapper.EnumClasses.GMLRelTypes;
-import matcher.Matcher.DeletePropertyNodeProperties;
+import matcher.EditOperationEnums.DeletePropertyNodeProperties;
 import matcher.Matcher.EditOperators;
 import matcher.Matcher.EditRelTypes;
-import matcher.Matcher.InsertPropertyNodeProperties;
-import matcher.Matcher.InsertRelationshipNodeProperties;
-import matcher.Matcher.UpdatePropertyNodeProperties;
+import matcher.EditOperationEnums.InsertPropertyNodeProperties;
+import matcher.EditOperationEnums.InsertRelationshipNodeProperties;
+import matcher.EditOperationEnums.UpdatePropertyNodeProperties;
 import util.ClientUtil;
 import util.GraphUtil;
 import util.SETTINGS;
@@ -81,7 +81,7 @@ public class Editor {
 			if (propertyName.equals("VALUE")) {
 				// not an attribute, but an element such as posList
 				request.append("\t\t\t<wfs:ValueReference>\n"
-						+ "\t\t\t\t//*[@id='" + opNode.getProperty(UpdatePropertyNodeProperties.OLD_NEAREST_ID.toString()).toString()
+						+ "\t\t\t\t//*[@id='" + opNode.getProperty(UpdatePropertyNodeProperties.OF_OLD_NEAREST_GMLID.toString()).toString()
 						+ "']//*[text()[contains(.,'" + opNode.getProperty(UpdatePropertyNodeProperties.OLD_VALUE.toString()).toString().replaceAll(";", " ") + "')]]\n"
 						+ "\t\t\t</wfs:ValueReference>\n");
 				request.append("\t\t\t<wfs:Value>\n"
@@ -90,7 +90,7 @@ public class Editor {
 			} else {
 				// attribute
 				request.append("\t\t\t<wfs:ValueReference>\n"
-						+ "\t\t\t\t//*[@id='" + opNode.getProperty(UpdatePropertyNodeProperties.OLD_NEAREST_ID.toString()).toString()
+						+ "\t\t\t\t//*[@id='" + opNode.getProperty(UpdatePropertyNodeProperties.OF_OLD_NEAREST_GMLID.toString()).toString()
 						+ "']//@*[contains(name(),'" + opNode.getProperty(UpdatePropertyNodeProperties.PROPERTY_NAME.toString()).toString() + "')]\n"
 						+ "\t\t\t</wfs:ValueReference>\n");
 				request.append("\t\t\t<wfs:Value>\n"
@@ -100,7 +100,7 @@ public class Editor {
 
 			request.append("\t\t</wfs:Property>\n");
 			request.append("\t\t<wfs:Filter>\n");
-			request.append("\t\t\t<wfs:ResourceId rid=\"" + opNode.getProperty(UpdatePropertyNodeProperties.OLD_BUILDING_ID.toString()).toString() + "\">\n");
+			request.append("\t\t\t<wfs:ResourceId rid=\"" + opNode.getProperty(UpdatePropertyNodeProperties.OF_OLD_BUILDING_GMLID.toString()).toString() + "\">\n");
 			request.append("\t\t</wfs:Filter>\n");
 			request.append("\t</wfs:Update>\n");
 			request.append("</wfs:Transaction>\n");
@@ -439,7 +439,7 @@ public class Editor {
 
 		// check if complex elements are to be inserted to building -> replace building
 		for (Node editor : GraphUtil.getNonOptionalAttachedEditors(oldBuilding, Label.label(EditOperators.INSERT_NODE + ""))) {
-			if (!GraphUtil.isSimpleBuildingElement(oldBuilding, editor.getProperty(InsertRelationshipNodeProperties.RELATIONSHIP_TYPE.toString()).toString())) {
+			if (!GraphUtil.isSimpleBuildingElement(oldBuilding, editor.getProperty(InsertRelationshipNodeProperties.INSERT_RELATIONSHIP_TYPE.toString()).toString())) {
 				// replace old building with the new one
 				updateBuilding(oldBuildingId, newBuildingId == null ? oldBuildingId : newBuildingId);
 				return;
@@ -520,7 +520,7 @@ public class Editor {
 
 		// insert simple properties to building
 		for (Node editor : GraphUtil.getNonOptionalAttachedEditors(oldBuilding, Label.label(EditOperators.INSERT_NODE + ""))) {
-			String relToInsert = editor.getProperty(InsertRelationshipNodeProperties.RELATIONSHIP_TYPE.toString()).toString();
+			String relToInsert = editor.getProperty(InsertRelationshipNodeProperties.INSERT_RELATIONSHIP_TYPE.toString()).toString();
 
 			boolean functionEdited = false;
 			boolean usageEdited = false;
@@ -1253,7 +1253,7 @@ public class Editor {
 
 		// insert geometry
 		for (Node editor : GraphUtil.getNonOptionalAttachedEditors(buildingNode, Label.label(EditOperators.INSERT_NODE + ""))) {
-			if (editor.getProperty(InsertRelationshipNodeProperties.RELATIONSHIP_TYPE.toString()).toString().equals(solidRelType.toString())) {
+			if (editor.getProperty(InsertRelationshipNodeProperties.INSERT_RELATIONSHIP_TYPE.toString()).toString().equals(solidRelType.toString())) {
 				updateElement(oldBuildingId, xPath, false,
 						StAXUtil.formatContents(
 								StAXUtil.extractXmlContentOfBuildingElementWithoutTags(
@@ -1294,7 +1294,7 @@ public class Editor {
 
 		// insert element
 		for (Node editor : GraphUtil.getNonOptionalAttachedEditors(buildingNode, Label.label(EditOperators.INSERT_NODE + ""))) {
-			if (editor.getProperty(InsertRelationshipNodeProperties.RELATIONSHIP_TYPE.toString()).toString().equals(relType.toString())) {
+			if (editor.getProperty(InsertRelationshipNodeProperties.INSERT_RELATIONSHIP_TYPE.toString()).toString().equals(relType.toString())) {
 				updateSimpleElement(oldBuildingId, xPath, GraphUtil.findFirstChildOfNode(editor, EditRelTypes.NEW_NODE).getProperty("value").toString());
 				return;
 			}
@@ -1427,20 +1427,20 @@ public class Editor {
 				StringBuilder xpath = new StringBuilder();
 				if (GraphUtil.findFirstChildOfNode(node, EditRelTypes.OLD_NODE).hasLabel(Label.label(CityGMLClass.BUILDING_ROOF_SURFACE + ""))) {
 					xpath.append("bldg:boundedBy/bldg:RoofSurface");
-					xpath.append("[@gml:id='" + node.getProperty(UpdatePropertyNodeProperties.OLD_NEAREST_ID + "").toString() + "']");
+					xpath.append("[@gml:id='" + node.getProperty(UpdatePropertyNodeProperties.OF_OLD_NEAREST_GMLID + "").toString() + "']");
 				} else if (GraphUtil.findFirstChildOfNode(node, EditRelTypes.OLD_NODE).hasLabel(Label.label(CityGMLClass.BUILDING_GROUND_SURFACE + ""))) {
 					xpath.append("bldg:boundedBy/bldg:GroundSurface");
-					xpath.append("[@gml:id='" + node.getProperty(UpdatePropertyNodeProperties.OLD_NEAREST_ID + "").toString() + "']");
+					xpath.append("[@gml:id='" + node.getProperty(UpdatePropertyNodeProperties.OF_OLD_NEAREST_GMLID + "").toString() + "']");
 				} else if (GraphUtil.findFirstChildOfNode(node, EditRelTypes.OLD_NODE).hasLabel(Label.label(CityGMLClass.BUILDING_WALL_SURFACE + ""))) {
 					xpath.append("bldg:boundedBy/bldg:WallSurface");
-					xpath.append("[@gml:id='" + node.getProperty(UpdatePropertyNodeProperties.OLD_NEAREST_ID + "").toString() + "']");
+					xpath.append("[@gml:id='" + node.getProperty(UpdatePropertyNodeProperties.OF_OLD_NEAREST_GMLID + "").toString() + "']");
 				}
 				if (xpath.length() != 0) {
 					xpath.append("/");
 				}
 				xpath.append("core:" + node.getProperty(UpdatePropertyNodeProperties.PROPERTY_NAME + "").toString());
 
-				String buildingId = node.getProperty(UpdatePropertyNodeProperties.OLD_BUILDING_ID + "").toString();
+				String buildingId = node.getProperty(UpdatePropertyNodeProperties.OF_OLD_BUILDING_GMLID + "").toString();
 
 				StringBuilder xmlContent = new StringBuilder();
 				xmlContent.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
