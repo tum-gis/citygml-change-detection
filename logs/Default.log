@@ -1,0 +1,170 @@
+[14:47:53     main] BEGIN OF LOGFILE FOR class controller.Controller
+[14:47:53     main] 
+-----------------------------------------
+READING SETTINGS FROM class util.SETTINGS
+-----------------------------------------
+MESSAGE OF TESTER
+	 > Default.                                                                                        
+
+SYSTEM INFO
+	 > Available processors:               8 cores
+	 > Initial heap space size:            0.2 GB
+	 > Maximum heap space size:            2.7 GB
+	 > Total memory available to JVM:      0.2 GB
+
+DATABASE AND PROGRAM SETTINGS
+	 > Home location:                      
+	 > Test data location:                 test_data/
+	 > Database location:                  neo4jDB/
+	 > Log location:                       logs/Default.log
+	 > Export location:                    export/
+	 > CSV delimiter:                      ;
+	 > WFS server:                         http://10.162.246.159:8080/citydb-wfs-qeop/wfs
+	 > Old city model location:            test_data/Polygon_Multi_Interior_0.gml
+	 > New city model location:            test_data/Polygon_Multi_Interior_1.gml
+	 > RTree image location:               saved_pictures/rtrees/
+
+MAPPER SETTINGS
+	 > Enable multi threading:             true
+	 > Number of producers:                1
+	 > Consumers per producers:            7
+	 > Enable ID indices:                  false
+	 > Split collection member:            true
+	 > Building batch cap:                 10
+	 > Feature batch cap:                  10
+	 > Transaction batch cap:              5000
+	 > Log after nr. of buildings:         100
+
+MATCHER SETTINGS
+	 > Matching strategy:                  RTREE
+	 > Enable multi threading:             true
+	 > Max. entries per RTree node:        10
+	 > Tile unit X:                        100.0
+	 > Tile unit Y:                        100.0
+	 > Tile border size:                   5.0
+	 > Match buildings by shared volume:   true
+	 > Shared volume threshold:            90.0%
+	 > Create matched content nodes:       false
+	 > Create matched geometry nodes:      false
+	 > Thread timeout (s):                 500000
+	 > Rounding tolerance:                 1.0E-7
+
+EDITOR SETTINGS
+	 > Enable Editors:                     false
+	 > Execute optional editors:           false
+
+[14:47:53     main] 
+------------------------------
+INITIALIZING TESTING COMPONENT
+------------------------------
+[14:47:53     main] ... deleting existing Neo4j databases ...
+[14:47:54     main] ... setting up citygml4j context and JAXB builder ...
+[14:47:56     main] ... reading CityGML files feature by feature ...
+[14:47:57     main] 
+-------------------------------------------------
+INITIALIZING MAPPING COMPONENT FOR OLD CITY MODEL
+-------------------------------------------------
+[14:47:57     main] ... setting up thread pool with 16 threads ...
+[14:47:57     main] INFO: p<i>-t<j> means pool<i>-thread<j>, example: p2t1 means pool2-thread1
+[14:47:57    p2-t2] Buildings found: 1
+[14:47:57     main] Post processing city model
+[14:47:57     main] Resolving XLINKs ...
+[14:47:58     main] Storing buildings' locations in an RTree for spatial indexing ...
+[14:47:58     main] Calculating bounding shapes of buildings ...
+[14:47:59     main] Exporting RTree signatures as images ...
+                    Drawing index level 0 of 1 nodes                    Writing image to disk: C:\GitWorkspace\citygml-change-detection\saved_pictures\rtrees\20170803_144758_old_city_model_M10.png
+[14:47:59     main] Finished reading city model
+[14:47:59     main] 
+-------------------------------------------------
+INITIALIZING MAPPING COMPONENT FOR NEW CITY MODEL
+-------------------------------------------------
+[14:47:59     main] ... setting up thread pool with 16 threads ...
+[14:47:59     main] INFO: p<i>-t<j> means pool<i>-thread<j>, example: p2t1 means pool2-thread1
+[14:47:59    p4-t2] Buildings found: 1
+[14:47:59     main] Post processing city model
+[14:47:59     main] Resolving XLINKs ...
+[14:47:59     main] Storing buildings' locations in an RTree for spatial indexing ...
+[14:47:59     main] Calculating bounding shapes of buildings ...
+[14:48:00     main] Exporting RTree signatures as images ...
+                    Drawing index level 0 of 1 nodes                    Writing image to disk: C:\GitWorkspace\citygml-change-detection\saved_pictures\rtrees\20170803_144759_new_city_model_M10.png
+[14:48:00     main] Finished reading city model
+[14:48:00     main] Step MAPPING finished
+[14:48:00     main] Time elapsed: 5 seconds
+[14:48:00     main] 
+-------------------------------
+INITIALIZING MATCHING COMPONENT
+-------------------------------
+[14:48:00    p6-t2] ... creating UPDATE_PROPERTY ...
+[14:48:00    p6-t2] ... creating DELETE_NODE ...
+[14:48:00    p6-t2] ... creating DELETE_NODE ...
+[14:48:00    p6-t2] ... creating DELETE_NODE ...
+[14:48:00    p6-t2] ... creating DELETE_NODE ...
+[14:48:00    p6-t2] ... creating DELETE_NODE ...
+[14:48:00    p6-t2] ... creating DELETE_NODE ...
+[14:48:00    p6-t2] ... creating DELETE_NODE ...
+[14:48:00    p6-t2] ... creating INSERT_NODE ...
+[14:48:00    p6-t2] ... creating INSERT_NODE ...
+[14:48:00    p6-t2] ... creating DELETE_NODE ...
+[14:48:00    p6-t2] ... creating INSERT_NODE ...
+[14:48:00    p6-t2] ... creating INSERT_NODE ...
+[14:48:00    p6-t2] ... creating INSERT_NODE ...
+[14:48:00    p6-t2] ... creating INSERT_NODE ...
+[14:48:00    p6-t2] ... creating INSERT_NODE ...
+[14:48:00    p6-t2] Processed buildings: 2
+[14:48:00     main] Post processing matcher ...
+[14:48:00     main] Step MATCHING finished
+[14:48:00     main] Time elapsed: 0 seconds
+[14:48:00     main] Exporting created edit operations to export/ ...
+                    Writing main table of all edit operations to C:\GitWorkspace\citygml-change-detection\export\EditOperations.csv
+                    Writing UPDATE_PROPERTY operations to C:\GitWorkspace\citygml-change-detection\export\EditOperations_UpdateProperty.csv
+                    Writing DELETE_PROPERTY operations to C:\GitWorkspace\citygml-change-detection\export\EditOperations_DeleteProperty.csv
+                    Writing INSERT_PROPERTY operations to C:\GitWorkspace\citygml-change-detection\export\EditOperations_InsertProperty.csv
+                    Writing DELETE_NODE operations to C:\GitWorkspace\citygml-change-detection\export\EditOperations_DeleteNode.csv
+                    Writing INSERT_NODE operations to C:\GitWorkspace\citygml-change-detection\export\EditOperations_InsertNode.csv
+[14:48:00     main] Preparing statistics report ...
+[14:48:00     main] 
+	                             STATISTICS REPORT
+	 _______________________________________________________________________ 
+	| MAPPER ...                                                             |
+	| Number of DIRECT_POSITION nodes:                                    16 |
+	| Number of POS_OR_POINT_PROPERTY_OR_POINT_REP nodes:                 12 |
+	| Number of POINT nodes:                                               7 |
+	| Number of POINT_PROPERTY nodes:                                      7 |
+	| Number of LINEAR_RING nodes:                                         5 |
+	| Number of DIRECT_POSITION_LIST nodes:                                3 |
+	| Number of INTERIOR nodes:                                            3 |
+	| Number of BOUNDING_SHAPE nodes:                                      2 |
+	| Number of BUILDING nodes:                                            2 |
+	| Number of BUILDING_BOUNDARY_SURFACE_PROPERTY nodes:                  2 |
+	| Number of BUILDING_GROUND_SURFACE nodes:                             2 |
+	| Number of CITY_MODEL nodes:                                          2 |
+	| Number of CITY_OBJECT_MEMBER nodes:                                  2 |
+	| Number of ENVELOPE nodes:                                            2 |
+	| Number of EXTERIOR nodes:                                            2 |
+	| Number of MULTI_SURFACE nodes:                                       2 |
+	| Number of MULTI_SURFACE_PROPERTY nodes:                              2 |
+	| Number of POLYGON nodes:                                             2 |
+	| Number of SURFACE_PROPERTY nodes:                                    2 |
+	| Number of ROOT_EDITOR nodes:                                         1 |
+	| Number of ROOT_MAPPER nodes:                                         1 |
+	| Number of ROOT_MATCHER nodes:                                        1 |
+	| Number of ReferenceNode nodes:                                       1 |
+	|                                                                        |
+	| TOTAL NUMBER OF CREATED NODES:                                81 nodes |
+	| MAPPER'S ELAPSED TIME:                                       5 seconds |
+	 ________________________________________________________________________/
+
+	 _______________________________________________________________________ 
+	| MATCHER ...                                                            |
+	| Number of DELETE_NODE nodes:                                         8 |
+	| Number of INSERT_NODE nodes:                                         7 |
+	| Number of UPDATE_PROPERTY nodes:                                     1 |
+	| Number of DELETE_PROPERTY nodes:                                     0 |
+	| Number of INSERT_PROPERTY nodes:                                     0 |
+	|                                                                        |
+	| TOTAL NUMBER OF CREATED NODES:                                16 nodes |
+	| OF WHICH ARE OPTIONAL:                                        15 nodes |
+	| MATCHER'S ELAPSED TIME:                                      0 seconds |
+	 ________________________________________________________________________/
+
+[14:48:00     main] END OF LOGFILE.

@@ -32,14 +32,14 @@ import org.opengis.feature.simple.SimpleFeatureType;
 
 import mapper.BoundingBoxCalculator;
 import mapper.EnumClasses.GMLRelTypes;
-import matcher.Matcher.DeletePropertyNodeProperties;
-import matcher.Matcher.DeleteRelationshipNodeProperties;
+import matcher.EditOperationEnums.DeletePropertyNodeProperties;
+import matcher.EditOperationEnums.DeleteRelationshipNodeProperties;
 import matcher.Matcher.EditOperators;
 import matcher.Matcher.EditRelTypes;
-import matcher.Matcher.InsertPropertyNodeProperties;
-import matcher.Matcher.InsertRelationshipNodeProperties;
+import matcher.EditOperationEnums.InsertPropertyNodeProperties;
+import matcher.EditOperationEnums.InsertRelationshipNodeProperties;
 import matcher.Matcher.TmpRelTypes;
-import matcher.Matcher.UpdatePropertyNodeProperties;
+import matcher.EditOperationEnums.UpdatePropertyNodeProperties;
 
 /**
  * Suggestions, bug reports, etc. please contact: son.nguyen@tum.de
