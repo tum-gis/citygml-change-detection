@@ -260,11 +260,14 @@ public class Matcher {
 			}
 
 			String tmp = retrieveBuildingId(rel.getOtherNode(node), elementNearestId);
-
+			
+			return tmp;
+			// OR
 			// if a node have multiple parent buildings -> choose the one building that explicitly declares it without XLINK
-			if (StAXUtil.isReachableFromBuilding(oldFilename, elementNearestId, tmp)) {
-				return tmp;
-			}
+			// if (StAXUtil.isReachableFromBuilding(oldFilename,
+			// elementNearestId, tmp)) {
+			// return tmp;
+			// }
 		}
 
 		return "";

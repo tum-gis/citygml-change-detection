@@ -1054,8 +1054,11 @@ public class Mapper implements MappingComponent {
 				System.out.flush();
 				System.setOut(old);
 				String[] tmpLines = baos.toString().split("\n");
-				for (String tmpLine : tmpLines) {
-					tmpLog += String.format("%20s", "") + tmpLine;
+				for (int i = 0; i < tmpLines.length; i++) {
+					tmpLog += String.format("%20s", "") + tmpLines[i];
+					if (i != tmpLines.length - 1) {
+						tmpLog += "\n";
+					}
 				}
 
 				logger.info(tmpLog);
