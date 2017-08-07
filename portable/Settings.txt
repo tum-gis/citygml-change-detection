@@ -23,7 +23,7 @@ NEW_CITY_MODEL_LOCATION=BerlinMoabitETRS89New.gml
 # Location of Neo4j graph database
 DB_LOCATION=neo4jDB/
 # Location of log files
-LOG_LOCATION=logs/Default.log
+LOG_LOCATION=logs/MatchBuildingsBySharedFootprint.log
 # Location of exported CSV storing edit operations
 EXPORT_LOCATION=export/
 CSV_DELIMITER=;
