@@ -34,6 +34,8 @@ public class SETTINGS {
 	public static final String KEY_TILE_UNIT_X = "TILE_UNIT_X";
 	public static final String KEY_TILE_UNIT_Y = "TILE_UNIT_Y";
 	public static final String KEY_ERR_TOLERANCE = "ERR_TOLERANCE";
+	public static final String KEY_ANGLE_TOLERANCE = "ANGLE_TOLERANCE";
+	public static final String KEY_DISTANCE_TOLERANCE = "DISTANCE_TOLERANCE";
 	public static final String KEY_TILE_BORDER_DISTANCE = "TILE_BORDER_DISTANCE";
 	public static final String KEY_MATCH_BUILDINGS_BY_SHARED_VOLUME = "MATCH_BUILDINGS_BY_SHARED_VOLUME";
 	public static final String KEY_BUILDING_SHARED_VOL_PERCENTAGE_THRESHOLD = "BUILDING_SHARED_VOL_PERCENTAGE_THRESHOLD";
@@ -178,6 +180,11 @@ public class SETTINGS {
 	public static final double TILE_UNIT_Y = getValueWithDefault(KEY_TILE_UNIT_Y, 100);
 
 	public static final double ERR_TOLERANCE = getValueWithDefault(KEY_ERR_TOLERANCE, 1e-7);
+	
+	public static final double ANGLE_TOLERANCE = getValueWithDefault(KEY_ANGLE_TOLERANCE, 1e-3);
+	
+	public static final double DISTANCE_TOLERANCE = getValueWithDefault(KEY_DISTANCE_TOLERANCE, 1e-3);
+	
 
 	/**
 	 * Spatially, buildings are assigned to their respective tiles. However, if a building's bounding shape is located too near to a tile border,

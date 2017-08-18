@@ -233,6 +233,7 @@ public class EditOperationExporter {
 				writerDeleteNodeOperations.close();
 				writerInsertNodeOperations.close();
 			} catch (Exception ex) {
+				System.out.println(ex);
 			}
 		}
 

@@ -267,7 +267,11 @@ public class Controller {
 
 		sb.append(String.format("%-40s", "\t > Thread timeout (s):") + SETTINGS.THREAD_TIME_OUT + "\n");
 
-		sb.append(String.format("%-40s", "\t > Rounding tolerance:") + SETTINGS.ERR_TOLERANCE + "\n");
+		sb.append(String.format("%-40s", "\t > Rounding tolerance (m):") + SETTINGS.ERR_TOLERANCE + "\n");
+		
+		sb.append(String.format("%-40s", "\t > Angle tolerance (rad):") + SETTINGS.ANGLE_TOLERANCE + "\n");
+		
+		sb.append(String.format("%-40s", "\t > Distance tolerance (m):") + SETTINGS.DISTANCE_TOLERANCE + "\n");
 
 		sb.append("\nEDITOR SETTINGS\n");
 
