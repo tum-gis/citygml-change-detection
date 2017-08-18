@@ -43,6 +43,7 @@ import matcher.EditOperationEnums.DeleteRelationshipNodeProperties;
 import matcher.EditOperationEnums.InsertPropertyNodeProperties;
 import matcher.EditOperationEnums.InsertRelationshipNodeProperties;
 import matcher.EditOperationEnums.UpdatePropertyNodeProperties;
+import util.Area3D;
 import util.BooleanObject;
 import util.GeometryUtil;
 import util.GraphUtil;
@@ -1758,65 +1759,78 @@ public class Matcher {
 
 	private BooleanObject matchGeometry(Node oldNode, Node newNode) {
 		String oldLabel = GraphUtil.getLabelString(oldNode);
+		
+		BooleanObject result = null;
 
 		if (oldLabel.equals(CityGMLClass.CITY_OBJECT_MEMBER + "")) {
-			return new BooleanObject(matchGeometryCityObjectMember(oldNode, newNode));
+			result = new BooleanObject(matchGeometryCityObjectMember(oldNode, newNode));
 		} else if (oldLabel.equals(CityGMLClass.BUILDING + "")) {
-			return new BooleanObject(matchGeometryBuildingOrBuildingPart(oldNode, newNode));
+			result = new BooleanObject(matchGeometryBuildingOrBuildingPart(oldNode, newNode));
 		} else if (oldLabel.equals(CityGMLClass.BUILDING_PART_PROPERTY + "")) {
-			return new BooleanObject(matchGeometryBuildingOrBuildingPartProperty(oldNode, newNode));
+			result = new BooleanObject(matchGeometryBuildingOrBuildingPartProperty(oldNode, newNode));
 		} else if (oldLabel.equals(CityGMLClass.BUILDING_PART + "")) {
-			return new BooleanObject(matchGeometryBuildingOrBuildingPart(oldNode, newNode));
-		} else if (oldLabel.equals(CityGMLClass.BUILDING_BOUNDARY_SURFACE_PROPERTY + "")) {
-			return new BooleanObject(matchGeometryBoundarySurfaceProperty(oldNode, newNode));
+			result = new BooleanObject(matchGeometryBuildingOrBuildingPart(oldNode, newNode));
+		} 
+		
+		else if (oldLabel.equals(CityGMLClass.BUILDING_BOUNDARY_SURFACE_PROPERTY + "")) {
+			result = new BooleanObject(matchGeometryBoundarySurfaceProperty(oldNode, newNode));
 		} else if (oldLabel.equals(CityGMLClass.BUILDING_CEILING_SURFACE + "")) {
-			return new BooleanObject(matchGeometryCeilingSurface(oldNode, newNode));
+			result = new BooleanObject(matchGeometryCeilingSurface(oldNode, newNode));
 		} else if (oldLabel.equals(CityGMLClass.BUILDING_CLOSURE_SURFACE + "")) {
-			return new BooleanObject(matchGeometryClosureSurface(oldNode, newNode));
+			result = new BooleanObject(matchGeometryClosureSurface(oldNode, newNode));
 		} else if (oldLabel.equals(CityGMLClass.BUILDING_FLOOR_SURFACE + "")) {
-			return new BooleanObject(matchGeometryFloorSurface(oldNode, newNode));
+			result = new BooleanObject(matchGeometryFloorSurface(oldNode, newNode));
 		} else if (oldLabel.equals(CityGMLClass.BUILDING_GROUND_SURFACE + "")) {
-			return new BooleanObject(matchGeometryGroundSurface(oldNode, newNode));
+			result = new BooleanObject(matchGeometryGroundSurface(oldNode, newNode));
 		} else if (oldLabel.equals(CityGMLClass.INTERIOR_BUILDING_WALL_SURFACE + "")) {
-			return new BooleanObject(matchGeometryInteriorWallSurface(oldNode, newNode));
+			result = new BooleanObject(matchGeometryInteriorWallSurface(oldNode, newNode));
 		} else if (oldLabel.equals(CityGMLClass.OUTER_BUILDING_CEILING_SURFACE + "")) {
-			return new BooleanObject(matchGeometryOuterCeilingSurface(oldNode, newNode));
+			result = new BooleanObject(matchGeometryOuterCeilingSurface(oldNode, newNode));
 		} else if (oldLabel.equals(CityGMLClass.OUTER_BUILDING_FLOOR_SURFACE + "")) {
-			return new BooleanObject(matchGeometryOuterFloorSurface(oldNode, newNode));
+			result = new BooleanObject(matchGeometryOuterFloorSurface(oldNode, newNode));
 		} else if (oldLabel.equals(CityGMLClass.BUILDING_ROOF_SURFACE + "")) {
-			return new BooleanObject(matchGeometryRoofSurface(oldNode, newNode));
+			result = new BooleanObject(matchGeometryRoofSurface(oldNode, newNode));
 		} else if (oldLabel.equals(CityGMLClass.BUILDING_WALL_SURFACE + "")) {
-			return new BooleanObject(matchGeometryWallSurface(oldNode, newNode));
-		} else if (oldLabel.equals(GMLClass.POLYGON + "")) {
-			return new BooleanObject(matchGeometryPolygon(oldNode, newNode));
+			result = new BooleanObject(matchGeometryWallSurface(oldNode, newNode));
+		} 
+		
+		else if (oldLabel.equals(GMLClass.POLYGON + "")) {
+			result = new BooleanObject(matchGeometryPolygon(oldNode, newNode));
 		} else if (oldLabel.equals(GMLClass.LINEAR_RING + "")) {
-			return new BooleanObject(matchGeometryLinearRing(oldNode, newNode));
+			result = new BooleanObject(matchGeometryLinearRing(oldNode, newNode));
 		} else if (oldLabel.equals(GMLClass.RING + "")) {
-			return new BooleanObject(matchGeometryRing(oldNode, newNode));
+			result = new BooleanObject(matchGeometryRing(oldNode, newNode));
 		} else if (oldLabel.equals(GMLClass.ENVELOPE + "")) {
-			return new BooleanObject(matchGeometryEnvelope(oldNode, newNode));
+			result = new BooleanObject(matchGeometryEnvelope(oldNode, newNode));
 		} else if (oldLabel.equals(GMLClass.POINT + "")) {
-			return new BooleanObject(matchGeometryPoint(oldNode, newNode));
+			result = new BooleanObject(matchGeometryPoint(oldNode, newNode));
 		} else if (oldLabel.equals(GMLClass.POINT_PROPERTY + "")) {
-			return new BooleanObject(matchGeometryPointProperty(oldNode, newNode));
+			result = new BooleanObject(matchGeometryPointProperty(oldNode, newNode));
 		} else if (oldLabel.equals(GMLClass.POINT_REP + "")) {
-			return new BooleanObject(matchGeometryPointRep(oldNode, newNode));
+			result = new BooleanObject(matchGeometryPointRep(oldNode, newNode));
 		} else if (oldLabel.equals(GMLClass.DIRECT_POSITION + "")) {
-			return new BooleanObject(matchGeometryDirectPosition(oldNode, newNode));
+			result = new BooleanObject(matchGeometryDirectPosition(oldNode, newNode));
 		} else if (oldLabel.equals(GMLClass.COORD + "")) {
-			return new BooleanObject(matchGeometryCoord(oldNode, newNode));
+			result = new BooleanObject(matchGeometryCoord(oldNode, newNode));
 		} else if (oldLabel.equals(GMLClass.DIRECT_POSITION_LIST + "")) {
-			return new BooleanObject(matchGeometryDirectPositionList(oldNode, newNode));
+			result = new BooleanObject(matchGeometryDirectPositionList(oldNode, newNode));
 		} else if (oldLabel.equals(GMLClass.COORDINATES + "")) {
-			return new BooleanObject(matchGeometryCoordinates(oldNode, newNode));
+			result = new BooleanObject(matchGeometryCoordinates(oldNode, newNode));
 		} else if (oldLabel.equals(GMLClass.LINE_STRING_PROPERTY + "")) {
-			return new BooleanObject(matchGeometryLineStringProperty(oldNode, newNode));
+			result = new BooleanObject(matchGeometryLineStringProperty(oldNode, newNode));
 		} else if (oldLabel.equals(GMLClass.LINE_STRING + "")) {
-			return new BooleanObject(matchGeometryLineString(oldNode, newNode));
+			result = new BooleanObject(matchGeometryLineString(oldNode, newNode));
+		} else{
+			// non-geometric nodes
+			result = null;
+		}
+		
+		if ((result != null) && (!suppressLogger) && (result.getValue()) && (oldNode.hasProperty("id")) && (newNode.hasProperty("id"))) {
+			logger.info("MATCHED [" + oldLabel + "] " + oldNode.getProperty("id").toString() + "\n" 
+						+ String.format("%20s", "") + "   WITH [" + oldLabel + "] " + newNode.getProperty("id").toString());
 		}
 
-		// non-geometric nodes
-		return null;
+		return result;
 	}
 
 	/*
@@ -1885,8 +1899,8 @@ public class Matcher {
 	}
 
 	public boolean matchGeometryBoundarySurfaceProperty(Node oldNode, Node newNode) {
-		Area oldArea = calcBoundarySurfaceProperty(oldNode);
-		Area newArea = calcBoundarySurfaceProperty(newNode);
+		Area3D oldArea = calcBoundarySurfaceProperty(oldNode);
+		Area3D newArea = calcBoundarySurfaceProperty(newNode);
 
 		if (oldArea.isEmpty() || newArea.isEmpty()) {
 			return false;
@@ -1905,8 +1919,8 @@ public class Matcher {
 	}
 
 	public boolean matchGeometryCeilingSurface(Node oldNode, Node newNode) {
-		Area oldArea = calcCeilingSurface(oldNode);
-		Area newArea = calcCeilingSurface(newNode);
+		Area3D oldArea = calcCeilingSurface(oldNode);
+		Area3D newArea = calcCeilingSurface(newNode);
 
 		if (oldArea.isEmpty() || newArea.isEmpty()) {
 			return false;
@@ -1925,8 +1939,8 @@ public class Matcher {
 	}
 
 	public boolean matchGeometryClosureSurface(Node oldNode, Node newNode) {
-		Area oldArea = calcClosureSurface(oldNode);
-		Area newArea = calcClosureSurface(newNode);
+		Area3D oldArea = calcClosureSurface(oldNode);
+		Area3D newArea = calcClosureSurface(newNode);
 
 		if (oldArea.isEmpty() || newArea.isEmpty()) {
 			return false;
@@ -1945,8 +1959,8 @@ public class Matcher {
 	}
 
 	public boolean matchGeometryFloorSurface(Node oldNode, Node newNode) {
-		Area oldArea = calcFloorSurface(oldNode);
-		Area newArea = calcFloorSurface(newNode);
+		Area3D oldArea = calcFloorSurface(oldNode);
+		Area3D newArea = calcFloorSurface(newNode);
 
 		if (oldArea.isEmpty() || newArea.isEmpty()) {
 			return false;
@@ -1965,8 +1979,8 @@ public class Matcher {
 	}
 
 	public boolean matchGeometryGroundSurface(Node oldNode, Node newNode) {
-		Area oldArea = calcGroundSurface(oldNode);
-		Area newArea = calcGroundSurface(newNode);
+		Area3D oldArea = calcGroundSurface(oldNode);
+		Area3D newArea = calcGroundSurface(newNode);
 
 		if (oldArea.isEmpty() || newArea.isEmpty()) {
 			return false;
@@ -1985,8 +1999,8 @@ public class Matcher {
 	}
 
 	public boolean matchGeometryInteriorWallSurface(Node oldNode, Node newNode) {
-		Area oldArea = calcInteriorWallSurface(oldNode);
-		Area newArea = calcInteriorWallSurface(newNode);
+		Area3D oldArea = calcInteriorWallSurface(oldNode);
+		Area3D newArea = calcInteriorWallSurface(newNode);
 
 		if (oldArea.isEmpty() || newArea.isEmpty()) {
 			return false;
@@ -2005,8 +2019,8 @@ public class Matcher {
 	}
 
 	public boolean matchGeometryOuterCeilingSurface(Node oldNode, Node newNode) {
-		Area oldArea = calcOuterCeilingSurface(oldNode);
-		Area newArea = calcOuterCeilingSurface(newNode);
+		Area3D oldArea = calcOuterCeilingSurface(oldNode);
+		Area3D newArea = calcOuterCeilingSurface(newNode);
 
 		if (oldArea.isEmpty() || newArea.isEmpty()) {
 			return false;
@@ -2025,8 +2039,8 @@ public class Matcher {
 	}
 
 	public boolean matchGeometryOuterFloorSurface(Node oldNode, Node newNode) {
-		Area oldArea = calcOuterFloorSurface(oldNode);
-		Area newArea = calcOuterFloorSurface(newNode);
+		Area3D oldArea = calcOuterFloorSurface(oldNode);
+		Area3D newArea = calcOuterFloorSurface(newNode);
 
 		if (oldArea.isEmpty() || newArea.isEmpty()) {
 			return false;
@@ -2045,8 +2059,8 @@ public class Matcher {
 	}
 
 	public boolean matchGeometryRoofSurface(Node oldNode, Node newNode) {
-		Area oldArea = calcRoofSurface(oldNode);
-		Area newArea = calcRoofSurface(newNode);
+		Area3D oldArea = calcRoofSurface(oldNode);
+		Area3D newArea = calcRoofSurface(newNode);
 
 		if (oldArea.isEmpty() || newArea.isEmpty()) {
 			return false;
@@ -2065,8 +2079,8 @@ public class Matcher {
 	}
 
 	public boolean matchGeometryWallSurface(Node oldNode, Node newNode) {
-		Area oldArea = calcWallSurface(oldNode);
-		Area newArea = calcWallSurface(newNode);
+		Area3D oldArea = calcWallSurface(oldNode);
+		Area3D newArea = calcWallSurface(newNode);
 
 		if (oldArea.isEmpty() || newArea.isEmpty()) {
 			return false;
@@ -2085,8 +2099,8 @@ public class Matcher {
 	}
 
 	public boolean matchGeometryPolygon(Node oldNode, Node newNode) {
-		Area oldArea = calcPolygon(oldNode);
-		Area newArea = calcPolygon(newNode);
+		Area3D oldArea = calcPolygon(oldNode);
+		Area3D newArea = calcPolygon(newNode);
 
 		if (oldArea.isEmpty() || newArea.isEmpty()) {
 			return false;
@@ -2105,8 +2119,8 @@ public class Matcher {
 	}
 
 	public boolean matchGeometryLinearRing(Node oldNode, Node newNode) {
-		Area oldArea = calcLinearRing(oldNode);
-		Area newArea = calcLinearRing(newNode);
+		Area3D oldArea = calcLinearRing(oldNode);
+		Area3D newArea = calcLinearRing(newNode);
 
 		if (oldArea.isEmpty() || newArea.isEmpty()) {
 			return false;
@@ -2125,8 +2139,8 @@ public class Matcher {
 	}
 
 	public boolean matchGeometryRing(Node oldNode, Node newNode) {
-		Area oldArea = calcRing(oldNode);
-		Area newArea = calcRing(newNode);
+		Area3D oldArea = calcRing(oldNode);
+		Area3D newArea = calcRing(newNode);
 
 		if (oldArea.isEmpty() || newArea.isEmpty()) {
 			return false;
@@ -2226,8 +2240,8 @@ public class Matcher {
 	/*
 	 * Hierarchical auxiliary functions for area calculation
 	 */
-	public Area calcSearchAbstractRing(Node node) {
-		Area result = new Area();
+	public Area3D calcSearchAbstractRing(Node node) {
+		Area3D result = new Area3D();
 		if (node == null) {
 			return result;
 		}
@@ -2238,8 +2252,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcSearchListPosOrPointPropertyOrPointRep(ArrayList<Node> nodeList) {
-		Area result = new Area();
+	public Area3D calcSearchListPosOrPointPropertyOrPointRep(ArrayList<Node> nodeList) {
+		Area3D result = new Area3D();
 		if (nodeList == null) {
 			return result;
 		}
@@ -2288,8 +2302,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcSearchListCoord(ArrayList<Node> nodeList) {
-		Area result = new Area();
+	public Area3D calcSearchListCoord(ArrayList<Node> nodeList) {
+		Area3D result = new Area3D();
 		if (nodeList == null) {
 			return result;
 		}
@@ -2325,8 +2339,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcSearchListCurveProperty(ArrayList<Node> nodeList) {
-		Area result = new Area();
+	public Area3D calcSearchListCurveProperty(ArrayList<Node> nodeList) {
+		Area3D result = new Area3D();
 		if (nodeList == null) {
 			return result;
 		}
@@ -2376,8 +2390,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcSearchListAbstractRingProperty(ArrayList<Node> nodeList) {
-		Area result = new Area();
+	public Area3D calcSearchListAbstractRingProperty(ArrayList<Node> nodeList) {
+		Area3D result = new Area3D();
 		if (nodeList == null) {
 			return result;
 		}
@@ -2389,8 +2403,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcSearchAbstractRingProperty(Node node) {
-		Area result = new Area();
+	public Area3D calcSearchAbstractRingProperty(Node node) {
+		Area3D result = new Area3D();
 		if (node == null) {
 			return result;
 		}
@@ -2406,8 +2420,8 @@ public class Matcher {
 	/*
 	 * Modular geometric functions for area calculation
 	 */
-	public Area calcPolygon(Node node) {
-		Area result = new Area();
+	public Area3D calcPolygon(Node node) {
+		Area3D result = new Area3D();
 		if (node == null || !node.hasLabel(Label.label(GMLClass.POLYGON + ""))) {
 			return result;
 		}
@@ -2418,8 +2432,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcExterior(Node node) {
-		Area result = new Area();
+	public Area3D calcExterior(Node node) {
+		Area3D result = new Area3D();
 		if (node == null || !node.hasLabel(Label.label(GMLClass.EXTERIOR + ""))) {
 			return result;
 		}
@@ -2429,8 +2443,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcLinearRing(Node node) {
-		Area result = new Area();
+	public Area3D calcLinearRing(Node node) {
+		Area3D result = new Area3D();
 		if (node == null || !node.hasLabel(Label.label(GMLClass.LINEAR_RING + ""))) {
 			return result;
 		}
@@ -2529,8 +2543,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcCoordinates(Node node) {
-		Area result = new Area();
+	public Area3D calcCoordinates(Node node) {
+		Area3D result = new Area3D();
 		if (node == null || !node.hasLabel(Label.label(GMLClass.COORDINATES + ""))) {
 			return result;
 		}
@@ -2589,8 +2603,8 @@ public class Matcher {
 		return new String[] { x, y, z };
 	}
 
-	public Area calcDirectPositionList(Node node) {
-		Area result = new Area();
+	public Area3D calcDirectPositionList(Node node) {
+		Area3D result = new Area3D();
 		if (node == null || !node.hasLabel(Label.label(GMLClass.DIRECT_POSITION_LIST + ""))) {
 			return result;
 		}
@@ -2609,8 +2623,8 @@ public class Matcher {
 				logger, suppressLogger);
 	}
 
-	public Area calcRing(Node node) {
-		Area result = new Area();
+	public Area3D calcRing(Node node) {
+		Area3D result = new Area3D();
 		if (node == null || !node.hasLabel(Label.label(GMLClass.RING + ""))) {
 			return result;
 		}
@@ -2675,8 +2689,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcInnerBoundaryIs(Node node) {
-		Area result = new Area();
+	public Area3D calcInnerBoundaryIs(Node node) {
+		Area3D result = new Area3D();
 		if (node == null || !node.hasLabel(Label.label(GMLClass.INNER_BOUNDARY_IS + ""))) {
 			return result;
 		}
@@ -2684,8 +2698,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcInterior(Node node) {
-		Area result = new Area();
+	public Area3D calcInterior(Node node) {
+		Area3D result = new Area3D();
 		if (node == null || !node.hasLabel(Label.label(GMLClass.INTERIOR + ""))) {
 			return result;
 		}
@@ -2695,8 +2709,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcOuterBoundaryIs(Node node) {
-		Area result = new Area();
+	public Area3D calcOuterBoundaryIs(Node node) {
+		Area3D result = new Area3D();
 		if (node == null || !node.hasLabel(Label.label(GMLClass.OUTER_BOUNDARY_IS + ""))) {
 			return result;
 		}
@@ -2708,8 +2722,8 @@ public class Matcher {
 	 * BUILDING BOUNDARY SURFACE PROPERTY
 	 */
 
-	public Area calcSearchAbstractBoundarySurface(Node node) {
-		Area result = new Area();
+	public Area3D calcSearchAbstractBoundarySurface(Node node) {
+		Area3D result = new Area3D();
 		if (node == null) {
 			return result;
 		}
@@ -2727,8 +2741,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcBoundarySurfaceProperty(Node node) {
-		Area result = new Area();
+	public Area3D calcBoundarySurfaceProperty(Node node) {
+		Area3D result = new Area3D();
 		if (node == null || !node.hasLabel(Label.label(CityGMLClass.BUILDING_BOUNDARY_SURFACE_PROPERTY + ""))) {
 			return result;
 		}
@@ -2738,8 +2752,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcCeilingSurface(Node node) {
-		Area result = new Area();
+	public Area3D calcCeilingSurface(Node node) {
+		Area3D result = new Area3D();
 		if (node == null || !node.hasLabel(Label.label(CityGMLClass.BUILDING_CEILING_SURFACE + ""))) {
 			return result;
 		}
@@ -2752,8 +2766,8 @@ public class Matcher {
 	}
 
 	// only abstract
-	public Area calcAbstractBoundarySurface(Node node, boolean forwardedFromChild) {
-		Area result = new Area();
+	public Area3D calcAbstractBoundarySurface(Node node, boolean forwardedFromChild) {
+		Area3D result = new Area3D();
 		if (!forwardedFromChild && (node == null || !node.hasLabel(Label.label(CityGMLClass.ABSTRACT_BUILDING_BOUNDARY_SURFACE + "")))) {
 			return result;
 		}
@@ -2768,8 +2782,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcMultiSurfaceProperty(Node node) {
-		Area result = new Area();
+	public Area3D calcMultiSurfaceProperty(Node node) {
+		Area3D result = new Area3D();
 		if (node == null || !node.hasLabel(Label.label(GMLClass.MULTI_SURFACE_PROPERTY + ""))) {
 			return result;
 		}
@@ -2779,8 +2793,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcMultiSurface(Node node) {
-		Area result = new Area();
+	public Area3D calcMultiSurface(Node node) {
+		Area3D result = new Area3D();
 		if (node == null || !node.hasLabel(Label.label(GMLClass.MULTI_SURFACE + ""))) {
 			return result;
 		}
@@ -2791,8 +2805,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcSearchListSurfaceProperty(ArrayList<Node> nodeList) {
-		Area result = new Area();
+	public Area3D calcSearchListSurfaceProperty(ArrayList<Node> nodeList) {
+		Area3D result = new Area3D();
 		if (nodeList == null) {
 			return result;
 		}
@@ -2804,8 +2818,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcSurfaceProperty(Node node) {
-		Area result = new Area();
+	public Area3D calcSurfaceProperty(Node node) {
+		Area3D result = new Area3D();
 		if (node == null || !node.hasLabel(Label.label(GMLClass.SURFACE_PROPERTY + ""))) {
 			return result;
 		}
@@ -2815,8 +2829,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcSearchAbstractSurface(Node node) {
-		Area result = new Area();
+	public Area3D calcSearchAbstractSurface(Node node) {
+		Area3D result = new Area3D();
 		if (node == null) {
 			return result;
 		}
@@ -2832,8 +2846,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcCompositeSurface(Node node) {
-		Area result = new Area();
+	public Area3D calcCompositeSurface(Node node) {
+		Area3D result = new Area3D();
 		if (node == null || !node.hasLabel(Label.label(GMLClass.COMPOSITE_SURFACE + ""))) {
 			return result;
 		}
@@ -2843,8 +2857,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcOrientableSurface(Node node, boolean forwardedFromChild) {
-		Area result = new Area();
+	public Area3D calcOrientableSurface(Node node, boolean forwardedFromChild) {
+		Area3D result = new Area3D();
 		if (!forwardedFromChild && (node == null || !node.hasLabel(Label.label(GMLClass.ORIENTABLE_SURFACE + "")))) {
 			return result;
 		}
@@ -2856,8 +2870,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calc_TexturedSurface(Node node) {
-		Area result = new Area();
+	public Area3D calc_TexturedSurface(Node node) {
+		Area3D result = new Area3D();
 		if (node == null || !node.hasLabel(Label.label(GMLClass._TEXTURED_SURFACE + ""))) {
 			return result;
 		}
@@ -2869,8 +2883,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcSurface(Node node, boolean forwardedFromChild) {
-		Area result = new Area();
+	public Area3D calcSurface(Node node, boolean forwardedFromChild) {
+		Area3D result = new Area3D();
 		if (!forwardedFromChild && (node == null || !node.hasLabel(Label.label(GMLClass.SURFACE + "")))) {
 			return result;
 		}
@@ -2880,8 +2894,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcSearchSurfacePatchArrayProperty(Node node) {
-		Area result = new Area();
+	public Area3D calcSearchSurfacePatchArrayProperty(Node node) {
+		Area3D result = new Area3D();
 		if (node == null) {
 			return result;
 		}
@@ -2892,8 +2906,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcSurfacePatchArrayProperty(Node node, boolean forwardedFromChild) {
-		Area result = new Area();
+	public Area3D calcSurfacePatchArrayProperty(Node node, boolean forwardedFromChild) {
+		Area3D result = new Area3D();
 		if (!forwardedFromChild && (node == null || !node.hasLabel(Label.label(GMLClass.SURFACE_PATCH_ARRAY_PROPERTY + "")))) {
 			return result;
 		}
@@ -2903,8 +2917,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcSearchAbstractSurfacePatch(Node node) {
-		Area result = new Area();
+	public Area3D calcSearchAbstractSurfacePatch(Node node) {
+		Area3D result = new Area3D();
 		if (node == null) {
 			return result;
 		}
@@ -2915,8 +2929,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcRectangle(Node node) {
-		Area result = new Area();
+	public Area3D calcRectangle(Node node) {
+		Area3D result = new Area3D();
 		if (node == null || !node.hasLabel(Label.label(GMLClass.RECTANGLE + ""))) {
 			return result;
 		}
@@ -2930,8 +2944,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcTriangle(Node node) {
-		Area result = new Area();
+	public Area3D calcTriangle(Node node) {
+		Area3D result = new Area3D();
 		if (node == null || !node.hasLabel(Label.label(GMLClass.TRIANGLE + ""))) {
 			return result;
 		}
@@ -2945,8 +2959,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcTrianglePatchArrayProperty(Node node) {
-		Area result = new Area();
+	public Area3D calcTrianglePatchArrayProperty(Node node) {
+		Area3D result = new Area3D();
 		if (node == null || !node.hasLabel(Label.label(GMLClass.TRIANGLE_PATCH_ARRAY_PROPERTY + ""))) {
 			return result;
 		}
@@ -2956,8 +2970,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcTriangulatedSurface(Node node, boolean forwardedFromChild) {
-		Area result = new Area();
+	public Area3D calcTriangulatedSurface(Node node, boolean forwardedFromChild) {
+		Area3D result = new Area3D();
 		if (!forwardedFromChild && (node == null || !node.hasLabel(Label.label(GMLClass.TRIANGULATED_SURFACE + "")))) {
 			return result;
 		}
@@ -2967,8 +2981,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcTin(Node node) {
-		Area result = new Area();
+	public Area3D calcTin(Node node) {
+		Area3D result = new Area3D();
 		if (node == null || !node.hasLabel(Label.label(GMLClass.TIN + ""))) {
 			return result;
 		}
@@ -2986,8 +3000,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcSurfaceArrayProperty(Node node) {
-		Area result = new Area();
+	public Area3D calcSurfaceArrayProperty(Node node) {
+		Area3D result = new Area3D();
 		if (node == null || !node.hasLabel(Label.label(GMLClass.SURFACE_ARRAY_PROPERTY + ""))) {
 			return result;
 		}
@@ -2997,8 +3011,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcSearchListOpeningProperty(ArrayList<Node> nodeList) {
-		Area result = new Area();
+	public Area3D calcSearchListOpeningProperty(ArrayList<Node> nodeList) {
+		Area3D result = new Area3D();
 		if (nodeList == null) {
 			return result;
 		}
@@ -3010,8 +3024,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcOpeningProperty(Node node) {
-		Area result = new Area();
+	public Area3D calcOpeningProperty(Node node) {
+		Area3D result = new Area3D();
 		if (node == null || !node.hasLabel(Label.label(CityGMLClass.BUILDING_OPENING_PROPERTY + ""))) {
 			return result;
 		}
@@ -3021,8 +3035,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcSearchAbstractOpening(Node node) {
-		Area result = new Area();
+	public Area3D calcSearchAbstractOpening(Node node) {
+		Area3D result = new Area3D();
 		if (node == null) {
 			return result;
 		}
@@ -3033,8 +3047,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcDoor(Node node) {
-		Area result = new Area();
+	public Area3D calcDoor(Node node) {
+		Area3D result = new Area3D();
 		if (node == null || !node.hasLabel(Label.label(CityGMLClass.BUILDING_DOOR + ""))) {
 			return result;
 		}
@@ -3046,8 +3060,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcAbstractOpening(Node node, boolean forwardedFromChild) {
-		Area result = new Area();
+	public Area3D calcAbstractOpening(Node node, boolean forwardedFromChild) {
+		Area3D result = new Area3D();
 		if (!forwardedFromChild && (node == null || !node.hasLabel(Label.label(CityGMLClass.ABSTRACT_BUILDING_OPENING + "")))) {
 			return result;
 		}
@@ -3062,8 +3076,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcImplicitRepresentationProperty(Node node) {
-		Area result = new Area();
+	public Area3D calcImplicitRepresentationProperty(Node node) {
+		Area3D result = new Area3D();
 		if (node == null || !node.hasLabel(Label.label(CityGMLClass.IMPLICIT_REPRESENTATION_PROPERTY + ""))) {
 			return result;
 		}
@@ -3073,8 +3087,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcImplicitGeometry(Node node) {
-		Area result = new Area();
+	public Area3D calcImplicitGeometry(Node node) {
+		Area3D result = new Area3D();
 		if (node == null || !node.hasLabel(Label.label(CityGMLClass.IMPLICIT_GEOMETRY + ""))) {
 			return result;
 		}
@@ -3084,8 +3098,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcWindow(Node node) {
-		Area result = new Area();
+	public Area3D calcWindow(Node node) {
+		Area3D result = new Area3D();
 		if (node == null || !node.hasLabel(Label.label(CityGMLClass.BUILDING_WINDOW + ""))) {
 			return result;
 		}
@@ -3095,8 +3109,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcClosureSurface(Node node) {
-		Area result = new Area();
+	public Area3D calcClosureSurface(Node node) {
+		Area3D result = new Area3D();
 		if (node == null || !node.hasLabel(Label.label(CityGMLClass.BUILDING_CLOSURE_SURFACE + ""))) {
 			return result;
 		}
@@ -3106,8 +3120,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcFloorSurface(Node node) {
-		Area result = new Area();
+	public Area3D calcFloorSurface(Node node) {
+		Area3D result = new Area3D();
 		if (node == null || !node.hasLabel(Label.label(CityGMLClass.BUILDING_FLOOR_SURFACE + ""))) {
 			return result;
 		}
@@ -3117,8 +3131,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcGroundSurface(Node node) {
-		Area result = new Area();
+	public Area3D calcGroundSurface(Node node) {
+		Area3D result = new Area3D();
 		if (node == null || !node.hasLabel(Label.label(CityGMLClass.BUILDING_GROUND_SURFACE + ""))) {
 			return result;
 		}
@@ -3128,8 +3142,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcInteriorWallSurface(Node node) {
-		Area result = new Area();
+	public Area3D calcInteriorWallSurface(Node node) {
+		Area3D result = new Area3D();
 		if (node == null || !node.hasLabel(Label.label(CityGMLClass.INTERIOR_BUILDING_WALL_SURFACE + ""))) {
 			return result;
 		}
@@ -3139,8 +3153,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcOuterCeilingSurface(Node node) {
-		Area result = new Area();
+	public Area3D calcOuterCeilingSurface(Node node) {
+		Area3D result = new Area3D();
 		if (node == null || !node.hasLabel(Label.label(CityGMLClass.OUTER_BUILDING_CEILING_SURFACE + ""))) {
 			return result;
 		}
@@ -3150,8 +3164,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcOuterFloorSurface(Node node) {
-		Area result = new Area();
+	public Area3D calcOuterFloorSurface(Node node) {
+		Area3D result = new Area3D();
 		if (node == null || !node.hasLabel(Label.label(CityGMLClass.OUTER_BUILDING_FLOOR_SURFACE + ""))) {
 			return result;
 		}
@@ -3161,8 +3175,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcRoofSurface(Node node) {
-		Area result = new Area();
+	public Area3D calcRoofSurface(Node node) {
+		Area3D result = new Area3D();
 		if (node == null || !node.hasLabel(Label.label(CityGMLClass.BUILDING_ROOF_SURFACE + ""))) {
 			return result;
 		}
@@ -3172,8 +3186,8 @@ public class Matcher {
 		return result;
 	}
 
-	public Area calcWallSurface(Node node) {
-		Area result = new Area();
+	public Area3D calcWallSurface(Node node) {
+		Area3D result = new Area3D();
 		if (node == null || !node.hasLabel(Label.label(CityGMLClass.BUILDING_WALL_SURFACE + ""))) {
 			return result;
 		}

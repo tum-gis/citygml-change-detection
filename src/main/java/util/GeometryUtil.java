@@ -270,12 +270,12 @@ public class GeometryUtil {
 	 *            default value is ";"
 	 * @return
 	 */
-	public static Area createArea(String pointsString, int dimension, String delimiter, Logger logger, boolean suppressLogger) {
+	public static Area3D createArea(String pointsString, int dimension, String delimiter, Logger logger, boolean suppressLogger) {
 		// transform 3D to 2D points
 		double[][] points = transform3dPointsTo2d(pointsString, dimension, delimiter, logger, suppressLogger);
 
 		if (points == null || points.length == 0) {
-			return new Area();
+			return new Area3D();
 		}
 
 		// create a path shape restricted by given 2D points
@@ -286,11 +286,21 @@ public class GeometryUtil {
 		}
 		path.closePath(); // If the path is already closed then this method has no effect.
 
-		Area result = new Area(path);
+		Area3D result = new Area3D(path);
+		
+		// add normal vector to this object
+		double[][] points3D = convertFromStringTo3dPoints(pointsString, dimension, delimiter, logger, suppressLogger);
+		double[] unitNormalVector = findUnitNormalOf3dPlane(points3D, logger, suppressLogger);
+		result.setNormalVector(unitNormalVector);
+
+		// add distance from this plane to origin
+		// Distance from point (x0, y0, z0) to a plane with normal vector (A, B, C) is D = − A*x0 − B*y0 − C*z0
+		result.setDistanceToOrigin(-unitNormalVector[0] * points3D[0][0] - unitNormalVector[1] * points3D[1][0]	- unitNormalVector[2]*points3D[2][0]);
+		
 		return result;
 	}
 
-	public static String toString(Area area, String prefix) {
+	public static String toString(Area3D area, String prefix) {
 		String tmp = prefix;
 		PathIterator iterator = area.getPathIterator(null);
 		float[] floats = new float[6];
@@ -594,7 +604,23 @@ public class GeometryUtil {
 	/*
 	 * Fuzzy/Error tolerance comparison
 	 */
-	public static boolean fuzzyEquals(Area area1, Area area2) {
+	public static boolean fuzzyEquals(Area3D area1, Area3D area2) {
+		// compare only if two areas have similar orientations/allocations in 3D
+		// angle in radian
+		double cosAngleBetween = dot(((Area3D) area1).getNormalVector(), ((Area3D) area2).getNormalVector()); // unit vectors have length = 1
+
+		// cos(0 + 2*k*pi) = 1, cos(pi + 2*k*pi) = -1
+		if (!((Math.abs(cosAngleBetween) <= 1 + SETTINGS.ANGLE_TOLERANCE)
+				&& (Math.abs(cosAngleBetween) >= 1 - SETTINGS.ANGLE_TOLERANCE))) {
+			return false;
+		}
+		
+		// compare only if two similarly oriented planes have near-zero distance
+		if (!(Math.abs(area1.getDistanceToOrigin() - area2.getDistanceToOrigin()) <= SETTINGS.ERR_TOLERANCE)) {
+			return false;
+		}
+
+		// then compare
 		ArrayList<double[]> points1 = getDoubleArray(area1);
 		ArrayList<double[]> points2 = getDoubleArray(area2);
 
@@ -608,8 +634,12 @@ public class GeometryUtil {
 
 		return true;
 	}
+	
+	public static double calcPointPlaneDistance(double[] normalVector, double[] point) {
+		return Math.abs(normalVector[0] * point[0] + normalVector[1] * point[1] + +normalVector[2] * point[2]);
+	}
 
-	public static ArrayList<double[]> getDoubleArray(Area area) {
+	public static ArrayList<double[]> getDoubleArray(Area3D area) {
 		ArrayList<double[]> result = new ArrayList<double[]>();
 
 		PathIterator iterator = area.getPathIterator(null);
@@ -634,7 +664,7 @@ public class GeometryUtil {
 		return result;
 	}
 
-	public static boolean areaContainsPoints(Area area, ArrayList<double[]> points) {
+	public static boolean areaContainsPoints(Area3D area, ArrayList<double[]> points) {
 		for (double[] point : points) {
 			if (!area.contains(point[0], point[1])
 					&& !area.contains(point[0] + SETTINGS.ERR_TOLERANCE, point[1])
