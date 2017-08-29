@@ -1794,7 +1794,9 @@ public class Matcher {
 			result = new BooleanObject(matchGeometryWallSurface(oldNode, newNode));
 		} 
 		
-		else if (oldLabel.equals(GMLClass.POLYGON + "")) {
+		else if (oldLabel.equals(GMLClass.SURFACE_PROPERTY + "")) {
+			result = new BooleanObject(matchGeometrySurfaceProperty(oldNode, newNode));
+		} else if (oldLabel.equals(GMLClass.POLYGON + "")) {
 			result = new BooleanObject(matchGeometryPolygon(oldNode, newNode));
 		} else if (oldLabel.equals(GMLClass.LINEAR_RING + "")) {
 			result = new BooleanObject(matchGeometryLinearRing(oldNode, newNode));
@@ -1820,15 +1822,15 @@ public class Matcher {
 			result = new BooleanObject(matchGeometryLineStringProperty(oldNode, newNode));
 		} else if (oldLabel.equals(GMLClass.LINE_STRING + "")) {
 			result = new BooleanObject(matchGeometryLineString(oldNode, newNode));
-		} else{
+		} else {
 			// non-geometric nodes
 			result = null;
 		}
 		
-		if ((result != null) && (!suppressLogger) && (result.getValue()) && (oldNode.hasProperty("id")) && (newNode.hasProperty("id"))) {
-			logger.info("MATCHED [" + oldLabel + "] " + oldNode.getProperty("id").toString() + "\n" 
-						+ String.format("%20s", "") + "   WITH [" + oldLabel + "] " + newNode.getProperty("id").toString());
-		}
+//		if ((result != null) && (!suppressLogger) && (result.getValue()) && (oldNode.hasProperty("id")) && (newNode.hasProperty("id"))) {
+//			logger.info("MATCHED [" + oldLabel + "] " + oldNode.getProperty("id").toString() + "\n" 
+//						+ String.format("%20s", "") + "   WITH [" + oldLabel + "] " + newNode.getProperty("id").toString());
+//		}
 
 		return result;
 	}
@@ -2098,6 +2100,26 @@ public class Matcher {
 		return result;
 	}
 
+	public boolean matchGeometrySurfaceProperty(Node oldNode, Node newNode) {
+		Area3D oldArea = calcSurfaceProperty(oldNode);
+		Area3D newArea = calcSurfaceProperty(newNode);
+
+		if (oldArea.isEmpty() || newArea.isEmpty()) {
+			return false;
+		}
+
+		// boolean result = oldArea.equals(newArea);
+		boolean result = GeometryUtil.fuzzyEquals(oldArea, newArea);
+
+		if (logger.isLoggable(Level.FINE)) {
+			StringBuilder tmp = new StringBuilder();
+			tmp.append("... equivalent geometry: " + result + " ...");
+			logging(tmp.toString());
+		}
+
+		return result;
+	}
+	
 	public boolean matchGeometryPolygon(Node oldNode, Node newNode) {
 		Area3D oldArea = calcPolygon(oldNode);
 		Area3D newArea = calcPolygon(newNode);
