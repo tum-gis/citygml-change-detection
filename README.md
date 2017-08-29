@@ -9,6 +9,60 @@ semantic properties. Since to date, no known algorithm is capable of detecting s
 
 The (ongoing) implementation of this research is stored and maintained in this repository..
 
+# Repository Structure
+
+This repository contains the following folders:
+
+* [export](export/): If deviations are found between two city models, the corresponding edit operations created on-the-fly shall be documented here in 6 CSV files, namely:
+
+    * **EditOperations.csv**: All created edit operations are listed here. Each line represents one edit operation and contains its unique ID as well as operation type. Edit operations of the same type shall be stored with greater details in each respective CSV file.
+	
+    * **EditOperations_UpdateProperty.csv**: All edit operations used for updating node properties shall be listed here.
+	
+    * **EditOperations_DeleteProperty.csv**: All edit operations used for deleting node properties shall be listed here.
+	
+    * **EditOperations_InsertProperty.csv**: All edit operations used for inserting node properties shall be listed here.
+	
+    * **EditOperations_DeleteNode.csv**: All edit operations used for deleting nodes shall be listed here.
+	
+    * **EditOperations_InsertNode.csv**: All edit operations used for inserting nodes shall be listed here.
+
+
+* [logs](logs/): Program and execution logs are stored here for debugging purposes.
+
+
+* [neo4jDB](neo4jDB/): The Neo4j database instance employed during execution shall be stored here. For querying and visualization purposes, the Neo4j web client can be pointed to this location. Note that the size of this database tends to increase over time as more and more transaction logs are stored. These or even the whole database contents can be removed. However, do NOT remove this folder.
+
+
+* [portable](portable/): The **stand-alone version** is included here. For more information, please refer to the respective [README](portable/README.md) there.
+
+
+* [saved_pictures](saved_pictures/): If R-tree is enabled during the mapping process, R-tree pictures of input city models shall be created and stored here. These signature pictures visualized R-trees of respective city models by representing each R-tree node as a rectangle and each node level as different colors.
+
+
+* [saved_settings](saved_settings/): Some useful run configurations can be found here. For more information, please refer to the respective [README](saved_settings/README.md) there.
+
+
+* [src](src/): Source codes can be found in this location, which consists of the following packages:
+
+    * [controller](src/main/java/controller/): The main method contained in this package controls how the whole program behaves.
+    
+    * [editor](src/main/java/editor/): Implemented for updating the old city model using the created edit opeartions and WFS.
+    
+    * [exporter](src/main/java/exporter/): Employed to export created edit operations to CSV files.
+    
+    * [mapper](src/main/java/mapper/): The mapping process that is capable of mapping CityGML objects to respective (sub) graphs in Neo4j.
+    
+    * [matcher](src/main/java/matcher/): The matching process that is implemented to compare graph representations of city models, detect their deviations and create edit operations accordingly.
+    
+    * [util](src/main/java/util/): Contains auxiliary classes.
+    
+
+* [test_data](test_data/): Input CityGML city models are supposed to be stored here.
+
+
+**IMPORTANT:** The configuration file [Default.txt](saved_settings/Default.txt) dictates which folders shall be used for which data. The above-mentioned structure follows therefore only the default configurations.
+
 
 # System Requirements
 
