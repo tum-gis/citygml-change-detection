@@ -1,11 +1,11 @@
 # Folder Structure
 
-The stand-alone version can be executed exclusive within this folder. For this purpose, the following files as well as sub-folders are required:
+The stand-alone version can be executed from within this folder. For this purpose, the following files as well as sub-folders are required:
 
 ### Files:
 
 
-* [CityGMLChangeDetection.jar](CityGMLChangeDetection.jar): The source codes are included in this file, which can then be manually executed in Windows, Linux, etc. using this file.
+* [CityGMLChangeDetection.jar](CityGMLChangeDetection.jar): The source codes are included in this file, which can then be manually executed in Windows, Linux, etc. using the `-jar` command.
 
 
 * [run.bat](run.bat) and [run.sh](run.sh): The program can be automatically started using the BATCH-script `.bat` in Windows or the SHELL-script `.sh` in Linux.
@@ -38,7 +38,7 @@ The stand-alone version can be executed exclusive within this folder. For this p
 **IMPORTANT:** The configuration file [Settings.txt](Settings.txt) dictates which folders shall be used for which data. The above-mentioned structure follows therefore only the default configurations.
 
 
-# Start the Programm
+# Start the Program
 
 
 ### Windows:
@@ -76,7 +76,7 @@ chmod +x run.sh
 By default, an initial and maximum amount of 1000 MB is assigned for the heap space. These can be modified using the following steps:
 
 
-##### Windows: 
+#### Windows: 
 
 
 Open [run.bat](run.bat) with a text editor.
@@ -98,7 +98,7 @@ java -Xms<InitAmount>m -Xmx<MaxAmount>m -XX:+UseG1GC -jar CityGMLChangeDetection
  where `<InitAmount>` and `<MaxAmount>` indicates initial and maximum amount of heap space (in MB) respectively and are thus to be replaced by concrete non-zero integers.
  
  
-##### Linux:
+#### Linux:
 
 
 Open [run.sh](run.sh) with a text editor.
@@ -125,7 +125,7 @@ java -Xms<InitAmount>m -Xmx<MaxAmount>m -XX:+UseG1GC -jar CityGMLChangeDetection
  All configurations can be modified within [Settings.txt](Settings.txt), where:
  
  
- ##### Miscellaneous:
+ #### Miscellaneous:
  
  Option | Meaning
  ---- | ----------------------------------------------------------------------------------
@@ -133,7 +133,7 @@ java -Xms<InitAmount>m -Xmx<MaxAmount>m -XX:+UseG1GC -jar CityGMLChangeDetection
  `USER_MESSAGE` | Contains comments for the current test run.
  
  
- #####  Database and program settings:
+ ####  Database and program settings:
  
  Option | Meaning | Default value
  ---- | --- | ---
@@ -149,7 +149,7 @@ java -Xms<InitAmount>m -Xmx<MaxAmount>m -XX:+UseG1GC -jar CityGMLChangeDetection
  `RTREE_IMAGE_LOCATION` | Location of R-tree signature images. | `saved_pictures/rtrees/`
  
 
- ##### Mapper settings:
+ #### Mapper settings:
  
  Option | Meaning | Default value
  ---- | --- | ---
@@ -164,7 +164,7 @@ java -Xms<InitAmount>m -Xmx<MaxAmount>m -XX:+UseG1GC -jar CityGMLChangeDetection
  `LOG_EVERY_N_BUILDINGS` | Determines how often it should be logged depending on the number of newly processed buildings since the last log write. | `10`
  
  
- ##### Matcher settings:
+ #### Matcher settings:
 
  Option | Meaning | Default value
  ---- | --- | ---
@@ -184,7 +184,7 @@ java -Xms<InitAmount>m -Xmx<MaxAmount>m -XX:+UseG1GC -jar CityGMLChangeDetection
  `THREAD_TIME_OUT` | This field defines how long the program can wait (in milliseconds) for all threads to finish before moving on to the next tasks (only valid if multi-threading is enabled). | `500,000`
  
  
- ##### Updater settings:
+ #### Updater settings:
  
  Option | Meaning | Default value
  ---- | --- | ---
