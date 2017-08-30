@@ -146,7 +146,7 @@ public class SETTINGS {
 		/**
 		 * No strategy is applied. Also enable single-threaded mode.
 		 */
-		NONE("");
+		NONE("NONE");
 
 		private final String text;
 
