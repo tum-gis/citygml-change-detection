@@ -5,34 +5,23 @@ The stand-alone version can be executed exclusive within this folder. For this p
 ### Files:
 
 
-* [CityGMLChangeDetection.jar](portable/CityGMLChangeDetection.jar): The source codes are included in this file, which can then be manually executed in Windows, Linux, etc. using this file.
+* [CityGMLChangeDetection.jar](CityGMLChangeDetection.jar): The source codes are included in this file, which can then be manually executed in Windows, Linux, etc. using this file.
 
 
-* [run.bat](portable/run.bat) and [run.sh](portable/run.sh): The program can be automatically started using the BATCH-script `.bat` in Windows or the SHELL-script `.sh` in Linux.
+* [run.bat](run.bat) and [run.sh](run.sh): The program can be automatically started using the BATCH-script `.bat` in Windows or the SHELL-script `.sh` in Linux.
 
 
-* [Settings.txt](portable/Settings.txt): All run configurations can be modified here. 
+* [Settings.txt](Settings.txt): All run configurations can be modified here. 
 
 
 ### Sub-folders:
 
 
-* [CityGMLChangeDetection_lib](portable/CityGMLChangeDetection_lib/): All dependencies are included here (as `.jar` files). Do NOT change any library in this folder or else the program cannot function correctly.
+* [CityGMLChangeDetection_lib](CityGMLChangeDetection_lib/): All dependencies are included here (as `.jar` files). Do NOT change any library in this folder or else the program cannot function correctly.
 
 
-* [export](export/): If deviations are found between two city models, the corresponding edit operations created on-the-fly shall be documented here in 6 CSV files, namely:
+* [export](export/): If deviations are found between two city models, the corresponding edit operations created on-the-fly shall be documented here in 6 CSV files. Fore more information please refer to the respective [README](export/README.md) there.
 
-    * **EditOperations.csv**: All created edit operations are listed here. Each line represents one edit operation and contains its unique ID as well as operation type. Edit operations of the same type shall be stored with greater details in each respective CSV file.
-	
-    * **EditOperations_UpdateProperty.csv**: All edit operations used for updating node properties shall be listed here.
-	
-    * **EditOperations_DeleteProperty.csv**: All edit operations used for deleting node properties shall be listed here.
-	
-    * **EditOperations_InsertProperty.csv**: All edit operations used for inserting node properties shall be listed here.
-	
-    * **EditOperations_DeleteNode.csv**: All edit operations used for deleting nodes shall be listed here.
-	
-    * **EditOperations_InsertNode.csv**: All edit operations used for inserting nodes shall be listed here.
     
 * [logs](logs/): Program and execution logs are stored here for debugging purposes.
 
@@ -46,7 +35,7 @@ The stand-alone version can be executed exclusive within this folder. For this p
 * [test_data](test_data/): Input CityGML city models are supposed to be stored here.
 
 
-**IMPORTANT:** The configuration file [Settings.txt](portable/Settings.txt) dictates which folders shall be used for which data. The above-mentioned structure follows therefore only the default configurations.
+**IMPORTANT:** The configuration file [Settings.txt](Settings.txt) dictates which folders shall be used for which data. The above-mentioned structure follows therefore only the default configurations.
 
 
 # Start the Programm
@@ -55,27 +44,28 @@ The stand-alone version can be executed exclusive within this folder. For this p
 ### Windows:
 
 
-Note that the existing Neo4j database instance stored in [neo4jDB](portable/neo4jDB) shall be deleted each time the program is started. A backup is therefore advised if the old database contains important data. 
+Note that the existing Neo4j database instance stored in [neo4jDB](neo4jDB/) shall be deleted each time the program is started. A backup is therefore advised if the old database contains important data. 
 
 
 1. Open command line
 2. Navigate to this folder
-3. Enter the following command to start the programm:
-
-    run.bat
+3. Enter the following command to start the program:
+```batch
+run.bat
+```
     
 
 ### Linux:
 
-Note that the existing Neo4j database instance stored in [neo4jDB](portable/neo4jDB) shall be deleted each time the program is started. A backup is therefore advised if the old database contains important data. 
+Note that the existing Neo4j database instance stored in [neo4jDB](neo4jDB/) shall be deleted each time the program is started. A backup is therefore advised if the old database contains important data. 
 
 1. Open terminal
 2. Navigate to this folder
-3. Enter the following commands to start the programm:
-
-    chmod +x run.sh
-    ./run.bat
- 
+3. Enter the following commands to start the program:
+```shell
+chmod +x run.sh
+./run.sh
+```
 
 # Change Run Configurations
 
@@ -89,19 +79,20 @@ By default, an initial and maximum amount of 1000 MB is assigned for the heap sp
 ##### Windows: 
 
 
-Open [run.bat](portable/run.bat) with a text editor.
+Open [run.bat](run.bat) with a text editor.
 
 
 Change the following line:
 
-
-    java -Xms1000m -Xmx1000m -XX:+UseG1GC -jar CityGMLChangeDetection.jar -SETTINGS="Settings.txt"
-  
+```batch
+java -Xms1000m -Xmx1000m -XX:+UseG1GC -jar CityGMLChangeDetection.jar -SETTINGS="Settings.txt"
+```
     
 to
 
-
-    java -Xms<InitAmount>m -Xmx<MaxAmount>m -XX:+UseG1GC -jar CityGMLChangeDetection.jar -SETTINGS="Settings.txt"
+```batch
+java -Xms<InitAmount>m -Xmx<MaxAmount>m -XX:+UseG1GC -jar CityGMLChangeDetection.jar -SETTINGS="Settings.txt"
+```
 
     
  where `<InitAmount>` and `<MaxAmount>` indicates initial and maximum amount of heap space (in MB) respectively and are thus to be replaced by concrete non-zero integers.
@@ -110,20 +101,20 @@ to
 ##### Linux:
 
 
-Open [run.sh](portable/run.sh) with a text editor.
+Open [run.sh](run.sh) with a text editor.
 
 
 Change the following line:
 
-
+```shell
     java -Xms1000m -Xmx1000m -XX:+UseG1GC -jar CityGMLChangeDetection.jar -SETTINGS="Settings.txt"
-  
-    
+```
+
 to
 
-
-    java -Xms<InitAmount>m -Xmx<MaxAmount>m -XX:+UseG1GC -jar CityGMLChangeDetection.jar -SETTINGS="Settings.txt"
-
+```shell
+java -Xms<InitAmount>m -Xmx<MaxAmount>m -XX:+UseG1GC -jar CityGMLChangeDetection.jar -SETTINGS="Settings.txt"
+```
     
  where `<InitAmount>` and `<MaxAmount>` indicates initial and maximum amount of heap space (in MB) respectively and are thus to be replaced by concrete non-zero integers.
  
@@ -131,14 +122,14 @@ to
  ### Modify Program Configurations
  
  
- All configurations can be modified within [Settings.txt](portable/Settings.txt), where:
+ All configurations can be modified within [Settings.txt](Settings.txt), where:
  
  
  ##### Miscellaneous:
  
  Option | Meaning
- ---- | ---------------------------------------------------------------------------------
- `#` | Lines starting with the `#` letter are marked as comments and will not be parsed 
+ ---- | ----------------------------------------------------------------------------------
+ `#` | Lines starting with the `#` letter are marked as comments and will not be parsed. 
  `USER_MESSAGE` | Contains comments for the current test run.
  
  
@@ -146,54 +137,54 @@ to
  
  Option | Meaning | Default value
  ---- | --- | ---
- `HOME_LOCATION` | Home location of this stand-alone version | 
- `TEST_DATA_LOCATION` | Location of datasets to be matched | `test_data/`
- `OLD_CITY_MODEL_LOCATION` | Location of old city model | `Polygon_Multi_Interior_0.gml`
- `NEW_CITY_MODEL_LOCATION` | Location of new city model | `Polygon_Multi_Interior_1.gml`
- `DB_LOCATION` | Location of Neo4j database | `neo4jDB/`
- `LOG_LOCATION` | Location of log files | `log/`
- `EXPORT_LOCATION` | Location of exported CSV storing edit operations | `export/`
- `CSV_DELIMITER` | Delimiter used to separate columns in CSV files | `;`
- `WFS_SERVER` | URL/Address of WFS server | 
- `RTREE_IMAGE_LOCATION` | Location of R-tree signature images | `saved_pictures/rtrees/`
+ `HOME_LOCATION` | Home location of this stand-alone version. If left empty, the current (relative) location of this configuration file shall be used. | 
+ `TEST_DATA_LOCATION` | Location of datasets to be matched. | `test_data/`
+ `OLD_CITY_MODEL_LOCATION` | Location of old city model. | `Polygon_Multi_Interior_0.gml`
+ `NEW_CITY_MODEL_LOCATION` | Location of new city model. | `Polygon_Multi_Interior_1.gml`
+ `DB_LOCATION` | Location of Neo4j database. | `neo4jDB/`
+ `LOG_LOCATION` | Location of log files. | `log/`
+ `EXPORT_LOCATION` | Location of exported CSV files storing edit operations. | `export/`
+ `CSV_DELIMITER` | Delimiter used to separate columns in CSV files. | `;`
+ `WFS_SERVER` | URL/Address of WFS server. | 
+ `RTREE_IMAGE_LOCATION` | Location of R-tree signature images. | `saved_pictures/rtrees/`
  
 
- ##### Mapping settings:
+ ##### Mapper settings:
  
  Option | Meaning | Default value
  ---- | --- | ---
  `ENABLE_MULTI_THREADED_MAPPING` | Run the mapping process in multi-threaded mode. | `true`
- `NR_OF_PRODUCERS` | If multi-threaded is enabled, this defines how many producers can run concurrently. The value `1` is recommended, since the mapping process is more likely dependent on the read/write disk operations. | `1`
- `CONSUMERS_PRO_PRODUCER` | If multi-threaded is enabled, this defines how many consumers **per producer** can run concurrently. It is advised to choose values below `N / (NR_OF_PRODUCERS + 1)`, where `N` is the total number of available physical CPU cores in the testing system. | `7`
- `ENABLE_INDICES` | Use Neo4j's built-in indices stored on disk is this value is `true`, or else the self-developed indexing mechanism using internal hash maps shall be employed. Note that using the latter results in significant performance boosts but requires a large amount of main memory, while the former does not require as much main memory but may run slower due to expensive disk operations. | `false`
- `SPLIT_PER_COLLECTION_MEMBER` | In order to parse large datasets efficiently, city objects are often split into smaller chunks (or pieces). If this value is set to true, each of these chunk shall be a top-level feature (e.g. a building). | `true`
+ `NR_OF_PRODUCERS` | If multi-threading is enabled, this defines how many producers can run concurrently. The value `1` is recommended, since the mapping process is more likely dependent on the slower read/write disk operations. | `1`
+ `CONSUMERS_PRO_PRODUCER` | If multi-threading is enabled, this defines how many consumers **per producer** can run concurrently. It is advised to choose values below `N / (NR_OF_PRODUCERS + 1)`, where `N` is the total number of available physical CPU cores in the testing system. | `7`
+ `ENABLE_INDICES` | Use Neo4j's built-in indices stored on disk if this value is `true`, or else the self-developed indexing mechanism using internal hash maps shall be employed. Note that using the latter results in significant performance boosts but requires a large amount of main memory, while the former does not require as much main memory but may run slower due to expensive disk operations. | `false`
+ `SPLIT_PER_COLLECTION_MEMBER` | In order to parse large datasets efficiently, city objects are often split into smaller chunks (or pieces). If this value is set to `true`, each of these chunk shall be a top-level feature (e.g. a building). | `true`
  `NR_OF_COMMIT_BUILDINGS` | To accelerate mapping time, buildings are processed in batches. This determines how many buildings should be processed before the next commit. | `10` 
  `NR_OF_COMMIT_FEATURES` | To accelerate mapping time, features are processed in batches. This determines how many features should be processed before the next commit. | `100` 
  `NR_OF_COMMMIT_TRANS` | To accelerate mapping time, transactions are committed in batches. This determines how many transactions should be grouped together before the next commit. | `5000` 
  `LOG_EVERY_N_BUILDINGS` | Determines how often it should be logged depending on the number of newly processed buildings since the last log write. | `10`
  
  
- ##### Matching settings:
+ ##### Matcher settings:
 
  Option | Meaning | Default value
  ---- | --- | ---
-`MATCHING_STRATEGY` | Two spatial strategies are available: `RTREE` or `TILES`. The former employs an R-tree to enable efficient spatial querying using bounding rectangles. The latter divides spatial objects into smaller cells organised in a grid layout. If no spatial strategy is used, this field is left empty. | `RTREE`
- `ENABLE_MULTI_THREADED_MAPPING` | Run the matching process in multi-threaded mode. If `true`, the number of producers and consumers per producers shall be the same as `NR_OF_PRODUCERS` and `CONSUMERS_PRO_PRODUCER` respectively as described above in the mapping process. | `true`
+`MATCHING_STRATEGY` | Two spatial strategies are available: `RTREE` or `TILES`. The former employs an R-tree to enable efficient spatial querying using bounding rectangles. The latter assigns spatial objects to cells organised in a grid layout. If no spatial strategy is used, set this field to `NONE`. Note that `NONE` will automatically disable multi-threading. | `RTREE`
+ `ENABLE_MULTI_THREADED_MAPPING` | Run the matching process in multi-threaded mode. If `true`, the number of producers and consumers per producers shall be the same as `NR_OF_PRODUCERS` and `CONSUMERS_PRO_PRODUCER` respectively as described above in the mapping process. Note that only the strategies `RTREE` and `TILES` are applicable to multi-threading. `NONE` is single-threaded only. | `true`
  `MAX_RTREE_NODE_REFERENCES` | R-trees are balanced, which means that each internal node can only have a fixed maximum number of child nodes, which is determined by this parameter (only valid if `RTREE` mode is enabled). | `10`
- `TILE_UNIT_X` | A grid is defined by its width (`X`) and height (`Y`), which are given in number of grid cells. For instance, a grid 10 x 10 has width equal to 10 cells and height equal 10 cells (only valid if `TILES` mode is enabled). | `100`
- `TILE_UNIT_Y` | A grid is defined by its width (`X`) and height (`Y`), which are given in number of grid cells. For instance, a grid 10 x 10 has width equal to 10 cells and height equal 10 cells (only valid if `TILES` mode is enabled). | `100`
+ `TILE_UNIT_X` | A grid is composed of a number of grid cells. Each cell has a rectangular shape and is defined by its width (`X`) and height (`Y`). This field defines the width (in meters) of each of these grid cells (only valid if `TILES` mode is enabled). | `100`
+ `TILE_UNIT_Y` | A grid is composed of a number of grid cells. Each cell has a rectangular shape and is defined by its width (`X`) and height (`Y`). This field defines the height (in meters) of each of these grid cells (only valid if `TILES` mode is enabled). | `100`
  `ERR_TOLERANCE` | Maximum allowed rounding error tolerances in meters. | `1e-7` 
  `ANGLE_TOLERANCE` | Maximum allowed angle tolerances in radians. | `1e-3` 
  `DISTANCE_TOLERANCE` | Maximum allowed distance tolerances in meters. | `1e-3` 
  `TILE_BORDER_DISTANCE` | This parameter defines how far (in meters) the uncertainty (or buffer) zones can spread from the respective tile borders (only valid if `TILES` mode is enabled). | `5` 
  `MATCH_BUILDINGS_BY_SHARED_VOLUME` | To efficiently and correctly find matching building candidates, their shared volumes (3D, if `true`) or footprints (2D, if `false`) are often used as a matching pattern. | `true`
  `BUILDING_SHARED_VOL_PERCENTAGE_THRESHOLD` | Building candidates are matched if their relative shared volume or footprint exceeds this value. | `0.9`
- `CREATE_MATCHED_CONTENT_NODE` | Each time two nodes are matched with identical contents, an auxiliary node shall be created indicating this relationship. Note that enabling this will result in a large number of auxiliary nodes and may have a negative affect on run time. | `false`
- `CREATE_MATCHED_GEOMETRY_NODE` | Each time two nodes are geometrically or spatially matched, an auxiliary node shall be created indicating this relationship. Note that enabling this will result in a large number of auxiliary nodes and may have a negative affect on run time. | `false`
- `THREAD_TIME_OUT` | This field defines how long the program can wait (in ms) for all threads to finish before moving on to the next tasks. | `500,000`
+ `CREATE_MATCHED_CONTENT_NODE` | Each time two nodes are matched with identical contents, an auxiliary node shall be created indicating this relationship (if `true`). Note that enabling this will result in a large number of auxiliary nodes and may have a negative effect on run time. | `false`
+ `CREATE_MATCHED_GEOMETRY_NODE` | Each time two nodes are geometrically or spatially matched, an auxiliary node shall be created indicating this relationship (if `true`). Note that enabling this will result in a large number of auxiliary nodes and may have a negative effect on run time. | `false`
+ `THREAD_TIME_OUT` | This field defines how long the program can wait (in milliseconds) for all threads to finish before moving on to the next tasks (only valid if multi-threading is enabled). | `500,000`
  
  
- ##### Updating settings:
+ ##### Updater settings:
  
  Option | Meaning | Default value
  ---- | --- | ---
