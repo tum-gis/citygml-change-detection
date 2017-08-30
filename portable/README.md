@@ -26,10 +26,10 @@ The stand-alone version can be executed from within this folder. For this purpos
 * [logs](logs/): Program and execution logs are stored here for debugging purposes.
 
 
-* [neo4jDB](neo4jDB/): The Neo4j database instance employed during execution shall be stored here. For querying and visualization purposes, the Neo4j web client can be pointed to this location. Note that the size of this database tends to increase over time as more and more transaction logs are stored. These data can be removed. However, do NOT remove this folder.
+* [neo4jDB](neo4jDB/): The Neo4j database instance employed during program execution shall be stored here. For querying and visualization purposes, the Neo4j web client can be pointed to this location. Note that the size of this database tends to increase over time as more and more transaction logs are stored. These data can be removed. In fact, when the program is complete, user is asked whether to keep or delete this (temporary) database.
 
 
-* [saved_pictures](saved_pictures/): If R-tree is enabled during the mapping process, R-tree pictures of input city models shall be created and stored here. These signature pictures visualized R-trees of respective city models by representing each R-tree node as a rectangle and each node level as different colors.
+* [saved_pictures](saved_pictures/): If spatial matching strategy R-tree is enabled, R-tree pictures of input city models shall be created and stored here. These signature pictures visualized R-trees of respective city models by representing each R-tree node as a rectangle. Their colors indicate node levels in the R-tree.
     
 
 * [test_data](test_data/): Input CityGML city models are supposed to be stored here.
@@ -107,7 +107,7 @@ Open [run.sh](run.sh) with a text editor.
 Change the following line:
 
 ```shell
-    java -Xms1000m -Xmx1000m -XX:+UseG1GC -jar CityGMLChangeDetection.jar -SETTINGS="Settings.txt"
+java -Xms1000m -Xmx1000m -XX:+UseG1GC -jar CityGMLChangeDetection.jar -SETTINGS="Settings.txt"
 ```
 
 to
@@ -116,7 +116,7 @@ to
 java -Xms<InitAmount>m -Xmx<MaxAmount>m -XX:+UseG1GC -jar CityGMLChangeDetection.jar -SETTINGS="Settings.txt"
 ```
     
- where `<InitAmount>` and `<MaxAmount>` indicates initial and maximum amount of heap space (in MB) respectively and are thus to be replaced by concrete non-zero integers.
+where `<InitAmount>` and `<MaxAmount>` indicate initial and maximum amount of heap space (in MB) respectively and are thus to be replaced by concrete non-zero integers.
  
  
  ### Modify Program Configurations
