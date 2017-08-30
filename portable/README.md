@@ -29,13 +29,16 @@ The stand-alone version can be executed from within this folder. For this purpos
 * [neo4jDB](neo4jDB/): The Neo4j database instance employed during program execution shall be stored here. For querying and visualization purposes, the Neo4j web client can be pointed to this location. Note that the size of this database tends to increase over time as more and more transaction logs are stored. These data can be removed. In fact, when the program is complete, user is asked whether to keep or delete this (temporary) database.
 
 
-* [saved_pictures](saved_pictures/): If spatial matching strategy R-tree is enabled, R-tree pictures of input city models shall be created and stored here. These signature pictures visualized R-trees of respective city models by representing each R-tree node as a rectangle. Their colors indicate node levels in the R-tree.
+* [saved_pictures](saved_pictures/): If spatial matching strategy R-tree is enabled, R-tree pictures of input city models shall be created and stored here. These signature pictures visualized R-trees of respective city models by representing each R-tree node as a rectangle, while their colors indicate node levels in the R-tree (see illustrations below).
     
 
 * [test_data](test_data/): Input CityGML city models are supposed to be stored here.
 
 
 **IMPORTANT:** The configuration file [Settings.txt](Settings.txt) dictates which folders shall be used for which data. The above-mentioned structure follows therefore only the default configurations.
+
+
+<img src="saved_pictures/rtrees/Berlin_M10.png" width="50%" title="Berlin R-tree M = 10"><img src="saved_pictures/rtrees/Berlin_M100.png" width="50%" title="Berlin R-tree M = 100">
 
 
 # Start the Program
