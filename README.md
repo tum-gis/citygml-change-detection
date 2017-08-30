@@ -13,25 +13,13 @@ The (ongoing) implementation of this research is stored and maintained in this r
 
 This repository contains the following folders:
 
-* [export](export/): If deviations are found between two city models, the corresponding edit operations created on-the-fly shall be documented here in 6 CSV files, namely:
-
-    * **EditOperations.csv**: All created edit operations are listed here. Each line represents one edit operation and contains its unique ID as well as operation type. Edit operations of the same type shall be stored with greater details in each respective CSV file.
-	
-    * **EditOperations_UpdateProperty.csv**: All edit operations used for updating node properties shall be listed here.
-	
-    * **EditOperations_DeleteProperty.csv**: All edit operations used for deleting node properties shall be listed here.
-	
-    * **EditOperations_InsertProperty.csv**: All edit operations used for inserting node properties shall be listed here.
-	
-    * **EditOperations_DeleteNode.csv**: All edit operations used for deleting nodes shall be listed here.
-	
-    * **EditOperations_InsertNode.csv**: All edit operations used for inserting nodes shall be listed here.
+* [export](export/): If deviations are found between two city models, the corresponding edit operations created on-the-fly shall be documented here in 6 CSV files. Fore more information please refer to the respective [README](export/README.md) there.
 
 
 * [logs](logs/): Program and execution logs are stored here for debugging purposes.
 
 
-* [neo4jDB](neo4jDB/): The Neo4j database instance employed during execution shall be stored here. For querying and visualization purposes, the Neo4j web client can be pointed to this location. Note that the size of this database tends to increase over time as more and more transaction logs are stored. These or even the whole database contents can be removed. However, do NOT remove this folder.
+* [neo4jDB](neo4jDB/): The Neo4j database instance employed during execution shall be stored here. For querying and visualization purposes, the Neo4j web client can be pointed to this location. Note that the size of this database tends to increase over time as more and more transaction logs are stored. These data can be removed. However, do NOT remove this folder.
 
 
 * [portable](portable/): The **stand-alone version** is included here. For more information, please refer to the respective [README](portable/README.md) there.
@@ -43,7 +31,7 @@ This repository contains the following folders:
 * [saved_settings](saved_settings/): Some useful run configurations can be found here. For more information, please refer to the respective [README](saved_settings/README.md) there.
 
 
-* [src](src/): Source codes can be found in this location, which consists of the following packages:
+* [src](src/main/java/): Source codes can be found in this location, which consists of the following packages:
 
     * [controller](src/main/java/controller/): The main method contained in this package controls how the whole program behaves.
     
@@ -163,8 +151,9 @@ For Linux and all other platforms, the folder [portable](portable/) was generate
 ## Windows
 
 The run configurations in selected IDE may contain the following options:
-
-	-Xms8192m -Xmx8192m -XX:+UseG1GC
+```batch
+-Xms8192m -Xmx8192m -XX:+UseG1GC
+```
 
 `-Xms` and `-Xmx` indicate the initial and maximum amount of main memory (heap space) assigned to the application. In this example, both the initial and maximum heap space are 8192MB or 8GB.
 
@@ -177,8 +166,9 @@ Alternatively, the application can be also configured in command line (see Linux
 ## Linux:
 
 Navigate to the folder [portable](portable/). Then execute the following command:
-
-	java -Xms8192m -Xmx8192m -XX:+UseG1GC -jar Filename.jar -SETTINGS="PathToSettings.txt"
+```batch
+java -Xms8192m -Xmx8192m -XX:+UseG1GC -jar Filename.jar -SETTINGS="PathToSettings.txt"
+```
 	
 The options `-Xms` and `-Xmx` are explained previously (see Windows).
 
