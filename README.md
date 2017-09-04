@@ -1,4 +1,11 @@
-*This page is currently under development.*
+# citygml-change-detection
+
+The source codes in this repository are based on the following articles:
+
+* Son H. Nguyen. ["SPATIO-SEMANTIC COMPARISON OF 3D CITY MODELS IN CITYGML USING A GRAPH DATABASE."](https://mediatum.ub.tum.de/node?id=1374646) Master's Thesis. Department of Informatics, Technical University of Munich (TUM).
+
+* Son H. Nguyen, Zhihang Yao, Thomas H. Kolbe. "SPATIO-SEMANTIC COMPARISON OF LARGE 3D CITY MODELS IN CITYGML USING A GRAPH DATABASE." In: 12th 3D Geoinfo Conference 2017.
+
 
 # Introduction
 
@@ -8,6 +15,33 @@ semantic properties. Since to date, no known algorithm is capable of detecting s
 The (ongoing) implementation of this research is stored and maintained in this repository.
 
 <img src="saved_pictures/demo/Broccoli400.png" width="100%">
+
+
+# License
+
+The **citygml-change-detection** repository is licensed under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0). See the [LICENSE](LICENSE) file for more details.
+
+
+# Developers
+
+The **citygml-change-detection** repository is being developed by:
+
+* [Son H. Nguyen.](https://www.gis.bgu.tum.de/en/our-team/staff/son-nguyen/) <br>
+[Chair of Geoinformatics. Department of Civil, Geo and Environmental Engineering.](https://www.gis.bgu.tum.de/en/home/) <br>
+[Technical University of Munich (TUM).](https://www.tum.de/en/)
+
+with the support of:
+
+* [Zhihang Yao.](https://www.gis.bgu.tum.de/en/our-team/staff/zhihang-yao/) <br>
+[Chair of Geoinformatics. Department of Civil, Geo and Environmental Engineering.](https://www.gis.bgu.tum.de/en/home/) <br>
+[Technical University of Munich (TUM).](https://www.tum.de/en/)
+
+* [Univ.-Prof. Dr. rer. nat. Thomas H. Kolbe.](https://www.gis.bgu.tum.de/en/our-team/staff/prof-thomas-h-kolbe/) <br>
+[Chair of Geoinformatics. Department of Civil, Geo and Environmental Engineering.](https://www.gis.bgu.tum.de/en/home/) <br>
+[Technical University of Munich (TUM).](https://www.tum.de/en/)
+
+
+This repository is a part of the [TUM-GIS](https://github.com/tum-gis) repository, the official GitHub page of the Chair of Geoinformatics, Department of Civil, Geo and Environmental Engineering, Technical University of Munich.
 
 
 # Repository Structure
