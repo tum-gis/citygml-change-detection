@@ -1,3 +1,49 @@
+# citygml-change-detection
+
+The source codes in this repository are based on the following articles:
+
+* Son H. Nguyen. ["SPATIO-SEMANTIC COMPARISON OF 3D CITY MODELS IN CITYGML USING A GRAPH DATABASE."](https://mediatum.ub.tum.de/node?id=1374646) Master's Thesis. Department of Informatics, Technical University of Munich (TUM).
+
+* Son H. Nguyen, Zhihang Yao, Thomas H. Kolbe. "SPATIO-SEMANTIC COMPARISON OF LARGE 3D CITY MODELS IN CITYGML USING A GRAPH DATABASE." In: 12th 3D Geoinfo Conference 2017.
+
+
+# Introduction
+
+A city may have multiple CityGML documents recorded at different times or surveyed by different users. To analyse the city’s evolution over a given period of time, as well as to update or edit the city model without negating modifications made by other users, it is of utmost importance to first compare, detect and locate spatio-semantic changes between CityGML datasets. This is however difficult due to the fact that CityGML elements belong to a complex hierarchical structure containing multi-level deep associations, which can basically be considered as a graph. Moreover, CityGML allows multiple syntactic ways to define an object leading to syntactic ambiguities in the exchange format. Furthermore, CityGML is capable of including not only 3D urban objects’ graphical appearances but also their
+semantic properties. Since to date, no known algorithm is capable of detecting spatio-semantic changes in CityGML documents, a frequent approach is to replace the older models completely with the newer ones, which not only costs computational resources, but also loses track of collaborative and chronological changes. Thus, this research proposes an approach capable of comparing two arbitrarily large-sized CityGML documents on both semantic and geometric level. Detected deviations are then attached to their respective sources and can easily be retrieved on demand. As a result, updating a 3D city model using this approach is much more efficient as only real changes are committed. To achieve this, the research employs a graph database as the main data structure for storing and processing CityGML datasets in three major steps: mapping, matching and updating. The mapping process transforms input CityGML documents into respective graph representations. The matching process compares these graphs and attaches edit operations on the fly. Found changes can then be executed using the Web Feature Service (WFS), the standard interface for updating geographical features across the web.
+
+The (ongoing) implementation of this research is stored and maintained in this repository.
+
+<img src="../saved_pictures/demo/Broccoli400.png" width="100%">
+
+
+# License
+
+The **citygml-change-detection** repository is licensed under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0). See the [LICENSE](LICENSE) file for more details.
+
+
+# Developers
+
+The **citygml-change-detection** repository is being developed by:
+
+* [Son H. Nguyen.](https://www.gis.bgu.tum.de/en/our-team/staff/son-nguyen/) <br>
+[Chair of Geoinformatics. Department of Civil, Geo and Environmental Engineering.](https://www.gis.bgu.tum.de/en/home/) <br>
+[Technical University of Munich (TUM).](https://www.tum.de/en/)
+
+with the support of:
+
+* [Zhihang Yao.](https://www.gis.bgu.tum.de/en/our-team/staff/zhihang-yao/) <br>
+[Chair of Geoinformatics. Department of Civil, Geo and Environmental Engineering.](https://www.gis.bgu.tum.de/en/home/) <br>
+[Technical University of Munich (TUM).](https://www.tum.de/en/)
+
+* [Univ.-Prof. Dr. rer. nat. Thomas H. Kolbe.](https://www.gis.bgu.tum.de/en/our-team/staff/prof-thomas-h-kolbe/) <br>
+[Chair of Geoinformatics. Department of Civil, Geo and Environmental Engineering.](https://www.gis.bgu.tum.de/en/home/) <br>
+[Technical University of Munich (TUM).](https://www.tum.de/en/)
+
+
+This repository is a part of the [TUM-GIS](https://github.com/tum-gis) repository, the official GitHub page of the Chair of Geoinformatics, Department of Civil, Geo and Environmental Engineering, Technical University of Munich.
+
+
 # Folder Structure
 
 The stand-alone version can be executed from within this folder. For this purpose, the following files as well as sub-folders are required:
