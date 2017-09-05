@@ -26,19 +26,19 @@ The **citygml-change-detection** repository is licensed under the [Apache Licens
 
 The **citygml-change-detection** repository is being developed by:
 
-* [Son H. Nguyen.](https://www.gis.bgu.tum.de/en/our-team/staff/son-nguyen/) <br>
-[Chair of Geoinformatics. Department of Civil, Geo and Environmental Engineering.](https://www.gis.bgu.tum.de/en/home/) <br>
-[Technical University of Munich (TUM).](https://www.tum.de/en/)
+* [Son H. Nguyen](https://www.gis.bgu.tum.de/en/our-team/staff/son-nguyen/) <br>
+Chair of Geoinformatics, Department of Civil, Geo and Environmental Engineering <br>
+Technical University of Munich (TUM).
 
 with the support of:
 
-* [Zhihang Yao.](https://www.gis.bgu.tum.de/en/our-team/staff/zhihang-yao/) <br>
-[Chair of Geoinformatics. Department of Civil, Geo and Environmental Engineering.](https://www.gis.bgu.tum.de/en/home/) <br>
-[Technical University of Munich (TUM).](https://www.tum.de/en/)
+* [Zhihang Yao](https://www.gis.bgu.tum.de/en/our-team/staff/zhihang-yao/) <br>
+Chair of Geoinformatics, Department of Civil, Geo and Environmental Engineering <br>
+Technical University of Munich (TUM).
 
-* [Univ.-Prof. Dr. rer. nat. Thomas H. Kolbe.](https://www.gis.bgu.tum.de/en/our-team/staff/prof-thomas-h-kolbe/) <br>
-[Chair of Geoinformatics. Department of Civil, Geo and Environmental Engineering.](https://www.gis.bgu.tum.de/en/home/) <br>
-[Technical University of Munich (TUM).](https://www.tum.de/en/)
+* [Univ.-Prof. Dr. rer. nat. Thomas H. Kolbe](https://www.gis.bgu.tum.de/en/our-team/staff/prof-thomas-h-kolbe/) <br>
+Chair of Geoinformatics, Department of Civil, Geo and Environmental Engineering <br>
+Technical University of Munich (TUM).
 
 
 This repository is a part of the [TUM-GIS](https://github.com/tum-gis) repository, the official GitHub page of the Chair of Geoinformatics, Department of Civil, Geo and Environmental Engineering, Technical University of Munich.
