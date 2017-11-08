@@ -18,8 +18,8 @@ HOME_LOCATION=
 # Location of datasets to be matched
 TEST_DATA_LOCATION=test_data/
 # Name of old and new CityGML dataset in TEST_DATA_LOCATION
-OLD_CITY_MODEL_LOCATION=settings/Demo_Building_0.gml
-NEW_CITY_MODEL_LOCATION=settings/Demo_Building_1.gml
+OLD_CITY_MODEL_LOCATION=Demo_Building_0.gml
+NEW_CITY_MODEL_LOCATION=Demo_Building_1.gml
 # Location of Neo4j graph database
 DB_LOCATION=neo4jDB/
 # Location of log files
