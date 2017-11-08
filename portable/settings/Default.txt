@@ -8,7 +8,7 @@
 # default values. Do NOT change names of existing variables.
 
 # Test message
-USER_MESSAGE=MatchBuildingsBySharedFootprint.
+USER_MESSAGE=Default.
 
 ###############################
 #DATABASE AND PROGRAM SETTINGS#

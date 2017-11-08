@@ -57,9 +57,6 @@ The stand-alone version can be executed from within this folder. For this purpos
 * [run.bat](run.bat) and [run.sh](run.sh): The program can be automatically started using the BATCH-script `.bat` in Windows or the SHELL-script `.sh` in Linux.
 
 
-* [Settings.txt](Settings.txt): All run configurations can be modified here. 
-
-
 ### Sub-folders:
 
 
@@ -77,6 +74,9 @@ The stand-alone version can be executed from within this folder. For this purpos
 
 * [saved_pictures](saved_pictures/): If spatial matching strategy R-tree is enabled, R-tree pictures of input city models shall be created and stored here. These signature pictures visualized R-trees of respective city models by representing each R-tree node as a rectangle, while their colors indicate node levels in the R-tree (see illustrations below).
     
+    
+* [settings](settings/): All run configurations can be modified here. 
+
 
 * [test_data](test_data/): Input CityGML city models are supposed to be stored here.
 
