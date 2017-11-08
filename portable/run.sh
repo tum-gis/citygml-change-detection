@@ -2,7 +2,7 @@
 printf "Deleting existing Neo4j database...\n\n"
 rm -rf neo4jDB
 if [ -f Settings.txt ]; then
-	java -Xms30000m -Xmx30000m -XX:+UseG1GC -jar CityGMLChangeDetection.jar -SETTINGS="Settings.txt"
+	java -Xms30000m -Xmx30000m -XX:+UseG1GC -jar CityGMLChangeDetection.jar -SETTINGS="settings/Default.txt"
 	printf "\nDelete Neo4j database?\n"
 	select yn in "Yes" "No"; do
 		case $yn in
