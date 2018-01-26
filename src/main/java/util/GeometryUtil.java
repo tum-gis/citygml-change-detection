@@ -111,7 +111,7 @@ public class GeometryUtil {
 
 	// calculate length of a given vector
 	public static double length(double[] v) {
-		return Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+		return Math.sqrt(v[0] * v[0] + v[1] * v[1] + (v.length == 3 ? v[2] * v[2] : 0));
 	}
 
 	// calculate distance of two given vectors
@@ -639,6 +639,7 @@ public class GeometryUtil {
 		return Math.abs(normalVector[0] * point[0] + normalVector[1] * point[1] + +normalVector[2] * point[2]);
 	}
 
+	// get 2D points of this shape
 	public static ArrayList<double[]> getDoubleArray(Area3D area) {
 		ArrayList<double[]> result = new ArrayList<double[]>();
 
@@ -649,10 +650,7 @@ public class GeometryUtil {
 			int type = iterator.currentSegment(coords);
 
 			// 2D points
-			double[] point = new double[] {
-					coords[0],
-					coords[1]
-			};
+			double[] point = new double[] { coords[0], coords[1] };
 
 			if (type != PathIterator.SEG_CLOSE) {
 				result.add(point);
@@ -661,7 +659,33 @@ public class GeometryUtil {
 			iterator.next();
 		}
 
+		// merge or remove collinear points from this list
+		mergeCollinearPoints(result);
+
 		return result;
+	}
+
+	// iterate every 3 points, delete middle point if they are collinear
+	public static void mergeCollinearPoints(ArrayList<double[]> points) {
+		if (points.size() < 3) {
+			return;
+		}
+
+		for (int i = 0; i < points.size() - 2; i++) {
+			double[] pointA = points.get(i);
+			double[] pointB = points.get(i + 1);
+			double[] pointC = points.get(i + 2);
+
+			double[] vectorAB = new double[] { pointB[0] - pointA[0], pointB[1] - pointA[1] };
+			double[] vectorAC = new double[] { pointC[0] - pointA[0], pointC[1] - pointA[1] };
+
+			double cosAngleBetween = dot(vectorAB, vectorAC) / (length(vectorAB) * length(vectorAC));
+			if ((Math.abs(cosAngleBetween) <= 1 + SETTINGS.ANGLE_TOLERANCE)
+					&& (Math.abs(cosAngleBetween) >= 1 - SETTINGS.ANGLE_TOLERANCE)) {
+				points.remove(i + 1);
+				i--;
+			}
+		}
 	}
 
 	public static boolean areaContainsPoints(Area3D area, ArrayList<double[]> points) {
