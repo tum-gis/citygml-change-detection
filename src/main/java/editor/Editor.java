@@ -72,8 +72,7 @@ public class Editor {
 
 		try (Transaction tx = graphDb.beginTx()) {
 			request.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-			request.append("<wfs:Transaction " + SERVICE + " " + VERSION + " "
-					+ Namespaces.FES + " " + Namespaces.WFS + " " + Namespaces.GML + " " + Namespaces.BLDG + ">\n");
+			request.append("<wfs:Transaction " + SERVICE + " " + VERSION + " " + StAXUtil.getAllNamespaces() + ">\n");
 			request.append("\t<wfs:Update typeName=\"bldg:Building\">\n");
 			request.append("\t\t<wfs:Property>\n");
 
@@ -129,16 +128,7 @@ public class Editor {
 			request.append("<wfs:Transaction "
 					+ SERVICE + " "
 					+ VERSION + " "
-					+ Namespaces.DEFAULT + " "
-					+ Namespaces.FES + " "
-					+ Namespaces.WFS + " "
-					+ Namespaces.GML + " "
-					+ Namespaces.BLDG + " "
-					+ Namespaces.GEN + " "
-					+ Namespaces.CORE + " "
-					+ Namespaces.XSI + " "
-					+ Namespaces.XAL + " "
-					+ Namespaces.SCHEMA_LOCATION + ">\n");
+					+ StAXUtil.getAllNamespaces() + ">\n");
 			request.append("\t<wfs:Update typeName=\"bldg:Building\">\n");
 			request.append("\t\t<wfs:Property>\n");
 
@@ -903,18 +893,7 @@ public class Editor {
 		request.append("<wfs:Transaction "
 				+ SERVICE + " "
 				+ VERSION + " "
-				+ Namespaces.DEFAULT + " "
-				+ Namespaces.FES + " "
-				+ Namespaces.FRN + " "
-				+ Namespaces.WFS + " "
-				+ Namespaces.GML + " "
-				+ Namespaces.BLDG + " "
-				+ Namespaces.GEN + " "
-				+ Namespaces.CORE + " "
-				+ Namespaces.XLINK + " "
-				+ Namespaces.XSI + " "
-				+ Namespaces.XAL + " "
-				+ Namespaces.SCHEMA_LOCATION + ">\n");
+				+ StAXUtil.getAllNamespaces() + ">\n");
 		request.append("\t<wfs:Update typeName=\"bldg:Building\">\n");
 		request.append("\t\t<wfs:Property>\n");
 		request.append("\t\t\t<wfs:ValueReference>\n");
@@ -985,18 +964,7 @@ public class Editor {
 		request.append("<wfs:Transaction "
 				+ SERVICE + " "
 				+ VERSION + " "
-				+ Namespaces.DEFAULT + " "
-				+ Namespaces.FES + " "
-				+ Namespaces.FRN + " "
-				+ Namespaces.WFS + " "
-				+ Namespaces.GML + " "
-				+ Namespaces.BLDG + " "
-				+ Namespaces.GEN + " "
-				+ Namespaces.CORE + " "
-				+ Namespaces.XLINK + " "
-				+ Namespaces.XSI + " "
-				+ Namespaces.XAL + " "
-				+ Namespaces.SCHEMA_LOCATION + ">\n");
+				+ StAXUtil.getAllNamespaces() + ">\n");
 		request.append("\t<wfs:Update typeName=\"bldg:Building\">\n");
 		request.append("\t\t<wfs:Property>\n");
 		request.append("\t\t\t<wfs:ValueReference>\n");
@@ -1043,19 +1011,7 @@ public class Editor {
 		request.append("<wfs:Transaction "
 				+ SERVICE + " "
 				+ VERSION + " "
-				+ Namespaces.DEFAULT + " "
-				+ Namespaces.FES + " "
-				+ Namespaces.FRN + " "
-				+ Namespaces.WFS + " "
-				+ Namespaces.GML + " "
-				+ Namespaces.BLDG + " "
-				+ Namespaces.GEN + " "
-				+ Namespaces.CORE + " "
-				+ Namespaces.XLINK + " "
-				+ Namespaces.XSI + " "
-				+ Namespaces.XAL + " "
-				+ Namespaces.VCS + " "
-				+ Namespaces.SCHEMA_LOCATION + ">\n");
+				+ StAXUtil.getAllNamespaces() + ">\n");
 
 		request.append("\t<wfs:Native vendorId=\"VCS\" safeToIgnore=\"false\">\n");
 		request.append("\t\t<vcs:InsertComplexProperty typeName=\"bldg:Building\">\n");
@@ -1085,19 +1041,7 @@ public class Editor {
 		request.append("<wfs:Transaction "
 				+ SERVICE + " "
 				+ VERSION + " "
-				+ Namespaces.DEFAULT + " "
-				+ Namespaces.FES + " "
-				+ Namespaces.FRN + " "
-				+ Namespaces.WFS + " "
-				+ Namespaces.GML + " "
-				+ Namespaces.BLDG + " "
-				+ Namespaces.GEN + " "
-				+ Namespaces.CORE + " "
-				+ Namespaces.XLINK + " "
-				+ Namespaces.XSI + " "
-				+ Namespaces.XAL + " "
-				+ Namespaces.VCS + " "
-				+ Namespaces.SCHEMA_LOCATION + ">\n");
+				+ StAXUtil.getAllNamespaces() + ">\n");
 
 		request.append("\t<wfs:Native vendorId=\"VCS\" safeToIgnore=\"false\">\n");
 		request.append("\t\t<vcs:InsertComplexProperty typeName=\"bldg:Building\">\n");
@@ -1129,19 +1073,7 @@ public class Editor {
 		request.append("<wfs:Transaction "
 				+ SERVICE + " "
 				+ VERSION + " "
-				+ Namespaces.DEFAULT + " "
-				+ Namespaces.FES + " "
-				+ Namespaces.FRN + " "
-				+ Namespaces.WFS + " "
-				+ Namespaces.GML + " "
-				+ Namespaces.BLDG + " "
-				+ Namespaces.GEN + " "
-				+ Namespaces.CORE + " "
-				+ Namespaces.XLINK + " "
-				+ Namespaces.XSI + " "
-				+ Namespaces.XAL + " "
-				+ Namespaces.VCS + " "
-				+ Namespaces.SCHEMA_LOCATION + ">\n");
+				+ StAXUtil.getAllNamespaces() + ">\n");
 		request.append("\t<wfs:Update typeName=\"bldg:Building\">\n");
 		request.append("\t\t<wfs:Property>\n");
 		request.append("\t\t\t<wfs:ValueReference action=\"remove\">\n");
@@ -1163,19 +1095,7 @@ public class Editor {
 		request.append("<wfs:Transaction "
 				+ SERVICE + " "
 				+ VERSION + " "
-				+ Namespaces.DEFAULT + " "
-				+ Namespaces.FES + " "
-				+ Namespaces.FRN + " "
-				+ Namespaces.WFS + " "
-				+ Namespaces.GML + " "
-				+ Namespaces.BLDG + " "
-				+ Namespaces.GEN + " "
-				+ Namespaces.CORE + " "
-				+ Namespaces.XLINK + " "
-				+ Namespaces.XSI + " "
-				+ Namespaces.XAL + " "
-				+ Namespaces.VCS + " "
-				+ Namespaces.SCHEMA_LOCATION + ">\n");
+				+ StAXUtil.getAllNamespaces() + ">\n");
 		request.append("\t<wfs:Update typeName=\"bldg:Building\">\n");
 		request.append("\t\t<wfs:Property>\n");
 		request.append("\t\t\t<wfs:ValueReference action=\"remove\">\n");
@@ -1197,18 +1117,7 @@ public class Editor {
 		request.append("<wfs:Transaction "
 				+ SERVICE + " "
 				+ VERSION + " "
-				+ Namespaces.DEFAULT + " "
-				+ Namespaces.FES + " "
-				+ Namespaces.FRN + " "
-				+ Namespaces.WFS + " "
-				+ Namespaces.GML + " "
-				+ Namespaces.BLDG + " "
-				+ Namespaces.GEN + " "
-				+ Namespaces.CORE + " "
-				+ Namespaces.XLINK + " "
-				+ Namespaces.XSI + " "
-				+ Namespaces.XAL + " "
-				+ Namespaces.SCHEMA_LOCATION + ">\n");
+				+ StAXUtil.getAllNamespaces() + ">\n");
 		request.append("\t<wfs:Insert>\n");
 		request.append(StAXUtil.formatContents(StAXUtil.extractAsXmlContent(newFilename, newBuildingId), "\t\t"));
 		request.append("\t</wfs:Insert>\n");
@@ -1223,18 +1132,7 @@ public class Editor {
 		request.append("<wfs:Transaction "
 				+ SERVICE + " "
 				+ VERSION + " "
-				+ Namespaces.DEFAULT + " "
-				+ Namespaces.FES + " "
-				+ Namespaces.FRN + " "
-				+ Namespaces.WFS + " "
-				+ Namespaces.GML + " "
-				+ Namespaces.BLDG + " "
-				+ Namespaces.GEN + " "
-				+ Namespaces.CORE + " "
-				+ Namespaces.XLINK + " "
-				+ Namespaces.XSI + " "
-				+ Namespaces.XAL + " "
-				+ Namespaces.SCHEMA_LOCATION + ">\n");
+				+ StAXUtil.getAllNamespaces() + ">\n");
 		request.append("\t<wfs:Delete typeName=\"bldg:Building\">\n");
 		request.append("\t\t<fes:Filter>\n");
 		request.append("\t\t\t<fes:ResourceId rid=\"" + oldBuildingId + "\"/>\n");
@@ -1340,19 +1238,7 @@ public class Editor {
 		request.append("<wfs:Transaction "
 				+ SERVICE + " "
 				+ VERSION + " "
-				+ Namespaces.DEFAULT + " "
-				+ Namespaces.FES + " "
-				+ Namespaces.FRN + " "
-				+ Namespaces.WFS + " "
-				+ Namespaces.GML + " "
-				+ Namespaces.BLDG + " "
-				+ Namespaces.GEN + " "
-				+ Namespaces.CORE + " "
-				+ Namespaces.XLINK + " "
-				+ Namespaces.XSI + " "
-				+ Namespaces.XAL + " "
-				+ Namespaces.VCS + " "
-				+ Namespaces.SCHEMA_LOCATION + ">\n");
+				+ StAXUtil.getAllNamespaces() + ">\n");
 		request.append("\t<wfs:Update typeName=\"bldg:Building\">\n");
 		request.append("\t\t<wfs:Property>\n");
 		request.append("\t\t\t<wfs:ValueReference" + (remove ? " action=\"remove\"" : "") + ">\n");
@@ -1388,19 +1274,7 @@ public class Editor {
 		request.append("<wfs:Transaction "
 				+ SERVICE + " "
 				+ VERSION + " "
-				+ Namespaces.DEFAULT + " "
-				+ Namespaces.FES + " "
-				+ Namespaces.FRN + " "
-				+ Namespaces.WFS + " "
-				+ Namespaces.GML + " "
-				+ Namespaces.BLDG + " "
-				+ Namespaces.GEN + " "
-				+ Namespaces.CORE + " "
-				+ Namespaces.XLINK + " "
-				+ Namespaces.XSI + " "
-				+ Namespaces.XAL + " "
-				+ Namespaces.VCS + " "
-				+ Namespaces.SCHEMA_LOCATION + ">\n");
+				+ StAXUtil.getAllNamespaces() + ">\n");
 		request.append("\t<wfs:Update typeName=\"bldg:Building\">\n");
 		request.append("\t\t<wfs:Property>\n");
 		request.append("\t\t\t<wfs:ValueReference>\n");
@@ -1444,19 +1318,10 @@ public class Editor {
 
 				StringBuilder xmlContent = new StringBuilder();
 				xmlContent.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-				xmlContent.append("<wfs:Transaction service=\"WFS\" version=\"2.0.0\" \n"
-						+ "xmlns=\"http://www.opengis.net/citygml/2.0\" \n"
-						+ "xmlns:fes=\"http://www.opengis.net/fes/2.0\" \n"
-						+ "xmlns:wfs=\"http://www.opengis.net/wfs/2.0\" \n"
-						+ "xmlns:gml=\"http://www.opengis.net/gml\" \n"
-						+ "xmlns:bldg=\"http://www.opengis.net/citygml/building/2.0\" \n"
-						+ "xmlns:gen=\"http://www.opengis.net/citygml/generics/2.0\" \n"
-						+ "xmlns:core=\"http://www.opengis.net/citygml/2.0\" \n"
-						+ "xmlns:xal=\"urn:oasis:names:tc:ciq:xsdschema:xAL:2.0\" \n"
-						+ "xmlns:schemaLocation=\"http://www.opengis.net/citygml/building/2.0 \n"
-						+ "http://schemas.opengis.net/citygml/building/2.0/building.xsd \n"
-						+ "http://www.opengis.net/citygml/generics/2.0 \n"
-						+ "http://schemas.opengis.net/citygml/generics/2.0/generics.xsd\">\n");
+				xmlContent.append("<wfs:Transaction "
+						+ SERVICE + " "
+						+ VERSION + " "
+						+ StAXUtil.getAllNamespaces() + ">\n");
 				xmlContent.append("\t<wfs:Update typeName=\"bldg:Building\">\n");
 				xmlContent.append("\t\t<wfs:Property>\n");
 				xmlContent.append("\t\t\t<wfs:ValueReference>\n");
