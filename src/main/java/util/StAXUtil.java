@@ -15,6 +15,7 @@ import javax.xml.stream.XMLStreamReader;
 public class StAXUtil {
 
 	public static final String NAMESPACE_DEFAULT = "http://www.opengis.net/citygml/2.0";
+	public static final String NAMESPACE_APP = "http://www.opengis.net/citygml/appearance/2.0";
 	public static final String NAMESPACE_BLDG = "http://www.opengis.net/citygml/building/2.0";
 	public static final String NAMESPACE_FES = "http://www.opengis.net/fes/2.0";
 	public static final String NAMESPACE_CORE = "http://www.opengis.net/citygml/2.0";
@@ -34,6 +35,7 @@ public class StAXUtil {
 	// NAMESPACES
 	public enum Namespaces {
 		DEFAULT("xmlns=\"" + StAXUtil.NAMESPACE_DEFAULT + "\""),
+		APP("xmlns:app=\"" + StAXUtil.NAMESPACE_APP + "\""),
 		BLDG("xmlns:bldg=\"" + StAXUtil.NAMESPACE_BLDG + "\""),
 		CORE("xmlns:core=\"" + StAXUtil.NAMESPACE_CORE + "\""),
 		FES("xmlns:fes=\"" + StAXUtil.NAMESPACE_FES + "\""),
@@ -41,7 +43,7 @@ public class StAXUtil {
 		GEN("xmlns:gen=\"" + StAXUtil.NAMESPACE_GEN + "\""),
 		GML("xmlns:gml=\"" + StAXUtil.NAMESPACE_GML + "\""),
 		WFS("xmlns:wfs=\"" + StAXUtil.NAMESPACE_WFS + "\""),
-		XAL("xmlns:xal=\"" + StAXUtil.NAMESPACE_XAL + "\""),
+		XAL("xmlns:xAL=\"" + StAXUtil.NAMESPACE_XAL + "\""),
 		XLINK("xmlns:xlink=\"" + StAXUtil.NAMESPACE_XLINK + "\""),
 		XSI("xmlns:xsi=\"" + StAXUtil.NAMESPACE_XSI + "\""),
 		VCS("xmlns:vcs=\"" + StAXUtil.NAMESPACE_VCS + "\""),
@@ -62,6 +64,7 @@ public class StAXUtil {
 	// NAMESPACE PREFIXES
 	public enum Prefixes {
 		DEFAULT(""),
+		APP("app"),
 		BLDG("bldg"),
 		CORE("core"),
 		FRN("frn"),
@@ -69,7 +72,7 @@ public class StAXUtil {
 		GEN("gen"),
 		GML("gml"),
 		WFS("wfs"),
-		XAL("xal"),
+		XAL("xAL"),
 		XLINK("xlink"),
 		XSI("xsi"),
 		VCS("vcs");
@@ -84,6 +87,24 @@ public class StAXUtil {
 		public String toString() {
 			return text;
 		}
+	}
+	
+	public static String getAllNamespaces() {
+		return 
+				Namespaces.DEFAULT + " " + 
+				Namespaces.APP + " " +
+				Namespaces.BLDG + " " +
+				Namespaces.CORE + " " +
+				Namespaces.FES + " " + 				
+				Namespaces.FRN + " " + 
+				Namespaces.GEN + " " + 
+				Namespaces.GML + " " + 
+				Namespaces.WFS + " " + 
+				Namespaces.XAL + " " + 
+				Namespaces.XLINK + " " + 
+				Namespaces.XSI + " " + 
+				Namespaces.VCS + " " +
+				Namespaces.SCHEMA_LOCATION;
 	}
 
 	/*
