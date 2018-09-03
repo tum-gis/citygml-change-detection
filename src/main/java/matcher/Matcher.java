@@ -1230,11 +1230,11 @@ public class Matcher {
 				while (itEditors.hasNext()) {
 					countTrans++;
 
-					if (countTrans % SETTINGS.NR_OF_COMMMIT_TRANS == 0) {
-						matcherTx.success();
-						matcherTx.close();
-						matcherTx = graphDb.beginTx();
-					}
+//					if (countTrans % SETTINGS.NR_OF_COMMMIT_TRANS == 0) {
+//						matcherTx.success();
+//						matcherTx.close();
+//						matcherTx = graphDb.beginTx();
+//					}
 
 					Node editor = itEditors.next();
 					matcherRootNode.createRelationshipTo(editor, EditRelTypes.CONSISTS_OF);
@@ -1290,8 +1290,13 @@ public class Matcher {
 		}
 
 		if (oldNodeLabel.equals(CityGMLClass.BUILDING + "")) {
+			// Apply MATCH_ONLY types of children of buildings defined by user in the config file
+			GraphUtil.SHOULD_APPLY_MATCH_ONLY = true;	
+			
 			countBuildings += 2;
 			// logger.info("... matching BUILDING " + oldNode.getProperty("id").toString() + " and " + newNode.getProperty("id").toString() + " ...");
+		} else {
+			GraphUtil.SHOULD_APPLY_MATCH_ONLY = false;
 		}
 
 		/*
