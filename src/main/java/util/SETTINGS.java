@@ -29,6 +29,7 @@ public class SETTINGS {
 	public static final String KEY_NR_OF_COMMMIT_TRANS = "NR_OF_COMMMIT_TRANS";
 	public static final String KEY_LOG_EVERY_N_BUILDINGS = "LOG_EVERY_N_BUILDINGS";
 	public static final String KEY_MATCH_ONLY = "MATCH_ONLY";
+	public static final String KEY_APPEARANCE_LOCATION = "APPEARANCE_LOCATION";
 	public static final String KEY_MATCHING_STRATEGY = "MATCHING_STRATEGY";
 	public static final String KEY_ENABLE_MULTI_THREADED_MATCHING = "ENABLE_MULTI_THREADED_MATCHING";
 	public static final String KEY_MAX_RTREE_NODE_REFERENCES = "MAX_RTREE_NODE_REFERENCES";
@@ -162,6 +163,8 @@ public class SETTINGS {
 	}
 
 	public static final String MATCH_ONLY = getValueWithDefault(KEY_MATCH_ONLY, "");
+	
+	public static final String APPEARANCE_LOCATION = getValueWithDefault(KEY_APPEARANCE_LOCATION, "");
 	
 	public static final MatchingStrategies MATCHING_STRATEGY = getValueWithDefault(KEY_MATCHING_STRATEGY, MatchingStrategies.RTREE);
 

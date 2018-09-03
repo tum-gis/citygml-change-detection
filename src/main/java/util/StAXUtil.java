@@ -326,6 +326,11 @@ public class StAXUtil {
 					}
 
 					result.append(">");
+					
+					// Prepend appearance location given by user to the imageURIs
+					if (!SETTINGS.APPEARANCE_LOCATION.equals("") && reader.getName().getLocalPart().equals("imageURI")) {
+						result.append(SETTINGS.APPEARANCE_LOCATION);
+					}
 				}
 
 				break;
