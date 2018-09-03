@@ -24,7 +24,8 @@ public class StAXUtil {
 	public static final String NAMESPACE_GML = "http://www.opengis.net/gml";
 	public static final String NAMESPACE_XLINK = "http://www.w3.org/1999/xlink";
 	public static final String NAMESPACE_WFS = "http://www.opengis.net/wfs/2.0";
-	public static final String NAMESPACE_XAL = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0";
+	public static final String NAMESPACE_xal = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0";
+	public static final String NAMESPACE_xAL = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0";
 	public static final String NAMESPACE_XSI = "http://www.w3.org/2001/XMLSchema-instance";
 	public static final String NAMESPACE_VCS = "http://www.virtualcitysystems.de/wfs/2.0";
 	public static final String SCHEMA_LOCATINO = "http://www.opengis.net/citygml/building/2.0 "
@@ -43,7 +44,8 @@ public class StAXUtil {
 		GEN("xmlns:gen=\"" + StAXUtil.NAMESPACE_GEN + "\""),
 		GML("xmlns:gml=\"" + StAXUtil.NAMESPACE_GML + "\""),
 		WFS("xmlns:wfs=\"" + StAXUtil.NAMESPACE_WFS + "\""),
-		XAL("xmlns:xAL=\"" + StAXUtil.NAMESPACE_XAL + "\""),
+		xal("xmlns:xal=\"" + StAXUtil.NAMESPACE_xal + "\""),
+		xAL("xmlns:xAL=\"" + StAXUtil.NAMESPACE_xAL + "\""),
 		XLINK("xmlns:xlink=\"" + StAXUtil.NAMESPACE_XLINK + "\""),
 		XSI("xmlns:xsi=\"" + StAXUtil.NAMESPACE_XSI + "\""),
 		VCS("xmlns:vcs=\"" + StAXUtil.NAMESPACE_VCS + "\""),
@@ -72,7 +74,8 @@ public class StAXUtil {
 		GEN("gen"),
 		GML("gml"),
 		WFS("wfs"),
-		XAL("xAL"),
+		xal("xal"),
+		xAL("xAL"),
 		XLINK("xlink"),
 		XSI("xsi"),
 		VCS("vcs");
@@ -100,7 +103,8 @@ public class StAXUtil {
 				Namespaces.GEN + " " + 
 				Namespaces.GML + " " + 
 				Namespaces.WFS + " " + 
-				Namespaces.XAL + " " + 
+				Namespaces.xal + " " + 
+				Namespaces.xAL + " " + 
 				Namespaces.XLINK + " " + 
 				Namespaces.XSI + " " + 
 				Namespaces.VCS + " " +
