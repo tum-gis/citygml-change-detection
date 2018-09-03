@@ -245,6 +245,10 @@ public class Controller {
 
 		sb.append("\nMATCHER SETTINGS\n");
 
+		sb.append(String.format("%-40s", "\t > Match only:") + SETTINGS.MATCH_ONLY + "\n");
+		
+		sb.append(String.format("%-40s", "\t > Appearance location:") + SETTINGS.APPEARANCE_LOCATION + "\n");
+		
 		sb.append(String.format("%-40s", "\t > Matching strategy:") + SETTINGS.MATCHING_STRATEGY + "\n");
 
 		sb.append(String.format("%-40s", "\t > Enable multi threading:") + SETTINGS.ENABLE_MULTI_THREADED_MATCHING + "\n");
