@@ -47,6 +47,13 @@ import matcher.EditOperationEnums.UpdatePropertyNodeProperties;
  */
 public class GraphUtil {
 	/**
+	 * Nodes are matched from top to bottom, which means they ALL should be matched
+	 * until the BUILDING level is reached, in which case only then the given types
+	 * shall be matched
+	 */
+	public static boolean SHOULD_APPLY_MATCH_ONLY = false;
+	
+	/**
 	 * Find a node by its ID.
 	 * 
 	 * Return null if there is no node or there are more than 2 nodes found.
@@ -320,7 +327,18 @@ public class GraphUtil {
 			}
 
 			if (!result.contains(rel.getType())) {
-				result.add(rel.getType());
+				// Find only relationship types defined by users in the config file
+				if (SHOULD_APPLY_MATCH_ONLY && !SETTINGS.MATCH_ONLY.equals("")) {
+					String[] onlyTypes = SETTINGS.MATCH_ONLY.split(" ");
+					for (String s : onlyTypes) {
+						if (rel.getType().toString().equals(SETTINGS.MATCH_ONLY)) {
+							result.add(rel.getType());
+							break;
+						}
+					}
+				} else {
+					result.add(rel.getType());
+				}
 			}
 		}
 
@@ -361,11 +379,11 @@ public class GraphUtil {
 			while (countIt.hasNext()) {
 				nodeCount++;
 
-				if (nodeCount % SETTINGS.NR_OF_COMMMIT_TRANS == 0) {
-					tx.success();
-					tx.close();
-					tx = graphDb.beginTx();
-				}
+//				if (nodeCount % SETTINGS.NR_OF_COMMMIT_TRANS == 0) {
+//					tx.success();
+//					tx.close();
+//					tx = graphDb.beginTx();
+//				}
 
 				countIt.next();
 			}
