@@ -50,6 +50,8 @@ LOG_EVERY_N_BUILDINGS=100
 ###################
 # Match only children of buildings of these types separated by a space letter
 MATCH_ONLY=
+# Global/Absolute location of textures to upload to WFS, must contain "/" or ("\") at the end
+APPEARANCE_LOCATION=
 MATCHING_STRATEGY=RTREE
 ENABLE_MULTI_THREADED_MATCHING=true
 MAX_RTREE_NODE_REFERENCES=10
