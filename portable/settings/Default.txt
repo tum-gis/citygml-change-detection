@@ -23,12 +23,12 @@ NEW_CITY_MODEL_LOCATION=Polygon_Multi_Interior_1.gml
 # Location of Neo4j graph database
 DB_LOCATION=neo4jDB/
 # Location of log files
-LOG_LOCATION=logs/MatchBuildingsBySharedFootprint.log
+LOG_LOCATION=logs/Default.log
 # Location of exported CSV storing edit operations
 EXPORT_LOCATION=export/
 CSV_DELIMITER=;
 # URL/Address of WFS server
-WFS_SERVER=http://10.162.246.159:8080/citydb-wfs-qeop/wfs
+WFS_SERVER=http://localhost:8080/citydb-wfs/wfs
 # Location of R-tree signature images
 RTREE_IMAGE_LOCATION=saved_pictures/rtrees/
 
@@ -48,6 +48,10 @@ LOG_EVERY_N_BUILDINGS=100
 ###################
 #MATCHING SETTINGS#
 ###################
+# Match only children of buildings of these types separated by a space letter
+MATCH_ONLY=
+# Global/Absolute location of textures to upload to WFS, must contain "/" or ("\") at the end
+APPEARANCE_LOCATION=
 MATCHING_STRATEGY=RTREE
 ENABLE_MULTI_THREADED_MATCHING=true
 MAX_RTREE_NODE_REFERENCES=10
