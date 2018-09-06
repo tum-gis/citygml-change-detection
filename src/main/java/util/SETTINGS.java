@@ -76,7 +76,7 @@ public class SETTINGS {
 	
 	public static final String CSV_DELIMITER = getValueWithDefault(KEY_CSV_DELIMITER, ";");
 
-	public static final String WFS_SERVER = getValueWithDefault(KEY_WFS_SERVER, "http://10.162.246.159:8080/citydb-wfs-qeop/wfs");
+	public static final String WFS_SERVER = getValueWithDefault(KEY_WFS_SERVER, "http://localhost:8080/citydb-wfs/wfs");
 
 	public static final String RTREE_IMAGE_LOCATION = HOME_LOCATION + getValueWithDefault(KEY_RTREE_IMAGE_LOCATION, "saved_pictures/rtrees/");
 
