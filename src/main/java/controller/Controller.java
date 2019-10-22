@@ -4,10 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.logging.FileHandler;
 import java.util.logging.Formatter;
@@ -19,6 +16,7 @@ import java.util.logging.Logger;
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.http.client.ClientProtocolException;
 import org.citygml4j.CityGMLContext;
 import org.citygml4j.builder.CityGMLBuilder;
@@ -30,7 +28,6 @@ import org.citygml4j.xml.io.reader.CityGMLReader;
 import org.citygml4j.xml.io.reader.FeatureReadMode;
 import org.citygml4j.xml.io.reader.MissingADESchemaException;
 import org.citygml4j.xml.io.reader.UnmarshalException;
-import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
@@ -43,13 +40,7 @@ import exporter.EditOperationExporter;
 import mapper.EnumClasses.GMLRelTypes;
 import mapper.Mapper;
 import matcher.Matcher;
-import matcher.EditOperationEnums.DeletePropertyNodeProperties;
-import matcher.EditOperationEnums.DeleteRelationshipNodeProperties;
 import matcher.Matcher.EditOperators;
-import matcher.Matcher.EditRelTypes;
-import matcher.EditOperationEnums.InsertPropertyNodeProperties;
-import matcher.EditOperationEnums.InsertRelationshipNodeProperties;
-import matcher.EditOperationEnums.UpdatePropertyNodeProperties;
 import util.GraphUtil;
 import util.MapUtil;
 import util.ReadCMDUtil;
@@ -204,7 +195,7 @@ public class Controller {
 
 		sb.append(String.format("%-40s", "\t > Home location:") + SETTINGS.HOME_LOCATION + "\n");
 
-		sb.append(String.format("%-40s", "\t > Test data location:") + SETTINGS.TEST_DATA_LOCATION + "\n");
+		sb.append(String.format("%-40s", "\t > Data location:") + SETTINGS.DATA_LOCATION + "\n");
 
 		sb.append(String.format("%-40s", "\t > Database location:") + SETTINGS.DB_LOCATION + "\n");
 
@@ -216,10 +207,17 @@ public class Controller {
 
 		sb.append(String.format("%-40s", "\t > WFS server:") + SETTINGS.WFS_SERVER + "\n");
 
-		// file names
-		sb.append(String.format("%-40s", "\t > Old city model location:") + oldFilename + "\n");
+		sb.append(String.format("%-40s", "\t > Batch comparison at data location:") + SETTINGS.COMPARE_IN_BATCH + "\n");
 
-		sb.append(String.format("%-40s", "\t > New city model location:") + newFilename + "\n");
+		sb.append(String.format("%-40s", "\t > Old city model location:") + SETTINGS.OLD_CITY_MODEL_LOCATION + "\n");
+
+		sb.append(String.format("%-40s", "\t > New city model location:") + SETTINGS.NEW_CITY_MODEL_LOCATION + "\n");
+
+		sb.append(String.format("%-40s", "\t > Old city model pre and suffix:") + SETTINGS.FILE_PATTERN_OLD_CITY_MODEL + "\n");
+
+		sb.append(String.format("%-40s", "\t > New city model pre and suffix:") + SETTINGS.FILE_PATTERN_NEW_CITY_MODEL + "\n");
+
+		sb.append(String.format("%-40s", "\t > File extension:") + SETTINGS.FILE_EXTENSION + "\n");
 
 		sb.append(String.format("%-40s", "\t > RTree image location:") + SETTINGS.RTREE_IMAGE_LOCATION + "\n");
 
@@ -292,10 +290,30 @@ public class Controller {
 
 		// Always write database operations in transactions
 		try (Transaction tx = graphDb.beginTx()) {
-			logger.info("... deleting existing Neo4j databases ...");
-			graphDb.execute("MATCH (n) DETACH DELETE n");
+			logger.info("... cleaning existing Neo4j databases ...");
+
+			// This is for small database
+			// graphDb.execute("MATCH (n) DETACH DELETE n");
+
+			// This is for bigger database
+			 graphDb.execute("MATCH (n)\n" +
+			 		"OPTIONAL MATCH (n)-[r]-()\n" +
+			 		//"WITH n,r LIMIT 10000\n" +
+			 		"DELETE n,r");
+
 			tx.success();
 		}
+	}
+
+	private void deleteNeo4jDatabase() {
+		// Delete all files in the database directory
+		logger.info("... deleting existing Neo4j databases ...");
+		try {
+			FileUtils.deleteDirectory((new File(SETTINGS.DB_LOCATION)));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		(new File(SETTINGS.DB_LOCATION)).mkdir();
 	}
 
 	private long calculateRunTime(long startTime, String step) {
@@ -513,58 +531,88 @@ public class Controller {
 	}
 
 	public static void main(String[] args) throws JAXBException, CityGMLReadException, InterruptedException, UnmarshalException, MissingADESchemaException, XMLStreamException, ClientProtocolException, IOException {
-		/**
-		 * Read command line arguments if available
-		 */
-		ReadCMDUtil.readCommandLindArguments(args);
+		// Read command line arguments if available
+		ReadCMDUtil.readCommandLineArguments(args);
 
-		Controller controller;
-
-		if (SETTINGS.OLD_CITY_MODEL_LOCATION == null || SETTINGS.OLD_CITY_MODEL_LOCATION.isEmpty()
-				|| SETTINGS.NEW_CITY_MODEL_LOCATION == null || SETTINGS.NEW_CITY_MODEL_LOCATION.isEmpty()) {
-
-			controller = new Controller(
-					SETTINGS.TEST_DATA_LOCATION + "Polygon_Multi_Interior_0.gml",
-					SETTINGS.TEST_DATA_LOCATION + "Polygon_Multi_Interior_1.gml");
-		} else {
-			controller = new Controller(
-					SETTINGS.OLD_CITY_MODEL_LOCATION,
-					SETTINGS.NEW_CITY_MODEL_LOCATION);
+		ArrayList<HashMap<String, String>> filePairs = new ArrayList<>();
+		for (int i = 0; i < 3; i++) {
+			filePairs.add(new HashMap<>());
 		}
 
-		/*
-		 * Delete all existing databases from Neo4j to begin a new session
-		 */
-		controller.cleanNeo4jDatabase();
+		if (SETTINGS.COMPARE_IN_BATCH) {
+			filePairs = SETTINGS.matchFilePairs(SETTINGS.DATA_LOCATION, SETTINGS.OLD_CITY_MODEL_LOCATION, SETTINGS.NEW_CITY_MODEL_LOCATION, SETTINGS.FILE_PATTERN_OLD_CITY_MODEL, SETTINGS.FILE_PATTERN_NEW_CITY_MODEL, SETTINGS.FILE_EXTENSION);
+		} else {
+			if (SETTINGS.OLD_CITY_MODEL_LOCATION == null || SETTINGS.OLD_CITY_MODEL_LOCATION.isEmpty()
+					|| SETTINGS.NEW_CITY_MODEL_LOCATION == null || SETTINGS.NEW_CITY_MODEL_LOCATION.isEmpty()) {
+				filePairs.get(1).put("Polygon_Multi_Interior_0.gml", "Polygon_Multi_Interior_1.gml");
+			} else {
+				filePairs.get(1).put(SETTINGS.OLD_CITY_MODEL_LOCATION, SETTINGS.NEW_CITY_MODEL_LOCATION);
+			}
+		}
 
-		/*
-		 * Map CityGML instances into a graph database in Neo4j
-		 */
-		controller.map();
+		Controller controller = new Controller(null, null);
 
-		/*
-		 * Match mapped CityGML instances
-		 */
-		controller.match();
-		
-		/*
-		 * Export edit operations to CSV files
-		 */
-		controller.export(SETTINGS.EXPORT_LOCATION, SETTINGS.CSV_DELIMITER);
+		// Process matched files
+		for (Map.Entry<String, String> entry : filePairs.get(1).entrySet()) {
+			try {
+				controller.graphDb.shutdown();
+			} catch (Exception e) {
 
-		/*
-		 * Execute WFS-Transactions
-		 */
-		controller.update();
+			}
 
-		/*
-		 * Statistics
-		 */
-		controller.printStats();
+			// Delete database files
+			controller.deleteNeo4jDatabase();
 
-		/*
-		 * Close Neo4j session
-		 */
+			controller.graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(new File(SETTINGS.DB_LOCATION));
+
+			controller.oldFilename = entry.getKey();
+			controller.newFilename = entry.getValue();
+
+			// Clean all existing databases from Neo4j to begin a new session
+			// controller.cleanNeo4jDatabase();
+
+			controller.logger.info("\n\n\t\t---------------------------------------------------------------------------------------------------------------------------\n" +
+					"\t\t\tPROCESSING " + controller.oldFilename + " AND " + controller.newFilename + "\n" +
+					"\t\t---------------------------------------------------------------------------------------------------------------------------\n");
+
+			// Map CityGML instances into a graph database in Neo4j
+			controller.map();
+
+			// Match mapped CityGML instances
+			controller.match();
+
+			// Export edit operations to CSV files
+			if (SETTINGS.COMPARE_IN_BATCH) {
+				File oldFile = new File(entry.getKey());
+				File newFile = new File(entry.getValue());
+				String newPath = SETTINGS.EXPORT_LOCATION + oldFile.getName().replace("." + SETTINGS.FILE_EXTENSION, "") + "_" + newFile.getName().replace("." + SETTINGS.FILE_EXTENSION, "") + "/";
+				new File(newPath).mkdirs();
+				controller.export(newPath, SETTINGS.CSV_DELIMITER);
+			} else {
+				controller.export(SETTINGS.EXPORT_LOCATION, SETTINGS.CSV_DELIMITER);
+			}
+
+			// Execute WFS-Transactions
+			controller.update();
+
+			// Statistics
+			controller.printStats();
+		}
+
+		// Process files that do not exist in the newer location
+		for (Map.Entry<String, String> entry : filePairs.get(0).entrySet()) {
+			controller.logger.warning("File " + entry.getKey() + " do not exist in the newer location!");
+		}
+
+		// Process files that are new in the newer location
+		for (Map.Entry<String, String> entry : filePairs.get(2).entrySet()) {
+			controller.logger.warning("File " + entry.getKey() + " do not exist in the older location!");
+		}
+
+		// Close Neo4j session
 		controller.registerShutdownHook();
+
+		// Delete database files
+		// controller.deleteNeo4jDatabase();
 	}
 }

@@ -1,5 +1,7 @@
 package util;
 
+import org.apache.commons.io.FilenameUtils;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -45,7 +47,7 @@ public class ReadCMDUtil {
 		ARGUMENTS = args;
 	}
 
-	public static void readCommandLindArguments(String[] args) throws IOException {
+	public static void readCommandLineArguments(String[] args) throws IOException {
 		for (String arg : args) {
 			if (arg.contains(KEY_SETTINGS_LOCATION)) {
 				parseCommandLineArguments(arg.split(KEY_VALUE_SEPARATOR)[1]);
@@ -55,4 +57,5 @@ public class ReadCMDUtil {
 
 		parseCommandLineArguments("saved_settings/Default.txt");
 	}
+
 }

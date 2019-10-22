@@ -1,5 +1,10 @@
 package util;
 
+import org.apache.commons.io.FilenameUtils;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -10,9 +15,13 @@ public class SETTINGS {
 
 	public static final String KEY_USER_MESSAGE = "USER_MESSAGE";
 	public static final String KEY_HOME_LOCATION = "HOME_LOCATION";
-	public static final String KEY_TEST_DATA_LOCATION = "TEST_DATA_LOCATION";
+	public static final String KEY_DATA_LOCATION = "DATA_LOCATION";
+	public static final String KEY_COMPARE_IN_BATCH = "COMPARE_IN_BATCH";
 	public static final String KEY_OLD_CITY_MODEL_LOCATION = "OLD_CITY_MODEL_LOCATION";
 	public static final String KEY_NEW_CITY_MODEL_LOCATION = "NEW_CITY_MODEL_LOCATION";
+	public static final String KEY_FILE_PATTERN_OLD_CITY_MODEL = "FILE_PATTERN_OLD_CITY_MODEL";
+	public static final String KEY_FILE_PATTERN_NEW_CITY_MODEL = "FILE_PATTERN_NEW_CITY_MODEL";
+	public static final String KEY_FILE_EXTENSION = "FILE_EXTENSION";
 	public static final String KEY_DB_LOCATION = "DB_LOCATION";
 	public static final String KEY_LOG_LOCATION = "LOG_LOCATION";
 	public static final String KEY_EXPORT_LOCATION = "EXPORT_LOCATION";
@@ -62,11 +71,19 @@ public class SETTINGS {
 	 */
 	public static final String HOME_LOCATION = getValueWithDefault(KEY_HOME_LOCATION, "");
 
-	public static final String TEST_DATA_LOCATION = HOME_LOCATION + getValueWithDefault(KEY_TEST_DATA_LOCATION, "test_data/");
+	public static final String DATA_LOCATION = HOME_LOCATION + getValueWithDefault(KEY_DATA_LOCATION, "test_data/");
 
-	public static final String OLD_CITY_MODEL_LOCATION = TEST_DATA_LOCATION + getValueWithDefault(KEY_OLD_CITY_MODEL_LOCATION, "");
+	public static final Boolean COMPARE_IN_BATCH = getValueWithDefault(KEY_COMPARE_IN_BATCH, false);
 
-	public static final String NEW_CITY_MODEL_LOCATION = TEST_DATA_LOCATION +getValueWithDefault(KEY_NEW_CITY_MODEL_LOCATION, "");
+	public static final String OLD_CITY_MODEL_LOCATION = DATA_LOCATION + getValueWithDefault(KEY_OLD_CITY_MODEL_LOCATION, "");
+
+	public static final String NEW_CITY_MODEL_LOCATION = DATA_LOCATION +getValueWithDefault(KEY_NEW_CITY_MODEL_LOCATION, "");
+
+	public static final String FILE_PATTERN_OLD_CITY_MODEL = getValueWithDefault(KEY_FILE_PATTERN_OLD_CITY_MODEL, "<><>");
+
+	public static final String FILE_PATTERN_NEW_CITY_MODEL = getValueWithDefault(KEY_FILE_PATTERN_NEW_CITY_MODEL, "<><>");
+
+	public static final String FILE_EXTENSION = getValueWithDefault(KEY_FILE_EXTENSION, ".gml");
 
 	public static final String DB_LOCATION = HOME_LOCATION + getValueWithDefault(KEY_DB_LOCATION, "neo4jDB/");
 
@@ -311,4 +328,96 @@ public class SETTINGS {
 		
 		return MatchingStrategies.valueOf(ARGUMENTS.get(key).toString());
 	}
+
+	/**
+	 * Automatically match files based on their names in a given directory
+	 *
+	 * @param dataLocation the directory location where {@code oldDataLocation} {@code newDataLocation} are located
+	 * @param oldDataLocation the directory location containing older datasets
+	 * @param newDataLocation the directory location containing newer datasets
+	 * @return an ArrayList of three HashMap<String, String> objects:
+	 * [0] deleted files with tupels (..., null),
+	 * [1] matched files with tupels (..., ...),
+	 * [2] inserted files with tupels (..., null)
+	 */
+	public static ArrayList<HashMap<String, String>> matchFilePairs(String dataLocation, String oldDataLocation, String newDataLocation, String oldFilePattern, String newFilePattern, String fileExtension) {
+		HashMap<String, String> deletedFiles = new HashMap<>();
+		HashMap<String, String> machtedFiles = new HashMap<>();
+		HashMap<String, String> insertedFiles = new HashMap<>();
+
+		ArrayList<String> oldFilenames = listFilesForFolder(oldDataLocation, fileExtension);
+		ArrayList<String> newFilenames = listFilesForFolder(newDataLocation, fileExtension);
+
+		String oldPathPrefix = oldDataLocation + "/";
+		String newPathPrefix = newDataLocation + "/";
+
+		String[] oldFilePreFixSuffix = oldFilePattern.split("<|><|>");
+		String[] newFilePreFixSuffix = newFilePattern.split("<|><|>");
+		if (oldFilePreFixSuffix == null || oldFilePreFixSuffix.length == 0) {
+			oldFilePreFixSuffix = new String[]{"", "", ""};
+		}
+		if (newFilePreFixSuffix == null || newFilePreFixSuffix.length == 0) {
+			newFilePreFixSuffix = new String[]{"", "", ""};
+		}
+		int prefixIndex = 0; // <a_><_b> --split--> ["a_", "", "_b"]
+		int suffixIndex = 2;
+
+		// matched files
+		int i = 0;
+		ArrayList<Integer> matchedIds = new ArrayList<>();
+		for (; i < oldFilenames.size(); i++) {
+			if (newFilenames.isEmpty()) {
+				break;
+			}
+
+			for (int j = 0; j < newFilenames.size(); j++) {
+				if (oldFilenames.get(i).replace(oldFilePreFixSuffix[prefixIndex], "").replace(oldFilePreFixSuffix[suffixIndex], "")
+						.equals(newFilenames.get(j).replace(newFilePreFixSuffix[prefixIndex], "").replace(newFilePreFixSuffix[suffixIndex], ""))) {
+					machtedFiles.put(oldPathPrefix + oldFilenames.get(i), newPathPrefix + newFilenames.get(j));
+					newFilenames.remove(j);
+					matchedIds.add(i);
+					break;
+				}
+			}
+		}
+
+		// deleted files
+		for (int j = 0; j < oldFilenames.size(); j++) {
+			if (!matchedIds.contains(j)) {
+				deletedFiles.put(oldPathPrefix + oldFilenames.get(j), null);
+			}
+		}
+
+		// inserted files
+		for (int j = 0; j < newFilenames.size(); j++) {
+			insertedFiles.put(newPathPrefix + newFilenames.get(j), null);
+		}
+
+
+		ArrayList<HashMap<String, String>> result = new ArrayList<>();
+		result.add(deletedFiles);
+		result.add(machtedFiles);
+		result.add(insertedFiles);
+
+		return result;
+	}
+
+	private static ArrayList<String> listFilesForFolder(String folderPath, String fileExtension) {
+		File folder = new File(folderPath);
+		ArrayList<String> filenames = new ArrayList<>();
+
+		if (folder.listFiles() != null) {
+			for (File fileEntry : folder.listFiles()) {
+				if (fileEntry.isDirectory()) {
+					// TODO match also folders with folders
+					// listFilesForFolder(fileEntry.getPath());
+				} else if (FilenameUtils.getExtension(fileEntry.getName()).equals(fileExtension)) {
+					filenames.add(fileEntry.getName());
+				}
+			}
+		}
+
+		return filenames;
+	}
+
 }
