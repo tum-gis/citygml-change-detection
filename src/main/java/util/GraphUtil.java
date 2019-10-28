@@ -540,7 +540,7 @@ public class GraphUtil {
 		}
 
 		if (foundBuilding == null || !buildingNode.getProperty("id").toString().equals(foundBuilding.getProperty("id").toString())) {
-			logger.info("Matched " + buildingNode.getProperty("id") + " with " + (foundBuilding == null ? "null" : foundBuilding.getProperty("id")));
+			logger.fine("Matched " + buildingNode.getProperty("id") + " with " + (foundBuilding == null ? "null" : foundBuilding.getProperty("id")));
 		}
 
 		return foundBuilding;

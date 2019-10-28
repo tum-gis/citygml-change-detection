@@ -139,7 +139,7 @@ public class Matcher {
 		Node node = graphDb.createNode();
 		node.addLabel(Label.label(label));
 
-		logger.info("... creating " + label + " ...");
+		logger.fine("... creating " + label + " ...");
 
 		// statistics
 		// if (stats.containsKey(label)) {
