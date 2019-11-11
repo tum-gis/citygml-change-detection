@@ -78,6 +78,16 @@ public class StatBot {
 
 		ArrayList<String> headers = new ArrayList<>();
 		headers.add("Number of BUILDING nodes:");
+		headers.add("Number of STRING_ATTRIBUTE nodes:");
+		headers.add("Number of SURFACE_PROPERTY nodes:");
+		headers.add("Number of POLYGON nodes:");
+		headers.add("Number of MULTI_SURFACE nodes:");
+		headers.add("Number of BUILDING_WALL_SURFACE nodes:");
+		headers.add("Number of BUILDING_ROOF_SURFACE nodes:");
+		headers.add("Number of BUILDING_GROUND_SURFACE nodes:");
+		headers.add("Number of EXTERNAL_REFERENCE nodes:");
+		headers.add("Number of SOLID nodes:");
+		
 		headers.add("TOTAL NUMBER OF CREATED NODES:");
 		headers.add("MAPPER'S ELAPSED TIME:");
 		
@@ -91,7 +101,7 @@ public class StatBot {
 		headers.add("OF WHICH ARE OPTIONAL:");
 		headers.add("MATCHER'S ELAPSED TIME:");
 		
-		int indexBetweenMapperAndMatcher = 3;
+		int indexBetweenMapperAndMatcher = 12;
 
 		ArrayList<Long> totalNumbers = new ArrayList<>();
 		for (int i = 0; i < headers.size(); i++) {
@@ -208,10 +218,9 @@ public class StatBot {
 				+ "\t| " + String.format("%-70s", "DELETE PROPERTY ...") + " |\n");
 		
 		// OLD_PARENT_NODE_TYPE
-		MapUtil.sortByValue(oldParentNodeType);
 		stats.append("\t| " + String.format("%-70s", "") + " |\n");
 		stats.append("\t| " + String.format("%-70s", "OLD_PARENT_NODE_TYPE") + " |\n");
-		Iterator it = oldParentNodeType.entrySet().iterator();
+		Iterator it = MapUtil.sortByValue(oldParentNodeType).entrySet().iterator();
 	    while (it.hasNext()) {
 	        Map.Entry pair = (Map.Entry)it.next();
 	        stats.append("\t| " + String.format("%-70s", "") + " |\n"
@@ -219,10 +228,9 @@ public class StatBot {
 	    }
 	    
 	    // PROPERTY_NAME
-	    MapUtil.sortByValue(propertyName);
 	    stats.append("\t| " + String.format("%-70s", "") + " |\n");
  		stats.append("\t| " + String.format("%-70s", "PROPERTY_NAME") + " |\n");
- 		it = propertyName.entrySet().iterator();
+ 		it = MapUtil.sortByValue(propertyName).entrySet().iterator();
  	    while (it.hasNext()) {
  	        Map.Entry pair = (Map.Entry)it.next();
  	        stats.append("\t| " + String.format("%-70s", "") + " |\n"
@@ -271,10 +279,9 @@ public class StatBot {
 				+ "\t| " + String.format("%-70s", "DELETE NODE ...") + " |\n");
 		
 		// DELETE_NODE_TYPE
-		MapUtil.sortByValue(deleteNodeType);
 		stats.append("\t| " + String.format("%-70s", "") + " |\n");
 		stats.append("\t| " + String.format("%-70s", "DELETE_NODE_TYPE") + " |\n");
-		Iterator it = deleteNodeType.entrySet().iterator();
+		Iterator it = MapUtil.sortByValue(deleteNodeType).entrySet().iterator();
 	    while (it.hasNext()) {
 	        Map.Entry pair = (Map.Entry)it.next();
 	        stats.append("\t| " + String.format("%-70s", "") + " |\n"
@@ -329,10 +336,9 @@ public class StatBot {
 				+ "\t| " + String.format("%-70s", "INSERT NODE ...") + " |\n");
 		
 		// INSERT_RELATIONSHIP_TYPE
-		MapUtil.sortByValue(insertRelationshipType);
 		stats.append("\t| " + String.format("%-70s", "") + " |\n");
 		stats.append("\t| " + String.format("%-70s", "INSERT_RELATIONSHIP_TYPE") + " |\n");
-		Iterator it = insertRelationshipType.entrySet().iterator();
+		Iterator it = MapUtil.sortByValue(insertRelationshipType).entrySet().iterator();
 	    while (it.hasNext()) {
 	        Map.Entry pair = (Map.Entry)it.next();
 	        stats.append("\t| " + String.format("%-70s", "") + " |\n"
@@ -340,10 +346,9 @@ public class StatBot {
 	    }
 	    
 	    // INSERT_NODE_TYPE
-	    MapUtil.sortByValue(insertNodeType);
 	    stats.append("\t| " + String.format("%-70s", "") + " |\n");
  		stats.append("\t| " + String.format("%-70s", "INSERT_NODE_TYPE") + " |\n");
- 		it = insertNodeType.entrySet().iterator();
+ 		it = MapUtil.sortByValue(insertNodeType).entrySet().iterator();
  	    while (it.hasNext()) {
  	        Map.Entry pair = (Map.Entry)it.next();
  	        stats.append("\t| " + String.format("%-70s", "") + " |\n"
@@ -398,10 +403,9 @@ public class StatBot {
 				+ "\t| " + String.format("%-70s", "INSERT PROPERTY ...") + " |\n");
 		
 		// OLD_PARENT_NODE_TYPE
-		MapUtil.sortByValue(oldParentNodeType);
 		stats.append("\t| " + String.format("%-70s", "") + " |\n");
 		stats.append("\t| " + String.format("%-70s", "OLD_PARENT_NODE_TYPE") + " |\n");
-		Iterator it = oldParentNodeType.entrySet().iterator();
+		Iterator it = MapUtil.sortByValue(oldParentNodeType).entrySet().iterator();
 	    while (it.hasNext()) {
 	        Map.Entry pair = (Map.Entry)it.next();
 	        stats.append("\t| " + String.format("%-70s", "") + " |\n"
@@ -409,10 +413,9 @@ public class StatBot {
 	    }
 	    
 	    // PROPERTY_NAME
-	    MapUtil.sortByValue(propertyName);
 	    stats.append("\t| " + String.format("%-70s", "") + " |\n");
  		stats.append("\t| " + String.format("%-70s", "PROPERTY_NAME") + " |\n");
- 		it = propertyName.entrySet().iterator();
+ 		it = MapUtil.sortByValue(propertyName).entrySet().iterator();
  	    while (it.hasNext()) {
  	        Map.Entry pair = (Map.Entry)it.next();
  	        stats.append("\t| " + String.format("%-70s", "") + " |\n"
@@ -467,10 +470,9 @@ public class StatBot {
 				+ "\t| " + String.format("%-70s", "UPDATE PROPERTY ...") + " |\n");
 		
 		// OLD_PARENT_NODE_TYPE
-		MapUtil.sortByValue(oldParentNodeType);
 		stats.append("\t| " + String.format("%-70s", "") + " |\n");
 		stats.append("\t| " + String.format("%-70s", "OLD_PARENT_NODE_TYPE") + " |\n");
-		Iterator it = oldParentNodeType.entrySet().iterator();
+		Iterator it = MapUtil.sortByValue(oldParentNodeType).entrySet().iterator();
 	    while (it.hasNext()) {
 	        Map.Entry pair = (Map.Entry)it.next();
 	        stats.append("\t| " + String.format("%-70s", "") + " |\n"
@@ -478,10 +480,9 @@ public class StatBot {
 	    }
 	    
 	    // PROPERTY_NAME
-	    MapUtil.sortByValue(propertyName);
 	    stats.append("\t| " + String.format("%-70s", "") + " |\n");
  		stats.append("\t| " + String.format("%-70s", "PROPERTY_NAME") + " |\n");
- 		it = propertyName.entrySet().iterator();
+ 		it = MapUtil.sortByValue(propertyName).entrySet().iterator();
  	    while (it.hasNext()) {
  	        Map.Entry pair = (Map.Entry)it.next();
  	        stats.append("\t| " + String.format("%-70s", "") + " |\n"
