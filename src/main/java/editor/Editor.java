@@ -70,7 +70,8 @@ public class Editor {
 	public StringBuilder requestUpdateProperty(Node opNode) {
 		StringBuilder request = new StringBuilder();
 
-		try (Transaction tx = graphDb.beginTx()) {
+		Transaction tx = graphDb.beginTx();
+		try {
 			request.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 			request.append("<wfs:Transaction " + SERVICE + " " + VERSION + " " + StAXUtil.getAllNamespaces() + ">\n");
 			request.append("\t<wfs:Update typeName=\"bldg:Building\">\n");
@@ -105,6 +106,8 @@ public class Editor {
 			request.append("</wfs:Transaction>\n");
 
 			tx.success();
+		} finally {
+			tx.close();
 		}
 
 		return request;
@@ -122,7 +125,8 @@ public class Editor {
 	public StringBuilder requestUpdateNodeWithId(String oldNearestElementId, String newNearestElementId, String oldBuildingId) throws FileNotFoundException, XMLStreamException {
 		StringBuilder request = new StringBuilder();
 
-		try (Transaction tx = graphDb.beginTx()) {
+		Transaction tx = graphDb.beginTx();
+		try {
 			request.append("-------------------------------------------------------------------------------------------\n");
 			request.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 			request.append("<wfs:Transaction "
@@ -151,6 +155,8 @@ public class Editor {
 			request.append("-------------------------------------------------------------------------------------------\n");
 
 			tx.success();
+		} finally {
+			tx.close();
 		}
 
 		return request;
@@ -160,7 +166,8 @@ public class Editor {
 	 * Update function
 	 */
 	public void executeUpdate(Node mapperRootNode) throws InterruptedException {
-		try (Transaction tx = graphDb.beginTx()) {
+		Transaction tx = graphDb.beginTx();
+		try {
 			logger.info("\n---------------------------------------\n"
 					+ "HTTP-POST CONTENTS FOR WFS-TRANSACTIONS"
 					+ "\n---------------------------------------");
@@ -177,7 +184,8 @@ public class Editor {
 				service.execute(new Runnable() {
 					@Override
 					public void run() {
-						try (Transaction tx = graphDb.beginTx()) {
+						Transaction tx = graphDb.beginTx();
+						try {
 							String oldBuildingId = oldBuilding.getProperty("id").toString();
 
 							// first element [old, new (optional)] is building's ID, others are nearest ID's that belong to this building
@@ -213,6 +221,8 @@ public class Editor {
 						} catch (XMLStreamException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
+						} finally {
+							tx.close();
 						}
 					}
 				});
@@ -224,6 +234,8 @@ public class Editor {
 			service.awaitTermination(SETTINGS.THREAD_TIME_OUT, TimeUnit.SECONDS);
 
 			tx.success();
+		} finally {
+			tx.close();
 		}
 	}
 
@@ -303,7 +315,8 @@ public class Editor {
 	 * @throws ClientProtocolException
 	 */
 	public void executeEditors(Node mapperRootNode, Node matcherRootNode) throws InterruptedException, ClientProtocolException, IOException, XMLStreamException {
-		try (Transaction tx = graphDb.beginTx()) {
+		Transaction tx = graphDb.beginTx();
+		try {
 			logger.info("\n---------------------------------------\n"
 					+ "HTTP-POST CONTENTS FOR WFS-TRANSACTIONS"
 					+ "\n---------------------------------------");
@@ -323,7 +336,8 @@ public class Editor {
 				service.execute(new Runnable() {
 					@Override
 					public void run() {
-						try (Transaction tx = graphDb.beginTx()) {
+						Transaction tx = graphDb.beginTx();
+						try {
 							ArrayList<Node> attachedInsertEditors = GraphUtil.getNonOptionalAttachedEditors(newBuilding, Label.label(EditOperators.INSERT_NODE + ""));
 							if (attachedInsertEditors == null || attachedInsertEditors.isEmpty()) {
 								// CITY_OBJECT_MEMBER
@@ -348,6 +362,8 @@ public class Editor {
 						} catch (XMLStreamException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
+						} finally {
+							tx.close();
 						}
 					}
 				});
@@ -369,7 +385,8 @@ public class Editor {
 
 					@Override
 					public void run() {
-						try (Transaction tx = graphDb.beginTx()) {
+						Transaction tx = graphDb.beginTx();
+						try {
 							executeBuildingEditors(oldBuilding);
 							tx.success();
 						} catch (ClientProtocolException e) {
@@ -381,6 +398,8 @@ public class Editor {
 						} catch (XMLStreamException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
+						} finally {
+							tx.close();
 						}
 					}
 
@@ -393,6 +412,8 @@ public class Editor {
 			service.awaitTermination(SETTINGS.THREAD_TIME_OUT, TimeUnit.SECONDS);
 
 			tx.success();
+		} finally {
+			tx.close();
 		}
 	}
 
@@ -1295,7 +1316,8 @@ public class Editor {
 	 * Simple update for buildings' creationDate
 	 */
 	public void executeSimpleUpdate(Node matcherRootNode) throws ClientProtocolException, IOException {
-		try (Transaction tx = graphDb.beginTx()) {
+		Transaction tx = graphDb.beginTx();
+		try {
 			for (Node node : GraphUtil.findChildrenOfNode(matcherRootNode, Label.label(EditOperators.UPDATE_PROPERTY + ""))) {
 				// xpath //*/text()[normalize-space(.)='text']/parent::*
 				StringBuilder xpath = new StringBuilder();
@@ -1344,6 +1366,8 @@ public class Editor {
 				ClientUtil.sendHttpPost(this.wfsServerUrl, xmlContent, logger);
 			}
 			tx.success();
+		} finally {
+			tx.close();
 		}
 	}
 
