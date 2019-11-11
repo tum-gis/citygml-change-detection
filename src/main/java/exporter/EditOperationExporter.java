@@ -149,7 +149,8 @@ public class EditOperationExporter {
 			sbInsertNodeOperations.append("COUNT" + delimiter
 					+ EnumUtil.enumValuesToHeaders(InsertRelationshipNodeProperties.class, delimiter) + "\n");
 
-			try (Transaction tx = graphDb.beginTx()) {
+			Transaction tx = graphDb.beginTx();
+			try {
 				for (Iterator<Node> nodeIt = GraphUtil.findChildrenOfNode(matcherRootNode, EditRelTypes.CONSISTS_OF)
 						.iterator(); nodeIt.hasNext();) {
 					Node node = (Node) nodeIt.next();
@@ -190,6 +191,8 @@ public class EditOperationExporter {
 
 				}
 				tx.success();
+			} finally {
+				tx.close();
 			}
 
 			// fill hash map with edit operation types and their numbers

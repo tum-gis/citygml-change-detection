@@ -182,7 +182,8 @@ public class ProducerConsumerUtil {
 					chunks.add(chunk);
 				}
 
-				try (Transaction tx = graphDb.beginTx()) {
+				Transaction tx = graphDb.beginTx();
+				try {
 					int countChunk = 0;
 					for (int i = 0; i < chunks.size(); i++) {
 						XMLChunk chunk = chunks.get(i);
@@ -215,6 +216,8 @@ public class ProducerConsumerUtil {
 				} catch (MissingADESchemaException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+				} finally {
+					tx.close();
 				}
 			}
 		}
@@ -518,8 +521,9 @@ public class ProducerConsumerUtil {
 
 					chunks.add(chunk);
 				}
-
-				try (Transaction tx = graphDb.beginTx()) {
+				
+				Transaction tx = graphDb.beginTx();
+				try {
 					i = 0;
 					for (; i < chunks.size(); i++) {
 						Node oldBuildingNode = chunks.get(i);
@@ -545,6 +549,8 @@ public class ProducerConsumerUtil {
 				} catch (XMLStreamException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+				} finally {
+					tx.close();
 				}
 			}
 		}

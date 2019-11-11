@@ -994,9 +994,12 @@ public class Matcher {
 					ExecutorService service = Executors.newFixedThreadPool(nThreads);
 
 					ArrayList<Node> oldBuildingNodes;
-					try (Transaction tx = graphDb.beginTx()) {
+					Transaction tx = graphDb.beginTx();
+					try {
 						oldBuildingNodes = GraphUtil.findBuildings(GraphUtil.findFirstChildOfNode(mapperRootNode, GMLRelTypes.OLD_CITY_MODEL));
 						tx.success();
+					} finally {
+						tx.close();
 					}
 
 					int producerSize = oldBuildingNodes.size() / SETTINGS.NR_OF_PRODUCERS;
@@ -1064,9 +1067,12 @@ public class Matcher {
 				if (SETTINGS.ENABLE_MULTI_THREADED_MATCHING) {
 					// multi-threaded
 					ArrayList<Node> newBuildingNodes;
-					try (Transaction tx = graphDb.beginTx()) {
+					Transaction tx = graphDb.beginTx();
+					try {
 						newBuildingNodes = GraphUtil.findBuildings(GraphUtil.findFirstChildOfNode(mapperRootNode, GMLRelTypes.NEW_CITY_MODEL));
 						tx.success();
+					} finally {
+						tx.close();
 					}
 
 					int nThreads = Runtime.getRuntime().availableProcessors() * 2;
@@ -1081,7 +1087,8 @@ public class Matcher {
 							service.execute(new Runnable() {
 								@Override
 								public void run() {
-									try (Transaction tx = graphDb.beginTx()) {
+									Transaction tx = graphDb.beginTx();
+									try {
 										if (!newBuildingNode.hasRelationship(Direction.INCOMING, TmpRelTypes.GEOMETRY_MATCHED)
 												&& !newBuildingNode.hasRelationship(Direction.INCOMING, TmpRelTypes.CONTENT_MATCHED)) {
 											createInsertRelationshipNode(
@@ -1097,6 +1104,8 @@ public class Matcher {
 									} catch (XMLStreamException e) {
 										// TODO Auto-generated catch block
 										e.printStackTrace();
+									} finally {
+										tx.close();
 									}
 								}
 							});
@@ -1106,7 +1115,8 @@ public class Matcher {
 							service.execute(new Runnable() {
 								@Override
 								public void run() {
-									try (Transaction tx = graphDb.beginTx()) {
+									Transaction tx = graphDb.beginTx();
+									try {
 										Node oldBuildingNode = GraphUtil.findBuildingInRTree(newBuildingNode, oldBuildingLayer, logger, graphDb);
 										if (oldBuildingNode == null) {
 											createInsertRelationshipNode(
@@ -1122,6 +1132,8 @@ public class Matcher {
 									} catch (XMLStreamException e) {
 										// TODO Auto-generated catch block
 										e.printStackTrace();
+									} finally {
+										tx.close();
 									}
 								}
 							});
