@@ -10,12 +10,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
-
-import org.neo4j.graphdb.Label;
-import org.neo4j.graphdb.Transaction;
-
-import matcher.Matcher.EditOperators;
 
 public class StatBot {
 
@@ -439,6 +433,9 @@ public class StatBot {
 
 				while ((line = br.readLine()) != null) {
 					String[] propertykeys = line.split(this.csvDelimiter);
+					if (propertykeys == null || propertykeys.length == 0 || propertykeys.length < 4) {
+						continue;
+					}
 					
 					// OLD_PARENT_NODE_TYPE
 					String key = propertykeys[2];
@@ -495,7 +492,7 @@ public class StatBot {
 	}
 
 	public static void main(String[] args) {
-		StatBot statBot = new StatBot("logs/testStatBot/logs", "logs/testStatBot/export");
+		StatBot statBot = new StatBot("logs_tiles", "export_tiles");
 		statBot.printLogStats();
 		statBot.printDeletePropertyStats();
 		statBot.printDeleteNodeStats();
