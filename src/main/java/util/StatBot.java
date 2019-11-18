@@ -22,12 +22,15 @@ public class StatBot {
 	private ArrayList<File> csvInsertNodeFiles;
 	private ArrayList<File> csvInsertPropertyFiles;
 	private ArrayList<File> csvUpdatePropertyFiles;
+	
+	private HashMap<String, Long> changedOldBuildingGmlids;
 
 	public StatBot(String logFolderPath, String exportCsvFolderPath, String csvDelimiter) {
 		this.logFolderPath = logFolderPath;
 		this.exportCsvFolderPath = exportCsvFolderPath;
 		this.csvDelimiter = csvDelimiter;
 		this.getAllCsvFromPath();
+		this.changedOldBuildingGmlids = new HashMap<>();
 	}
 
 	public StatBot(String logFolderPath, String sheetFolderPath) {
@@ -191,6 +194,8 @@ public class StatBot {
 					key = propertykeys[6];
 					value = propertyName.get(key);
 					propertyName.put(key, value == null ? 1 : value + 1);
+					
+					this.changedOldBuildingGmlids.put(propertykeys[5], null);
 				}
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
@@ -252,6 +257,8 @@ public class StatBot {
 					String key = propertykeys[2];
 					Long value = deleteNodeType.get(key);
 					deleteNodeType.put(key, value == null ? 1 : value + 1);
+					
+					this.changedOldBuildingGmlids.put(propertykeys[5], null);
 				}
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
@@ -309,6 +316,8 @@ public class StatBot {
 					key = propertykeys[3];
 					value = insertNodeType.get(key);
 					insertNodeType.put(key, value == null ? 1 : value + 1);
+					
+					this.changedOldBuildingGmlids.put(propertykeys[6], null);
 				}
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
@@ -376,6 +385,8 @@ public class StatBot {
 					key = propertykeys[6];
 					value = propertyName.get(key);
 					propertyName.put(key, value == null ? 1 : value + 1);
+					
+					this.changedOldBuildingGmlids.put(propertykeys[5], null);
 				}
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
@@ -446,6 +457,8 @@ public class StatBot {
 					key = propertykeys[6];
 					value = propertyName.get(key);
 					propertyName.put(key, value == null ? 1 : value + 1);
+					
+					this.changedOldBuildingGmlids.put(propertykeys[5], null);
 				}
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
@@ -486,6 +499,12 @@ public class StatBot {
  					+ "\t| > " + String.format("%-53s", pair.getKey()) + String.format("%15s", pair.getValue()) + " |\n");
  	    }
 	 	    
+		stats.append("\t ________________________________________________________________________/\n\n");
+		
+		stats.append("\t _______________________________________________________________________ \n"
+				+ "\t| " + String.format("%-70s", "EXTRA BONUS ...") + " |\n");
+		stats.append("\t| " + String.format("%-70s", "") + " |\n"
+				+ "\t| " + String.format("%-55s", "NUMBER OF CHANGED BUILDINGS:") + String.format("%15s", this.changedOldBuildingGmlids.size()) + " |\n");
 		stats.append("\t ________________________________________________________________________/\n\n");
 		
 		System.out.println(stats);
