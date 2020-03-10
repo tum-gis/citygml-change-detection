@@ -1050,7 +1050,7 @@ public class Mapper implements MappingComponent {
 				PrintStream ps = new PrintStream(baos);
 				PrintStream old = System.out;
 				System.setOut(ps);
-				GraphUtil.exportRTreeImage(buildingLayer, graphDb, imageName);
+				GraphUtil.exportRTreeImage(buildingLayer, graphDb, imageName, logger);
 				System.out.flush();
 				System.setOut(old);
 				String[] tmpLines = baos.toString().split("\n");

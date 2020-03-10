@@ -554,24 +554,29 @@ public class GraphUtil {
 	 * @param filename
 	 * @throws IOException
 	 */
-	public static void exportRTreeImage(EditableLayer buildingLayer, GraphDatabaseService graphDb, String filename) throws IOException {
-		SimpleFeatureType featureType = Neo4jFeatureBuilder.getTypeFromLayer(buildingLayer);
-		org.neo4j.gis.spatial.rtree.Envelope bbox = buildingLayer.getIndex().getBoundingBox();
-		com.vividsolutions.jts.geom.Coordinate lowerCoordinate = new com.vividsolutions.jts.geom.Coordinate(bbox.getMinX(), bbox.getMinY());
-		com.vividsolutions.jts.geom.Coordinate upperCoordinate = new com.vividsolutions.jts.geom.Coordinate(bbox.getMaxX(), bbox.getMaxY());
-		Node rTreeRootNode = ((RTreeIndex) buildingLayer.getIndex()).getIndexRoot();
-		// or Node rTreeRootNode = GraphUtil.findFirstChildOf(buildingLayer.getLayerNode(), RTreeRelationshipTypes.RTREE_ROOT);
+	public static void exportRTreeImage(EditableLayer buildingLayer, GraphDatabaseService graphDb, String filename, Logger logger) {
+		try {
+			SimpleFeatureType featureType = Neo4jFeatureBuilder.getTypeFromLayer(buildingLayer);
+			org.neo4j.gis.spatial.rtree.Envelope bbox = buildingLayer.getIndex().getBoundingBox();
+			com.vividsolutions.jts.geom.Coordinate lowerCoordinate = new com.vividsolutions.jts.geom.Coordinate(bbox.getMinX(), bbox.getMinY());
+			com.vividsolutions.jts.geom.Coordinate upperCoordinate = new com.vividsolutions.jts.geom.Coordinate(bbox.getMaxX(), bbox.getMaxY());
+			Node rTreeRootNode = ((RTreeIndex) buildingLayer.getIndex()).getIndexRoot();
+			// or Node rTreeRootNode = GraphUtil.findFirstChildOf(buildingLayer.getLayerNode(), RTreeRelationshipTypes.RTREE_ROOT);
 
-		RTreeImageExporter imageExporter = new RTreeImageExporter(
-				buildingLayer.getGeometryFactory(),
-				buildingLayer.getGeometryEncoder(),
-				buildingLayer.getCoordinateReferenceSystem(),
-				featureType,
-				(RTreeIndex) buildingLayer.getIndex(),
-				lowerCoordinate,
-				upperCoordinate);
+			RTreeImageExporter imageExporter = new RTreeImageExporter(
+					buildingLayer.getGeometryFactory(),
+					buildingLayer.getGeometryEncoder(),
+					buildingLayer.getCoordinateReferenceSystem(),
+					featureType,
+					(RTreeIndex) buildingLayer.getIndex(),
+					lowerCoordinate,
+					upperCoordinate);
 
-		imageExporter.saveRTreeLayers(new File(filename), rTreeRootNode, Integer.MAX_VALUE);
+			imageExporter.saveRTreeLayers(new File(filename), rTreeRootNode, Integer.MAX_VALUE);
+		} catch (Exception e) {
+			logger.warning(e.getMessage() + "\nPerhaps this city model does not have any buildings, so an RTree could not be produced.");
+		}
+
 	}
 
 	public static boolean isAttachedWithNonOptionalEditor(Node node) {
