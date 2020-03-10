@@ -66,7 +66,7 @@ public class SETTINGS {
 
 	public static final String OLD_CITY_MODEL_LOCATION = TEST_DATA_LOCATION + getValueWithDefault(KEY_OLD_CITY_MODEL_LOCATION, "");
 
-	public static final String NEW_CITY_MODEL_LOCATION = TEST_DATA_LOCATION +getValueWithDefault(KEY_NEW_CITY_MODEL_LOCATION, "");
+	public static final String NEW_CITY_MODEL_LOCATION = TEST_DATA_LOCATION + getValueWithDefault(KEY_NEW_CITY_MODEL_LOCATION, "");
 
 	public static final String DB_LOCATION = HOME_LOCATION + getValueWithDefault(KEY_DB_LOCATION, "neo4jDB/");
 

@@ -22,6 +22,7 @@ import javax.xml.stream.XMLStreamException;
 import org.apache.http.client.ClientProtocolException;
 import org.citygml4j.CityGMLContext;
 import org.citygml4j.builder.CityGMLBuilder;
+import org.citygml4j.model.citygml.CityGMLClass;
 import org.citygml4j.model.citygml.building.AbstractOpening;
 import org.citygml4j.model.citygml.core.Address;
 import org.citygml4j.xml.io.CityGMLInputFactory;
@@ -364,12 +365,18 @@ public class Controller {
 			tx.close();
 		}
 
-		if (filename.replace(SETTINGS.TEST_DATA_LOCATION, "").isEmpty() || filename.replace(SETTINGS.TEST_DATA_LOCATION + "/", "").isEmpty()) {
-			return;
-		}
-
-		File cityModelFile = new File(filename);
-		if (!cityModelFile.exists()) {
+		if (filename.replace(SETTINGS.TEST_DATA_LOCATION, "").isEmpty()
+				|| filename.replace(SETTINGS.TEST_DATA_LOCATION + "/", "").isEmpty()
+				|| !new File(filename).exists()) {
+			// if the city model does not exist -> create a dummy old/new city model node
+			Transaction txx = graphDb.beginTx();
+			try {
+				Node targetNode = mapper.createNodeWithLabel(CityGMLClass.CITY_MODEL);
+				mapperRootNode.createRelationshipTo(targetNode, relType);
+				tx.success();
+			} finally {
+				txx.close();
+			}
 			return;
 		}
 		CityGMLReader reader = in.createCityGMLReader(new File(filename));
@@ -571,42 +578,25 @@ public class Controller {
 					SETTINGS.NEW_CITY_MODEL_LOCATION);
 		}
 
-		/*
-		 * Delete all existing databases from Neo4j to begin a new session
-		 */
+		// Delete all existing databases from Neo4j to begin a new session
 		controller.cleanNeo4jDatabase();
 
-		/*
-		 * Map CityGML instances into a graph database in Neo4j
-		 */
+		// Map CityGML instances into a graph database in Neo4j
 		controller.map();
 
-		// If only one dataset is given -> only map and do not match, export and update
-		if (!SETTINGS.NEW_CITY_MODEL_LOCATION.replace(SETTINGS.TEST_DATA_LOCATION, "").isEmpty() && !SETTINGS.NEW_CITY_MODEL_LOCATION.replace(SETTINGS.TEST_DATA_LOCATION + "/", "").isEmpty()) {			
-			/*
-			 * Match mapped CityGML instances
-			 */
-			controller.match();
+		// Match mapped CityGML instances
+		controller.match();
 
-			/*
-			 * Export edit operations to CSV files
-			 */
-			controller.export(SETTINGS.EXPORT_LOCATION, SETTINGS.CSV_DELIMITER);
+		// Export edit operations to CSV files
+		controller.export(SETTINGS.EXPORT_LOCATION, SETTINGS.CSV_DELIMITER);
 
-			/*
-			 * Execute WFS-Transactions
-			 */
-			controller.update();
-		}
+		// Execute WFS-Transactions
+		controller.update();
 
-		/*
-		 * Statistics
-		 */
+		// Statistics
 		controller.printStats();
 
-		/*
-		 * Close Neo4j session
-		 */
+		// Close Neo4j session
 		controller.registerShutdownHook();
 	}
 }

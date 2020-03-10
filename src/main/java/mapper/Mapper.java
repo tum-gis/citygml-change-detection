@@ -707,7 +707,7 @@ public class Mapper implements MappingComponent {
 		this.mapperTx = mapperTx;
 	}
 
-	private Node createNodeWithLabel(ModelClassEnum label) {
+	public Node createNodeWithLabel(ModelClassEnum label) {
 		return createNodeWithLabel(label + "");
 	}
 
@@ -953,10 +953,7 @@ public class Mapper implements MappingComponent {
 						createNodeSearchHierarchy(cityGml, null, GMLRelTypes.HREF_FEATURE);
 					}
 
-				} catch (UnmarshalException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (MissingADESchemaException e) {
+				} catch (UnmarshalException | MissingADESchemaException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
