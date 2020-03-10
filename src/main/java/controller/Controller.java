@@ -344,14 +344,10 @@ public class Controller {
 		}
 
 		// map old city model
-		if (!this.oldFilename.replace(SETTINGS.TEST_DATA_LOCATION, "").isEmpty() && !this.oldFilename.replace(SETTINGS.TEST_DATA_LOCATION + "/", "").isEmpty()) {
-			mapCityModel(in, this.oldFilename, GMLRelTypes.OLD_CITY_MODEL, true);
-		}
+		mapCityModel(in, this.oldFilename, GMLRelTypes.OLD_CITY_MODEL, true);
 
 		// map new city model
-		if (!this.newFilename.replace(SETTINGS.TEST_DATA_LOCATION, "").isEmpty() && !this.newFilename.replace(SETTINGS.TEST_DATA_LOCATION + "/", "").isEmpty()) {
-			mapCityModel(in, this.newFilename, GMLRelTypes.NEW_CITY_MODEL, false);
-		}
+		mapCityModel(in, this.newFilename, GMLRelTypes.NEW_CITY_MODEL, false);
 
 		// statistics
 		this.mapperRunTime = calculateRunTime(startTime, "MAPPING");
@@ -368,6 +364,14 @@ public class Controller {
 			tx.close();
 		}
 
+		if (filename.replace(SETTINGS.TEST_DATA_LOCATION, "").isEmpty() || filename.replace(SETTINGS.TEST_DATA_LOCATION + "/", "").isEmpty()) {
+			return;
+		}
+
+		File cityModelFile = new File(filename);
+		if (!cityModelFile.exists()) {
+			return;
+		}
 		CityGMLReader reader = in.createCityGMLReader(new File(filename));
 
 		mapper.mapperInit(reader, mapperRootNode);
