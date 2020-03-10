@@ -1065,9 +1065,6 @@ public class Mapper implements MappingComponent {
 			}
 
 			mapperTx.success();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} finally {
 			mapperTx.close();
 		}

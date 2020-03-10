@@ -61,8 +61,7 @@ public class GraphUtil {
 	 * Return a node if there is exactly one node found.
 	 * 
 	 * (If there are two nodes found, the one belongs to respective city model is returned.)
-	 * 
-	 * @param indexManager
+	 *
 	 * @param id
 	 * @param logger
 	 * @return
@@ -573,8 +572,10 @@ public class GraphUtil {
 					upperCoordinate);
 
 			imageExporter.saveRTreeLayers(new File(filename), rTreeRootNode, Integer.MAX_VALUE);
-		} catch (Exception e) {
+		} catch (NullPointerException e) {
 			logger.warning(e.getMessage() + "\nPerhaps this city model does not have any buildings, so an RTree could not be produced.");
+		} catch (IOException e) {
+			logger.warning(e.getMessage() + "\nCould not export RTree images.");
 		}
 
 	}
