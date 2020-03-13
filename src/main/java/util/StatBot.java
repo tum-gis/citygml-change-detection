@@ -66,11 +66,11 @@ public class StatBot {
 	}
 
 	private String getTopBorderLine() {
-		return "\t _______________________________________________________________________ \n";
+		return "\t ________________________________________________________________________\n";
 	}
 
 	private String getBottomBorderLine() {
-		return "\t\\ _______________________________________________________________________/\n";
+		return "\t\\________________________________________________________________________/\n";
 	}
 
 	public void printLogStats() {
@@ -452,6 +452,16 @@ public class StatBot {
 				String line = br.readLine();
 
 				while ((line = br.readLine()) != null) {
+					// concat lines that should have been a single line
+					String substring = "\"";
+					int occurrences = 0;
+					while ((occurrences = (line.length() - line.replaceAll(substring, "").length()) / substring.length()) % 2 != 0) {
+						String newLine = br.readLine();
+						if (newLine == null) {
+							break;
+						}
+						line += newLine;
+					}
 					String[] propertykeys = line.split(this.csvDelimiter);
 					if (propertykeys == null || propertykeys.length == 0 || propertykeys.length < 4) {
 						continue;
