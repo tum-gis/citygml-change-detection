@@ -65,6 +65,14 @@ public class StatBot {
 		}
 	}
 
+	private String getTopBorderLine() {
+		return "\t _______________________________________________________________________ \n";
+	}
+
+	private String getBottomBorderLine() {
+		return "\t\\ _______________________________________________________________________/\n";
+	}
+
 	public void printLogStats() {
 		File[] logFiles = new File(this.logFolderPath).listFiles(new FilenameFilter() {
 		    @Override
@@ -152,22 +160,23 @@ public class StatBot {
 		stats.append("\n\t                    brought to you by StatBot with love\n\n");
 
 		// MAPPER
-		stats.append("\t _______________________________________________________________________ \n"
-				+ "\t| " + String.format("%-70s", "MAPPER ...") + " |\n");
+		stats.append(getTopBorderLine());
+		stats.append("\t| " + String.format("%-70s", "MAPPER ...") + " |\n");
 		for (int i = 0; i < indexBetweenMapperAndMatcher; i++) {
 			stats.append("\t| " + String.format("%-70s", "") + " |\n"
 					+ "\t| " + String.format("%-55s", headers.get(i)) + String.format("%15s", totalNumbers.get(i)) + " |\n");
 		}
-		stats.append("\t ________________________________________________________________________/\n\n");
-		
+		stats.append(getBottomBorderLine());
+		stats.append("\n");
+
 		// MATCHER
-		stats.append("\t _______________________________________________________________________ \n"
-				+ "\t| " + String.format("%-70s", "MATCHER ...") + " |\n");
+		stats.append(getTopBorderLine());
+		stats.append("\t| " + String.format("%-70s", "MATCHER ...") + " |\n");
 		for (int i = indexBetweenMapperAndMatcher; i < headers.size(); i++) {
 			stats.append("\t| " + String.format("%-70s", "") + " |\n"
 					+ "\t| " + String.format("%-55s", headers.get(i)) + String.format("%15s", totalNumbers.get(i)) + " |\n");
 		}
-		stats.append("\t ________________________________________________________________________/\n");
+		stats.append(getBottomBorderLine());
 		
 		System.out.println(stats);
 	}
@@ -213,8 +222,8 @@ public class StatBot {
 		}
 		
 		StringBuilder stats = new StringBuilder();
-		stats.append("\t _______________________________________________________________________ \n"
-				+ "\t| " + String.format("%-70s", "DELETE PROPERTY ...") + " |\n");
+		stats.append(getTopBorderLine());
+		stats.append("\t| " + String.format("%-70s", "DELETE PROPERTY ...") + " |\n");
 		
 		// OLD_PARENT_NODE_TYPE
 		stats.append("\t| " + String.format("%-70s", "") + " |\n");
@@ -236,7 +245,7 @@ public class StatBot {
  					+ "\t| > " + String.format("%-53s", pair.getKey()) + String.format("%15s", pair.getValue()) + " |\n");
  	    }
 	 	    
-		stats.append("\t ________________________________________________________________________/\n\n");
+		stats.append(getBottomBorderLine());
 		
 		System.out.println(stats);
 	}
@@ -276,8 +285,8 @@ public class StatBot {
 		}
 		
 		StringBuilder stats = new StringBuilder();
-		stats.append("\t _______________________________________________________________________ \n"
-				+ "\t| " + String.format("%-70s", "DELETE NODE ...") + " |\n");
+		stats.append(getTopBorderLine());
+		stats.append("\t| " + String.format("%-70s", "DELETE NODE ...") + " |\n");
 		
 		// DELETE_NODE_TYPE
 		stats.append("\t| " + String.format("%-70s", "") + " |\n");
@@ -289,7 +298,7 @@ public class StatBot {
 					+ "\t| > " + String.format("%-53s", pair.getKey()) + String.format("%15s", pair.getValue()) + " |\n");
 	    }
 	 	    
-		stats.append("\t ________________________________________________________________________/\n\n");
+		stats.append(getBottomBorderLine());
 		
 		System.out.println(stats);
 	}
@@ -335,8 +344,8 @@ public class StatBot {
 		}
 		
 		StringBuilder stats = new StringBuilder();
-		stats.append("\t _______________________________________________________________________ \n"
-				+ "\t| " + String.format("%-70s", "INSERT NODE ...") + " |\n");
+		stats.append(getTopBorderLine());
+		stats.append("\t| " + String.format("%-70s", "INSERT NODE ...") + " |\n");
 		
 		// INSERT_RELATIONSHIP_TYPE
 		stats.append("\t| " + String.format("%-70s", "") + " |\n");
@@ -358,7 +367,7 @@ public class StatBot {
  					+ "\t| > " + String.format("%-53s", pair.getKey()) + String.format("%15s", pair.getValue()) + " |\n");
  	    }
 	 	    
-		stats.append("\t ________________________________________________________________________/\n\n");
+		stats.append(getBottomBorderLine());
 		
 		System.out.println(stats);
 	}
@@ -404,8 +413,8 @@ public class StatBot {
 		}
 		
 		StringBuilder stats = new StringBuilder();
-		stats.append("\t _______________________________________________________________________ \n"
-				+ "\t| " + String.format("%-70s", "INSERT PROPERTY ...") + " |\n");
+		stats.append(getTopBorderLine());
+		stats.append("\t| " + String.format("%-70s", "INSERT PROPERTY ...") + " |\n");
 		
 		// OLD_PARENT_NODE_TYPE
 		stats.append("\t| " + String.format("%-70s", "") + " |\n");
@@ -427,7 +436,7 @@ public class StatBot {
  					+ "\t| > " + String.format("%-53s", pair.getKey()) + String.format("%15s", pair.getValue()) + " |\n");
  	    }
 	 	    
-		stats.append("\t ________________________________________________________________________/\n\n");
+		stats.append(getBottomBorderLine());
 		
 		System.out.println(stats);
 	}
@@ -476,8 +485,8 @@ public class StatBot {
 		}
 		
 		StringBuilder stats = new StringBuilder();
-		stats.append("\t _______________________________________________________________________ \n"
-				+ "\t| " + String.format("%-70s", "UPDATE PROPERTY ...") + " |\n");
+		stats.append(getTopBorderLine());
+		stats.append("\t| " + String.format("%-70s", "UPDATE PROPERTY ...") + " |\n");
 		
 		// OLD_PARENT_NODE_TYPE
 		stats.append("\t| " + String.format("%-70s", "") + " |\n");
@@ -499,13 +508,14 @@ public class StatBot {
  					+ "\t| > " + String.format("%-53s", pair.getKey()) + String.format("%15s", pair.getValue()) + " |\n");
  	    }
 	 	    
-		stats.append("\t ________________________________________________________________________/\n\n");
+		stats.append(getBottomBorderLine());
+ 	    stats.append("\n");
 		
-		stats.append("\t _______________________________________________________________________ \n"
-				+ "\t| " + String.format("%-70s", "EXTRA BONUS ...") + " |\n");
+		stats.append(getTopBorderLine());
+		stats.append("\t| " + String.format("%-70s", "EXTRA BONUS ...") + " |\n");
 		stats.append("\t| " + String.format("%-70s", "") + " |\n"
 				+ "\t| " + String.format("%-55s", "NUMBER OF CHANGED BUILDINGS:") + String.format("%15s", this.changedOldBuildingGmlids.size()) + " |\n");
-		stats.append("\t ________________________________________________________________________/\n\n");
+		stats.append(getBottomBorderLine());
 		
 		System.out.println(stats);
 	}
