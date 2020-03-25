@@ -11,3 +11,6 @@
 
 ##### UPDATE
 * Optimized database memory consumption of very large datasets, see [`29069a6`](https://github.com/tum-gis/citygml-change-detection/commit/29069a6d069e8a3bb44dad31d42a4f4b00e4cc10).
+
+##### FIXES
+* Fixed matching values of length elements with respect to error tolerance, see[`e474001`](https://github.com/tum-gis/citygml-change-detection/commit/e474001d21c06cf5eed02a770222734e66871f87).
