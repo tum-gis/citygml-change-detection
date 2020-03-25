@@ -1711,7 +1711,7 @@ public class Matcher {
 
 							matched = false;
 
-							if (((String) oldPair.getKey()).equals(GMLRelTypes.VALUE + "")) {
+							if (((String) oldPair.getKey()).toUpperCase().equals(GMLRelTypes.VALUE + "")) {
 								createUpdatePropertyNode(oldNode, editor, oldPair.getKey(), oldPair.getValue(), newPair.getValue(), isOptional.getValue());
 							} else {
 								createUpdatePropertyNode(oldNode, editor, oldPair.getKey(), oldPair.getValue(), newPair.getValue(), false);
@@ -1839,6 +1839,8 @@ public class Matcher {
 			result = new BooleanObject(matchGeometryLineStringProperty(oldNode, newNode));
 		} else if (oldLabel.equals(GMLClass.LINE_STRING + "")) {
 			result = new BooleanObject(matchGeometryLineString(oldNode, newNode));
+		} else if (oldLabel.equals(GMLClass.LENGTH + "")) {
+			result = new BooleanObject(matchGeometryLength(oldNode, newNode));
 		} else {
 			// non-geometric nodes
 			result = null;
@@ -2274,6 +2276,14 @@ public class Matcher {
 		ArrayList<double[]> newPoints = GeometryUtil.getDoubleArray(BoundingBoxCalculator.createLineString(newNode));
 
 		return GeometryUtil.fuzzyEquals(oldPoints, newPoints);
+	}
+
+	public boolean matchGeometryLength(Node oldNode, Node newNode) {
+		// TODO handle unit of measurement uom:urn:adv:uom:m
+		double oldLength = Double.parseDouble(oldNode.getProperty("value").toString());
+		double newLength = Double.parseDouble(newNode.getProperty("value").toString());
+
+		return Math.abs(newLength - oldLength) <= SETTINGS.ERR_TOLERANCE;
 	}
 
 	/*

@@ -58,7 +58,7 @@ MAX_RTREE_NODE_REFERENCES=10
 TILE_UNIT_X=100
 TILE_UNIT_Y=100
 # Rounding error tolerance in meter
-ERR_TOLERANCE=1e-7
+ERR_TOLERANCE=2e-3
 # Angle tolerance in radian
 ANGLE_TOLERANCE=1e-3
 # Distance tolerance in meter
