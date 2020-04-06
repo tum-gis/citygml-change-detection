@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
 
+import logger.LogUtil;
 import org.apache.http.client.ClientProtocolException;
 import org.citygml4j.CityGMLContext;
 import org.citygml4j.builder.CityGMLBuilder;
@@ -70,7 +71,6 @@ public class Controller {
 	private EditOperationExporter exporter;
 	
 	private Logger logger;
-	private SimpleDateFormat df;
 
 	private String oldFilename;
 	private String newFilename;
@@ -93,40 +93,12 @@ public class Controller {
 		// Initialize a new Neo4j graph database
 		graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(new File(dbPathName));
 
-		// Initialize a clock for timestamps
-		// df = new SimpleDateFormat("[yyyy-MM-dd HH:mm:ss] ");
-		df = new SimpleDateFormat("HH:mm:ss ");
-
-		// Initialize a logger
-		this.logger = Logger.getLogger(Mapper.class.getName());
-		logger.setUseParentHandlers(false);
-
-		logger.setLevel(Level.INFO);
-
-		FileHandler fh;
-		try {
-			fh = new FileHandler(SETTINGS.LOG_LOCATION);
-			CustomFormatter formatter = new CustomFormatter();
-			// ConsoleHandler consoleHandler = new ConsoleHandler();
-			// consoleHandler.setFormatter(formatter);
-			// consoleHandler.setLevel(Level.FINEST);
-			// logger.addHandler(consoleHandler);
-
-			fh.setFormatter(formatter);
-			logger.addHandler(fh);
-			// Logs will be shown in console and stored in a log file
-			logger.info("BEGIN OF LOGFILE FOR " + this.getClass().toString());
-
-			readSettings();
-
-			logger.info("\n------------------------------"
-					+ "\nINITIALIZING TESTING COMPONENT"
-					+ "\n------------------------------");
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		// Initalize a logger
+		this.logger = LogUtil.getLoggerWithSimpleDateFormat(this.getClass().toString(), SETTINGS.LOG_LOCATION);
+		readSettings();
+		logger.info("\n------------------------------"
+				+ "\nINITIALIZING TESTING COMPONENT"
+				+ "\n------------------------------");
 	}
 
 	// Registers a shutdown hook for the Neo4j instance so that it
@@ -145,36 +117,6 @@ public class Controller {
 			tx.success();
 		} finally {
 			tx.close();
-		}
-	}
-
-	private class CustomFormatter extends Formatter {
-		@Override
-
-		public String format(LogRecord record) {
-			StringBuilder builder = new StringBuilder(1000);
-			builder.append("[" + df.format(new Date()) + " ");
-			builder.append(String.format("%8s", Thread.currentThread().getName().replace("pool-", "p").replace("thread-", "t") + "]") + " ");
-			// builder.append("[").append(record.getSourceClassName()).append(".");
-			// builder.append(record.getSourceMethodName()).append("] ");
-			// builder.append("[").append(record.getLevel()).append("] ");
-			builder.append(formatMessage(record));
-			builder.append("\n");
-
-			// Print on the console
-			System.out.print(builder.toString());
-
-			return builder.toString();
-		}
-
-		@Override
-		public String getHead(Handler h) {
-			return super.getHead(h);
-		}
-
-		@Override
-		public String getTail(Handler h) {
-			return super.getTail(h);
 		}
 	}
 
