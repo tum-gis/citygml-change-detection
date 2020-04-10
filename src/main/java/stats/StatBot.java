@@ -1,6 +1,7 @@
 package stats;
 
 import logger.LogUtil;
+import matcher.Matcher;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -29,11 +30,10 @@ public class StatBot {
 
     private ThematicChange thematicChanges;
     private ProceduralChange proceduralChanges;
-    private AppearanceChange appearanceChanges;
     private SyntacticChange syntacticChanges;
     private GeometricChange geometricChanges;
-    private TopLevelChange topLevelChange;
-    private OtherChange otherChange;
+    private TopLevelChange topLevelChanges;
+    private OtherChange otherChanges;
 
     private Logger logger;
 
@@ -44,49 +44,70 @@ public class StatBot {
         this.getAllCsvFromPath();
         this.changedOldBuildingGmlids = new HashMap<>();
 
-        this.appearanceChanges = new AppearanceChange();
         this.geometricChanges = new GeometricChange();
         this.syntacticChanges = new SyntacticChange();
         this.proceduralChanges = new ProceduralChange();
         this.thematicChanges = new ThematicChange();
-        this.topLevelChange = new TopLevelChange();
-        this.otherChange = new OtherChange();
+        this.topLevelChanges = new TopLevelChange();
+        this.otherChanges = new OtherChange();
 
-		this.logger = LogUtil.getLogger(this.getClass().toString(), "STATBOT");
+        this.logger = LogUtil.getLogger(this.getClass().toString(), "STATBOT");
     }
 
     public StatBot(String logFolderPath, String sheetFolderPath) {
         this(logFolderPath, sheetFolderPath, ";");
     }
 
-    private void categorizeChanges(String propertyName, String ofNodeType) {
-        // the function contains checks if this property belongs to the category
-        // if true, the number of occurences of this propery shall be increased by 1
-        if (this.appearanceChanges.contains(propertyName, ofNodeType)) {
+    private void categorizeChanges(String key, Matcher.EditOperators editOperator, boolean isOptional) {
+        // the function checks if this key string belongs to a change category
+        // if true, the number of occurences of this key string of the edit operator shall be increased by 1
 
-        } else if (this.thematicChanges.contains(propertyName, ofNodeType)) {
-
-        } else if (this.syntacticChanges.contains(propertyName, ofNodeType)) {
-            // TODO consider also the attribute optional in the tables
-        } else if (this.proceduralChanges.contains(propertyName, ofNodeType)) {
-
-        } else if (this.topLevelChange.contains(propertyName, ofNodeType)) {
-
-        } else if (this.geometricChanges.contains(propertyName, ofNodeType)) {
-
+        // if this change is optional, it is a syntactic (geometric) change
+        if (isOptional) {
+            this.syntacticChanges.contains(key, editOperator);
         } else {
-            // if all the above categories do not meet
-            // add this change to OtherChange
-            this.otherChange.contains(propertyName, ofNodeType);
+            if (this.thematicChanges.contains(key, editOperator)) {
+
+            } else if (this.proceduralChanges.contains(key, editOperator)) {
+
+            } else if (this.topLevelChanges.contains(key, editOperator)) {
+
+            } else if (this.geometricChanges.contains(key, editOperator)) {
+                // the test for geometric changes must occur after the other categorized ones
+            } else {
+                // if all the above categories do not meet
+                // add this change to OtherChange
+                this.otherChanges.contains(key, editOperator);
+            }
         }
     }
 
     private void printCategorizedChanges() {
-        this.appearanceChanges.printMap(logger);
+        this.proceduralChanges.logMap(logger);
+        this.thematicChanges.logMap(logger);
+        this.syntacticChanges.logMap(logger);
+        this.geometricChanges.logMap(logger);
+        this.topLevelChanges.logMap(logger);
+        this.otherChanges.logMap(logger);
+    }
 
-        this.thematicChanges.printMap(logger);
+    private void printOverviewTable() {
+        List<Change> rows = new ArrayList<>();
+        rows.add(this.proceduralChanges);
+        rows.add(this.thematicChanges);
+        rows.add(this.syntacticChanges);
+        rows.add(this.geometricChanges);
+        rows.add(this.topLevelChanges);
+        rows.add(this.otherChanges);
 
-        this.proceduralChanges.printMap(logger);
+        List<Matcher.EditOperators> cols = new ArrayList<>();
+        cols.add(Matcher.EditOperators.INSERT_PROPERTY);
+        cols.add(Matcher.EditOperators.DELETE_PROPERTY);
+        cols.add(Matcher.EditOperators.UPDATE_PROPERTY);
+        cols.add(Matcher.EditOperators.INSERT_NODE);
+        cols.add(Matcher.EditOperators.DELETE_NODE);
+
+        LogUtil.logOverviewTable(logger, rows, cols);
     }
 
     private void getAllCsvFromPath() {
@@ -243,7 +264,13 @@ public class StatBot {
 
                     this.changedOldBuildingGmlids.put(propertykeys[5], null);
 
-                    this.categorizeChanges(propertyNameString, oldNodeTypeString);
+                    boolean isOptional = Boolean.parseBoolean(propertykeys[8]);
+                    // check property name first, if it is empty then old node type
+                    if (!propertyNameString.isEmpty()) {
+                        this.categorizeChanges(propertyNameString, Matcher.EditOperators.DELETE_PROPERTY, isOptional);
+                    } else {
+                        this.categorizeChanges(oldNodeTypeString, Matcher.EditOperators.DELETE_PROPERTY, isOptional);
+                    }
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -291,7 +318,8 @@ public class StatBot {
 
                     this.changedOldBuildingGmlids.put(propertykeys[5], null);
 
-                    this.categorizeChanges(null, deleteNodeTypeString);
+                    boolean isOptional = Boolean.parseBoolean(propertykeys[6]);
+                    this.categorizeChanges(deleteNodeTypeString, Matcher.EditOperators.DELETE_NODE, isOptional);
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -342,7 +370,8 @@ public class StatBot {
 
                     this.changedOldBuildingGmlids.put(propertykeys[6], null);
 
-                    this.categorizeChanges(null, insertNodeTypeString);
+                    boolean isOptional = Boolean.parseBoolean(propertykeys[9]);
+                    this.categorizeChanges(insertNodeTypeString, Matcher.EditOperators.INSERT_NODE, isOptional);
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -396,7 +425,13 @@ public class StatBot {
 
                     this.changedOldBuildingGmlids.put(propertykeys[5], null);
 
-                    this.categorizeChanges(propertyNameString, oldNodeTypeString);
+                    boolean isOptional = Boolean.parseBoolean(propertykeys[8]);
+                    // check property name first, if it is empty then old node type
+                    if (!propertyNameString.isEmpty()) {
+                        this.categorizeChanges(propertyNameString, Matcher.EditOperators.INSERT_PROPERTY, isOptional);
+                    } else {
+                        this.categorizeChanges(oldNodeTypeString, Matcher.EditOperators.INSERT_PROPERTY, isOptional);
+                    }
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -463,7 +498,13 @@ public class StatBot {
 
                     this.changedOldBuildingGmlids.put(propertykeys[5], null);
 
-                    this.categorizeChanges(propertyNameString, oldNodeTypeString);
+                    boolean isOptional = Boolean.parseBoolean(propertykeys[9]);
+                    // check property name first, if it is empty then old node type
+                    if (!propertyNameString.isEmpty()) {
+                        this.categorizeChanges(propertyNameString, Matcher.EditOperators.UPDATE_PROPERTY, isOptional);
+                    } else {
+                        this.categorizeChanges(oldNodeTypeString, Matcher.EditOperators.UPDATE_PROPERTY, isOptional);
+                    }
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -510,6 +551,7 @@ public class StatBot {
         statBot.printUpdatePropertyStats();
 
         statBot.printCategorizedChanges();
+        statBot.printOverviewTable();
         statBot.printSummary();
     }
 

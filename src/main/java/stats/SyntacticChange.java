@@ -1,10 +1,8 @@
 package stats;
 
-import logger.LogUtil;
-import mapper.EnumClasses;
+import matcher.Matcher;
 
 import java.util.HashMap;
-import java.util.logging.Logger;
 
 public class SyntacticChange extends Change {
 
@@ -12,8 +10,23 @@ public class SyntacticChange extends Change {
         super();
     }
 
+    // here every new property / node type shall be added to the list
     @Override
-    public void printMap(Logger logger) {
-        LogUtil.logMap(logger, this.map, "Syntactic Changes");
+    public boolean contains(String key, Matcher.EditOperators editOperator) {
+        HashMap<Matcher.EditOperators, Long> value = this.map.get(key);
+
+        if (value == null) {
+            this.initMapEntry(key);
+            return false;
+        }
+
+        value.put(editOperator, value.get(editOperator) + 1);
+        return true;
     }
+
+    @Override
+    public String getLabel() {
+        return "Syntactic Changes";
+    }
+
 }

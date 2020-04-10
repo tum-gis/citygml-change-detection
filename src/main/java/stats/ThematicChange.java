@@ -1,47 +1,85 @@
 package stats;
 
-import logger.LogUtil;
-import mapper.EnumClasses;
 import org.citygml4j.model.citygml.CityGMLClass;
 import org.citygml4j.model.gml.GMLClass;
-
-import java.util.HashMap;
-import java.util.logging.Logger;
+import org.citygml4j.model.xal.XALClass;
 
 public class ThematicChange extends Change {
 
     public ThematicChange() {
         super();
-        this.map.put("yearOfConstruction", new Long(0));
-        this.map.put("yearOfDemolition", new Long(0));
-        this.map.put("storeysAboveGround", new Long(0));
-        this.map.put("storeysBelowGround", new Long(0));
+        this.initMapEntry("yearOfConstruction");
+        this.initMapEntry("yearOfDemolition");
+        this.initMapEntry("storeysAboveGround");
+        this.initMapEntry("storeysBelowGround");
+        this.initMapEntry("name");
+        this.initMapEntry("value");
+        // property of EXTERNAL_REFERENCE
+        this.initMapEntry("informationSystem");
+
+        // TODO more ADDRESS properties
+        // thoroughfare of address
+        this.initMapEntry("content");
+
+        // TODO more APPEARANCE properties
+        this.initMapEntry("imageURI");
+        this.initMapEntry("theme");
+        this.initMapEntry("shininess");
+        this.initMapEntry("ring");
+        this.initMapEntry("uri");
+        this.initMapEntry("red");
+        this.initMapEntry("green");
+        this.initMapEntry("blue");
+        this.initMapEntry("transparency");
+        this.initMapEntry("TARGET");
+
         // class, function, usage, roof type, name
-        this.map.put(GMLClass.CODE.toString(), new Long(0));
+        this.initMapEntry(GMLClass.CODE.toString());
         // measured height
-        this.map.put(GMLClass.LENGTH.toString(), new Long(0));
+        this.initMapEntry(GMLClass.LENGTH.toString());
         // storey heights above/below ground
-        this.map.put(GMLClass.QUANTITY_EXTENT.toString(), new Long(0));
-        this.map.put(GMLClass.MEASURE_OR_NULL_LIST.toString(), new Long(0));
+        this.initMapEntry(GMLClass.QUANTITY_EXTENT.toString());
+        this.initMapEntry(GMLClass.MEASURE_OR_NULL_LIST.toString());
         // address
-        this.map.put(CityGMLClass.ADDRESS_PROPERTY.toString(), new Long(0));
+        this.initMapEntry(CityGMLClass.ADDRESS_PROPERTY.toString());
         // external reference
-        this.map.put(CityGMLClass.EXTERNAL_REFERENCE.toString(), new Long(0));
-        // generic string attribute
-        this.map.put(CityGMLClass.STRING_ATTRIBUTE.toString(), new Long(0));
-        // generic uri attribute
-        this.map.put(CityGMLClass.URI_ATTRIBUTE.toString(), new Long(0));
+        this.initMapEntry(CityGMLClass.EXTERNAL_REFERENCE.toString());
+        // generic attributes
+        this.initMapEntry(CityGMLClass.STRING_ATTRIBUTE.toString());
+        this.initMapEntry(CityGMLClass.URI_ATTRIBUTE.toString());
+        this.initMapEntry(CityGMLClass.MEASURE_ATTRIBUTE.toString());
+        this.initMapEntry(CityGMLClass.DATE_ATTRIBUTE.toString());
+        this.initMapEntry(CityGMLClass.DOUBLE_ATTRIBUTE.toString());
+        this.initMapEntry(CityGMLClass.INT_ATTRIBUTE.toString());
+        this.initMapEntry(CityGMLClass.GENERIC_ATTRIBUTE_SET.toString());
         // generalizes to
-        this.map.put(CityGMLClass.GENERALIZATION_RELATION.toString(), new Long(0));
+        this.initMapEntry(CityGMLClass.GENERALIZATION_RELATION.toString());
         // location
-        this.map.put(GMLClass.LOCATION_PROPERTY.toString(), new Long(0));
+        this.initMapEntry(GMLClass.LOCATION_PROPERTY.toString());
         // description
-        this.map.put(GMLClass.STRING_OR_REF.toString(), new Long(0));
-        this.map.put(GMLClass.META_DATA_PROPERTY.toString(), new Long(0));
+        this.initMapEntry(GMLClass.STRING_OR_REF.toString());
+        this.initMapEntry(GMLClass.META_DATA_PROPERTY.toString());
+        this.initMapEntry(CityGMLClass.EXTERNAL_OBJECT.toString());
+
+        // TODO more ADDRESS node types
+        this.initMapEntry(XALClass.THOROUGHFARE.toString());
+        this.initMapEntry(XALClass.THOROUGHFARE_NAME.toString());
+        this.initMapEntry(XALClass.THOROUGHFARE_NUMBER.toString());
+        this.initMapEntry(XALClass.THOROUGHFARE_NUMBER_SUFFIX.toString());
+        this.initMapEntry(XALClass.POSTAL_CODE_NUMBER.toString());
+        this.initMapEntry(XALClass.COUNTRY.toString());
+
+        // TODO more APPEARANCE node types
+        this.initMapEntry(CityGMLClass.APPEARANCE.toString());
+        this.initMapEntry(CityGMLClass.PARAMETERIZED_TEXTURE.toString());
+        this.initMapEntry(CityGMLClass.TEXTURE_COORDINATES.toString());
+        this.initMapEntry(CityGMLClass._TEXTURED_SURFACE.toString());
+        this.initMapEntry(CityGMLClass.X3D_MATERIAL.toString());
+        this.initMapEntry(CityGMLClass.COLOR.toString());
     }
 
     @Override
-    public void printMap(Logger logger) {
-        LogUtil.logMap(logger, this.map, "Thematic Change");
+    public String getLabel() {
+        return "Thematic Changes";
     }
 }
