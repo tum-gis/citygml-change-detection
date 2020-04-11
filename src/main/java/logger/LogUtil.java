@@ -1,5 +1,7 @@
 package logger;
 
+import matcher.Matcher;
+import stats.Change;
 import util.MapUtil;
 
 import java.io.IOException;
@@ -10,8 +12,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class LogUtil {
-    private static String LINE_FORMATTER = "%-70s";
-    private static String KEY_FORMATTER = "%-53s";
+    private static String LINE_FORMATTER = "%-80s";
+    private static String KEY_FORMATTER = "%-63s";
     private static String VALUE_FORMATTER = "%15s";
 
     public static Logger getLoggerWithSimpleDateFormat(String loggerName, String loggerFile) {
@@ -55,23 +57,44 @@ public class LogUtil {
         return logger;
     }
 
-    public static void logMap(Logger logger, HashMap<String, Long> occurrenceMap, String message) {
+    public static void logMap(Logger logger, HashMap<String, Long> occurrenceMap, String message, boolean sort) {
         StringBuilder stats = new StringBuilder();
 
         stats.append(getTopBorderLine());
 
         stats.append("\t| " + String.format(LINE_FORMATTER, message.toUpperCase().trim()) + " |\n");
 
-        stats.append(getMapContents(occurrenceMap));
+        stats.append(getMapContents(occurrenceMap, sort));
 
         stats.append(getBottomBorderLine());
 
         logger.info(stats.toString());
     }
 
-    private static String getMapContents(HashMap<String, Long> occurrenceMap) {
+    public static void logMapWithMapValues(Logger logger, HashMap<String, HashMap<Matcher.EditOperators, Long>> occurrenceMap, String message) {
         StringBuilder stats = new StringBuilder();
-        Iterator it = MapUtil.sortByValue(occurrenceMap).entrySet().iterator();
+
+        stats.append(getTopBorderLine());
+
+        stats.append("\t| " + String.format(LINE_FORMATTER, message.toUpperCase().trim()) + " |\n");
+
+        stats.append(getMapContentsWithMapValues(occurrenceMap, true));
+
+        stats.append(getBottomBorderLine());
+
+        logger.info(stats.toString());
+    }
+
+    private static String getMapContents(HashMap<String, Long> occurrenceMap, boolean sort) {
+        StringBuilder stats = new StringBuilder();
+
+        Iterator it;
+        if (sort) {
+            it = MapUtil.sortByValue(occurrenceMap).entrySet().iterator();
+        } else {
+            it = occurrenceMap.entrySet().iterator();
+        }
+
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry) it.next();
             stats.append(getFormattedLine(pair.getKey().toString(), (Long) pair.getValue()));
@@ -79,19 +102,54 @@ public class LogUtil {
         return stats.toString();
     }
 
-    public static void logMap(Logger logger, List<String> keys, List<Long> occurrences, String message) {
+    private static String getMapContentsWithMapValues(HashMap<String, HashMap<Matcher.EditOperators, Long>> occurrenceMap, boolean sort) {
+        StringBuilder stats = new StringBuilder();
+
+        Iterator i;
+        if (sort) {
+            i = MapUtil.sortByHashMapValue(occurrenceMap).entrySet().iterator();
+        } else {
+            i = occurrenceMap.entrySet().iterator();
+        }
+
+        while (i.hasNext()) {
+            Map.Entry pair_i = (Map.Entry) i.next();
+            // the pair.getValue() is already sorted by MapUtil.sortByHashMapValue
+            Iterator j = ((HashMap<Matcher.EditOperators, Long>) pair_i.getValue()).entrySet().iterator();
+            Long sum = new Long(0);
+            StringBuilder subStats = new StringBuilder();
+            while (j.hasNext()) {
+                Map.Entry pair_j = (Map.Entry) j.next();
+                Long value = (Long) pair_j.getValue();
+                sum += value;
+                // only show if not 0
+                if (value != 0) {
+                    subStats.append(getFormattedLine(" > " + pair_j.getKey().toString(), value));
+                }
+            }
+            // only show if not 0
+            if (sum != 0) {
+                stats.append(getFormattedLine(pair_i.getKey().toString(), sum, true));
+                stats.append(subStats);
+            }
+        }
+        return stats.toString();
+    }
+
+    public static void logMap(Logger logger, List<String> keys, List<Long> occurrences, String message, boolean sort) {
         // assuming both the ArrayLists have the same size
         HashMap<String, Long> occurrenceMap = new HashMap<>();
         for (int i = 0; i < keys.size(); i++) {
             occurrenceMap.put(keys.get(i), occurrences.get(i));
         }
 
-        logMap(logger, occurrenceMap, message);
+        logMap(logger, occurrenceMap, message, sort);
     }
 
     public static void logMaps(Logger logger,
                                String generalMessage,
-                               List<HashMap<String, Long>> occurrenceMaps, List<String> messages) {
+                               List<HashMap<String, Long>> occurrenceMaps, List<String> messages,
+                               boolean sort) {
         StringBuilder stats = new StringBuilder();
 
         stats.append(getTopBorderLine());
@@ -105,7 +163,7 @@ public class LogUtil {
             stats.append(getDottedLine());
             stats.append(getEmptyFormattedLine());
             stats.append("\t| " + String.format(LINE_FORMATTER, message.toUpperCase().trim()) + " |\n");
-            stats.append(getMapContents(occurrenceMap));
+            stats.append(getMapContents(occurrenceMap, sort));
         }
 
         stats.append(getBottomBorderLine());
@@ -113,10 +171,14 @@ public class LogUtil {
         logger.info(stats.toString());
     }
 
-    public static String getFormattedLine(String key, Number value) {
+    public static String getFormattedLine(String key, Number value, boolean emphasizeNumber) {
         return "\t| " + String.format(LINE_FORMATTER, "") + " |\n"
                 + "\t| > " + String.format(KEY_FORMATTER, key)
-                + String.format(VALUE_FORMATTER, String.format("%,d", value)) + " |\n";
+                + String.format(VALUE_FORMATTER, (emphasizeNumber ? "-> " : "") + String.format("%,d", value)) + " |\n";
+    }
+
+    public static String getFormattedLine(String key, Number value) {
+        return getFormattedLine(key, value, false);
     }
 
     public static String getFormattedLine(String message) {
@@ -157,15 +219,127 @@ public class LogUtil {
         logLine(logger, "", false, false);
     }
 
+    public static void logOverviewTable(Logger logger, List<Change> rows, List<Matcher.EditOperators> cols) {
+        // +-------------------+----------------+----------------+----------------+------------+------------+
+        // |                   | InsertProperty | DeleteProperty | UpdateProperty | InsertNode | DeleteNode |
+        // +===================+================+================+================+============+============+
+        // | Thematic Changes  |                |                |                |            |            |
+        // +-------------------+----------------+----------------+----------------+------------+------------+
+        // | Syntactic Changes |                |                |                |            |            |
+        // +-------------------+----------------+----------------+----------------+------------+------------+
+
+        StringBuilder stats = new StringBuilder();
+
+        int columnWidth = 20;
+        String widthFormatter = "%" + columnWidth + "s";
+
+        // header, first cell is empty
+        stats.append(getTableBorderLine(columnWidth, cols.size()));
+        stats.append(String.format("%" + columnWidth + "s", ""));
+        for (int i = 0; i < cols.size(); i++) {
+            stats.append(String.format(widthFormatter, cols.get(i)));
+        }
+        stats.append("\n");
+
+        // fill the table
+        Long[][] tableValues = new Long[rows.size()][cols.size()];
+        for (int i = 0; i < rows.size(); i++) {
+            stats.append(getTableBorderLine(columnWidth, cols.size()));
+            Change changeCategory = rows.get(i);
+            stats.append(String.format(widthFormatter, changeCategory.getLabel()));
+            Long sumCols = new Long(0);
+            for (int j = 0; j < cols.size(); j++) {
+                Matcher.EditOperators editOperator = cols.get(j);
+                tableValues[i][j] = calcCell(changeCategory.getMap(), editOperator);
+                stats.append(String.format(widthFormatter, String.format("%,d", tableValues[i][j])));
+                sumCols += tableValues[i][j];
+            }
+            // show sum of all columns in this row
+            stats.append(String.format(widthFormatter, "-> " + String.format("%,d", sumCols)));
+            stats.append("\n");
+        }
+
+        // show sum of all rows in each column
+        stats.append(getTableBorderLine(columnWidth, cols.size()));
+        stats.append(String.format(widthFormatter, ""));
+        Long sumAll = new Long(0);
+        for (int j = 0; j < cols.size(); j++) {
+            Long sumRows = new Long(0);
+            for (int i = 0; i < rows.size(); i++) {
+                sumRows += tableValues[i][j];
+            }
+            sumAll += sumRows;
+            stats.append(String.format(widthFormatter, "-> " + String.format("%,d", sumRows)));
+        }
+
+        // show sum of all values
+        stats.append(String.format(widthFormatter, "-> " + String.format("%,d", sumAll)));
+        stats.append("\n");
+        // stats.append(getTableBorderLine(columnWidth, cols.size()));
+
+        logger.info(stats.toString());
+    }
+
+    private static String getTableBorderLine(int columnWidth, int nrOfColumns) {
+        String result = "";
+        for (int i = 0; i < nrOfColumns + 1; i++) {
+            result += "+";
+            for (int j = 0; j < columnWidth - 1; j++) {
+                result += "-";
+            }
+        }
+        result += "+\n";
+
+        return result;
+    }
+
+    private static Long calcCell(HashMap<String, HashMap<Matcher.EditOperators, Long>> row, Matcher.EditOperators col) {
+        Long result = new Long(0);
+
+        Iterator it = row.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            String key = pair.getKey().toString();
+            HashMap<Matcher.EditOperators, Long> value = (HashMap<Matcher.EditOperators, Long>) pair.getValue();
+            Long numberValue = value.get(col);
+            if (numberValue != null) {
+                result += numberValue;
+            }
+        }
+
+        return result;
+    }
+
     private static String getTopBorderLine() {
-        return "\t ________________________________________________________________________\n";
+        int width = Integer.parseInt(LINE_FORMATTER.replace("%-", "").replace("s", ""));
+        String result = "\t ";
+        for (int i = 0; i < width + 2; i++) {
+            result += "_";
+        }
+        result += " \n";
+
+        return result;
     }
 
     private static String getBottomBorderLine() {
-        return "\t\\________________________________________________________________________/\n\n";
+        int width = Integer.parseInt(LINE_FORMATTER.replace("%-", "").replace("s", ""));
+        String result = "\t\\";
+        for (int i = 0; i < width + 2; i++) {
+            result += "_";
+        }
+        result += "/\n";
+
+        return result;
     }
 
     private static String getDottedLine() {
-        return "\t|   -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  |\n";
+        int width = Integer.parseInt(LINE_FORMATTER.replace("%-", "").replace("s", ""));
+        String result = "\t ";
+        for (int i = 0; i < width + 2; i++) {
+            result += ".";
+        }
+        result += " \n";
+
+        return result;
     }
 }

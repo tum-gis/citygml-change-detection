@@ -9,9 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class StatBot {
@@ -27,6 +25,9 @@ public class StatBot {
     private ArrayList<File> csvUpdatePropertyFiles;
 
     private HashMap<String, Long> changedOldBuildingGmlids;
+
+    private Long nrOfBuildingsOld = new Long(0);
+    private Long nrOfBuildingsNew = new Long(0);
 
     private ThematicChange thematicChanges;
     private ProceduralChange proceduralChanges;
@@ -146,63 +147,87 @@ public class StatBot {
             }
         });
 
-        ArrayList<String> headers = new ArrayList<>();
-        headers.add("Number of BUILDING nodes:");
-        headers.add("Number of STRING_ATTRIBUTE nodes:");
-        headers.add("Number of SURFACE_PROPERTY nodes:");
-        headers.add("Number of POLYGON nodes:");
-        headers.add("Number of MULTI_SURFACE nodes:");
-        headers.add("Number of BUILDING_WALL_SURFACE nodes:");
-        headers.add("Number of BUILDING_ROOF_SURFACE nodes:");
-        headers.add("Number of BUILDING_GROUND_SURFACE nodes:");
-        headers.add("Number of EXTERNAL_REFERENCE nodes:");
-        headers.add("Number of SOLID nodes:");
-
-        headers.add("TOTAL NUMBER OF CREATED NODES:");
-        headers.add("MAPPER'S ELAPSED TIME:");
-
-        headers.add("Number of DELETE_PROPERTY nodes:");
-        headers.add("Number of DELETE_NODE nodes:");
-        headers.add("Number of UPDATE_PROPERTY nodes:");
-        headers.add("Number of INSERT_NODE nodes:");
-        headers.add("Number of INSERT_PROPERTY nodes:");
-
-        headers.add("TOTAL NUMBER OF CREATED NODES:");
-        headers.add("OF WHICH ARE OPTIONAL:");
-        headers.add("MATCHER'S ELAPSED TIME:");
-
-        int indexBetweenMapperAndMatcher = 12;
-
-        ArrayList<Long> totalNumbers = new ArrayList<>();
-        for (int i = 0; i < headers.size(); i++) {
-            totalNumbers.add((long) 0);
-        }
+        Map<String, Long> mapperStats = new HashMap<>();
+        HashMap<String, Long> matcherStats = new HashMap<>();
 
         for (File logFile : logFiles) {
-            // Get total mapping time
-
             BufferedReader br = null;
             try {
                 br = new BufferedReader(new FileReader(logFile));
-                String line = br.readLine();
+                String line = "";
+                boolean mapperOldReached = false;
+                boolean mapperNewReached = false;
+                boolean statsReached = false;
+                boolean statsMapperReached = false;
+                boolean statsMatcherReached = false;
 
-                int totalNumberOfCreatedNodesFound = 0;
+                String prevLine = "";
                 while ((line = br.readLine()) != null) {
-                    for (int i = 0; i < headers.size(); i++) {
-                        String header = headers.get(i);
+                    // read info from mapper
+                    if (line.contains("INITIALIZING MAPPING COMPONENT FOR OLD CITY MODEL")) {
+                        mapperOldReached = true;
+                        mapperNewReached = false;
+                    } else if (line.contains("INITIALIZING MAPPING COMPONENT FOR NEW CITY MODEL")) {
+                        mapperOldReached = false;
+                        mapperNewReached = true;
+                        nrOfBuildingsOld += Long.parseLong(prevLine.split("Buildings found:")[1].trim());
+                    }
 
-                        if (line.indexOf(header) > 0) {
-                            if (header.compareTo("TOTAL NUMBER OF CREATED NODES:") == 0) {
-                                totalNumberOfCreatedNodesFound++;
-                                if (totalNumberOfCreatedNodesFound == 2) {
-                                    continue;
-                                }
-                            }
-
-                            totalNumbers.set(i, totalNumbers.get(i) + Integer.parseInt(line.replaceAll(headers.get(i) + "|\\||seconds|nodes", "").replaceAll("\\s+", "")));
-                            break;
+                    if (mapperOldReached || mapperNewReached) {
+                        if (line.contains("Buildings found")) {
+                            prevLine = line;
                         }
+                    }
 
+                    // read info from stats
+                    if (!line.contains("STATISTICS REPORT") && !statsReached) {
+                        continue;
+                    }
+
+                    if (line.contains("END OF LOGFILE")) {
+                        break;
+                    }
+
+                    // if statistics part of the file has now been reached
+                    statsReached = true;
+                    mapperOldReached = false;
+                    mapperNewReached = false;
+                    nrOfBuildingsNew += Long.parseLong(prevLine.split("Buildings found:")[1].trim());
+
+                    if (line.contains("MAPPER ...")) {
+                        statsMapperReached = true;
+                        statsMatcherReached = false;
+                    } else if (line.contains("MATCHER ...")) {
+                        statsMapperReached = false;
+                        statsMatcherReached = true;
+                    }
+
+                    if (statsMapperReached) {
+                        if (line.contains(":")) {
+                            String[] str = line.replaceAll("\\|", "").trim().split(":");
+                            String key = str[0].trim();
+                            Long value = Long.parseLong(str[1].replaceAll("nodes|seconds", "").trim());
+                            Long existingValue = mapperStats.get(key);
+                            if (existingValue == null) {
+                                mapperStats.put(key, value);
+                            } else {
+                                mapperStats.put(key, existingValue + value);
+                            }
+                        }
+                    }
+
+                    if (statsMatcherReached) {
+                        if (line.contains(":")) {
+                            String[] str = line.replaceAll("\\|", "").trim().split(":");
+                            String key = str[0].trim();
+                            Long value = Long.parseLong(str[1].replaceAll("nodes|seconds", "").trim());
+                            Long existingValue = matcherStats.get(key);
+                            if (existingValue == null) {
+                                matcherStats.put(key, value);
+                            } else {
+                                matcherStats.put(key, existingValue + value);
+                            }
+                        }
                     }
                 }
             } catch (FileNotFoundException e) {
@@ -225,18 +250,38 @@ public class StatBot {
                         "\n\t                    brought to you by STATBOT with love\n\n");
 
         // MAPPER
-        LogUtil.logMap(
-                logger,
-                headers.subList(0, indexBetweenMapperAndMatcher),
-                totalNumbers.subList(0, indexBetweenMapperAndMatcher),
-                "MAPPER");
+        HashMap<String, Long> newMapperStats = new HashMap<>();
+        Iterator it = mapperStats.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            if (!pair.getKey().toString().contains("TOTAL NUMBER OF CREATED NODES")
+                    && !pair.getKey().toString().contains("MAPPER'S ELAPSED TIME")) {
+                newMapperStats.put((String) pair.getKey(), (Long) pair.getValue());
+            }
+        }
+
+        LogUtil.logMap(logger, newMapperStats, "MAPPER", true);
+
+        LogUtil.logLine(logger, "TOTAL NUMBER OF CREATED NODES", mapperStats.get("TOTAL NUMBER OF CREATED NODES"), true, false);
+        LogUtil.logLine(logger, "MAPPER'S ELAPSED TIME", mapperStats.get("MAPPER'S ELAPSED TIME"), false, true);
 
         // MATCHER
-        LogUtil.logMap(
-                logger,
-                headers.subList(indexBetweenMapperAndMatcher, headers.size()),
-                totalNumbers.subList(indexBetweenMapperAndMatcher, headers.size()),
-                "MATCHER");
+        HashMap<String, Long> newMatcherStats = new HashMap<>();
+        it = matcherStats.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            if (!pair.getKey().toString().contains("TOTAL NUMBER OF CREATED NODES")
+                    && !pair.getKey().toString().contains("OF WHICH ARE OPTIONAL")
+                    && !pair.getKey().toString().contains("MATCHER'S ELAPSED TIME")) {
+                newMatcherStats.put((String) pair.getKey(), (Long) pair.getValue());
+            }
+        }
+
+        LogUtil.logMap(logger, newMatcherStats, "MATCHER", true);
+
+        LogUtil.logLine(logger, "TOTAL NUMBER OF CREATED NODES", matcherStats.get("TOTAL NUMBER OF CREATED NODES"), true, false);
+        LogUtil.logLine(logger, "OF WHICH ARE OPTIONAL", matcherStats.get("OF WHICH ARE OPTIONAL"), false, false);
+        LogUtil.logLine(logger, "MATCHER'S ELAPSED TIME", matcherStats.get("MATCHER'S ELAPSED TIME"), false, true);
     }
 
     public void printDeletePropertyStats() {
@@ -296,7 +341,7 @@ public class StatBot {
         occurrenceMaps.add(propertyName);
         messages.add("PROPERTY_NAME");
 
-        LogUtil.logMaps(this.logger, "DELETE PROPERTY ...", occurrenceMaps, messages);
+        LogUtil.logMaps(this.logger, "DELETE PROPERTY ...", occurrenceMaps, messages, true);
     }
 
     public void printDeleteNodeStats() {
@@ -342,7 +387,7 @@ public class StatBot {
         occurrenceMaps.add(deleteNodeType);
         messages.add("DELETE_NODE_TYPE");
 
-        LogUtil.logMaps(this.logger, "DELETE NODE ...", occurrenceMaps, messages);
+        LogUtil.logMaps(this.logger, "DELETE NODE ...", occurrenceMaps, messages, true);
     }
 
     public void printInsertNodeStats() {
@@ -397,7 +442,7 @@ public class StatBot {
         occurrenceMaps.add(insertNodeType);
         messages.add("INSERT_NODE_TYPE");
 
-        LogUtil.logMaps(this.logger, "INSERT NODE ...", occurrenceMaps, messages);
+        LogUtil.logMaps(this.logger, "INSERT NODE ...", occurrenceMaps, messages, true);
     }
 
     public void printInsertPropertyStats() {
@@ -457,7 +502,7 @@ public class StatBot {
         occurrenceMaps.add(propertyName);
         messages.add("PROPERTY_NAME");
 
-        LogUtil.logMaps(this.logger, "INSERT PROPERTY ...", occurrenceMaps, messages);
+        LogUtil.logMaps(this.logger, "INSERT PROPERTY ...", occurrenceMaps, messages, true);
     }
 
     public void printUpdatePropertyStats() {
@@ -530,28 +575,41 @@ public class StatBot {
         occurrenceMaps.add(propertyName);
         messages.add("PROPERTY_NAME");
 
-        LogUtil.logMaps(this.logger, "UPDATE PROPERTY ...", occurrenceMaps, messages);
+        LogUtil.logMaps(this.logger, "UPDATE PROPERTY ...", occurrenceMaps, messages, true);
     }
 
     public void printSummary() {
-        HashMap<String, Long> summary = new HashMap<>();
+        // retain order of inserted entries
+        LinkedHashMap<String, Long> summary = new LinkedHashMap<>();
 
         // changed buildings
-        summary.put("NUMBER OF CHANGED BUILDINGS", new Long(this.changedOldBuildingGmlids.size()));
-        LogUtil.logMap(this.logger, summary, "SUMMARY");
+        summary.put("NUMBER OF OLD BUILDINGS", this.nrOfBuildingsOld);
+        summary.put("NUMBER OF NEW BUILDINGS", this.nrOfBuildingsNew);
+        summary.put("NUMBER OF CHANGED OLD BUILDINGS", new Long(this.changedOldBuildingGmlids.size()));
+        LogUtil.logMap(this.logger, summary, "SUMMARY", false);
     }
 
     public static void main(String[] args) {
         StatBot statBot = new StatBot("logs_tiles", "export_tiles");
+
+        // this function must be called first
         statBot.printLogStats();
+
+        // these must be called before the printOverviewTable() function
+        // edit operators first, the categories will be listed pro edit operator
         statBot.printDeletePropertyStats();
         statBot.printDeleteNodeStats();
         statBot.printInsertNodeStats();
         statBot.printInsertPropertyStats();
         statBot.printUpdatePropertyStats();
 
+        // categories first, the edit operators will be listed pro category
         statBot.printCategorizedChanges();
+
+        // bring both the edit operators and categories together in one table
         statBot.printOverviewTable();
+
+        // this must be called last
         statBot.printSummary();
     }
 
