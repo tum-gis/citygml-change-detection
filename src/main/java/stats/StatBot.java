@@ -2,6 +2,7 @@ package stats;
 
 import logger.LogUtil;
 import matcher.Matcher;
+import org.citygml4j.model.citygml.CityGMLClass;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -59,27 +60,40 @@ public class StatBot {
         this(logFolderPath, sheetFolderPath, ";");
     }
 
-    private void categorizeChanges(String key, Matcher.EditOperators editOperator, boolean isOptional) {
+    private boolean isRealChange(String key, Matcher.EditOperators editOperator, boolean isOptional) {
+        ChangeCategories changeCategory = categorizeChanges(key, editOperator, isOptional);
+        return (!changeCategory.equals(ChangeCategories.PROCEDURAL_CHANGE)
+                && !changeCategory.equals(ChangeCategories.SYNTACTIC_CHANGE)
+                && !changeCategory.equals(ChangeCategories.OTHER_CHANGE));
+    }
+
+    private ChangeCategories categorizeChanges(String key, Matcher.EditOperators editOperator, boolean isOptional) {
         // the function checks if this key string belongs to a change category
         // if true, the number of occurences of this key string of the edit operator shall be increased by 1
 
+        boolean found = false;
         // if this change is optional, it is a syntactic (geometric) change
         if (isOptional) {
+            // always categorize this change as syntactic change, no need for if
             this.syntacticChanges.contains(key, editOperator);
+            return ChangeCategories.SYNTACTIC_CHANGE;
+        }
+
+        if (this.thematicChanges.contains(key, editOperator)) {
+            return ChangeCategories.THEMATIC_CHANGE;
+        } else if (this.proceduralChanges.contains(key, editOperator)) {
+            return ChangeCategories.PROCEDURAL_CHANGE;
+        } else if (this.topLevelChanges.contains(key, editOperator)) {
+            return ChangeCategories.TOP_LEVEL_CHANGE;
+        } else if (this.geometricChanges.contains(key, editOperator)) {
+            // the test for geometric changes must occur after the other categorized ones
+            return ChangeCategories.GEOMETRIC_CHANGE;
         } else {
-            if (this.thematicChanges.contains(key, editOperator)) {
-
-            } else if (this.proceduralChanges.contains(key, editOperator)) {
-
-            } else if (this.topLevelChanges.contains(key, editOperator)) {
-
-            } else if (this.geometricChanges.contains(key, editOperator)) {
-                // the test for geometric changes must occur after the other categorized ones
-            } else {
-                // if all the above categories do not meet
-                // add this change to OtherChange
-                this.otherChanges.contains(key, editOperator);
-            }
+            // if all the above categories do not meet
+            // add this change to OtherChange
+            // always categorize this change as other change, no need for if
+            this.otherChanges.contains(key, editOperator);
+            return ChangeCategories.OTHER_CHANGE;
         }
     }
 
@@ -307,14 +321,16 @@ public class StatBot {
                     value = propertyName.get(propertyNameString);
                     propertyName.put(propertyNameString, value == null ? 1 : value + 1);
 
-                    this.changedOldBuildingGmlids.put(propertykeys[5], null);
-
                     boolean isOptional = Boolean.parseBoolean(propertykeys[8]);
                     // check property name first, if it is empty then old node type
+                    boolean isRealChange = false;
                     if (!propertyNameString.isEmpty()) {
-                        this.categorizeChanges(propertyNameString, Matcher.EditOperators.DELETE_PROPERTY, isOptional);
+                        isRealChange = this.isRealChange(propertyNameString, Matcher.EditOperators.DELETE_PROPERTY, isOptional);
                     } else {
-                        this.categorizeChanges(oldNodeTypeString, Matcher.EditOperators.DELETE_PROPERTY, isOptional);
+                        isRealChange = this.isRealChange(oldNodeTypeString, Matcher.EditOperators.DELETE_PROPERTY, isOptional);
+                    }
+                    if (isRealChange) {
+                        this.changedOldBuildingGmlids.put(propertykeys[5], null);
                     }
                 }
             } catch (FileNotFoundException e) {
@@ -361,10 +377,12 @@ public class StatBot {
                     Long value = deleteNodeType.get(deleteNodeTypeString);
                     deleteNodeType.put(deleteNodeTypeString, value == null ? 1 : value + 1);
 
-                    this.changedOldBuildingGmlids.put(propertykeys[5], null);
-
+                    boolean isRealChange = false;
                     boolean isOptional = Boolean.parseBoolean(propertykeys[6]);
-                    this.categorizeChanges(deleteNodeTypeString, Matcher.EditOperators.DELETE_NODE, isOptional);
+                    isRealChange = this.isRealChange(deleteNodeTypeString, Matcher.EditOperators.DELETE_NODE, isOptional);
+                    if (isRealChange) {
+                        this.changedOldBuildingGmlids.put(propertykeys[5], null);
+                    }
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -413,10 +431,12 @@ public class StatBot {
                     value = insertNodeType.get(insertNodeTypeString);
                     insertNodeType.put(insertNodeTypeString, value == null ? 1 : value + 1);
 
-                    this.changedOldBuildingGmlids.put(propertykeys[6], null);
-
+                    boolean isRealChange = false;
                     boolean isOptional = Boolean.parseBoolean(propertykeys[9]);
-                    this.categorizeChanges(insertNodeTypeString, Matcher.EditOperators.INSERT_NODE, isOptional);
+                    isRealChange = this.isRealChange(insertNodeTypeString, Matcher.EditOperators.INSERT_NODE, isOptional);
+                    if (isRealChange) {
+                        this.changedOldBuildingGmlids.put(propertykeys[6], null);
+                    }
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -468,14 +488,16 @@ public class StatBot {
                     value = propertyName.get(propertyNameString);
                     propertyName.put(propertyNameString, value == null ? 1 : value + 1);
 
-                    this.changedOldBuildingGmlids.put(propertykeys[5], null);
-
+                    boolean isRealChange = false;
                     boolean isOptional = Boolean.parseBoolean(propertykeys[8]);
                     // check property name first, if it is empty then old node type
                     if (!propertyNameString.isEmpty()) {
-                        this.categorizeChanges(propertyNameString, Matcher.EditOperators.INSERT_PROPERTY, isOptional);
+                        isRealChange = this.isRealChange(propertyNameString, Matcher.EditOperators.INSERT_PROPERTY, isOptional);
                     } else {
-                        this.categorizeChanges(oldNodeTypeString, Matcher.EditOperators.INSERT_PROPERTY, isOptional);
+                        isRealChange = this.isRealChange(oldNodeTypeString, Matcher.EditOperators.INSERT_PROPERTY, isOptional);
+                    }
+                    if (isRealChange) {
+                        this.changedOldBuildingGmlids.put(propertykeys[5], null);
                     }
                 }
             } catch (FileNotFoundException e) {
@@ -541,14 +563,16 @@ public class StatBot {
                     value = propertyName.get(propertyNameString);
                     propertyName.put(propertyNameString, value == null ? 1 : value + 1);
 
-                    this.changedOldBuildingGmlids.put(propertykeys[5], null);
-
+                    boolean isRealChange = false;
                     boolean isOptional = Boolean.parseBoolean(propertykeys[9]);
                     // check property name first, if it is empty then old node type
                     if (!propertyNameString.isEmpty()) {
-                        this.categorizeChanges(propertyNameString, Matcher.EditOperators.UPDATE_PROPERTY, isOptional);
+                        isRealChange = this.isRealChange(propertyNameString, Matcher.EditOperators.UPDATE_PROPERTY, isOptional);
                     } else {
-                        this.categorizeChanges(oldNodeTypeString, Matcher.EditOperators.UPDATE_PROPERTY, isOptional);
+                        isRealChange = this.isRealChange(oldNodeTypeString, Matcher.EditOperators.UPDATE_PROPERTY, isOptional);
+                    }
+                    if (isRealChange) {
+                        this.changedOldBuildingGmlids.put(propertykeys[5], null);
                     }
                 }
             } catch (FileNotFoundException e) {
@@ -586,6 +610,9 @@ public class StatBot {
         summary.put("NUMBER OF OLD BUILDINGS", this.nrOfBuildingsOld);
         summary.put("NUMBER OF NEW BUILDINGS", this.nrOfBuildingsNew);
         summary.put("NUMBER OF CHANGED OLD BUILDINGS", new Long(this.changedOldBuildingGmlids.size()));
+        summary.put("NUMBER OF UNCHANGED OLD BUILDINGS", new Long(this.nrOfBuildingsOld - this.changedOldBuildingGmlids.size()));
+        summary.put("DELETED OLD BUILDINGS", new Long(this.topLevelChanges.map.get(CityGMLClass.BUILDING.toString()).get(Matcher.EditOperators.DELETE_NODE)));
+        summary.put("INSERTED NEW BUILDINGS", new Long(this.topLevelChanges.map.get(CityGMLClass.BUILDING.toString()).get(Matcher.EditOperators.INSERT_NODE)));
         LogUtil.logMap(this.logger, summary, "SUMMARY", false);
     }
 

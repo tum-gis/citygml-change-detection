@@ -36,6 +36,7 @@ public class ThematicChange extends Change {
         // class, function, usage, roof type, name
         this.initMapEntry(GMLClass.CODE.toString());
         // measured height
+        this.initMapEntry(GMLClass.MEASURE.toString());
         this.initMapEntry(GMLClass.LENGTH.toString());
         // storey heights above/below ground
         this.initMapEntry(GMLClass.QUANTITY_EXTENT.toString());

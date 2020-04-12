@@ -60,8 +60,6 @@ public class GeometricChange extends Change {
         this.initMapEntry(GMLClass.COMPOSITE_SURFACE.toString());
         this.initMapEntry(GMLClass.SOLID.toString());
         this.initMapEntry(GMLClass.SOLID_PROPERTY.toString());
-
-
     }
 
     @Override
