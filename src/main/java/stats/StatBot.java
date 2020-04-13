@@ -198,12 +198,20 @@ public class StatBot {
                     } else if (line.contains("INITIALIZING MAPPING COMPONENT FOR NEW CITY MODEL")) {
                         mapperOldReached = false;
                         mapperNewReached = true;
-                        nrOfBuildingsOld += Long.parseLong(prevLine.split("Buildings found:")[1].trim());
+                        if (!prevLine.contains("Buildings found:")) {
+                            nrOfBuildingsOld = new Long(0);
+                        } else {
+                            nrOfBuildingsOld += Long.parseLong(prevLine.split("Buildings found:")[1].trim());
+                        }
                     } else if (line.contains("STATISTICS REPORT")) {
                         statsReached = true;
                         mapperOldReached = false;
                         mapperNewReached = false;
-                        nrOfBuildingsNew += Long.parseLong(prevLine.split("Buildings found:")[1].trim());
+                        if (!prevLine.contains("Buildings found:")) {
+                            nrOfBuildingsNew = new Long(0);
+                        } else {
+                            nrOfBuildingsNew += Long.parseLong(prevLine.split("Buildings found:")[1].trim());
+                        }
                     }
 
                     if (mapperOldReached || mapperNewReached) {
