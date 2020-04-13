@@ -4,412 +4,457 @@
 	                    brought to you by STATBOT with love
 
 
-	 ________________________________________________________________________
-	| MAPPER                                                                 |
-	|                                                                        |
-	| > TOTAL NUMBER OF CREATED NODES:                             1.704.458 |
-	|                                                                        |
-	| > Number of SURFACE_PROPERTY nodes:                             95.052 |
-	|                                                                        |
-	| > Number of POLYGON nodes:                                      90.340 |
-	|                                                                        |
-	| > Number of STRING_ATTRIBUTE nodes:                             58.905 |
-	|                                                                        |
-	| > Number of MULTI_SURFACE nodes:                                 9.970 |
-	|                                                                        |
-	| > Number of BUILDING_WALL_SURFACE nodes:                         4.412 |
-	|                                                                        |
-	| > Number of BUILDING nodes:                                      4.356 |
-	|                                                                        |
-	| > Number of EXTERNAL_REFERENCE nodes:                            4.356 |
-	|                                                                        |
-	| > Number of BUILDING_ROOF_SURFACE nodes:                         2.968 |
-	|                                                                        |
-	| > Number of BUILDING_GROUND_SURFACE nodes:                       2.590 |
-	|                                                                        |
-	| > Number of SOLID nodes:                                         2.270 |
-	|                                                                        |
-	| > MAPPER'S ELAPSED TIME:                                            81 |
-	\________________________________________________________________________/
+	 __________________________________________________________________________________ 
+	| MAPPER                                                                           |
+	|                                                                                  |
+	| > Number of SURFACE_PROPERTY nodes                                        29.541 |
+	|                                                                                  |
+	| > Number of DIRECT_POSITION_LIST nodes                                    28.314 |
+	|                                                                                  |
+	| > Number of LINEAR_RING nodes                                             28.314 |
+	|                                                                                  |
+	| > Number of EXTERIOR nodes                                                28.279 |
+	|                                                                                  |
+	| > Number of POLYGON nodes                                                 28.279 |
+	|                                                                                  |
+	| > Number of STRING_ATTRIBUTE nodes                                        21.018 |
+	|                                                                                  |
+	| > Number of DOUBLE_ATTRIBUTE nodes                                        13.319 |
+	|                                                                                  |
+	| > Number of INT_ATTRIBUTE nodes                                            9.381 |
+	|                                                                                  |
+	| > Number of BUILDING_BOUNDARY_SURFACE_PROPERTY nodes                       4.985 |
+	|                                                                                  |
+	| > Number of MULTI_SURFACE nodes                                            4.985 |
+	|                                                                                  |
+	| > Number of MULTI_SURFACE_PROPERTY nodes                                   4.985 |
+	|                                                                                  |
+	| > Number of DIRECT_POSITION nodes                                          2.594 |
+	|                                                                                  |
+	| > Number of BUILDING_WALL_SURFACE nodes                                    2.206 |
+	|                                                                                  |
+	| > Number of CODE nodes                                                     1.745 |
+	|                                                                                  |
+	| > Number of ADDRESS nodes                                                  1.521 |
+	|                                                                                  |
+	| > Number of ADDRESS_DETAILS nodes                                          1.521 |
+	|                                                                                  |
+	| > Number of ADDRESS_PROPERTY nodes                                         1.521 |
+	|                                                                                  |
+	| > Number of COUNTRY nodes                                                  1.521 |
+	|                                                                                  |
+	| > Number of LOCALITY nodes                                                 1.521 |
+	|                                                                                  |
+	| > Number of LOCALITY_NAME nodes                                            1.521 |
+	|                                                                                  |
+	| > Number of XAL_ADDRESS_PROPERTY nodes                                     1.521 |
+	|                                                                                  |
+	| > Number of BUILDING_ROOF_SURFACE nodes                                    1.484 |
+	|                                                                                  |
+	| > Number of THOROUGHFARE nodes                                             1.483 |
+	|                                                                                  |
+	| > Number of THOROUGHFARE_NAME nodes                                        1.483 |
+	|                                                                                  |
+	| > Number of THOROUGHFARE_NUMBER nodes                                      1.483 |
+	|                                                                                  |
+	| > Number of THOROUGHFARE_NUMBER_OR_RANGE nodes                             1.483 |
+	|                                                                                  |
+	| > Number of BOUNDING_SHAPE nodes                                           1.297 |
+	|                                                                                  |
+	| > Number of CITY_OBJECT_MEMBER nodes                                       1.297 |
+	|                                                                                  |
+	| > Number of ENVELOPE nodes                                                 1.297 |
+	|                                                                                  |
+	| > Number of BUILDING nodes                                                 1.295 |
+	|                                                                                  |
+	| > Number of BUILDING_GROUND_SURFACE nodes                                  1.295 |
+	|                                                                                  |
+	| > Number of EXTERNAL_OBJECT nodes                                          1.295 |
+	|                                                                                  |
+	| > Number of EXTERNAL_REFERENCE nodes                                       1.295 |
+	|                                                                                  |
+	| > Number of LENGTH nodes                                                   1.295 |
+	|                                                                                  |
+	| > Number of CITY_OBJECT_GROUP_MEMBER nodes                                   642 |
+	|                                                                                  |
+	| > Number of COMPOSITE_SURFACE nodes                                           41 |
+	|                                                                                  |
+	| > Number of SOLID nodes                                                       41 |
+	|                                                                                  |
+	| > Number of SOLID_PROPERTY nodes                                              41 |
+	|                                                                                  |
+	| > Number of COUNTRY_NAME nodes                                                38 |
+	|                                                                                  |
+	| > Number of INTERIOR nodes                                                    35 |
+	|                                                                                  |
+	| > Number of CITY_MODEL nodes                                                   2 |
+	|                                                                                  |
+	| > Number of CITY_OBJECT_GROUP nodes                                            2 |
+	|                                                                                  |
+	| > Number of GEOMETRY_PROPERTY nodes                                            2 |
+	|                                                                                  |
+	| > Number of ROOT_EDITOR nodes                                                  1 |
+	|                                                                                  |
+	| > Number of ROOT_MAPPER nodes                                                  1 |
+	|                                                                                  |
+	| > Number of ROOT_MATCHER nodes                                                 1 |
+	|                                                                                  |
+	| > Number of ReferenceNode nodes                                                1 |
+	\__________________________________________________________________________________/
 
+	 __________________________________________________________________________________ 
+	|                                                                                  |
+	| > TOTAL NUMBER OF CREATED NODES                                          237.222 |
 
-	 ________________________________________________________________________
-	| MATCHER                                                                |
-	|                                                                        |
-	| > TOTAL NUMBER OF CREATED NODES:                               212.604 |
-	|                                                                        |
-	| > Number of UPDATE_PROPERTY nodes:                             132.677 |
-	|                                                                        |
-	| > Number of DELETE_NODE nodes:                                  46.092 |
-	|                                                                        |
-	| > OF WHICH ARE OPTIONAL:                                        41.074 |
-	|                                                                        |
-	| > Number of INSERT_NODE nodes:                                  30.968 |
-	|                                                                        |
-	| > Number of DELETE_PROPERTY nodes:                               1.968 |
-	|                                                                        |
-	| > Number of INSERT_PROPERTY nodes:                                 899 |
-	|                                                                        |
-	| > MATCHER'S ELAPSED TIME:                                          320 |
-	\________________________________________________________________________/
+	|                                                                                  |
+	| > MAPPER'S ELAPSED TIME                                                       14 |
+	\__________________________________________________________________________________/
 
+	 __________________________________________________________________________________ 
+	| MATCHER                                                                          |
+	|                                                                                  |
+	| > Number of DELETE_NODE nodes                                             14.105 |
+	|                                                                                  |
+	| > Number of UPDATE_PROPERTY nodes                                         12.434 |
+	|                                                                                  |
+	| > Number of INSERT_NODE nodes                                              4.415 |
+	|                                                                                  |
+	| > Number of DELETE_PROPERTY nodes                                              0 |
+	|                                                                                  |
+	| > Number of INSERT_PROPERTY nodes                                              0 |
+	\__________________________________________________________________________________/
 
-	 ________________________________________________________________________
-	| DELETE PROPERTY ...                                                    |
-	|                                                                        |
-	|   -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  |
-	|                                                                        |
-	| OLD_PARENT_NODE_TYPE                                                   |
-	|                                                                        |
-	| > MULTI_CURVE                                                      979 |
-	|                                                                        |
-	| > SOLID                                                            979 |
-	|                                                                        |
-	| > BUILDING                                                          10 |
-	|                                                                        |
-	|   -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  |
-	|                                                                        |
-	| PROPERTY_NAME                                                          |
-	|                                                                        |
-	| > srsName                                                        1.958 |
-	|                                                                        |
-	| > storeysAboveGround                                                10 |
-	\________________________________________________________________________/
+	 __________________________________________________________________________________ 
+	|                                                                                  |
+	| > TOTAL NUMBER OF CREATED NODES                                           30.954 |
 
+	|                                                                                  |
+	| > OF WHICH ARE OPTIONAL                                                        0 |
 
-	 ________________________________________________________________________
-	| DELETE NODE ...                                                        |
-	|                                                                        |
-	|   -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  |
-	|                                                                        |
-	| DELETE_NODE_TYPE                                                       |
-	|                                                                        |
-	| > DOUBLE_ATTRIBUTE                                              16.360 |
-	|                                                                        |
-	| > STRING_ATTRIBUTE                                               8.341 |
-	|                                                                        |
-	| > INT_ATTRIBUTE                                                  6.234 |
-	|                                                                        |
-	| > POS_OR_POINT_PROPERTY_OR_POINT_REP                             4.286 |
-	|                                                                        |
-	| > SURFACE_PROPERTY                                               2.635 |
-	|                                                                        |
-	| > CURVE_PROPERTY                                                 2.181 |
-	|                                                                        |
-	| > _TEXTURED_SURFACE                                              1.150 |
-	|                                                                        |
-	| > X3D_MATERIAL                                                   1.070 |
-	|                                                                        |
-	| > BUILDING_ROOF_SURFACE                                            862 |
-	|                                                                        |
-	| > BUILDING_GROUND_SURFACE                                          846 |
-	|                                                                        |
-	| > BUILDING_WALL_SURFACE                                            808 |
-	|                                                                        |
-	| > PARAMETERIZED_TEXTURE                                            542 |
-	|                                                                        |
-	| > CODE                                                             203 |
-	|                                                                        |
-	| > POS_OR_POINT_PROPERTY_OR_POINT_REP_OR_COORD                      169 |
-	|                                                                        |
-	| > BUILDING_PART_PROPERTY                                           134 |
-	|                                                                        |
-	| > SURFACE_DATA_PROPERTY                                            110 |
-	|                                                                        |
-	| > LENGTH                                                            42 |
-	|                                                                        |
-	| > THOROUGHFARE                                                      34 |
-	|                                                                        |
-	| > BUILDING                                                          31 |
-	|                                                                        |
-	| > ADDRESS_PROPERTY                                                  20 |
-	|                                                                        |
-	| > MULTI_CURVE_PROPERTY                                              10 |
-	|                                                                        |
-	| > SOLID_PROPERTY                                                    10 |
-	|                                                                        |
-	| > INTERIOR                                                           8 |
-	|                                                                        |
-	| > TEXTURE_COORDINATES                                                5 |
-	|                                                                        |
-	| > THOROUGHFARE_NUMBER_SUFFIX                                         1 |
-	\________________________________________________________________________/
+	|                                                                                  |
+	| > MATCHER'S ELAPSED TIME                                                     120 |
+	\__________________________________________________________________________________/
 
+	 __________________________________________________________________________________ 
+	| DELETE PROPERTY ...                                                              |
+	|                                                                                  |
+	 .................................................................................. 
+	|                                                                                  |
+	| OLD_PARENT_NODE_TYPE                                                             |
+	|                                                                                  |
+	 .................................................................................. 
+	|                                                                                  |
+	| PROPERTY_NAME                                                                    |
+	\__________________________________________________________________________________/
 
-	 ________________________________________________________________________
-	| INSERT NODE ...                                                        |
-	|                                                                        |
-	|   -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  |
-	|                                                                        |
-	| INSERT_RELATIONSHIP_TYPE                                               |
-	|                                                                        |
-	| > SURFACE_DATA_MEMBER                                           19.692 |
-	|                                                                        |
-	| > SURFACE_MEMBER                                                 4.556 |
-	|                                                                        |
-	| > OBJECT                                                         4.128 |
-	|                                                                        |
-	| > BOUNDED_BY_SURFACE                                             1.450 |
-	|                                                                        |
-	| > CONTROL_POINTS                                                   537 |
-	|                                                                        |
-	| > GENERIC_ATTRIBUTE                                                288 |
-	|                                                                        |
-	| > CITY_OBJECT_MEMBER                                                55 |
-	|                                                                        |
-	| > BUILDING_PART                                                     45 |
-	|                                                                        |
-	| > COUNTRY_NAME                                                      34 |
-	|                                                                        |
-	| > LOD2_SOLID                                                        34 |
-	|                                                                        |
-	| > CURVE_MEMBER                                                      28 |
-	|                                                                        |
-	| > LOD1_SOLID                                                        25 |
-	|                                                                        |
-	| > LOD1_TERRAIN_INTERSECTION                                         25 |
-	|                                                                        |
-	| > ROOF_TYPE                                                         24 |
-	|                                                                        |
-	| > ADDRESS                                                           23 |
-	|                                                                        |
-	| > APPEARANCE                                                        10 |
-	|                                                                        |
-	| > INTERIOR                                                           8 |
-	|                                                                        |
-	| > THOROUGHFARE_NUMBER_SUFFIX                                         4 |
-	|                                                                        |
-	| > TEXTURE_COORDINATES                                                2 |
-	|                                                                        |
-	|   -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  |
-	|                                                                        |
-	| INSERT_NODE_TYPE                                                       |
-	|                                                                        |
-	| > APPEARANCE                                                    19.692 |
-	|                                                                        |
-	| > MULTI_SURFACE                                                  4.528 |
-	|                                                                        |
-	| > BUILDING_BOUNDARY_SURFACE_PROPERTY                             2.516 |
-	|                                                                        |
-	| > BUILDING                                                       1.746 |
-	|                                                                        |
-	| > SURFACE_DATA_PROPERTY                                          1.612 |
-	|                                                                        |
-	| > LINE_STRING                                                      385 |
-	|                                                                        |
-	| > LINEAR_RING                                                      152 |
-	|                                                                        |
-	| > BUILDING_WALL_SURFACE                                            130 |
-	|                                                                        |
-	| > CITY_MODEL                                                        55 |
-	|                                                                        |
-	| > COUNTRY                                                           34 |
-	|                                                                        |
-	| > BUILDING_ROOF_SURFACE                                             28 |
-	|                                                                        |
-	| > COMPOSITE_SURFACE                                                 28 |
-	|                                                                        |
-	| > MULTI_CURVE                                                       28 |
-	|                                                                        |
-	| > BUILDING_GROUND_SURFACE                                           20 |
-	|                                                                        |
-	| > POLYGON                                                            8 |
-	|                                                                        |
-	| > THOROUGHFARE                                                       4 |
-	|                                                                        |
-	| > TEX_COORD_LIST                                                     2 |
-	\________________________________________________________________________/
+	 __________________________________________________________________________________ 
+	| DELETE NODE ...                                                                  |
+	|                                                                                  |
+	 .................................................................................. 
+	|                                                                                  |
+	| DELETE_NODE_TYPE                                                                 |
+	|                                                                                  |
+	| > DOUBLE_ATTRIBUTE                                                         8.180 |
+	|                                                                                  |
+	| > INT_ATTRIBUTE                                                            3.117 |
+	|                                                                                  |
+	| > STRING_ATTRIBUTE                                                         1.267 |
+	|                                                                                  |
+	| > BUILDING_ROOF_SURFACE                                                      431 |
+	|                                                                                  |
+	| > BUILDING_GROUND_SURFACE                                                    423 |
+	|                                                                                  |
+	| > BUILDING_WALL_SURFACE                                                      404 |
+	|                                                                                  |
+	| > SURFACE_PROPERTY                                                           227 |
+	|                                                                                  |
+	| > CODE                                                                        17 |
+	|                                                                                  |
+	| > THOROUGHFARE                                                                17 |
+	|                                                                                  |
+	| > BUILDING                                                                    13 |
+	|                                                                                  |
+	| > ADDRESS_PROPERTY                                                             5 |
+	|                                                                                  |
+	| > INTERIOR                                                                     4 |
+	\__________________________________________________________________________________/
 
+	 __________________________________________________________________________________ 
+	| INSERT NODE ...                                                                  |
+	|                                                                                  |
+	 .................................................................................. 
+	|                                                                                  |
+	| INSERT_RELATIONSHIP_TYPE                                                         |
+	|                                                                                  |
+	| > SURFACE_MEMBER                                                           2.264 |
+	|                                                                                  |
+	| > OBJECT                                                                   1.258 |
+	|                                                                                  |
+	| > BOUNDED_BY_SURFACE                                                         725 |
+	|                                                                                  |
+	| > GENERIC_ATTRIBUTE                                                           94 |
+	|                                                                                  |
+	| > CITY_OBJECT_MEMBER                                                          24 |
+	|                                                                                  |
+	| > COUNTRY_NAME                                                                17 |
+	|                                                                                  |
+	| > LOD2_SOLID                                                                  17 |
+	|                                                                                  |
+	| > ROOF_TYPE                                                                   12 |
+	|                                                                                  |
+	| > INTERIOR                                                                     4 |
+	|                                                                                  |
+	 .................................................................................. 
+	|                                                                                  |
+	| INSERT_NODE_TYPE                                                                 |
+	|                                                                                  |
+	| > MULTI_SURFACE                                                            2.264 |
+	|                                                                                  |
+	| > BUILDING_BOUNDARY_SURFACE_PROPERTY                                       1.258 |
+	|                                                                                  |
+	| > BUILDING                                                                   759 |
+	|                                                                                  |
+	| > BUILDING_WALL_SURFACE                                                       65 |
+	|                                                                                  |
+	| > CITY_MODEL                                                                  24 |
+	|                                                                                  |
+	| > COUNTRY                                                                     17 |
+	|                                                                                  |
+	| > BUILDING_ROOF_SURFACE                                                       14 |
+	|                                                                                  |
+	| > BUILDING_GROUND_SURFACE                                                     10 |
+	|                                                                                  |
+	| > POLYGON                                                                      4 |
+	\__________________________________________________________________________________/
 
-	 ________________________________________________________________________
-	| INSERT PROPERTY ...                                                    |
-	|                                                                        |
-	|   -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  |
-	|                                                                        |
-	| OLD_PARENT_NODE_TYPE                                                   |
-	|                                                                        |
-	| > EXTERNAL_REFERENCE                                               820 |
-	|                                                                        |
-	| > X3D_MATERIAL                                                      54 |
-	|                                                                        |
-	| > BUILDING                                                          25 |
-	|                                                                        |
-	|   -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  |
-	|                                                                        |
-	| PROPERTY_NAME                                                          |
-	|                                                                        |
-	| > informationSystem                                                820 |
-	|                                                                        |
-	| > shininess                                                         54 |
-	|                                                                        |
-	| > storeysAboveGround                                                25 |
-	\________________________________________________________________________/
+	 __________________________________________________________________________________ 
+	| INSERT PROPERTY ...                                                              |
+	|                                                                                  |
+	 .................................................................................. 
+	|                                                                                  |
+	| OLD_PARENT_NODE_TYPE                                                             |
+	|                                                                                  |
+	 .................................................................................. 
+	|                                                                                  |
+	| PROPERTY_NAME                                                                    |
+	\__________________________________________________________________________________/
 
+	 __________________________________________________________________________________ 
+	| UPDATE PROPERTY ...                                                              |
+	|                                                                                  |
+	 .................................................................................. 
+	|                                                                                  |
+	| OLD_PARENT_NODE_TYPE                                                             |
+	|                                                                                  |
+	| > DIRECT_POSITION_LIST                                                     3.550 |
+	|                                                                                  |
+	| > LINEAR_RING                                                              3.129 |
+	|                                                                                  |
+	| > POLYGON                                                                  3.128 |
+	|                                                                                  |
+	| > DIRECT_POSITION                                                          1.258 |
+	|                                                                                  |
+	| > STRING_ATTRIBUTE                                                         1.241 |
+	|                                                                                  |
+	| > BUILDING                                                                    17 |
+	|                                                                                  |
+	| > EXTERNAL_OBJECT                                                             17 |
+	|                                                                                  |
+	| > EXTERNAL_REFERENCE                                                          17 |
+	|                                                                                  |
+	| > LENGTH                                                                      17 |
+	|                                                                                  |
+	| > MULTI_SURFACE                                                               17 |
+	|                                                                                  |
+	| > INT_ATTRIBUTE                                                               14 |
+	|                                                                                  |
+	| > BUILDING_WALL_SURFACE                                                       13 |
+	|                                                                                  |
+	| > DOUBLE_ATTRIBUTE                                                             8 |
+	|                                                                                  |
+	| > CODE                                                                         4 |
+	|                                                                                  |
+	| > BUILDING_GROUND_SURFACE                                                      2 |
+	|                                                                                  |
+	| > BUILDING_ROOF_SURFACE                                                        2 |
+	|                                                                                  |
+	 .................................................................................. 
+	|                                                                                  |
+	| PROPERTY_NAME                                                                    |
+	|                                                                                  |
+	| > id                                                                       6.308 |
+	|                                                                                  |
+	| > VALUE                                                                    4.808 |
+	|                                                                                  |
+	| > value                                                                      797 |
+	|                                                                                  |
+	| > name                                                                       504 |
+	|                                                                                  |
+	| > informationSystem                                                           17 |
+	\__________________________________________________________________________________/
 
-	 ________________________________________________________________________
-	| UPDATE PROPERTY ...                                                    |
-	|                                                                        |
-	|   -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  |
-	|                                                                        |
-	| OLD_PARENT_NODE_TYPE                                                   |
-	|                                                                        |
-	| > DIRECT_POSITION                                               46.337 |
-	|                                                                        |
-	| > POLYGON                                                       20.982 |
-	|                                                                        |
-	| > PARAMETERIZED_TEXTURE                                         16.032 |
-	|                                                                        |
-	| > TEXTURE_COORDINATES                                           15.969 |
-	|                                                                        |
-	| > _TEXTURED_SURFACE                                              7.953 |
-	|                                                                        |
-	| > DIRECT_POSITION_LIST                                           7.100 |
-	|                                                                        |
-	| > LINEAR_RING                                                    6.258 |
-	|                                                                        |
-	| > APPEARANCE                                                     3.754 |
-	|                                                                        |
-	| > STRING_ATTRIBUTE                                               3.361 |
-	|                                                                        |
-	| > BUILDING                                                       1.789 |
-	|                                                                        |
-	| > CODE                                                           1.061 |
-	|                                                                        |
-	| > LENGTH                                                           698 |
-	|                                                                        |
-	| > COLOR                                                            521 |
-	|                                                                        |
-	| > BUILDING_PART                                                    338 |
-	|                                                                        |
-	| > X3D_MATERIAL                                                     233 |
-	|                                                                        |
-	| > EXTERNAL_REFERENCE                                                91 |
-	|                                                                        |
-	| > EXTERNAL_OBJECT                                                   34 |
-	|                                                                        |
-	| > MULTI_SURFACE                                                     34 |
-	|                                                                        |
-	| > THOROUGHFARE_NUMBER                                               33 |
-	|                                                                        |
-	| > INT_ATTRIBUTE                                                     28 |
-	|                                                                        |
-	| > BUILDING_WALL_SURFACE                                             26 |
-	|                                                                        |
-	| > DOUBLE_ATTRIBUTE                                                  16 |
-	|                                                                        |
-	| > THOROUGHFARE_NAME                                                 12 |
-	|                                                                        |
-	| > THOROUGHFARE_NUMBER_SUFFIX                                         5 |
-	|                                                                        |
-	| > BUILDING_GROUND_SURFACE                                            4 |
-	|                                                                        |
-	| > BUILDING_ROOF_SURFACE                                              4 |
-	|                                                                        |
-	| > POSTAL_CODE_NUMBER                                                 3 |
-	|                                                                        |
-	| > STRING_OR_REF                                                      1 |
-	|                                                                        |
-	|   -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  |
-	|                                                                        |
-	| PROPERTY_NAME                                                          |
-	|                                                                        |
-	| > VALUE                                                         61.453 |
-	|                                                                        |
-	| > id                                                            38.457 |
-	|                                                                        |
-	| > imageURI                                                       8.016 |
-	|                                                                        |
-	| > ring                                                           7.953 |
-	|                                                                        |
-	| > uri                                                            7.953 |
-	|                                                                        |
-	| > value                                                          4.191 |
-	|                                                                        |
-	| > theme                                                          1.877 |
-	|                                                                        |
-	| > creationDate                                                   1.047 |
-	|                                                                        |
-	| > name                                                           1.008 |
-	|                                                                        |
-	| > blue                                                             176 |
-	|                                                                        |
-	| > green                                                            176 |
-	|                                                                        |
-	| > red                                                              169 |
-	|                                                                        |
-	| > informationSystem                                                 91 |
-	|                                                                        |
-	| > transparency                                                      54 |
-	|                                                                        |
-	| > content                                                           53 |
-	|                                                                        |
-	| > TARGET                                                             3 |
-	\________________________________________________________________________/
+	 __________________________________________________________________________________ 
+	| PROCEDURAL CHANGES                                                               |
+	|                                                                                  |
+	| > id                                                                    -> 6.308 |
+	|                                                                                  |
+	| >  > UPDATE_PROPERTY                                                       6.308 |
+	\__________________________________________________________________________________/
 
+	 __________________________________________________________________________________ 
+	| THEMATIC CHANGES                                                                 |
+	|                                                                                  |
+	| > DOUBLE_ATTRIBUTE                                                      -> 8.180 |
+	|                                                                                  |
+	| >  > DELETE_NODE                                                           8.180 |
+	|                                                                                  |
+	| > INT_ATTRIBUTE                                                         -> 3.117 |
+	|                                                                                  |
+	| >  > DELETE_NODE                                                           3.117 |
+	|                                                                                  |
+	| > STRING_ATTRIBUTE                                                      -> 1.267 |
+	|                                                                                  |
+	| >  > DELETE_NODE                                                           1.267 |
+	|                                                                                  |
+	| > value                                                                   -> 797 |
+	|                                                                                  |
+	| >  > UPDATE_PROPERTY                                                         797 |
+	|                                                                                  |
+	| > name                                                                    -> 504 |
+	|                                                                                  |
+	| >  > UPDATE_PROPERTY                                                         504 |
+	|                                                                                  |
+	| > GENERIC_ATTRIBUTE                                                        -> 94 |
+	|                                                                                  |
+	| >  > INSERT_NODE                                                              94 |
+	|                                                                                  |
+	| > CODE                                                                     -> 17 |
+	|                                                                                  |
+	| >  > DELETE_NODE                                                              17 |
+	|                                                                                  |
+	| > COUNTRY_NAME                                                             -> 17 |
+	|                                                                                  |
+	| >  > INSERT_NODE                                                              17 |
+	|                                                                                  |
+	| > THOROUGHFARE                                                             -> 17 |
+	|                                                                                  |
+	| >  > DELETE_NODE                                                              17 |
+	|                                                                                  |
+	| > informationSystem                                                        -> 17 |
+	|                                                                                  |
+	| >  > UPDATE_PROPERTY                                                          17 |
+	|                                                                                  |
+	| > ROOF_TYPE                                                                -> 12 |
+	|                                                                                  |
+	| >  > INSERT_NODE                                                              12 |
+	|                                                                                  |
+	| > ADDRESS_PROPERTY                                                          -> 5 |
+	|                                                                                  |
+	| >  > DELETE_NODE                                                               5 |
+	\__________________________________________________________________________________/
 
-	 ________________________________________________________________________
-	| CHANGES IN APPEARANCE                                                  |
-	|                                                                        |
-	| > imageURI                                                       8.016 |
-	|                                                                        |
-	| > theme                                                          1.877 |
-	|                                                                        |
-	| > shininess                                                         54 |
-	|                                                                        |
-	| > RING                                                               0 |
-	\________________________________________________________________________/
+	 __________________________________________________________________________________ 
+	| SYNTACTIC CHANGES                                                                |
+	\__________________________________________________________________________________/
 
+	 __________________________________________________________________________________ 
+	| GEOMETRIC CHANGES                                                                |
+	|                                                                                  |
+	| > VALUE                                                                 -> 4.808 |
+	|                                                                                  |
+	| >  > UPDATE_PROPERTY                                                       4.808 |
+	|                                                                                  |
+	| > SURFACE_MEMBER                                                        -> 2.264 |
+	|                                                                                  |
+	| >  > INSERT_NODE                                                           2.264 |
+	|                                                                                  |
+	| > OBJECT                                                                -> 1.258 |
+	|                                                                                  |
+	| >  > INSERT_NODE                                                           1.258 |
+	|                                                                                  |
+	| > BOUNDED_BY_SURFACE                                                      -> 725 |
+	|                                                                                  |
+	| >  > INSERT_NODE                                                             725 |
+	|                                                                                  |
+	| > BUILDING_ROOF_SURFACE                                                   -> 431 |
+	|                                                                                  |
+	| >  > DELETE_NODE                                                             431 |
+	|                                                                                  |
+	| > BUILDING_GROUND_SURFACE                                                 -> 423 |
+	|                                                                                  |
+	| >  > DELETE_NODE                                                             423 |
+	|                                                                                  |
+	| > BUILDING_WALL_SURFACE                                                   -> 404 |
+	|                                                                                  |
+	| >  > DELETE_NODE                                                             404 |
+	|                                                                                  |
+	| > SURFACE_PROPERTY                                                        -> 227 |
+	|                                                                                  |
+	| >  > DELETE_NODE                                                             227 |
+	|                                                                                  |
+	| > LOD2_SOLID                                                               -> 17 |
+	|                                                                                  |
+	| >  > INSERT_NODE                                                              17 |
+	|                                                                                  |
+	| > INTERIOR                                                                  -> 8 |
+	|                                                                                  |
+	| >  > DELETE_NODE                                                               4 |
+	|                                                                                  |
+	| >  > INSERT_NODE                                                               4 |
+	\__________________________________________________________________________________/
 
-	 ________________________________________________________________________
-	| THEMATIC CHANGE                                                        |
-	|                                                                        |
-	| > STRING_ATTRIBUTE                                              11.702 |
-	|                                                                        |
-	| > CODE                                                           1.264 |
-	|                                                                        |
-	| > EXTERNAL_REFERENCE                                               911 |
-	|                                                                        |
-	| > LENGTH                                                           740 |
-	|                                                                        |
-	| > storeysAboveGround                                                35 |
-	|                                                                        |
-	| > ADDRESS_PROPERTY                                                  20 |
-	|                                                                        |
-	| > STRING_OR_REF                                                      1 |
-	|                                                                        |
-	| > GENERALIZATION_RELATION                                            0 |
-	|                                                                        |
-	| > LOCATION_PROPERTY                                                  0 |
-	|                                                                        |
-	| > MEASURE_OR_NULL_LIST                                               0 |
-	|                                                                        |
-	| > META_DATA_PROPERTY                                                 0 |
-	|                                                                        |
-	| > QUANTITY_EXTENT                                                    0 |
-	|                                                                        |
-	| > URI_ATTRIBUTE                                                      0 |
-	|                                                                        |
-	| > storeysBelowGround                                                 0 |
-	|                                                                        |
-	| > yearOfConstruction                                                 0 |
-	|                                                                        |
-	| > yearOfDemolition                                                   0 |
-	\________________________________________________________________________/
+	 __________________________________________________________________________________ 
+	| TOP-LEVEL CHANGES                                                                |
+	|                                                                                  |
+	| > CITY_OBJECT_MEMBER                                                       -> 24 |
+	|                                                                                  |
+	| >  > INSERT_NODE                                                              24 |
+	|                                                                                  |
+	| > BUILDING                                                                 -> 13 |
+	|                                                                                  |
+	| >  > DELETE_NODE                                                              13 |
+	\__________________________________________________________________________________/
 
+	 __________________________________________________________________________________ 
+	| OTHER CHANGES                                                                    |
+	\__________________________________________________________________________________/
 
-	 ________________________________________________________________________
-	| PROCEDURAL CHANGES                                                     |
-	|                                                                        |
-	| > id                                                            38.457 |
-	|                                                                        |
-	| > creationDate                                                   1.047 |
-	\________________________________________________________________________/
++-------------------+-------------------+-------------------+-------------------+-------------------+-------------------+
+                         INSERT_PROPERTY     DELETE_PROPERTY     UPDATE_PROPERTY         INSERT_NODE         DELETE_NODE
++-------------------+-------------------+-------------------+-------------------+-------------------+-------------------+
+  Procedural Changes                   0                   0               6.308                   0                   0            -> 6.308
++-------------------+-------------------+-------------------+-------------------+-------------------+-------------------+
+    Thematic Changes                   0                   0               1.318                 123              12.603           -> 14.044
++-------------------+-------------------+-------------------+-------------------+-------------------+-------------------+
+   Syntactic Changes                   0                   0                   0                   0                   0                -> 0
++-------------------+-------------------+-------------------+-------------------+-------------------+-------------------+
+   Geometric Changes                   0                   0               4.808               4.268               1.489           -> 10.565
++-------------------+-------------------+-------------------+-------------------+-------------------+-------------------+
+   Top-level Changes                   0                   0                   0                  24                  13               -> 37
++-------------------+-------------------+-------------------+-------------------+-------------------+-------------------+
+       Other Changes                   0                   0                   0                   0                   0                -> 0
++-------------------+-------------------+-------------------+-------------------+-------------------+-------------------+
+                                    -> 0                -> 0           -> 12.434            -> 4.415           -> 14.105           -> 30.954
 
-
-	 ________________________________________________________________________
-	| SUMMARY                                                                |
-	|                                                                        |
-	| > NUMBER OF CHANGED BUILDINGS                                    1.525 |
-	\________________________________________________________________________/
-
+	 __________________________________________________________________________________ 
+	| SUMMARY                                                                          |
+	|                                                                                  |
+	| > NUMBER OF OLD BUILDINGS                                                    644 |
+	|                                                                                  |
+	| > NUMBER OF NEW BUILDINGS                                                    653 |
+	|                                                                                  |
+	| > NUMBER OF CHANGED OLD BUILDINGS (incl. being deleted)                      643 |
+	|                                                                                  |
+	| > NUMBER OF CHANGED OLD BUILDINGS (but not deleted)                          630 |
+	|                                                                                  |
+	| > NUMBER OF UNCHANGED OLD BUILDINGS                                            1 |
+	|                                                                                  |
+	| > DELETED OLD BUILDINGS                                                       13 |
+	|                                                                                  |
+	| > INSERTED NEW BUILDINGS                                                      24 |
+	|                                                                                  |
+	| > TOTAL NUMBER OF DETECTED CHANGES                                        30.954 |
+	|                                                                                  |
+	| > TOTAL NUMBER OF REAL CHANGES                                            24.646 |
+	\__________________________________________________________________________________/
 

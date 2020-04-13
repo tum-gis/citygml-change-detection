@@ -1,8 +1,8 @@
 package stats;
 
+import mapper.EnumClasses;
 import org.citygml4j.model.citygml.CityGMLClass;
 import org.citygml4j.model.gml.GMLClass;
-import util.BooleanObject;
 
 public class GeometricChange extends Change {
 
@@ -60,6 +60,14 @@ public class GeometricChange extends Change {
         this.initMapEntry(GMLClass.COMPOSITE_SURFACE.toString());
         this.initMapEntry(GMLClass.SOLID.toString());
         this.initMapEntry(GMLClass.SOLID_PROPERTY.toString());
+
+        // additional relationship types (for INSERT_NODE edit operations)
+        this.initMapEntry(EnumClasses.GMLRelTypes.SURFACE_MEMBER.toString());
+        this.initMapEntry(EnumClasses.GMLRelTypes.SURFACE_MEMBERS.toString());
+        this.initMapEntry(EnumClasses.GMLRelTypes.OBJECT.toString());
+        this.initMapEntry(EnumClasses.GMLRelTypes.BOUNDED_BY.toString());
+        this.initMapEntry(EnumClasses.GMLRelTypes.BOUNDED_BY_SURFACE.toString());
+        this.initMapEntry(EnumClasses.GMLRelTypes.LOD2_SOLID.toString());
     }
 
     @Override

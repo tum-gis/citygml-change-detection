@@ -1,6 +1,7 @@
 package stats;
 
 import logger.LogUtil;
+import mapper.EnumClasses;
 import matcher.Matcher;
 import org.citygml4j.model.citygml.CityGMLClass;
 
@@ -36,6 +37,10 @@ public class StatBot {
     private GeometricChange geometricChanges;
     private TopLevelChange topLevelChanges;
     private OtherChange otherChanges;
+
+    private Long[][] overviewTableValues;
+    private Long totalNrOfDetectedChanges;
+    private Long totalNrOfRealChanges;
 
     private Logger logger;
 
@@ -107,6 +112,9 @@ public class StatBot {
     }
 
     private void printOverviewTable() {
+        // NOTE: while changing the order of these entries,
+        // the following variables MUST also be updated accordingly
+        // nrOfProceduralChanges (currently 0), nrOfSyntacticChanges (currently 2)
         List<Change> rows = new ArrayList<>();
         rows.add(this.proceduralChanges);
         rows.add(this.thematicChanges);
@@ -122,7 +130,13 @@ public class StatBot {
         cols.add(Matcher.EditOperators.INSERT_NODE);
         cols.add(Matcher.EditOperators.DELETE_NODE);
 
-        LogUtil.logOverviewTable(logger, rows, cols);
+        this.overviewTableValues = LogUtil.logOverviewTable(logger, rows, cols);
+        this.totalNrOfDetectedChanges = this.overviewTableValues[rows.size()][cols.size()];
+        Long nrOfProceduralChanges = this.overviewTableValues[0][cols.size()];
+        Long nrOfSyntacticChanges = this.overviewTableValues[2][cols.size()];
+        this.totalNrOfRealChanges = this.totalNrOfDetectedChanges
+                - nrOfProceduralChanges
+                - nrOfSyntacticChanges;
     }
 
     private void getAllCsvFromPath() {
@@ -185,6 +199,11 @@ public class StatBot {
                         mapperOldReached = false;
                         mapperNewReached = true;
                         nrOfBuildingsOld += Long.parseLong(prevLine.split("Buildings found:")[1].trim());
+                    } else if (line.contains("STATISTICS REPORT")) {
+                        statsReached = true;
+                        mapperOldReached = false;
+                        mapperNewReached = false;
+                        nrOfBuildingsNew += Long.parseLong(prevLine.split("Buildings found:")[1].trim());
                     }
 
                     if (mapperOldReached || mapperNewReached) {
@@ -193,53 +212,48 @@ public class StatBot {
                         }
                     }
 
-                    // read info from stats
-                    if (!line.contains("STATISTICS REPORT") && !statsReached) {
-                        continue;
-                    }
-
                     if (line.contains("END OF LOGFILE")) {
                         break;
                     }
 
                     // if statistics part of the file has now been reached
-                    statsReached = true;
-                    mapperOldReached = false;
-                    mapperNewReached = false;
-                    nrOfBuildingsNew += Long.parseLong(prevLine.split("Buildings found:")[1].trim());
+                    if (statsReached) {
+                        mapperOldReached = false;
+                        mapperNewReached = false;
 
-                    if (line.contains("MAPPER ...")) {
-                        statsMapperReached = true;
-                        statsMatcherReached = false;
-                    } else if (line.contains("MATCHER ...")) {
-                        statsMapperReached = false;
-                        statsMatcherReached = true;
-                    }
+                        if (line.contains("MAPPER ...")) {
+                            statsMapperReached = true;
+                            statsMatcherReached = false;
+                        } else if (line.contains("MATCHER ...")) {
+                            statsMapperReached = false;
+                            statsMatcherReached = true;
+                        }
 
-                    if (statsMapperReached) {
-                        if (line.contains(":")) {
-                            String[] str = line.replaceAll("\\|", "").trim().split(":");
-                            String key = str[0].trim();
-                            Long value = Long.parseLong(str[1].replaceAll("nodes|seconds", "").trim());
-                            Long existingValue = mapperStats.get(key);
-                            if (existingValue == null) {
-                                mapperStats.put(key, value);
-                            } else {
-                                mapperStats.put(key, existingValue + value);
+                        if (statsMapperReached) {
+                            if (line.contains(":")) {
+                                String[] str = line.replaceAll("\\|", "").trim().split(":");
+                                String key = str[0].trim();
+                                Long value = Long.parseLong(str[1].replaceAll("nodes|seconds", "").trim());
+                                Long existingValue = mapperStats.get(key);
+                                if (existingValue == null) {
+                                    mapperStats.put(key, value);
+                                } else {
+                                    mapperStats.put(key, existingValue + value);
+                                }
                             }
                         }
-                    }
 
-                    if (statsMatcherReached) {
-                        if (line.contains(":")) {
-                            String[] str = line.replaceAll("\\|", "").trim().split(":");
-                            String key = str[0].trim();
-                            Long value = Long.parseLong(str[1].replaceAll("nodes|seconds", "").trim());
-                            Long existingValue = matcherStats.get(key);
-                            if (existingValue == null) {
-                                matcherStats.put(key, value);
-                            } else {
-                                matcherStats.put(key, existingValue + value);
+                        if (statsMatcherReached) {
+                            if (line.contains(":")) {
+                                String[] str = line.replaceAll("\\|", "").trim().split(":");
+                                String key = str[0].trim();
+                                Long value = Long.parseLong(str[1].replaceAll("nodes|seconds", "").trim());
+                                Long existingValue = matcherStats.get(key);
+                                if (existingValue == null) {
+                                    matcherStats.put(key, value);
+                                } else {
+                                    matcherStats.put(key, existingValue + value);
+                                }
                             }
                         }
                     }
@@ -433,7 +447,7 @@ public class StatBot {
 
                     boolean isRealChange = false;
                     boolean isOptional = Boolean.parseBoolean(propertykeys[9]);
-                    isRealChange = this.isRealChange(insertNodeTypeString, Matcher.EditOperators.INSERT_NODE, isOptional);
+                    isRealChange = this.isRealChange(relTypeString, Matcher.EditOperators.INSERT_NODE, isOptional);
                     if (isRealChange) {
                         this.changedOldBuildingGmlids.put(propertykeys[6], null);
                     }
@@ -607,12 +621,24 @@ public class StatBot {
         LinkedHashMap<String, Long> summary = new LinkedHashMap<>();
 
         // changed buildings
-        summary.put("NUMBER OF OLD BUILDINGS", this.nrOfBuildingsOld);
-        summary.put("NUMBER OF NEW BUILDINGS", this.nrOfBuildingsNew);
-        summary.put("NUMBER OF CHANGED OLD BUILDINGS", new Long(this.changedOldBuildingGmlids.size()));
-        summary.put("NUMBER OF UNCHANGED OLD BUILDINGS", new Long(this.nrOfBuildingsOld - this.changedOldBuildingGmlids.size()));
-        summary.put("DELETED OLD BUILDINGS", new Long(this.topLevelChanges.map.get(CityGMLClass.BUILDING.toString()).get(Matcher.EditOperators.DELETE_NODE)));
-        summary.put("INSERTED NEW BUILDINGS", new Long(this.topLevelChanges.map.get(CityGMLClass.BUILDING.toString()).get(Matcher.EditOperators.INSERT_NODE)));
+        summary.put("NUMBER OF OLD BUILDINGS",
+                this.nrOfBuildingsOld);
+        summary.put("NUMBER OF NEW BUILDINGS",
+                this.nrOfBuildingsNew);
+        summary.put("NUMBER OF CHANGED OLD BUILDINGS (incl. being deleted)",
+                new Long(this.changedOldBuildingGmlids.size()));
+        summary.put("NUMBER OF CHANGED OLD BUILDINGS (but not deleted)",
+                new Long(this.changedOldBuildingGmlids.size() - this.topLevelChanges.map.get(CityGMLClass.BUILDING.toString()).get(Matcher.EditOperators.DELETE_NODE)));
+        summary.put("NUMBER OF UNCHANGED OLD BUILDINGS",
+                new Long(this.nrOfBuildingsOld - this.changedOldBuildingGmlids.size()));
+        summary.put("DELETED OLD BUILDINGS",
+                new Long(this.topLevelChanges.map.get(CityGMLClass.BUILDING.toString()).get(Matcher.EditOperators.DELETE_NODE)));
+        summary.put("INSERTED NEW BUILDINGS",
+                new Long(this.topLevelChanges.map.get(EnumClasses.GMLRelTypes.CITY_OBJECT_MEMBER.toString()).get(Matcher.EditOperators.INSERT_NODE)));
+        summary.put("TOTAL NUMBER OF DETECTED CHANGES",
+                this.totalNrOfDetectedChanges);
+        summary.put("TOTAL NUMBER OF REAL CHANGES",
+                this.totalNrOfRealChanges);
         LogUtil.logMap(this.logger, summary, "SUMMARY", false);
     }
 

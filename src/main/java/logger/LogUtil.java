@@ -219,7 +219,7 @@ public class LogUtil {
         logLine(logger, "", false, false);
     }
 
-    public static void logOverviewTable(Logger logger, List<Change> rows, List<Matcher.EditOperators> cols) {
+    public static Long[][] logOverviewTable(Logger logger, List<Change> rows, List<Matcher.EditOperators> cols) {
         // +-------------------+----------------+----------------+----------------+------------+------------+
         // |                   | InsertProperty | DeleteProperty | UpdateProperty | InsertNode | DeleteNode |
         // +===================+================+================+================+============+============+
@@ -227,6 +227,12 @@ public class LogUtil {
         // +-------------------+----------------+----------------+----------------+------------+------------+
         // | Syntactic Changes |                |                |                |            |            |
         // +-------------------+----------------+----------------+----------------+------------+------------+
+
+        // save numbers of each cell in this table
+        // the additional row / column at the end store the sums of all respective columns / rows
+        // e.g. input 6 rows x 5 columns
+        // output 7 rows x 6 columns, where the last row contains sums of all cells in 1st, 2nd, ... column, etc.
+        Long[][] tableValues = new Long[rows.size() + 1][cols.size() + 1];
 
         StringBuilder stats = new StringBuilder();
 
@@ -242,7 +248,6 @@ public class LogUtil {
         stats.append("\n");
 
         // fill the table
-        Long[][] tableValues = new Long[rows.size()][cols.size()];
         for (int i = 0; i < rows.size(); i++) {
             stats.append(getTableBorderLine(columnWidth, cols.size()));
             Change changeCategory = rows.get(i);
@@ -254,6 +259,8 @@ public class LogUtil {
                 stats.append(String.format(widthFormatter, String.format("%,d", tableValues[i][j])));
                 sumCols += tableValues[i][j];
             }
+            // save the sum of all cells in this row in the last additional column
+            tableValues[i][cols.size()] = sumCols;
             // show sum of all columns in this row
             stats.append(String.format(widthFormatter, "-> " + String.format("%,d", sumCols)));
             stats.append("\n");
@@ -269,15 +276,21 @@ public class LogUtil {
                 sumRows += tableValues[i][j];
             }
             sumAll += sumRows;
+            // save the sum of all cells in this column in the last additional row
+            tableValues[rows.size()][j] = sumRows;
             stats.append(String.format(widthFormatter, "-> " + String.format("%,d", sumRows)));
         }
 
+        // save the sum of all cells in this table
+        tableValues[rows.size()][cols.size()] = sumAll;
         // show sum of all values
         stats.append(String.format(widthFormatter, "-> " + String.format("%,d", sumAll)));
         stats.append("\n");
         // stats.append(getTableBorderLine(columnWidth, cols.size()));
 
         logger.info(stats.toString());
+
+        return tableValues;
     }
 
     private static String getTableBorderLine(int columnWidth, int nrOfColumns) {

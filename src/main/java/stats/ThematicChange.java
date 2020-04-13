@@ -1,5 +1,6 @@
 package stats;
 
+import mapper.EnumClasses;
 import org.citygml4j.model.citygml.CityGMLClass;
 import org.citygml4j.model.gml.GMLClass;
 import org.citygml4j.model.xal.XALClass;
@@ -61,6 +62,11 @@ public class ThematicChange extends Change {
         this.initMapEntry(GMLClass.STRING_OR_REF.toString());
         this.initMapEntry(GMLClass.META_DATA_PROPERTY.toString());
         this.initMapEntry(CityGMLClass.EXTERNAL_OBJECT.toString());
+
+        // additional relationship types (for INSERT_NODE edit operations)
+        this.initMapEntry(EnumClasses.GMLRelTypes.GENERIC_ATTRIBUTE.toString());
+        this.initMapEntry(EnumClasses.GMLRelTypes.COUNTRY_NAME.toString());
+        this.initMapEntry(EnumClasses.GMLRelTypes.ROOF_TYPE.toString());
 
         // TODO more ADDRESS node types
         this.initMapEntry(XALClass.THOROUGHFARE.toString());
