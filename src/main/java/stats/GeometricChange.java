@@ -60,6 +60,7 @@ public class GeometricChange extends Change {
         this.initMapEntry(GMLClass.COMPOSITE_SURFACE.toString());
         this.initMapEntry(GMLClass.SOLID.toString());
         this.initMapEntry(GMLClass.SOLID_PROPERTY.toString());
+        this.initMapEntry(GMLClass.BOUNDING_SHAPE.toString());
 
         // additional relationship types (for INSERT_NODE edit operations)
         this.initMapEntry(EnumClasses.GMLRelTypes.SURFACE_MEMBER.toString());

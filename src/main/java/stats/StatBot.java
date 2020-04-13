@@ -28,8 +28,8 @@ public class StatBot {
 
     private HashMap<String, Long> changedOldBuildingGmlids;
 
-    private Long nrOfBuildingsOld = new Long(0);
-    private Long nrOfBuildingsNew = new Long(0);
+    private Long nrOfBuildingsOld;
+    private Long nrOfBuildingsNew;
 
     private ThematicChange thematicChanges;
     private ProceduralChange proceduralChanges;
@@ -57,6 +57,9 @@ public class StatBot {
         this.thematicChanges = new ThematicChange();
         this.topLevelChanges = new TopLevelChange();
         this.otherChanges = new OtherChange();
+
+        this.nrOfBuildingsOld = new Long(0);
+        this.nrOfBuildingsNew = new Long(0);
 
         this.logger = LogUtil.getLogger(this.getClass().toString(), "STATBOT");
     }
@@ -198,9 +201,7 @@ public class StatBot {
                     } else if (line.contains("INITIALIZING MAPPING COMPONENT FOR NEW CITY MODEL")) {
                         mapperOldReached = false;
                         mapperNewReached = true;
-                        if (!prevLine.contains("Buildings found:")) {
-                            nrOfBuildingsOld = new Long(0);
-                        } else {
+                        if (prevLine.contains("Buildings found:")) {
                             nrOfBuildingsOld += Long.parseLong(prevLine.split("Buildings found:")[1].trim());
                         }
                         prevLine = "";
@@ -208,9 +209,7 @@ public class StatBot {
                         statsReached = true;
                         mapperOldReached = false;
                         mapperNewReached = false;
-                        if (!prevLine.contains("Buildings found:")) {
-                            nrOfBuildingsNew = new Long(0);
-                        } else {
+                        if (prevLine.contains("Buildings found:")) {
                             nrOfBuildingsNew += Long.parseLong(prevLine.split("Buildings found:")[1].trim());
                         }
                         prevLine = "";
@@ -646,15 +645,15 @@ public class StatBot {
         LinkedHashMap<String, Long> summary = new LinkedHashMap<>();
 
         // changed buildings
-        summary.put("NUMBER OF OLD BUILDINGS (+- 2)",
+        summary.put("NUMBER OF OLD BUILDINGS",
                 this.nrOfBuildingsOld);
-        summary.put("NUMBER OF NEW BUILDINGS (+- 2)",
+        summary.put("NUMBER OF NEW BUILDINGS",
                 this.nrOfBuildingsNew);
         summary.put("NUMBER OF CHANGED OLD BUILDINGS (incl. being deleted)",
                 new Long(this.changedOldBuildingGmlids.size()));
         summary.put("NUMBER OF CHANGED OLD BUILDINGS (but not deleted)",
                 new Long(this.changedOldBuildingGmlids.size() - this.topLevelChanges.map.get(CityGMLClass.BUILDING.toString()).get(Matcher.EditOperators.DELETE_NODE)));
-        summary.put("NUMBER OF UNCHANGED OLD BUILDINGS (+- 2)",
+        summary.put("NUMBER OF UNCHANGED OLD BUILDINGS",
                 new Long(this.nrOfBuildingsOld - this.changedOldBuildingGmlids.size()));
         summary.put("DELETED OLD BUILDINGS",
                 new Long(this.topLevelChanges.map.get(CityGMLClass.BUILDING.toString()).get(Matcher.EditOperators.DELETE_NODE)));

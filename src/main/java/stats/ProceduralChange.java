@@ -7,6 +7,7 @@ public class ProceduralChange extends Change {
         this.initMapEntry("id");
         this.initMapEntry("creationDate");
         this.initMapEntry("srsName");
+        this.initMapEntry("srsDimension");
     }
 
     @Override
