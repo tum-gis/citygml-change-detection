@@ -203,6 +203,7 @@ public class StatBot {
                         } else {
                             nrOfBuildingsOld += Long.parseLong(prevLine.split("Buildings found:")[1].trim());
                         }
+                        prevLine = "";
                     } else if (line.contains("STATISTICS REPORT")) {
                         statsReached = true;
                         mapperOldReached = false;
@@ -212,6 +213,7 @@ public class StatBot {
                         } else {
                             nrOfBuildingsNew += Long.parseLong(prevLine.split("Buildings found:")[1].trim());
                         }
+                        prevLine = "";
                     }
 
                     if (mapperOldReached || mapperNewReached) {
@@ -352,7 +354,10 @@ public class StatBot {
                         isRealChange = this.isRealChange(oldNodeTypeString, Matcher.EditOperators.DELETE_PROPERTY, isOptional);
                     }
                     if (isRealChange) {
-                        this.changedOldBuildingGmlids.put(propertykeys[5], null);
+                        String ofOldBuildingId = propertykeys[5];
+                        if (ofOldBuildingId != null && !ofOldBuildingId.isEmpty()) {
+                            this.changedOldBuildingGmlids.put(ofOldBuildingId, null);
+                        }
                     }
                 }
             } catch (FileNotFoundException e) {
@@ -403,7 +408,10 @@ public class StatBot {
                     boolean isOptional = Boolean.parseBoolean(propertykeys[6]);
                     isRealChange = this.isRealChange(deleteNodeTypeString, Matcher.EditOperators.DELETE_NODE, isOptional);
                     if (isRealChange) {
-                        this.changedOldBuildingGmlids.put(propertykeys[5], null);
+                        String ofOldBuildingId = propertykeys[5];
+                        if (ofOldBuildingId != null && !ofOldBuildingId.isEmpty()) {
+                            this.changedOldBuildingGmlids.put(ofOldBuildingId, null);
+                        }
                     }
                 }
             } catch (FileNotFoundException e) {
@@ -457,7 +465,10 @@ public class StatBot {
                     boolean isOptional = Boolean.parseBoolean(propertykeys[9]);
                     isRealChange = this.isRealChange(relTypeString, Matcher.EditOperators.INSERT_NODE, isOptional);
                     if (isRealChange) {
-                        this.changedOldBuildingGmlids.put(propertykeys[6], null);
+                        String ofOldBuildingId = propertykeys[6];
+                        if (ofOldBuildingId != null && !ofOldBuildingId.isEmpty()) {
+                            this.changedOldBuildingGmlids.put(ofOldBuildingId, null);
+                        }
                     }
                 }
             } catch (FileNotFoundException e) {
@@ -519,7 +530,10 @@ public class StatBot {
                         isRealChange = this.isRealChange(oldNodeTypeString, Matcher.EditOperators.INSERT_PROPERTY, isOptional);
                     }
                     if (isRealChange) {
-                        this.changedOldBuildingGmlids.put(propertykeys[5], null);
+                        String ofOldBuildingId = propertykeys[5];
+                        if (ofOldBuildingId != null && !ofOldBuildingId.isEmpty()) {
+                            this.changedOldBuildingGmlids.put(ofOldBuildingId, null);
+                        }
                     }
                 }
             } catch (FileNotFoundException e) {
@@ -594,7 +608,10 @@ public class StatBot {
                         isRealChange = this.isRealChange(oldNodeTypeString, Matcher.EditOperators.UPDATE_PROPERTY, isOptional);
                     }
                     if (isRealChange) {
-                        this.changedOldBuildingGmlids.put(propertykeys[5], null);
+                        String ofOldBuildingId = propertykeys[5];
+                        if (ofOldBuildingId != null && !ofOldBuildingId.isEmpty()) {
+                            this.changedOldBuildingGmlids.put(ofOldBuildingId, null);
+                        }
                     }
                 }
             } catch (FileNotFoundException e) {
@@ -629,15 +646,15 @@ public class StatBot {
         LinkedHashMap<String, Long> summary = new LinkedHashMap<>();
 
         // changed buildings
-        summary.put("NUMBER OF OLD BUILDINGS",
+        summary.put("NUMBER OF OLD BUILDINGS (+- 2)",
                 this.nrOfBuildingsOld);
-        summary.put("NUMBER OF NEW BUILDINGS",
+        summary.put("NUMBER OF NEW BUILDINGS (+- 2)",
                 this.nrOfBuildingsNew);
         summary.put("NUMBER OF CHANGED OLD BUILDINGS (incl. being deleted)",
                 new Long(this.changedOldBuildingGmlids.size()));
         summary.put("NUMBER OF CHANGED OLD BUILDINGS (but not deleted)",
                 new Long(this.changedOldBuildingGmlids.size() - this.topLevelChanges.map.get(CityGMLClass.BUILDING.toString()).get(Matcher.EditOperators.DELETE_NODE)));
-        summary.put("NUMBER OF UNCHANGED OLD BUILDINGS",
+        summary.put("NUMBER OF UNCHANGED OLD BUILDINGS (+- 2)",
                 new Long(this.nrOfBuildingsOld - this.changedOldBuildingGmlids.size()));
         summary.put("DELETED OLD BUILDINGS",
                 new Long(this.topLevelChanges.map.get(CityGMLClass.BUILDING.toString()).get(Matcher.EditOperators.DELETE_NODE)));
