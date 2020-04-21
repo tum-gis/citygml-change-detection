@@ -69,6 +69,7 @@ public class ThematicChange extends Change {
         this.initMapEntry(EnumClasses.GMLRelTypes.ROOF_TYPE.toString());
         this.initMapEntry(EnumClasses.GMLRelTypes.MEASURED_HEIGHT.toString());
         this.initMapEntry(EnumClasses.GMLRelTypes.NAME.toString());
+        this.initMapEntry(EnumClasses.GMLRelTypes.DESCRIPTION.toString());
 
         // TODO more ADDRESS node types
         this.initMapEntry(XALClass.ADDRESS.toString());

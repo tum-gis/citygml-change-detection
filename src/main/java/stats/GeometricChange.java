@@ -63,11 +63,17 @@ public class GeometricChange extends Change {
         this.initMapEntry(GMLClass.BOUNDING_SHAPE.toString());
 
         // additional relationship types (for INSERT_NODE edit operations)
+        this.initMapEntry(EnumClasses.GMLRelTypes.CONTROL_POINT.toString());
+        this.initMapEntry(EnumClasses.GMLRelTypes.CONTROL_POINTS.toString());
+        this.initMapEntry(EnumClasses.GMLRelTypes.CURVE_MEMBER.toString());
+        this.initMapEntry(EnumClasses.GMLRelTypes.CURVE_MEMBERS.toString());
         this.initMapEntry(EnumClasses.GMLRelTypes.SURFACE_MEMBER.toString());
         this.initMapEntry(EnumClasses.GMLRelTypes.SURFACE_MEMBERS.toString());
         this.initMapEntry(EnumClasses.GMLRelTypes.OBJECT.toString());
         this.initMapEntry(EnumClasses.GMLRelTypes.BOUNDED_BY.toString());
         this.initMapEntry(EnumClasses.GMLRelTypes.BOUNDED_BY_SURFACE.toString());
+        this.initMapEntry(EnumClasses.GMLRelTypes.LOD1_TERRAIN_INTERSECTION.toString());
+        this.initMapEntry(EnumClasses.GMLRelTypes.LOD1_SOLID.toString());
         this.initMapEntry(EnumClasses.GMLRelTypes.LOD2_SOLID.toString());
     }
 
