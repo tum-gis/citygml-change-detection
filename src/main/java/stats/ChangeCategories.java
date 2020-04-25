@@ -5,6 +5,7 @@ public enum ChangeCategories {
     THEMATIC_CHANGE,
     SYNTACTIC_CHANGE,
     GEOMETRIC_CHANGE,
+    STRUCTURAL_CHANGE,
     TOP_LEVEL_CHANGE,
     OTHER_CHANGE
 }

@@ -35,6 +35,7 @@ public class StatBot {
     private ProceduralChange proceduralChanges;
     private SyntacticChange syntacticChanges;
     private GeometricChange geometricChanges;
+    private StructuralChange structuralChange;
     private TopLevelChange topLevelChanges;
     private OtherChange otherChanges;
 
@@ -55,6 +56,7 @@ public class StatBot {
         this.syntacticChanges = new SyntacticChange();
         this.proceduralChanges = new ProceduralChange();
         this.thematicChanges = new ThematicChange();
+        this.structuralChange = new StructuralChange();
         this.topLevelChanges = new TopLevelChange();
         this.otherChanges = new OtherChange();
 
@@ -91,6 +93,8 @@ public class StatBot {
             return ChangeCategories.THEMATIC_CHANGE;
         } else if (this.proceduralChanges.contains(key, editOperator)) {
             return ChangeCategories.PROCEDURAL_CHANGE;
+        } else if (this.structuralChange.contains(key, editOperator)) {
+            return ChangeCategories.STRUCTURAL_CHANGE;
         } else if (this.topLevelChanges.contains(key, editOperator)) {
             return ChangeCategories.TOP_LEVEL_CHANGE;
         } else if (this.geometricChanges.contains(key, editOperator)) {
@@ -110,6 +114,7 @@ public class StatBot {
         this.thematicChanges.logMap(logger);
         this.syntacticChanges.logMap(logger);
         this.geometricChanges.logMap(logger);
+        this.structuralChange.logMap(logger);
         this.topLevelChanges.logMap(logger);
         this.otherChanges.logMap(logger);
     }
@@ -123,6 +128,7 @@ public class StatBot {
         rows.add(this.thematicChanges);
         rows.add(this.syntacticChanges);
         rows.add(this.geometricChanges);
+        rows.add(this.structuralChange);
         rows.add(this.topLevelChanges);
         rows.add(this.otherChanges);
 

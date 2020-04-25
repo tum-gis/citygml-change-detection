@@ -11,7 +11,6 @@ public class TopLevelChange extends Change {
         super();
         this.initMapEntry(CityGMLClass.CITY_OBJECT_MEMBER.toString());
         this.initMapEntry(CityGMLClass.BUILDING.toString());
-        this.initMapEntry(CityGMLClass.BUILDING_PART.toString());
         this.initMapEntry(CityGMLClass.CITY_MODEL.toString());
     }
 
