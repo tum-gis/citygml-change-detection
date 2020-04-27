@@ -3,6 +3,7 @@
 ### 1.0.0 - Active
 
 ##### NEW
+* Added categorization of detected changes to facilitate more user-friendly reading/interpretation, see [`6ba3c1e`](https://github.com/tum-gis/citygml-change-detection/commit/6ba3c1eb8cf462064ccdd32a0a784d8f6b1799bf). 
 * Added example scripts for running the program using parallel execution (such as for tiles), see [`cbc57d1`](https://github.com/tum-gis/citygml-change-detection/commit/cbc57d1477b3903a55c3c4fc7682e357868cd567). 
 * Added handling of empty city models while exporting RTree images, see [`5e0494e`](https://github.com/tum-gis/citygml-change-detection/commit/5e0494eb3b33716b22af34376066b0a5c2ae9bec).
 * Added a statistics bot `StatBot`, see [`ea6695a`](https://github.com/tum-gis/citygml-change-detection/commit/ea6695a3896ee73284a3c30be819c1c3dfd08cc4).
