@@ -231,9 +231,9 @@ public class Controller {
 
         sb.append("\nSTATBOT SETTINGS\n");
 
-        sb.append(String.format("%-40s", "\t > Output summary:") + (SETTINGS.STATBOT_OUTPUT_SUMMARY ? SETTINGS.STATBOT_OUTPUT_SUMMARY_PATH : SETTINGS.STATBOT_OUTPUT_SUMMARY) + "\n");
+        sb.append(String.format("%-40s", "\t > Output summary:") + SETTINGS.STATBOT_OUTPUT_SUMMARY_PATH + "\n");
 
-        sb.append(String.format("%-40s", "\t > Output summary:") + (SETTINGS.STATBOT_OUTPUT_CSV ? SETTINGS.STATBOT_OUTPUT_CSV_FOLDER : SETTINGS.STATBOT_OUTPUT_CSV) + "\n");
+        sb.append(String.format("%-40s", "\t > Output summary:") + SETTINGS.STATBOT_OUTPUT_CSV_FOLDER + "\n");
 
         logger.info(sb.toString());
     }

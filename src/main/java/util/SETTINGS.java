@@ -45,9 +45,7 @@ public class SETTINGS {
     public static final String KEY_THREAD_TIME_OUT = "THREAD_TIME_OUT";
     public static final String KEY_ENABLE_EDITORS = "ENABLE_EDITORS";
     public static final String KEY_EXECUTE_OPTIONAL = "EXECUTE_OPTIONAL";
-    public static final String KEY_STATBOT_OUTPUT_SUMMARY = "STATBOT_OUTPUT_SUMMARY";
     public static final String KEY_STATBOT_OUTPUT_SUMMARY_PATH = "STATBOT_OUTPUT_SUMMARY_PATH";
-    public static final String KEY_STATBOT_OUTPUT_CSV = "STATBOT_OUTPUT_CSV";
     public static final String KEY_STATBOT_OUTPUT_CSV_FOLDER = "STATBOT_OUTPUT_CSV_FOLDER";
 
     public static final String KEY_SETTINGS_LOCATION = "SETTINGS";
@@ -243,11 +241,7 @@ public class SETTINGS {
     /*
      * STATBOT settings
      */
-    public static final boolean STATBOT_OUTPUT_SUMMARY = getValueWithDefault(KEY_STATBOT_OUTPUT_SUMMARY, true);
-
     public static final String STATBOT_OUTPUT_SUMMARY_PATH = getValueWithDefault(KEY_STATBOT_OUTPUT_SUMMARY_PATH, "STATBOT");
-
-    public static final boolean STATBOT_OUTPUT_CSV = getValueWithDefault(KEY_STATBOT_OUTPUT_CSV, true);
 
     public static final String STATBOT_OUTPUT_CSV_FOLDER = getValueWithDefault(KEY_STATBOT_OUTPUT_CSV_FOLDER, "export_STATBOT");
 
