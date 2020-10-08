@@ -4,13 +4,9 @@ import logger.LogUtil;
 import mapper.EnumClasses;
 import matcher.Matcher;
 import org.citygml4j.model.citygml.CityGMLClass;
+import util.SETTINGS;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FilenameFilter;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -26,7 +22,8 @@ public class StatBot {
     private ArrayList<File> csvInsertPropertyFiles;
     private ArrayList<File> csvUpdatePropertyFiles;
 
-    private HashMap<String, Long> changedOldBuildingGmlids;
+    private HashSet<String> changedOldBuildingGmlids;
+    private HashSet<String> deletedOldBuildingGmlids;
 
     private Long nrOfBuildingsOld;
     private Long nrOfBuildingsNew;
@@ -50,7 +47,8 @@ public class StatBot {
         this.exportCsvFolderPath = exportCsvFolderPath;
         this.csvDelimiter = csvDelimiter;
         this.getAllCsvFromPath();
-        this.changedOldBuildingGmlids = new HashMap<>();
+        this.changedOldBuildingGmlids = new HashSet<>();
+        this.deletedOldBuildingGmlids = new HashSet<>();
 
         this.geometricChanges = new GeometricChange();
         this.syntacticChanges = new SyntacticChange();
@@ -63,11 +61,37 @@ public class StatBot {
         this.nrOfBuildingsOld = new Long(0);
         this.nrOfBuildingsNew = new Long(0);
 
-        this.logger = LogUtil.getLogger(this.getClass().toString(), "STATBOT");
+        this.logger = LogUtil.getLogger(this.getClass().toString(), SETTINGS.STATBOT_OUTPUT_SUMMARY_PATH);
     }
 
     public StatBot(String logFolderPath, String sheetFolderPath) {
         this(logFolderPath, sheetFolderPath, ";");
+    }
+
+    public void printAllStats() {
+        // this function must be called first
+        this.printLogStats();
+
+        // these must be called before the printOverviewTable() function
+        // edit operators first, the categories will be listed pro edit operator
+        this.printDeletePropertyStats();
+        this.printDeleteNodeStats();
+        this.printInsertNodeStats();
+        this.printInsertPropertyStats();
+        this.printUpdatePropertyStats();
+
+        // categories first, the edit operators will be listed pro category
+        this.printCategorizedChanges();
+
+        // bring both the edit operators and categories together in one table
+        this.printOverviewTable();
+
+        // this must be called last
+        this.printSummary();
+
+        if (SETTINGS.STATBOT_OUTPUT_CSV_FOLDER != null && !SETTINGS.STATBOT_OUTPUT_CSV_FOLDER.isEmpty()) {
+            this.exportCsvFiles();
+        }
     }
 
     private boolean isRealChange(String key, Matcher.EditOperators editOperator, boolean isOptional) {
@@ -155,34 +179,48 @@ public class StatBot {
         this.csvInsertPropertyFiles = new ArrayList<>();
         this.csvUpdatePropertyFiles = new ArrayList<>();
 
-        File[] exportCsvFolders = new File(this.exportCsvFolderPath).listFiles();
-        for (File exportCsvFolder : exportCsvFolders) {
-            File[] exportCsvFiles = new File(exportCsvFolder.getAbsolutePath()).listFiles();
-            for (File exportCsvFile : exportCsvFiles) {
-                if (exportCsvFile.isFile()) {
-                    if (exportCsvFile.getName().compareTo("EditOperations_DeleteProperty.csv") == 0) {
-                        this.csvDeletePropertyFiles.add(exportCsvFile);
-                    } else if (exportCsvFile.getName().compareTo("EditOperations_DeleteNode.csv") == 0) {
-                        this.csvDeleteNodeFiles.add(exportCsvFile);
-                    } else if (exportCsvFile.getName().compareTo("EditOperations_InsertNode.csv") == 0) {
-                        this.csvInsertNodeFiles.add(exportCsvFile);
-                    } else if (exportCsvFile.getName().compareTo("EditOperations_InsertProperty.csv") == 0) {
-                        this.csvInsertPropertyFiles.add(exportCsvFile);
-                    } else if (exportCsvFile.getName().compareTo("EditOperations_UpdateProperty.csv") == 0) {
-                        this.csvUpdatePropertyFiles.add(exportCsvFile);
+        File[] exportCsvFoldersOrFiles = new File(this.exportCsvFolderPath).listFiles();
+        for (File exportCsvFolderOrFile : exportCsvFoldersOrFiles) {
+            if (exportCsvFolderOrFile.isDirectory()) {
+                File[] exportCsvFiles = new File(exportCsvFolderOrFile.getAbsolutePath()).listFiles();
+                for (File exportCsvFile : exportCsvFiles) {
+                    if (exportCsvFile.isFile()) {
+                        this.addToRespectiveEditOperationList(exportCsvFile);
                     }
                 }
+            } else {
+                this.addToRespectiveEditOperationList(exportCsvFolderOrFile);
             }
         }
     }
 
-    public void printLogStats() {
-        File[] logFiles = new File(this.logFolderPath).listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return name.endsWith(".log");
-            }
-        });
+    private void addToRespectiveEditOperationList(File file) {
+        if (file.getName().compareTo("EditOperations_DeleteProperty.csv") == 0) {
+            this.csvDeletePropertyFiles.add(file);
+        } else if (file.getName().compareTo("EditOperations_DeleteNode.csv") == 0) {
+            this.csvDeleteNodeFiles.add(file);
+        } else if (file.getName().compareTo("EditOperations_InsertNode.csv") == 0) {
+            this.csvInsertNodeFiles.add(file);
+        } else if (file.getName().compareTo("EditOperations_InsertProperty.csv") == 0) {
+            this.csvInsertPropertyFiles.add(file);
+        } else if (file.getName().compareTo("EditOperations_UpdateProperty.csv") == 0) {
+            this.csvUpdatePropertyFiles.add(file);
+        }
+    }
+
+    private void printLogStats() {
+        File[] logFiles = null;
+        File logFolderOrFile = new File(this.logFolderPath);
+        if (logFolderOrFile.isDirectory()) {
+            logFiles = new File(this.logFolderPath).listFiles(new FilenameFilter() {
+                @Override
+                public boolean accept(File dir, String name) {
+                    return name.endsWith(".log");
+                }
+            });
+        } else {
+            logFiles = new File[]{logFolderOrFile};
+        }
 
         Map<String, Long> mapperStats = new HashMap<>();
         HashMap<String, Long> matcherStats = new HashMap<>();
@@ -327,7 +365,7 @@ public class StatBot {
         LogUtil.logLine(logger, "MATCHER'S ELAPSED TIME", matcherStats.get("MATCHER'S ELAPSED TIME"), false, true);
     }
 
-    public void printDeletePropertyStats() {
+    private void printDeletePropertyStats() {
         HashMap<String, Long> oldParentNodeType = new HashMap<>();
         HashMap<String, Long> propertyName = new HashMap<>();
 
@@ -361,7 +399,7 @@ public class StatBot {
                     if (isRealChange) {
                         String ofOldBuildingId = propertykeys[5];
                         if (ofOldBuildingId != null && !ofOldBuildingId.isEmpty()) {
-                            this.changedOldBuildingGmlids.put(ofOldBuildingId, null);
+                            this.changedOldBuildingGmlids.add(ofOldBuildingId);
                         }
                     }
                 }
@@ -392,7 +430,7 @@ public class StatBot {
         LogUtil.logMaps(this.logger, "DELETE PROPERTY ...", occurrenceMaps, messages, true);
     }
 
-    public void printDeleteNodeStats() {
+    private void printDeleteNodeStats() {
         HashMap<String, Long> deleteNodeType = new HashMap<>();
 
         for (File logFile : this.csvDeleteNodeFiles) {
@@ -412,10 +450,16 @@ public class StatBot {
                     boolean isRealChange = false;
                     boolean isOptional = Boolean.parseBoolean(propertykeys[6]);
                     isRealChange = this.isRealChange(deleteNodeTypeString, Matcher.EditOperators.DELETE_NODE, isOptional);
+
                     if (isRealChange) {
                         String ofOldBuildingId = propertykeys[5];
                         if (ofOldBuildingId != null && !ofOldBuildingId.isEmpty()) {
-                            this.changedOldBuildingGmlids.put(ofOldBuildingId, null);
+                            if (deleteNodeTypeString.equals(CityGMLClass.BUILDING.toString())) {
+                                // this is a deleted Building
+                                this.deletedOldBuildingGmlids.add(ofOldBuildingId);
+                            } else {
+                                this.changedOldBuildingGmlids.add(ofOldBuildingId);
+                            }
                         }
                     }
                 }
@@ -443,7 +487,7 @@ public class StatBot {
         LogUtil.logMaps(this.logger, "DELETE NODE ...", occurrenceMaps, messages, true);
     }
 
-    public void printInsertNodeStats() {
+    private void printInsertNodeStats() {
         HashMap<String, Long> insertRelationshipType = new HashMap<>();
         HashMap<String, Long> insertNodeType = new HashMap<>();
 
@@ -472,7 +516,7 @@ public class StatBot {
                     if (isRealChange) {
                         String ofOldBuildingId = propertykeys[6];
                         if (ofOldBuildingId != null && !ofOldBuildingId.isEmpty()) {
-                            this.changedOldBuildingGmlids.put(ofOldBuildingId, null);
+                            this.changedOldBuildingGmlids.add(ofOldBuildingId);
                         }
                     }
                 }
@@ -503,7 +547,7 @@ public class StatBot {
         LogUtil.logMaps(this.logger, "INSERT NODE ...", occurrenceMaps, messages, true);
     }
 
-    public void printInsertPropertyStats() {
+    private void printInsertPropertyStats() {
         HashMap<String, Long> oldParentNodeType = new HashMap<>();
         HashMap<String, Long> propertyName = new HashMap<>();
 
@@ -537,7 +581,7 @@ public class StatBot {
                     if (isRealChange) {
                         String ofOldBuildingId = propertykeys[5];
                         if (ofOldBuildingId != null && !ofOldBuildingId.isEmpty()) {
-                            this.changedOldBuildingGmlids.put(ofOldBuildingId, null);
+                            this.changedOldBuildingGmlids.add(ofOldBuildingId);
                         }
                     }
                 }
@@ -568,7 +612,7 @@ public class StatBot {
         LogUtil.logMaps(this.logger, "INSERT PROPERTY ...", occurrenceMaps, messages, true);
     }
 
-    public void printUpdatePropertyStats() {
+    private void printUpdatePropertyStats() {
         HashMap<String, Long> oldParentNodeType = new HashMap<>();
         HashMap<String, Long> propertyName = new HashMap<>();
 
@@ -615,7 +659,7 @@ public class StatBot {
                     if (isRealChange) {
                         String ofOldBuildingId = propertykeys[5];
                         if (ofOldBuildingId != null && !ofOldBuildingId.isEmpty()) {
-                            this.changedOldBuildingGmlids.put(ofOldBuildingId, null);
+                            this.changedOldBuildingGmlids.add(ofOldBuildingId);
                         }
                     }
                 }
@@ -646,7 +690,7 @@ public class StatBot {
         LogUtil.logMaps(this.logger, "UPDATE PROPERTY ...", occurrenceMaps, messages, true);
     }
 
-    public void printSummary() {
+    private void printSummary() {
         // retain order of inserted entries
         LinkedHashMap<String, Long> summary = new LinkedHashMap<>();
 
@@ -655,12 +699,10 @@ public class StatBot {
                 this.nrOfBuildingsOld);
         summary.put("NUMBER OF NEW BUILDINGS",
                 this.nrOfBuildingsNew);
-        summary.put("NUMBER OF CHANGED OLD BUILDINGS (incl. being deleted)",
+        summary.put("NUMBER OF CHANGED OLD BUILDINGS",
                 new Long(this.changedOldBuildingGmlids.size()));
-        summary.put("NUMBER OF CHANGED OLD BUILDINGS (but not deleted)",
-                new Long(this.changedOldBuildingGmlids.size() - this.topLevelChanges.map.get(CityGMLClass.BUILDING.toString()).get(Matcher.EditOperators.DELETE_NODE)));
         summary.put("NUMBER OF UNCHANGED OLD BUILDINGS",
-                new Long(this.nrOfBuildingsOld - this.changedOldBuildingGmlids.size()));
+                new Long(this.nrOfBuildingsOld - this.changedOldBuildingGmlids.size() - this.deletedOldBuildingGmlids.size()));
         summary.put("DELETED OLD BUILDINGS",
                 new Long(this.topLevelChanges.map.get(CityGMLClass.BUILDING.toString()).get(Matcher.EditOperators.DELETE_NODE)));
         summary.put("INSERTED NEW BUILDINGS",
@@ -672,28 +714,58 @@ public class StatBot {
         LogUtil.logMap(this.logger, summary, "SUMMARY", false);
     }
 
-    public static void main(String[] args) {
-        StatBot statBot = new StatBot("logs_tiles", "export_tiles");
+    private void exportCsvFiles() {
+        // deleted top-level objects
+        Writer writerDeleted = null;
+        StringBuilder sbDeleted = new StringBuilder();
+        try {
+            File fDeleted = new File(SETTINGS.STATBOT_OUTPUT_CSV_FOLDER + "TopLevel_Deleted.csv");
+            writerDeleted = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fDeleted), "utf-8"));
+            for (String gmlid : this.deletedOldBuildingGmlids) {
+                sbDeleted.append(gmlid + "\n");
+            }
+            writerDeleted.write(sbDeleted.toString());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (writerDeleted != null) {
+                try {
+                    writerDeleted.close();
+                } catch (Exception ex) {
+                    System.out.println(ex);
+                }
+            }
+        }
 
-        // this function must be called first
-        statBot.printLogStats();
-
-        // these must be called before the printOverviewTable() function
-        // edit operators first, the categories will be listed pro edit operator
-        statBot.printDeletePropertyStats();
-        statBot.printDeleteNodeStats();
-        statBot.printInsertNodeStats();
-        statBot.printInsertPropertyStats();
-        statBot.printUpdatePropertyStats();
-
-        // categories first, the edit operators will be listed pro category
-        statBot.printCategorizedChanges();
-
-        // bring both the edit operators and categories together in one table
-        statBot.printOverviewTable();
-
-        // this must be called last
-        statBot.printSummary();
+        // changed top-level objects
+        Writer writerChanged = null;
+        StringBuilder sbChanged = new StringBuilder();
+        try {
+            File fChanged = new File(SETTINGS.STATBOT_OUTPUT_CSV_FOLDER + "TopLevel_Changed.csv");
+            writerChanged = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fChanged), "utf-8"));
+            for (String gmlid : this.changedOldBuildingGmlids) {
+                sbChanged.append(gmlid + "\n");
+            }
+            writerChanged.write(sbChanged.toString());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (writerChanged != null) {
+                try {
+                    writerChanged.close();
+                } catch (Exception ex) {
+                    System.out.println(ex);
+                }
+            }
+        }
     }
 
     public String getLogFolderPath() {
