@@ -22,6 +22,8 @@ OLD_CITY_MODEL_LOCATION=Polygon_Multi_Interior_0.gml
 NEW_CITY_MODEL_LOCATION=Polygon_Multi_Interior_1.gml
 # Location of Neo4j graph database
 DB_LOCATION=neo4jDB/
+# Clean previous database instance
+CLEAN_PREVIOUS_DB=true
 # Location of log files
 LOG_LOCATION=logs/Default.log
 # Location of exported CSV storing edit operations
