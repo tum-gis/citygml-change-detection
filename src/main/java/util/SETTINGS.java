@@ -46,6 +46,8 @@ public class SETTINGS {
     public static final String KEY_THREAD_TIME_OUT = "THREAD_TIME_OUT";
     public static final String KEY_ENABLE_EDITORS = "ENABLE_EDITORS";
     public static final String KEY_EXECUTE_OPTIONAL = "EXECUTE_OPTIONAL";
+    public static final String KEY_STATBOT_OUTPUT_SUMMARY_PATH = "STATBOT_OUTPUT_SUMMARY_PATH";
+    public static final String KEY_STATBOT_OUTPUT_CSV_FOLDER = "STATBOT_OUTPUT_CSV_FOLDER";
 
     public static final String KEY_SETTINGS_LOCATION = "SETTINGS";
     public static final String KEY_VALUE_SEPARATOR = "=";
@@ -238,6 +240,13 @@ public class SETTINGS {
     public static final boolean ENABLE_EDITORS = getValueWithDefault(KEY_ENABLE_EDITORS, false);
 
     public static final boolean EXECUTE_OPTIONAL = getValueWithDefault(KEY_EXECUTE_OPTIONAL, false);
+
+    /*
+     * STATBOT settings
+     */
+    public static final String STATBOT_OUTPUT_SUMMARY_PATH = getValueWithDefault(KEY_STATBOT_OUTPUT_SUMMARY_PATH, "STATBOT");
+
+    public static final String STATBOT_OUTPUT_CSV_FOLDER = getValueWithDefault(KEY_STATBOT_OUTPUT_CSV_FOLDER, "export_STATBOT");
 
     /**
      * Auxiliary function that fetches declared configurations. If they do not exist, use default values instead.

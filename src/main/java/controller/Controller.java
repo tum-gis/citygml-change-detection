@@ -38,6 +38,7 @@ import mapper.EnumClasses.GMLRelTypes;
 import mapper.Mapper;
 import matcher.Matcher;
 import matcher.Matcher.EditOperators;
+import stats.StatBot;
 import util.GraphUtil;
 import util.MapUtil;
 import util.ReadCMDUtil;
@@ -216,6 +217,12 @@ public class Controller {
         sb.append(String.format("%-40s", "\t > Enable Editors:") + SETTINGS.ENABLE_EDITORS + "\n");
 
         sb.append(String.format("%-40s", "\t > Execute optional editors:") + SETTINGS.EXECUTE_OPTIONAL + "\n");
+
+        sb.append("\nSTATBOT SETTINGS\n");
+
+        sb.append(String.format("%-40s", "\t > Output summary:") + SETTINGS.STATBOT_OUTPUT_SUMMARY_PATH + "\n");
+
+        sb.append(String.format("%-40s", "\t > Output summary:") + SETTINGS.STATBOT_OUTPUT_CSV_FOLDER + "\n");
 
         logger.info(sb.toString());
     }
@@ -527,5 +534,9 @@ public class Controller {
 
         // Close Neo4j session
         controller.registerShutdownHook();
+
+        // Statistics
+        StatBot statBot = new StatBot(SETTINGS.LOG_LOCATION, SETTINGS.EXPORT_LOCATION, SETTINGS.CSV_DELIMITER);
+        statBot.printAllStats();
     }
 }
