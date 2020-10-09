@@ -172,7 +172,7 @@ Intel Core i3
 
 ## Windows
 
-1. Import this project into IDE of choice (such as Eclipse, NetBeans, etc. ) using Maven. The required artifacts can be found in [pom.xml](pom.xml). 
+1. Import this project into IDE of choice (such as Eclipse, NetBeans, etc. ) using Gradle. 
 
 2. Once imported, these artifacts/dependencies shall be automatically downloaded to the local system.
 
