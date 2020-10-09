@@ -16,7 +16,7 @@ semantic properties. Since to date, no known algorithm is capable of detecting s
 
 The (ongoing) implementation of this research is stored and maintained in this repository.
 
-<img src="saved_pictures/demo/Broccoli400.png" width="100%">
+<img src="resources/Broccoli400.png" width="100%">
 
 
 # License
