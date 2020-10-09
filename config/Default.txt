@@ -16,8 +16,8 @@ USER_MESSAGE=Run CityGML Change Detection using Default Settings.
 # Relative location (leave empty for current location)
 HOME_LOCATION=
 # Name of old and new CityGML dataset in TEST_DATA_LOCATION
-OLD_CITY_MODEL_LOCATION=input/Soest/2017/Data.gml
-NEW_CITY_MODEL_LOCATION=input/Soest/2019/Data.gml
+OLD_CITY_MODEL_LOCATION=input/Polygon_Multi_Interior_0.gml
+NEW_CITY_MODEL_LOCATION=input/Polygon_Multi_Interior_1.gml
 # Location of Neo4j graph database
 DB_LOCATION=neo4jDB/
 # Clean previous database instance
@@ -82,6 +82,6 @@ EXECUTE_OPTIONAL=false
 #STATBOT SETTINGS#
 ##################
 # Export the statistics summary in a file, if left empty nothing shall be exported
-STATBOT_OUTPUT_SUMMARY_PATH=STATBOT
+STATBOT_OUTPUT_SUMMARY_PATH=output/statbot/Stats.log
 # The folder location to store exported CSV files, must contain "/" or "\" at the end, if left empty nothing shall be exported
 STATBOT_OUTPUT_CSV_FOLDER=output/statbot/
