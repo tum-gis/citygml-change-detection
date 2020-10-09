@@ -8,31 +8,31 @@
 # default values. Do NOT change names of existing variables.
 
 # Test message
-USER_MESSAGE=Default.
+USER_MESSAGE=Run CityGML Change Detection using Default Settings.
 
 ###############################
 #DATABASE AND PROGRAM SETTINGS#
 ###############################
 # Relative location (leave empty for current location)
 HOME_LOCATION=
-# Location of datasets to be matched
-TEST_DATA_LOCATION=test_data/
 # Name of old and new CityGML dataset in TEST_DATA_LOCATION
-OLD_CITY_MODEL_LOCATION=Polygon_Multi_Interior_0.gml
-NEW_CITY_MODEL_LOCATION=Polygon_Multi_Interior_1.gml
+OLD_CITY_MODEL_LOCATION=input/Soest/2017/Data.gml
+NEW_CITY_MODEL_LOCATION=input/Soest/2019/Data.gml
 # Location of Neo4j graph database
 DB_LOCATION=neo4jDB/
 # Clean previous database instance
+# if set to true, remove old DB from disk
+# if set to false, the old DB will not be removed from disk, but its contents shall be archived in DB logs
 CLEAN_PREVIOUS_DB=true
 # Location of log files
-LOG_LOCATION=logs/Default.log
+LOG_LOCATION=output/logs/Run.log
 # Location of exported CSV storing edit operations
-EXPORT_LOCATION=export/
+EXPORT_LOCATION=output/changes/
 CSV_DELIMITER=;
 # URL/Address of WFS server
 WFS_SERVER=http://localhost:8080/citydb-wfs/wfs
 # Location of R-tree signature images
-RTREE_IMAGE_LOCATION=saved_pictures/rtrees/
+RTREE_IMAGE_LOCATION=output/rtrees/
 
 ##################
 #MAPPING SETTINGS#
@@ -84,4 +84,4 @@ EXECUTE_OPTIONAL=false
 # Export the statistics summary in a file, if left empty nothing shall be exported
 STATBOT_OUTPUT_SUMMARY_PATH=STATBOT
 # The folder location to store exported CSV files, must contain "/" or "\" at the end, if left empty nothing shall be exported
-STATBOT_OUTPUT_CSV_FOLDER=export_STATBOT/
+STATBOT_OUTPUT_CSV_FOLDER=output/statbot/

@@ -64,11 +64,9 @@ public class SETTINGS {
      */
     public static final String HOME_LOCATION = getValueWithDefault(KEY_HOME_LOCATION, "");
 
-    public static final String TEST_DATA_LOCATION = HOME_LOCATION + getValueWithDefault(KEY_TEST_DATA_LOCATION, "test_data/");
+    public static final String OLD_CITY_MODEL_LOCATION = HOME_LOCATION + getValueWithDefault(KEY_OLD_CITY_MODEL_LOCATION, "");
 
-    public static final String OLD_CITY_MODEL_LOCATION = TEST_DATA_LOCATION + getValueWithDefault(KEY_OLD_CITY_MODEL_LOCATION, "");
-
-    public static final String NEW_CITY_MODEL_LOCATION = TEST_DATA_LOCATION + getValueWithDefault(KEY_NEW_CITY_MODEL_LOCATION, "");
+    public static final String NEW_CITY_MODEL_LOCATION = HOME_LOCATION + getValueWithDefault(KEY_NEW_CITY_MODEL_LOCATION, "");
 
     public static final String DB_LOCATION = HOME_LOCATION + getValueWithDefault(KEY_DB_LOCATION, "neo4jDB/");
 
@@ -321,5 +319,123 @@ public class SETTINGS {
         }
 
         return MatchingStrategies.valueOf(ARGUMENTS.get(key).toString());
+    }
+
+    public static String readSettings() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("\n-----------------------------------------"
+                + "\nREADING SETTINGS FROM " + SETTINGS.class
+                + "\n-----------------------------------------");
+
+        sb.append("\nMESSAGE OF TESTER\n");
+
+        for (String line : SETTINGS.USER_MESSAGE.split("\n")) {
+            sb.append(String.format("%-100s", "\t > " + line) + "\n");
+        }
+
+        sb.append("\nSYSTEM INFO\n");
+
+        sb.append(String.format("%-40s", "\t > Available processors: ") + Runtime.getRuntime().availableProcessors() + " cores\n");
+
+        sb.append(String.format("%-40s", "\t > Initial heap space size: ") + Math.round(Runtime.getRuntime().freeMemory() / (1024 * 1024 * 1024.) * 10) / 10. + " GB\n");
+
+        // Returns the maximum amount of memory that the Java virtual machine will attempt to use.
+        // If there is no inherent limit then the value Long.MAX_VALUE will be returned.
+        long maxMemory = Runtime.getRuntime().maxMemory();
+        sb.append(String.format("%-40s", "\t > Maximum heap space size: ") + (maxMemory == Long.MAX_VALUE ? "undefined" : Math.round(maxMemory / (1024 * 1024 * 1024.) * 10) / 10. + " GB") + "\n");
+
+        sb.append(String.format("%-40s", "\t > Total memory available to JVM: ") + Math.round(Runtime.getRuntime().totalMemory() / (1024 * 1024 * 1024.) * 10) / 10. + " GB\n");
+
+        sb.append("\nDATABASE AND PROGRAM SETTINGS\n");
+
+        sb.append(String.format("%-40s", "\t > Home location:") + SETTINGS.HOME_LOCATION + "\n");
+
+        sb.append(String.format("%-40s", "\t > Database location:") + SETTINGS.DB_LOCATION + "\n");
+
+        sb.append(String.format("%-40s", "\t > Clean previous database:") + SETTINGS.CLEAN_PREVIOUS_DB + "\n");
+
+        sb.append(String.format("%-40s", "\t > Log location:") + SETTINGS.LOG_LOCATION + "\n");
+
+        sb.append(String.format("%-40s", "\t > Export location:") + SETTINGS.EXPORT_LOCATION + "\n");
+
+        sb.append(String.format("%-40s", "\t > CSV delimiter:") + SETTINGS.CSV_DELIMITER + "\n");
+
+        sb.append(String.format("%-40s", "\t > WFS server:") + SETTINGS.WFS_SERVER + "\n");
+
+        // file names
+        sb.append(String.format("%-40s", "\t > Old city model location:") + SETTINGS.OLD_CITY_MODEL_LOCATION + "\n");
+
+        sb.append(String.format("%-40s", "\t > New city model location:") + SETTINGS.NEW_CITY_MODEL_LOCATION + "\n");
+
+        sb.append(String.format("%-40s", "\t > RTree image location:") + SETTINGS.RTREE_IMAGE_LOCATION + "\n");
+
+        sb.append("\nMAPPER SETTINGS\n");
+
+        sb.append(String.format("%-40s", "\t > Enable multi threading:") + SETTINGS.ENABLE_MULTI_THREADED_MAPPING + "\n");
+
+        sb.append(String.format("%-40s", "\t > Number of producers:") + SETTINGS.NR_OF_PRODUCERS + "\n");
+
+        sb.append(String.format("%-40s", "\t > Consumers per producers:") + SETTINGS.CONSUMERS_PRO_PRODUCER + "\n");
+
+        sb.append(String.format("%-40s", "\t > Enable ID indices:") + SETTINGS.ENABLE_INDICES + "\n");
+
+        sb.append(String.format("%-40s", "\t > Split collection member:") + SETTINGS.SPLIT_PER_COLLECTION_MEMBER + "\n");
+
+        sb.append(String.format("%-40s", "\t > Building batch cap:") + SETTINGS.NR_OF_COMMIT_BUILDINGS + "\n");
+
+        sb.append(String.format("%-40s", "\t > Feature batch cap:") + SETTINGS.NR_OF_COMMIT_FEATURES + "\n");
+
+        sb.append(String.format("%-40s", "\t > Transaction batch cap:") + SETTINGS.NR_OF_COMMMIT_TRANS + "\n");
+
+        sb.append(String.format("%-40s", "\t > Log after nr. of buildings:") + SETTINGS.LOG_EVERY_N_BUILDINGS + "\n");
+
+        sb.append("\nMATCHER SETTINGS\n");
+
+        sb.append(String.format("%-40s", "\t > Match only:") + SETTINGS.MATCH_ONLY + "\n");
+
+        sb.append(String.format("%-40s", "\t > Appearance location:") + SETTINGS.APPEARANCE_LOCATION + "\n");
+
+        sb.append(String.format("%-40s", "\t > Matching strategy:") + SETTINGS.MATCHING_STRATEGY + "\n");
+
+        sb.append(String.format("%-40s", "\t > Enable multi threading:") + SETTINGS.ENABLE_MULTI_THREADED_MATCHING + "\n");
+
+        sb.append(String.format("%-40s", "\t > Max. entries per RTree node:") + SETTINGS.MAX_RTREE_NODE_REFERENCES + "\n");
+
+        sb.append(String.format("%-40s", "\t > Tile unit X:") + SETTINGS.TILE_UNIT_X + "\n");
+
+        sb.append(String.format("%-40s", "\t > Tile unit Y:") + SETTINGS.TILE_UNIT_Y + "\n");
+
+        sb.append(String.format("%-40s", "\t > Tile border size:") + SETTINGS.TILE_BORDER_DISTANCE + "\n");
+
+        sb.append(String.format("%-40s", "\t > Match buildings by shared volume:") + SETTINGS.MATCH_BUILDINGS_BY_SHARED_VOLUME + "\n");
+
+        sb.append(String.format("%-40s", "\t > Shared " + (SETTINGS.MATCH_BUILDINGS_BY_SHARED_VOLUME ? "volume" : "footprint") + " threshold" + ":") + SETTINGS.BUILDING_SHARED_VOL_PERCENTAGE_THRESHOLD * 100 + "%" + "\n");
+
+        sb.append(String.format("%-40s", "\t > Create matched content nodes:") + SETTINGS.CREATE_MATCHED_CONTENT_NODE + "\n");
+
+        sb.append(String.format("%-40s", "\t > Create matched geometry nodes:") + SETTINGS.CREATE_MATCHED_GEOMETRY_NODE + "\n");
+
+        sb.append(String.format("%-40s", "\t > Thread timeout (s):") + SETTINGS.THREAD_TIME_OUT + "\n");
+
+        sb.append(String.format("%-40s", "\t > Rounding tolerance (m):") + SETTINGS.ERR_TOLERANCE + "\n");
+
+        sb.append(String.format("%-40s", "\t > Angle tolerance (rad):") + SETTINGS.ANGLE_TOLERANCE + "\n");
+
+        sb.append(String.format("%-40s", "\t > Distance tolerance (m):") + SETTINGS.DISTANCE_TOLERANCE + "\n");
+
+        sb.append("\nEDITOR SETTINGS\n");
+
+        sb.append(String.format("%-40s", "\t > Enable Editors:") + SETTINGS.ENABLE_EDITORS + "\n");
+
+        sb.append(String.format("%-40s", "\t > Execute optional editors:") + SETTINGS.EXECUTE_OPTIONAL + "\n");
+
+        sb.append("\nSTATBOT SETTINGS\n");
+
+        sb.append(String.format("%-40s", "\t > Output summary:") + SETTINGS.STATBOT_OUTPUT_SUMMARY_PATH + "\n");
+
+        sb.append(String.format("%-40s", "\t > Output summary:") + SETTINGS.STATBOT_OUTPUT_CSV_FOLDER + "\n");
+
+        return sb.toString();
     }
 }

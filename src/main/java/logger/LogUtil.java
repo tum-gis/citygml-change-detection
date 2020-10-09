@@ -2,6 +2,7 @@ package logger;
 
 import matcher.Matcher;
 import stats.Change;
+import util.FileUtil;
 import util.MapUtil;
 
 import java.io.IOException;
@@ -38,6 +39,7 @@ public class LogUtil {
 
         FileHandler fh;
         try {
+            FileUtil.createFile(loggerFile);
             fh = new FileHandler(loggerFile);
             CustomFormatter formatter = new CustomFormatter(df);
             // ConsoleHandler consoleHandler = new ConsoleHandler();

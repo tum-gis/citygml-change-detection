@@ -4,6 +4,7 @@ import logger.LogUtil;
 import mapper.EnumClasses;
 import matcher.Matcher;
 import org.citygml4j.model.citygml.CityGMLClass;
+import util.FileUtil;
 import util.SETTINGS;
 
 import java.io.*;
@@ -719,7 +720,7 @@ public class StatBot {
         Writer writerDeleted = null;
         StringBuilder sbDeleted = new StringBuilder();
         try {
-            File fDeleted = new File(SETTINGS.STATBOT_OUTPUT_CSV_FOLDER + "TopLevel_Deleted.csv");
+            File fDeleted = FileUtil.createFile(SETTINGS.STATBOT_OUTPUT_CSV_FOLDER + "TopLevel_Deleted.csv");
             writerDeleted = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fDeleted), "utf-8"));
             for (String gmlid : this.deletedOldBuildingGmlids) {
                 sbDeleted.append(gmlid + "\n");
@@ -745,7 +746,7 @@ public class StatBot {
         Writer writerChanged = null;
         StringBuilder sbChanged = new StringBuilder();
         try {
-            File fChanged = new File(SETTINGS.STATBOT_OUTPUT_CSV_FOLDER + "TopLevel_Changed.csv");
+            File fChanged = FileUtil.createFile(SETTINGS.STATBOT_OUTPUT_CSV_FOLDER + "TopLevel_Changed.csv");
             writerChanged = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fChanged), "utf-8"));
             for (String gmlid : this.changedOldBuildingGmlids) {
                 sbChanged.append(gmlid + "\n");

@@ -89,7 +89,7 @@ This repository contains the following folders:
 **IMPORTANT:** The configuration file [Default.txt](saved_settings/Default.txt) dictates which folders shall be used for which data. The above-mentioned structure follows therefore only the default configurations.
 
 
-<img src="saved_pictures/rtrees/Berlin_M10.png" width="50%" title="Berlin R-tree M = 10"><img src="saved_pictures/rtrees/Berlin_M100.png" width="50%" title="Berlin R-tree M = 100">
+<img src="resources/Berlin_M10.png" width="50%" title="Berlin R-tree M = 10"><img src="resources/Berlin_M100.png" width="50%" title="Berlin R-tree M = 100">
 
 
 # System Requirements
