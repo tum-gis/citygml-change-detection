@@ -1,0 +1,9 @@
+# Ignore everything in this directory
+*
+
+# Except this file
+!.gitignore
+
+# Except demo files
+!Polygon_Multi_Interior_0.gml
+!Polygon_Multi_Interior_1.gml

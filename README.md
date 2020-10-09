@@ -16,7 +16,7 @@ semantic properties. Since to date, no known algorithm is capable of detecting s
 
 The (ongoing) implementation of this research is stored and maintained in this repository.
 
-<img src="saved_pictures/demo/Broccoli400.png" width="100%">
+<img src="resources/Broccoli400.png" width="100%">
 
 
 # License
@@ -89,7 +89,7 @@ This repository contains the following folders:
 **IMPORTANT:** The configuration file [Default.txt](saved_settings/Default.txt) dictates which folders shall be used for which data. The above-mentioned structure follows therefore only the default configurations.
 
 
-<img src="saved_pictures/rtrees/Berlin_M10.png" width="50%" title="Berlin R-tree M = 10"><img src="saved_pictures/rtrees/Berlin_M100.png" width="50%" title="Berlin R-tree M = 100">
+<img src="resources/Berlin_M10.png" width="50%" title="Berlin R-tree M = 10"><img src="resources/Berlin_M100.png" width="50%" title="Berlin R-tree M = 100">
 
 
 # System Requirements
@@ -172,7 +172,7 @@ Intel Core i3
 
 ## Windows
 
-1. Import this project into IDE of choice (such as Eclipse, NetBeans, etc. ) using Maven. The required artifacts can be found in [pom.xml](pom.xml). 
+1. Import this project into IDE of choice (such as Eclipse, NetBeans, etc. ) using Gradle. 
 
 2. Once imported, these artifacts/dependencies shall be automatically downloaded to the local system.
 
