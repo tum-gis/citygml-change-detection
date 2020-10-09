@@ -50,43 +50,15 @@ This repository is a part of the [TUM-GIS](https://github.com/tum-gis) repositor
 
 This repository contains the following folders:
 
-* [export](export/): If deviations are found between two city models, the corresponding edit operations created on-the-fly shall be documented here in 6 CSV files. Fore more information please refer to the respective [README](export/README.md) there.
+| Directory         | Description                                                                                                                                                                                                                                                                                            |
+|-------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [input](input/)   | Location of input CityGML datasets                                                                                                                                                                                                                                                                     |
+| [output](output/) | Location of output files and directories generated while executing the change detection process, this includes [detected changes in CSV files](output/changes/), [log files](output/logs/), [RTree footprints of imported top-level features](output/rtrees/) and [statistics report](output/statbot/) |
+| [config](config/) | Location of example settings that can be applied for the change detection process, especially the [default settings](config/Default.txt)                                                                                                                                                               |
 
 
-* [logs](logs/): Program and execution logs are stored here for debugging purposes.
-
-
-* [neo4jDB](neo4jDB/): The Neo4j database instance employed during program execution shall be stored here. For querying and visualization purposes, the Neo4j web client can be pointed to this location. Note that the size of this database tends to increase over time as more and more transaction logs are stored. These data can be removed. However, do NOT remove this folder.
-
-
-* [portable](portable/): The **stand-alone version** is included here. For more information, please refer to the respective [README](portable/README.md) there.
-
-
-* [saved_pictures](saved_pictures/): If spatial matching strategy R-tree is enabled, R-tree pictures of input city models shall be created and stored here. These signature pictures visualized R-trees of respective city models by representing each R-tree node as a rectangle, while their colors indicate node levels in the R-tree (see illustrations below).
-
-
-* [saved_settings](saved_settings/): Some useful run configurations can be found here. For more information, please refer to the respective [README](saved_settings/README.md) there.
-
-
-* [src](src/main/java/): Source codes can be found in this location, which consists of the following packages:
-
-    * [controller](src/main/java/controller/): The main method contained in this package controls how the whole program behaves.
-    
-    * [editor](src/main/java/editor/): Implemented for updating the old city model using the created edit opeartions and WFS.
-    
-    * [exporter](src/main/java/exporter/): Employed to export created edit operations to CSV files.
-    
-    * [mapper](src/main/java/mapper/): The mapping process that is capable of mapping CityGML objects to respective (sub) graphs in Neo4j.
-    
-    * [matcher](src/main/java/matcher/): The matching process that is implemented to compare graph representations of city models, detect their deviations and create edit operations accordingly.
-    
-    * [util](src/main/java/util/): Contains auxiliary classes.
-    
-
-* [test_data](test_data/): Input CityGML city models are supposed to be stored here.
-
-
-**IMPORTANT:** The configuration file [Default.txt](saved_settings/Default.txt) dictates which folders shall be used for which data. The above-mentioned structure follows therefore only the default configurations.
+**IMPORTANT:** The change detection process requires a config file. 
+The default configuration file [Default.txt](config/Default.txt) is an example of how to adjust these settings.
 
 
 <img src="resources/Berlin_M10.png" width="50%" title="Berlin R-tree M = 10"><img src="resources/Berlin_M100.png" width="50%" title="Berlin R-tree M = 100">
