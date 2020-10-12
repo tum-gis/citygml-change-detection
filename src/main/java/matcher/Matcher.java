@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 
 import javax.xml.stream.XMLStreamException;
 
+import mapper.EnumClasses;
 import org.citygml4j.model.citygml.CityGMLClass;
 import org.citygml4j.model.common.base.ModelClassEnum;
 import org.citygml4j.model.gml.GMLClass;
@@ -250,17 +251,21 @@ public class Matcher {
 		return false;
 	}
 
-	private String retrieveBuildingId(Node node, String elementNearestId) throws FileNotFoundException, XMLStreamException {
+	private String retrieveBuildingId(Node node) throws FileNotFoundException, XMLStreamException {
+		return retrieveBuildingId(node, Direction.INCOMING);
+	}
+
+	private String retrieveBuildingId(Node node, Direction direction) throws FileNotFoundException, XMLStreamException {
 		if (node.hasLabel(Label.label(CityGMLClass.BUILDING + ""))) {
 			return node.getProperty("id").toString();
 		}
 
-		for (Relationship rel : node.getRelationships(Direction.INCOMING)) {
+		for (Relationship rel : node.getRelationships(direction)) {
 			if (isEditorRelationshipType(rel)) {
 				continue;
 			}
 
-			String tmp = retrieveBuildingId(rel.getOtherNode(node), elementNearestId);
+			String tmp = retrieveBuildingId(rel.getOtherNode(node), direction);
 			
 			return tmp;
 			// OR
@@ -322,7 +327,7 @@ public class Matcher {
 		
 		String oldNearestId = retrieveNearestId(oldNode);
 		result.setProperty(UpdatePropertyNodeProperties.OF_OLD_NEAREST_GMLID.toString(), oldNearestId);
-		result.setProperty(UpdatePropertyNodeProperties.OF_OLD_BUILDING_GMLID.toString(), retrieveBuildingId(oldNode, oldNearestId));
+		result.setProperty(UpdatePropertyNodeProperties.OF_OLD_BUILDING_GMLID.toString(), retrieveBuildingId(oldNode));
 		
 		result.setProperty(UpdatePropertyNodeProperties.PROPERTY_NAME.toString(), propertyName);
 		result.setProperty(UpdatePropertyNodeProperties.OLD_VALUE.toString(), oldValue);
@@ -365,7 +370,7 @@ public class Matcher {
 		
 		String oldNearestId = retrieveNearestId(oldNode);
 		result.setProperty(DeletePropertyNodeProperties.OF_OLD_NEAREST_GMLID.toString(), oldNearestId);
-		result.setProperty(DeletePropertyNodeProperties.OF_OLD_BUILDING_GMLID.toString(), retrieveBuildingId(oldNode, oldNearestId));
+		result.setProperty(DeletePropertyNodeProperties.OF_OLD_BUILDING_GMLID.toString(), retrieveBuildingId(oldNode));
 
 		result.setProperty(DeletePropertyNodeProperties.PROPERTY_NAME.toString(), propertyName);
 		result.setProperty(DeletePropertyNodeProperties.OLD_VALUE.toString(), oldNode.getProperty((String) propertyName).toString());
@@ -405,7 +410,7 @@ public class Matcher {
 		
 		String oldNearestId = retrieveNearestId(oldNode);
 		result.setProperty(InsertPropertyNodeProperties.OF_OLD_NEAREST_GMLID.toString(), oldNearestId);
-		result.setProperty(InsertPropertyNodeProperties.OF_OLD_BUILDING_GMLID.toString(), retrieveBuildingId(oldNode, oldNearestId));
+		result.setProperty(InsertPropertyNodeProperties.OF_OLD_BUILDING_GMLID.toString(), retrieveBuildingId(oldNode));
 
 		result.setProperty(InsertPropertyNodeProperties.PROPERTY_NAME.toString(), propertyName);
 		result.setProperty(InsertPropertyNodeProperties.NEW_VALUE.toString(), newValue);
@@ -471,7 +476,7 @@ public class Matcher {
 		
 		String oldNearestId = retrieveNearestId(oldNode);
 		result.setProperty(DeleteRelationshipNodeProperties.OF_OLD_NEAREST_GMLID.toString(), oldNearestId);
-		result.setProperty(DeleteRelationshipNodeProperties.OF_OLD_BUILDING_GMLID.toString(), retrieveBuildingId(oldNode, oldNearestId));
+		result.setProperty(DeleteRelationshipNodeProperties.OF_OLD_BUILDING_GMLID.toString(), retrieveBuildingId(oldNode));
 
 		result.setProperty(DeleteRelationshipNodeProperties.IS_OPTIONAL.toString(), isOptional);
 		// if (isOptional) {
@@ -546,12 +551,18 @@ public class Matcher {
 		
 		String oldNearestId = retrieveNearestId(oldNode);
 		result.setProperty(InsertRelationshipNodeProperties.OF_OLD_NEAREST_GMLID.toString(), oldNearestId);
-		result.setProperty(InsertRelationshipNodeProperties.OF_OLD_BUILDING_GMLID.toString(), retrieveBuildingId(oldNode, oldNearestId));
+		result.setProperty(InsertRelationshipNodeProperties.OF_OLD_BUILDING_GMLID.toString(), retrieveBuildingId(oldNode));
 		
 		String newNearestId = retrieveNearestId(newNode);
 		result.setProperty(InsertRelationshipNodeProperties.OF_NEW_NEAREST_GMLID.toString(), newNearestId);
-		result.setProperty(InsertRelationshipNodeProperties.OF_NEW_BUILDING_GMLID.toString(), retrieveBuildingId(newNode, newNearestId));
-		
+		// normally we search GMLID of the new building while traversing "up" the graph (using Direction.INCOMING from the current node)
+		// but if the current operation is to insert a building, it should look "down" the graph (using Direction.OUTGOING) to find the GMLID of the building instead
+		if (relType.equals(GMLRelTypes.CITY_OBJECT_MEMBER)) {
+			result.setProperty(InsertRelationshipNodeProperties.OF_NEW_BUILDING_GMLID.toString(), retrieveBuildingId(newNode, Direction.OUTGOING));
+		} else {
+			result.setProperty(InsertRelationshipNodeProperties.OF_NEW_BUILDING_GMLID.toString(), retrieveBuildingId(newNode));
+		}
+
 		result.setProperty(InsertRelationshipNodeProperties.IS_OPTIONAL.toString(), isOptional);
 		// if (isOptional) {
 		// nrOfOptionalTransactions++;

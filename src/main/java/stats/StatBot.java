@@ -23,8 +23,12 @@ public class StatBot {
     private ArrayList<File> csvInsertPropertyFiles;
     private ArrayList<File> csvUpdatePropertyFiles;
 
-    private HashSet<String> changedOldBuildingGmlids;
+    // stores the GMLID of both old and new building, in case the GMLID was changed between the two datasets
+    private HashMap<String, String> changedOldBuildingGmlids;
+    // stores the GMLID of deleted buildings from the old dataset
     private HashSet<String> deletedOldBuildingGmlids;
+    // stores the GMLID of inserted buildings from the new dataset
+    private HashSet<String> insertNewBuildingGmlids;
 
     private Long nrOfBuildingsOld;
     private Long nrOfBuildingsNew;
@@ -48,8 +52,9 @@ public class StatBot {
         this.exportCsvFolderPath = exportCsvFolderPath;
         this.csvDelimiter = csvDelimiter;
         this.getAllCsvFromPath();
-        this.changedOldBuildingGmlids = new HashSet<>();
+        this.changedOldBuildingGmlids = new HashMap<>();
         this.deletedOldBuildingGmlids = new HashSet<>();
+        this.insertNewBuildingGmlids = new HashSet<>();
 
         this.geometricChanges = new GeometricChange();
         this.syntacticChanges = new SyntacticChange();
@@ -377,19 +382,19 @@ public class StatBot {
                 String line = br.readLine();
 
                 while ((line = br.readLine()) != null) {
-                    String[] propertykeys = line.split(this.csvDelimiter);
+                    String[] propertyKeys = line.split(this.csvDelimiter);
 
                     // OLD_PARENT_NODE_TYPE
-                    String oldNodeTypeString = propertykeys[2];
+                    String oldNodeTypeString = propertyKeys[2];
                     Long value = oldParentNodeType.get(oldNodeTypeString);
                     oldParentNodeType.put(oldNodeTypeString, value == null ? 1 : value + 1);
 
                     // PROPERTY_NAME
-                    String propertyNameString = propertykeys[6];
+                    String propertyNameString = propertyKeys[6];
                     value = propertyName.get(propertyNameString);
                     propertyName.put(propertyNameString, value == null ? 1 : value + 1);
 
-                    boolean isOptional = Boolean.parseBoolean(propertykeys[8]);
+                    boolean isOptional = Boolean.parseBoolean(propertyKeys[8]);
                     // check property name first, if it is empty then old node type
                     boolean isRealChange = false;
                     if (!propertyNameString.isEmpty()) {
@@ -398,9 +403,9 @@ public class StatBot {
                         isRealChange = this.isRealChange(oldNodeTypeString, Matcher.EditOperators.DELETE_PROPERTY, isOptional);
                     }
                     if (isRealChange) {
-                        String ofOldBuildingId = propertykeys[5];
+                        String ofOldBuildingId = propertyKeys[5];
                         if (ofOldBuildingId != null && !ofOldBuildingId.isEmpty()) {
-                            this.changedOldBuildingGmlids.add(ofOldBuildingId);
+                            this.changedOldBuildingGmlids.put(ofOldBuildingId, "");
                         }
                     }
                 }
@@ -441,25 +446,25 @@ public class StatBot {
                 String line = br.readLine();
 
                 while ((line = br.readLine()) != null) {
-                    String[] propertykeys = line.split(this.csvDelimiter);
+                    String[] propertyKeys = line.split(this.csvDelimiter);
 
                     // DELETE_NODE_TYPE
-                    String deleteNodeTypeString = propertykeys[2];
+                    String deleteNodeTypeString = propertyKeys[2];
                     Long value = deleteNodeType.get(deleteNodeTypeString);
                     deleteNodeType.put(deleteNodeTypeString, value == null ? 1 : value + 1);
 
                     boolean isRealChange = false;
-                    boolean isOptional = Boolean.parseBoolean(propertykeys[6]);
+                    boolean isOptional = Boolean.parseBoolean(propertyKeys[6]);
                     isRealChange = this.isRealChange(deleteNodeTypeString, Matcher.EditOperators.DELETE_NODE, isOptional);
 
                     if (isRealChange) {
-                        String ofOldBuildingId = propertykeys[5];
+                        String ofOldBuildingId = propertyKeys[5];
                         if (ofOldBuildingId != null && !ofOldBuildingId.isEmpty()) {
                             if (deleteNodeTypeString.equals(CityGMLClass.BUILDING.toString())) {
                                 // this is a deleted Building
                                 this.deletedOldBuildingGmlids.add(ofOldBuildingId);
                             } else {
-                                this.changedOldBuildingGmlids.add(ofOldBuildingId);
+                                this.changedOldBuildingGmlids.put(ofOldBuildingId, "");
                             }
                         }
                     }
@@ -499,25 +504,35 @@ public class StatBot {
                 String line = br.readLine();
 
                 while ((line = br.readLine()) != null) {
-                    String[] propertykeys = line.split(this.csvDelimiter);
+                    String[] propertyKeys = line.split(this.csvDelimiter);
 
                     // INSERT_RELATIONSHIP_TYPE
-                    String relTypeString = propertykeys[2];
+                    String relTypeString = propertyKeys[2];
                     Long value = insertRelationshipType.get(relTypeString);
                     insertRelationshipType.put(relTypeString, value == null ? 1 : value + 1);
 
                     // INSERT_NODE_TYPE
-                    String insertNodeTypeString = propertykeys[3];
+                    String insertNodeTypeString = propertyKeys[3];
                     value = insertNodeType.get(insertNodeTypeString);
                     insertNodeType.put(insertNodeTypeString, value == null ? 1 : value + 1);
 
                     boolean isRealChange = false;
-                    boolean isOptional = Boolean.parseBoolean(propertykeys[9]);
+                    boolean isOptional = Boolean.parseBoolean(propertyKeys[9]);
                     isRealChange = this.isRealChange(relTypeString, Matcher.EditOperators.INSERT_NODE, isOptional);
                     if (isRealChange) {
-                        String ofOldBuildingId = propertykeys[6];
+                        String ofOldBuildingId = propertyKeys[6];
                         if (ofOldBuildingId != null && !ofOldBuildingId.isEmpty()) {
-                            this.changedOldBuildingGmlids.add(ofOldBuildingId);
+                            this.changedOldBuildingGmlids.put(ofOldBuildingId, "");
+                        } else {
+                            String ofNewBuildingId = propertyKeys[8];
+                            if (relTypeString.equals(EnumClasses.GMLRelTypes.CITY_OBJECT_MEMBER.toString())
+                                    && insertNodeTypeString.equals(CityGMLClass.CITY_MODEL.toString())) {
+                                // no GMLID of old building is available,
+                                // insert relationship is CITY_OBJECT_MEMBER,
+                                // and the node that has the new node is CITY_MODEL
+                                // --> this must be a new inserted building
+                                this.insertNewBuildingGmlids.add(ofNewBuildingId);
+                            }
                         }
                     }
                 }
@@ -559,20 +574,20 @@ public class StatBot {
                 String line = br.readLine();
 
                 while ((line = br.readLine()) != null) {
-                    String[] propertykeys = line.split(this.csvDelimiter);
+                    String[] propertyKeys = line.split(this.csvDelimiter);
 
                     // OLD_PARENT_NODE_TYPE
-                    String oldNodeTypeString = propertykeys[2];
+                    String oldNodeTypeString = propertyKeys[2];
                     Long value = oldParentNodeType.get(oldNodeTypeString);
                     oldParentNodeType.put(oldNodeTypeString, value == null ? 1 : value + 1);
 
                     // PROPERTY_NAME
-                    String propertyNameString = propertykeys[6];
+                    String propertyNameString = propertyKeys[6];
                     value = propertyName.get(propertyNameString);
                     propertyName.put(propertyNameString, value == null ? 1 : value + 1);
 
                     boolean isRealChange = false;
-                    boolean isOptional = Boolean.parseBoolean(propertykeys[8]);
+                    boolean isOptional = Boolean.parseBoolean(propertyKeys[8]);
                     // check property name first, if it is empty then old node type
                     if (!propertyNameString.isEmpty()) {
                         isRealChange = this.isRealChange(propertyNameString, Matcher.EditOperators.INSERT_PROPERTY, isOptional);
@@ -580,9 +595,9 @@ public class StatBot {
                         isRealChange = this.isRealChange(oldNodeTypeString, Matcher.EditOperators.INSERT_PROPERTY, isOptional);
                     }
                     if (isRealChange) {
-                        String ofOldBuildingId = propertykeys[5];
+                        String ofOldBuildingId = propertyKeys[5];
                         if (ofOldBuildingId != null && !ofOldBuildingId.isEmpty()) {
-                            this.changedOldBuildingGmlids.add(ofOldBuildingId);
+                            this.changedOldBuildingGmlids.put(ofOldBuildingId, "");
                         }
                     }
                 }
@@ -634,23 +649,23 @@ public class StatBot {
                         }
                         line += newLine;
                     }
-                    String[] propertykeys = line.split(this.csvDelimiter);
-                    if (propertykeys == null || propertykeys.length == 0 || propertykeys.length < 4) {
+                    String[] propertyKeys = line.split(this.csvDelimiter);
+                    if (propertyKeys == null || propertyKeys.length == 0 || propertyKeys.length < 4) {
                         continue;
                     }
 
                     // OLD_PARENT_NODE_TYPE
-                    String oldNodeTypeString = propertykeys[2];
+                    String oldNodeTypeString = propertyKeys[2];
                     Long value = oldParentNodeType.get(oldNodeTypeString);
                     oldParentNodeType.put(oldNodeTypeString, value == null ? 1 : value + 1);
 
                     // PROPERTY_NAME
-                    String propertyNameString = propertykeys[6];
+                    String propertyNameString = propertyKeys[6];
                     value = propertyName.get(propertyNameString);
                     propertyName.put(propertyNameString, value == null ? 1 : value + 1);
 
                     boolean isRealChange = false;
-                    boolean isOptional = Boolean.parseBoolean(propertykeys[9]);
+                    boolean isOptional = Boolean.parseBoolean(propertyKeys[9]);
                     // check property name first, if it is empty then old node type
                     if (!propertyNameString.isEmpty()) {
                         isRealChange = this.isRealChange(propertyNameString, Matcher.EditOperators.UPDATE_PROPERTY, isOptional);
@@ -658,9 +673,20 @@ public class StatBot {
                         isRealChange = this.isRealChange(oldNodeTypeString, Matcher.EditOperators.UPDATE_PROPERTY, isOptional);
                     }
                     if (isRealChange) {
-                        String ofOldBuildingId = propertykeys[5];
+                        String ofOldBuildingId = propertyKeys[5];
                         if (ofOldBuildingId != null && !ofOldBuildingId.isEmpty()) {
-                            this.changedOldBuildingGmlids.add(ofOldBuildingId);
+                            this.changedOldBuildingGmlids.put(ofOldBuildingId, "");
+                        }
+                    } else {
+                        // check if the GMLID has been changed between the two datasets
+                        // this change does not reflect real changes but its changed IDs are needed for updating
+                        if ((oldNodeTypeString.equals(CityGMLClass.BUILDING.toString()))
+                                && (propertyNameString.equals("id"))) {
+                            String oldValue = propertyKeys[7].replaceAll("\"", "");
+                            String newValue = propertyKeys[8].replaceAll("\"", "");
+                            this.changedOldBuildingGmlids.put(oldValue, newValue);
+                        } else {
+
                         }
                     }
                 }
@@ -719,6 +745,7 @@ public class StatBot {
         // deleted top-level objects
         Writer writerDeleted = null;
         StringBuilder sbDeleted = new StringBuilder();
+        sbDeleted.append("GMLID\n");
         try {
             File fDeleted = FileUtil.createFile(SETTINGS.STATBOT_OUTPUT_CSV_FOLDER + "TopLevel_Deleted.csv");
             writerDeleted = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fDeleted), "utf-8"));
@@ -742,14 +769,44 @@ public class StatBot {
             }
         }
 
+        // inserted top-level objects
+        Writer writerInserted = null;
+        StringBuilder sbInserted = new StringBuilder();
+        sbInserted.append("GMLID\n");
+        try {
+            File fInserted = FileUtil.createFile(SETTINGS.STATBOT_OUTPUT_CSV_FOLDER + "TopLevel_Inserted.csv");
+            writerInserted = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fInserted), "utf-8"));
+            for (String gmlid : this.insertNewBuildingGmlids) {
+                sbInserted.append(gmlid + "\n");
+            }
+            writerInserted.write(sbInserted.toString());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (writerInserted != null) {
+                try {
+                    writerInserted.close();
+                } catch (Exception ex) {
+                    System.out.println(ex);
+                }
+            }
+        }
+
         // changed top-level objects
         Writer writerChanged = null;
         StringBuilder sbChanged = new StringBuilder();
+        sbChanged.append("OLD_GMLID" + csvDelimiter + "NEW_GMLID\n");
         try {
             File fChanged = FileUtil.createFile(SETTINGS.STATBOT_OUTPUT_CSV_FOLDER + "TopLevel_Changed.csv");
             writerChanged = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fChanged), "utf-8"));
-            for (String gmlid : this.changedOldBuildingGmlids) {
-                sbChanged.append(gmlid + "\n");
+            Iterator it = this.changedOldBuildingGmlids.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry) it.next();
+                sbChanged.append(pair.getKey() + csvDelimiter + pair.getValue() + "\n");
             }
             writerChanged.write(sbChanged.toString());
         } catch (UnsupportedEncodingException e) {
