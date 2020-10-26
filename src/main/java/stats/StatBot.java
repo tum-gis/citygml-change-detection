@@ -672,21 +672,23 @@ public class StatBot {
                     } else {
                         isRealChange = this.isRealChange(oldNodeTypeString, Matcher.EditOperators.UPDATE_PROPERTY, isOptional);
                     }
+
+                    // check if the GMLID has been changed between the two datasets
+                    // this change does not reflect real changes but its changed IDs are needed for updating
+                    if ((oldNodeTypeString.equals(CityGMLClass.BUILDING.toString()))
+                            && (propertyNameString.equals("id"))) {
+                        String oldValue = propertyKeys[7].replaceAll("\"", "");
+                        String newValue = propertyKeys[8].replaceAll("\"", "");
+                        this.changedOldBuildingGmlids.put(oldValue, newValue);
+                    }
+
                     if (isRealChange) {
                         String ofOldBuildingId = propertyKeys[5];
                         if (ofOldBuildingId != null && !ofOldBuildingId.isEmpty()) {
-                            this.changedOldBuildingGmlids.put(ofOldBuildingId, "");
-                        }
-                    } else {
-                        // check if the GMLID has been changed between the two datasets
-                        // this change does not reflect real changes but its changed IDs are needed for updating
-                        if ((oldNodeTypeString.equals(CityGMLClass.BUILDING.toString()))
-                                && (propertyNameString.equals("id"))) {
-                            String oldValue = propertyKeys[7].replaceAll("\"", "");
-                            String newValue = propertyKeys[8].replaceAll("\"", "");
-                            this.changedOldBuildingGmlids.put(oldValue, newValue);
-                        } else {
-
+                            // check if this GMLID already exists in the list (e.g. when the GMLID has been changed)
+                            if (this.changedOldBuildingGmlids.get(ofOldBuildingId) == null) {
+                                this.changedOldBuildingGmlids.put(ofOldBuildingId, "");
+                            }
                         }
                     }
                 }
@@ -799,7 +801,7 @@ public class StatBot {
         // changed top-level objects
         Writer writerChanged = null;
         StringBuilder sbChanged = new StringBuilder();
-        sbChanged.append("OLD_GMLID" + csvDelimiter + "NEW_GMLID\n");
+        sbChanged.append("OLD_GMLID" + csvDelimiter + "NEW_GMLID (empty means same as old)\n");
         try {
             File fChanged = FileUtil.createFile(SETTINGS.STATBOT_OUTPUT_CSV_FOLDER + "TopLevel_Changed.csv");
             writerChanged = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fChanged), "utf-8"));
