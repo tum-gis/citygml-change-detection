@@ -1,8 +1,13 @@
-# citygml-change-detection
+# *CityGML Change Detection* 
+
+#### A high-performance graph-based tool for automatic change detection in massive CityGML datasets
 
 [ ![Download](https://api.bintray.com/packages/tum-gis/maven/citygml-change-detection/images/download.svg) ](https://bintray.com/tum-gis/maven/citygml-change-detection/_latestVersion)
 
 # Publication:
+
+This project is a part of the on-going PhD research of [Son H. Nguyen](https://www.lrg.tum.de/en/gis/our-team/staff/son-h-nguyen/) at the Chair of Geoinformatics, Department of Aerospace and Geodesy, Technical University of Munich.
+For more information on the research, please refer to the following published studies:
 
 * Son H. Nguyen, Thomas H. Kolbe. ["A MULTI-PERSPECTIVE APPROACH TO INTERPRETING SPATIO-SEMANTIC CHANGES OF LARGE 3D CITY MODELS IN CITYGML USING A GRAPH DATABASE"](https://www.isprs-ann-photogramm-remote-sens-spatial-inf-sci.net/VI-4-W1-2020/143/2020/), ISPRS Ann. Photogramm. Remote Sens. Spatial Inf. Sci., VI-4/W1-2020, 143–150, https://doi.org/10.5194/isprs-annals-VI-4-W1-2020-143-2020, 2020. 
 
@@ -10,6 +15,11 @@
 
 * Son H. Nguyen. ["SPATIO-SEMANTIC COMPARISON OF 3D CITY MODELS IN CITYGML USING A GRAPH DATABASE."](https://mediatum.ub.tum.de/node?id=1374646) Master's Thesis. Department of Informatics, Technical University of Munich (TUM).
 
+We acknowledge the company [CADFEM](https://www.cadfem.net/de/en/), [Virtual City Systems](https://vc.systems/en/) and the 
+[Leonhard Obermeyer Center (LOC)](https://www.loc.tum.de/en/home/) of the 
+[Technical University of Munich (TUM)](https://www.tum.de/en/) for supporting this work. We also would like to thank
+the [Bavarian Agency for Digitisation, High-Speed Internet and Surveying (LDBV)](https://www.ldbv.bayern.de/englisch.html) 
+and the [state government of North Rhine-Westphalia](https://www.land.nrw/en) for providing the input datasets.
 
 # Introduction
 
@@ -24,28 +34,6 @@ The (ongoing) implementation of this research is stored and maintained in this r
 # License
 
 The **citygml-change-detection** repository is licensed under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0). See the [LICENSE](LICENSE) file for more details.
-
-
-# Developers
-
-The **citygml-change-detection** repository is being developed by:
-
-* [Son H. Nguyen](https://www.gis.bgu.tum.de/en/our-team/staff/son-nguyen/) <br>
-Chair of Geoinformatics, Department of Civil, Geo and Environmental Engineering <br>
-Technical University of Munich (TUM).
-
-with the support of:
-
-* [Zhihang Yao](https://www.gis.bgu.tum.de/en/our-team/staff/zhihang-yao/) <br>
-Chair of Geoinformatics, Department of Civil, Geo and Environmental Engineering <br>
-Technical University of Munich (TUM).
-
-* [Univ.-Prof. Dr. rer. nat. Thomas H. Kolbe](https://www.gis.bgu.tum.de/en/our-team/staff/prof-thomas-h-kolbe/) <br>
-Chair of Geoinformatics, Department of Civil, Geo and Environmental Engineering <br>
-Technical University of Munich (TUM).
-
-
-This repository is a part of the [TUM-GIS](https://github.com/tum-gis) repository, the official GitHub page of the Chair of Geoinformatics, Department of Civil, Geo and Environmental Engineering, Technical University of Munich.
 
 
 # Repository Structure
@@ -144,23 +132,51 @@ Intel Core i3
 
 # Installation
 
-## Windows
+### Maven / Gradle / Ivy
 
-1. Import this project into IDE of choice (such as Eclipse, NetBeans, etc. ) using Gradle. 
+The simplest and fastest way to get the program up and running is to import this project from [Bintray JCenter](https://bintray.com/tum-gis/maven/citygml-change-detection).
+Simply add the following lines in the respective option file.
 
-2. Once imported, these artifacts/dependencies shall be automatically downloaded to the local system.
+**NOTE**: Replace ``VERSION`` with the desired release version 
+(see [release list](https://bintray.com/tum-gis/maven/citygml-change-detection)).
 
-3. After the project has been built, navigate to [CityGMLChangeDetection.java](src/main/java/controller/CityGMLChangeDetection.java).
+##### Maven
 
-4. Change the test file names to suit your needs. The test files are located by default in folder [input](input/). The default settings are stored in [Default.txt](config/Default.txt). Log files are written in folder [logs](output/logs/). R-tree signature pictures of tested CityGML documents can be found in folder [rtrees](output/rtrees/).
+```
+<dependency>
+  <groupId>tum-gis</groupId>
+  <artifactId>citygml-change-detection</artifactId>
+  <version>VERSION</version>
+  <type>pom</type>
+</dependency>
+```
 
-Alternatively, the application can be executed in command line (see Linux).
+##### Maven
 
-## Linux
+```
+dependencies {
+    implementation 'tum-gis:citygml-change-detection:VERSION'
+}
+```
 
-For Linux and all other platforms, the folder [portable](portable/) was generated to contain executable Jar file and its dependencies. The Jar file can be executed in command line (see Setup Configurations).
+##### Ivy
 
-# Setup Configurations
+```
+<dependency org='tum-gis' name='citygml-change-detection' rev='VERSION'>
+  <artifact name='citygml-change-detection' ext='pom' ></artifact>
+</dependency>
+```
+
+
+### Gradle
+
+Alternatively, this can be imported using Gradle. 
+Simply clone this project and use common ``gradle`` commands to start the program. 
+Please refer to [Gradle Documentation](https://docs.gradle.org/current/userguide/userguide.html) for more information.
+
+
+
+# Run in Command Line
 
 ## Windows
 

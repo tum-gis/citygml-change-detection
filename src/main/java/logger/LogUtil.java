@@ -39,7 +39,7 @@ public class LogUtil {
 
         FileHandler fh;
         try {
-            FileUtil.createFile(loggerFile);
+            FileUtil.createFileOrDirectory(loggerFile, false);
             fh = new FileHandler(loggerFile);
             CustomFormatter formatter = new CustomFormatter(df);
             // ConsoleHandler consoleHandler = new ConsoleHandler();

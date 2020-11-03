@@ -116,12 +116,12 @@ public class EditOperationExporter {
 
         try {
             // create files
-            File fEditOperations = FileUtil.createFile(filename + ".csv");
-            File fUpdatePropertyOperations = FileUtil.createFile(filename + "_UpdateProperty.csv");
-            File fDeletePropertyOperations = FileUtil.createFile(filename + "_DeleteProperty.csv");
-            File fInsertPropertyOperations = FileUtil.createFile(filename + "_InsertProperty.csv");
-            File fDeleteNodeOperations = FileUtil.createFile(filename + "_DeleteNode.csv");
-            File fInsertNodeOperations = FileUtil.createFile(filename + "_InsertNode.csv");
+            File fEditOperations = FileUtil.createFileOrDirectory(filename + ".csv", false);
+            File fUpdatePropertyOperations = FileUtil.createFileOrDirectory(filename + "_UpdateProperty.csv", false);
+            File fDeletePropertyOperations = FileUtil.createFileOrDirectory(filename + "_DeleteProperty.csv", false);
+            File fInsertPropertyOperations = FileUtil.createFileOrDirectory(filename + "_InsertProperty.csv", false);
+            File fDeleteNodeOperations = FileUtil.createFileOrDirectory(filename + "_DeleteNode.csv", false);
+            File fInsertNodeOperations = FileUtil.createFileOrDirectory(filename + "_InsertNode.csv", false);
 
             writerEditOperations = new BufferedWriter(
                     new OutputStreamWriter(new FileOutputStream(fEditOperations), "utf-8"));

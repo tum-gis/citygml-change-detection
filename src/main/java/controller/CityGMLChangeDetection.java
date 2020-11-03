@@ -39,10 +39,7 @@ import mapper.Mapper;
 import matcher.Matcher;
 import matcher.Matcher.EditOperators;
 import stats.StatBot;
-import util.GraphUtil;
-import util.MapUtil;
-import util.ReadCMDUtil;
-import util.SETTINGS;
+import util.*;
 
 /**
  * Suggestions, bug reports, etc. please contact: son.nguyen@tum.de
@@ -89,6 +86,16 @@ public class CityGMLChangeDetection {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+
+        // Check if given folder paths exist, if not they shall be created
+        String[] checkPaths = {
+                SETTINGS.DB_LOCATION,
+                SETTINGS.EXPORT_LOCATION,
+                SETTINGS.RTREE_IMAGE_LOCATION
+        };
+        for (int i = 0; i < checkPaths.length; i++) {
+            FileUtil.createFileOrDirectory(checkPaths[i], true);
         }
 
         this.init();
@@ -458,7 +465,6 @@ public class CityGMLChangeDetection {
         logger.info(stats.toString());
         logger.info("END OF LOGFILE.");
     }
-
 
     public static void main(String[] args) {
         CityGMLChangeDetection cityGMLChangeDetection = new CityGMLChangeDetection(args);

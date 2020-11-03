@@ -749,7 +749,7 @@ public class StatBot {
         StringBuilder sbDeleted = new StringBuilder();
         sbDeleted.append("GMLID\n");
         try {
-            File fDeleted = FileUtil.createFile(SETTINGS.STATBOT_OUTPUT_CSV_FOLDER + "TopLevel_Deleted.csv");
+            File fDeleted = FileUtil.createFileOrDirectory(SETTINGS.STATBOT_OUTPUT_CSV_FOLDER + "TopLevel_Deleted.csv", false);
             writerDeleted = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fDeleted), "utf-8"));
             for (String gmlid : this.deletedOldBuildingGmlids) {
                 sbDeleted.append(gmlid + "\n");
@@ -776,7 +776,7 @@ public class StatBot {
         StringBuilder sbInserted = new StringBuilder();
         sbInserted.append("GMLID\n");
         try {
-            File fInserted = FileUtil.createFile(SETTINGS.STATBOT_OUTPUT_CSV_FOLDER + "TopLevel_Inserted.csv");
+            File fInserted = FileUtil.createFileOrDirectory(SETTINGS.STATBOT_OUTPUT_CSV_FOLDER + "TopLevel_Inserted.csv", false);
             writerInserted = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fInserted), "utf-8"));
             for (String gmlid : this.insertNewBuildingGmlids) {
                 sbInserted.append(gmlid + "\n");
@@ -803,7 +803,7 @@ public class StatBot {
         StringBuilder sbChanged = new StringBuilder();
         sbChanged.append("OLD_GMLID" + csvDelimiter + "NEW_GMLID (empty means same as old)\n");
         try {
-            File fChanged = FileUtil.createFile(SETTINGS.STATBOT_OUTPUT_CSV_FOLDER + "TopLevel_Changed.csv");
+            File fChanged = FileUtil.createFileOrDirectory(SETTINGS.STATBOT_OUTPUT_CSV_FOLDER + "TopLevel_Changed.csv", false);
             writerChanged = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fChanged), "utf-8"));
             Iterator it = this.changedOldBuildingGmlids.entrySet().iterator();
             while (it.hasNext()) {
