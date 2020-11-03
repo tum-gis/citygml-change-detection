@@ -130,9 +130,9 @@ Intel Core i3
 *Recommended: 200GB SSD via SATA or PCIe*
 
 
-# Installation
+# Installation and Run
 
-### Maven / Gradle / Ivy
+### 1. Installation
 
 The simplest and fastest way to get the program up and running is to import this project from [Bintray JCenter](https://bintray.com/tum-gis/maven/citygml-change-detection).
 Simply add the following lines in the respective option file.
@@ -168,17 +168,25 @@ dependencies {
 ```
 
 
-### Gradle
+### 2. Run
 
-Alternatively, this can be imported using Gradle. 
-Simply clone this project and use common ``gradle`` commands to start the program. 
-Please refer to [Gradle Documentation](https://docs.gradle.org/current/userguide/userguide.html) for more information.
+### Run in IDE
+
+After the configuration file has been modified, rebuild the project to download all the dependencies needed.
+Then start the program using the following code:
+
+```java
+CityGMLChangeDetection program = new CityGMLChangeDetection("config.txt");
+program.execute();
+```
+
+The ``config.txt`` file contains all configuration parameters needed by the software. 
+These parameteres are defined [here](config/Default.txt).
 
 
+### Run in Command Line
 
-# Run in Command Line
-
-## Windows
+##### Windows
 
 The run configurations in selected IDE may contain the following options:
 ```batch
@@ -193,7 +201,7 @@ The application settings are stored by default in [Default.txt](saved_settings/D
 
 Alternatively, the application can be also configured in command line (see Linux).
 	
-## Linux:
+##### Linux:
 
 Navigate to the folder [portable](portable/). Then execute the following command:
 ```shell
