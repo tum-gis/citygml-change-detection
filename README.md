@@ -188,6 +188,8 @@ These parameteres are defined [here](config/Default.txt).
 
 ##### Windows
 
+---------------------
+
 The run configurations in selected IDE may contain the following options:
 ```batch
 -Xms8192m -Xmx8192m -XX:+UseG1GC
@@ -197,11 +199,14 @@ The run configurations in selected IDE may contain the following options:
 
 `-XX:+UseG1GC` means that the concurrent garbage collector `G1GC` is employed. Note that to save memory, the JVM employs the Compressed Ordinary Object Pointer (OOP) feature that compresses object references. This feature is enabled by default in latest versions of JDK. The compressed OOPs is activated in 64-bit JVM if the value of flag `-Xmx` is undefined or smaller than 32 GB. Therefore, a maximum heap space size value of 32 GB and beyond shall deactivate the compressed OOP and thus might cause marginal or negative gains in performance, unless the increase in size is significant (64GB or above) as stated in [Neo4j Operations Manual](https://neo4j.com/docs/operations-manual/current/).
 
-The application settings are stored by default in [Default.txt](saved_settings/Default.txt). Change the values to suit your needs.
+The application settings are stored by default in [Default.txt](config/Default.txt). Change the values to suit your needs.
 
 Alternatively, the application can be also configured in command line (see Linux).
-	
+
+
 ##### Linux:
+
+---------------------
 
 Navigate to the folder [portable](portable/). Then execute the following command:
 ```shell
@@ -217,8 +222,9 @@ The option `PathToSettings.txt` indicates the location of the text file storing 
 
 # Reading and Understanding Results
 
-The application consists of three part: mapping, matching and updating CityGML datasets. Each of these steps can be configured to run in stand-alone mode (see [Controller.java](src/main/java/cityGMLChangeDetection/Controller.java)). 
+The application consists of three part: mapping, matching and updating CityGML datasets. 
+Each of these steps can be configured to run in stand-alone mode (see [CityGMLChangeDetection.java](src/main/java/controller/CityGMLChangeDetection.java)). 
 
-For example, if the matching and updating process are deactivated in [Default.txt](saved_settings/Default.txt), then only the mapping process is executed. On the other hand, for an existing database, the mapping process can be skipped. The same applies for an existing database with edit operations already attached, both the mapping and matching process can be skipped, so that only the updating process is applied.
+For example, if the matching and updating process are deactivated in [Default.txt](config/Default.txt), then only the mapping process is executed. On the other hand, for an existing database, the mapping process can be skipped. The same applies for an existing database with edit operations already attached, both the mapping and matching process can be skipped, so that only the updating process is applied.
 
 At the end of each run session, the application summarizes the statistics of created graph database containing node labels and their frequencies in descending order. A summary of attached edit operations (if available) is also shown together with their contents and locations. In case the updating process is activated, the WFS HTTP POST contents and the corresponding server responses are also displayed.
