@@ -163,7 +163,7 @@ dependencies {
 
 ```
 <dependency org='tum-gis' name='citygml-change-detection' rev='VERSION'>
-  <artifact name='citygml-change-detection' ext='pom' ></artifact>
+  <artifact name='citygml-change-detection' ext='pom'></artifact>
 </dependency>
 ```
 
