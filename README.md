@@ -4,7 +4,7 @@
 
 [ ![Download](https://api.bintray.com/packages/tum-gis/maven/citygml-change-detection/images/download.svg) ](https://bintray.com/tum-gis/maven/citygml-change-detection/_latestVersion)
 
-# Publication:
+# Publication
 
 This project is a part of the on-going PhD research of [Son H. Nguyen](https://www.lrg.tum.de/en/gis/our-team/staff/son-h-nguyen/) at the Chair of Geoinformatics, Department of Aerospace and Geodesy, Technical University of Munich.
 For more information on the research, please refer to the following published studies:
