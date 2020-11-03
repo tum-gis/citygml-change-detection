@@ -1,5 +1,7 @@
 # citygml-change-detection
 
+[ ![Download](https://api.bintray.com/packages/tum-gis/maven/citygml-change-detection/images/download.svg) ](https://bintray.com/tum-gis/maven/citygml-change-detection/_latestVersion)
+
 # Publication:
 
 * Son H. Nguyen, Thomas H. Kolbe. ["A MULTI-PERSPECTIVE APPROACH TO INTERPRETING SPATIO-SEMANTIC CHANGES OF LARGE 3D CITY MODELS IN CITYGML USING A GRAPH DATABASE"](https://www.isprs-ann-photogramm-remote-sens-spatial-inf-sci.net/VI-4-W1-2020/143/2020/), ISPRS Ann. Photogramm. Remote Sens. Spatial Inf. Sci., VI-4/W1-2020, 143–150, https://doi.org/10.5194/isprs-annals-VI-4-W1-2020-143-2020, 2020. 
@@ -148,7 +150,7 @@ Intel Core i3
 
 2. Once imported, these artifacts/dependencies shall be automatically downloaded to the local system.
 
-3. After the project has been built, navigate to [Controller.java](src/main/java/controller/Controller.java).
+3. After the project has been built, navigate to [CityGMLChangeDetection.java](src/main/java/controller/CityGMLChangeDetection.java).
 
 4. Change the test file names to suit your needs. The test files are located by default in folder [input](input/). The default settings are stored in [Default.txt](config/Default.txt). Log files are written in folder [logs](output/logs/). R-tree signature pictures of tested CityGML documents can be found in folder [rtrees](output/rtrees/).
 
@@ -191,7 +193,7 @@ The option `PathToSettings.txt` indicates the location of the text file storing 
 
 # Reading and Understanding Results
 
-The application consists of three part: mapping, matching and updating CityGML datasets. Each of these steps can be configured to run in stand-alone mode (see [Controller.java](src/main/java/controller/Controller.java)). 
+The application consists of three part: mapping, matching and updating CityGML datasets. Each of these steps can be configured to run in stand-alone mode (see [Controller.java](src/main/java/cityGMLChangeDetection/Controller.java)). 
 
 For example, if the matching and updating process are deactivated in [Default.txt](saved_settings/Default.txt), then only the mapping process is executed. On the other hand, for an existing database, the mapping process can be skipped. The same applies for an existing database with edit operations already attached, both the mapping and matching process can be skipped, so that only the updating process is applied.
 

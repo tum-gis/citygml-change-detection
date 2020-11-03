@@ -47,7 +47,7 @@ import util.SETTINGS;
 /**
  * Suggestions, bug reports, etc. please contact: son.nguyen@tum.de
  */
-public class Controller {
+public class CityGMLChangeDetection {
     // Embedded Neo4j Java API
     private GraphDatabaseService graphDb;
     private Node mapperRootNode;
@@ -66,7 +66,37 @@ public class Controller {
     private long mapperRunTime = 0;
     private long matcherRunTime = 0;
 
-    public Controller() {
+    private StatBot statBot;
+
+    public CityGMLChangeDetection(String configFile) {
+        // Read command line arguments if available
+        try {
+            if (configFile == null || !ReadCMDUtil.readCommandLindArguments(configFile)) {
+                ReadCMDUtil.readCommandLindArguments("config/Default.txt");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        this.init();
+    }
+
+    public CityGMLChangeDetection(String[] args) {
+        // Read command line arguments if available
+        try {
+            if (args == null || !ReadCMDUtil.readCommandLindArguments(args)) {
+                ReadCMDUtil.readCommandLindArguments("config/Default.txt");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        this.init();
+    }
+
+    private void init() {
+        this.statBot = new StatBot(SETTINGS.LOG_LOCATION, SETTINGS.EXPORT_LOCATION, SETTINGS.CSV_DELIMITER);
+
         this.oldFilename = SETTINGS.OLD_CITY_MODEL_LOCATION;
         this.newFilename = SETTINGS.NEW_CITY_MODEL_LOCATION;
         this.wfsServerUrl = SETTINGS.WFS_SERVER;
@@ -87,6 +117,45 @@ public class Controller {
         logger.info("\n------------------------------"
                 + "\nINITIALIZING TESTING COMPONENT"
                 + "\n------------------------------");
+    }
+
+    public void execute() {
+        try {
+            // Map CityGML instances into a graph database in Neo4j
+            this.map();
+
+            // Match mapped CityGML instances
+            this.match();
+
+            // Export edit operations to CSV files
+            this.export(SETTINGS.EXPORT_LOCATION, SETTINGS.CSV_DELIMITER);
+
+            // Execute WFS-Transactions
+            this.update();
+
+            // Statistics
+            this.printStats();
+
+            // Close Neo4j session
+            this.registerShutdownHook();
+
+            // Statistics
+            this.statBot.printAllStats();
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        } catch (CityGMLReadException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (UnmarshalException e) {
+            e.printStackTrace();
+        } catch (MissingADESchemaException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XMLStreamException e) {
+            e.printStackTrace();
+        }
     }
 
     // Registers a shutdown hook for the Neo4j instance so that it
@@ -390,34 +459,9 @@ public class Controller {
         logger.info("END OF LOGFILE.");
     }
 
-    public static void main(String[] args) throws JAXBException, CityGMLReadException, InterruptedException, UnmarshalException, MissingADESchemaException, XMLStreamException, ClientProtocolException, IOException {
-        // Read command line arguments if available
-        if (!ReadCMDUtil.readCommandLindArguments(args)) {
-            ReadCMDUtil.readCommandLindArguments("config/Default.txt");
-        }
 
-        Controller controller = new Controller();
-
-        // Map CityGML instances into a graph database in Neo4j
-        controller.map();
-
-        // Match mapped CityGML instances
-        controller.match();
-
-        // Export edit operations to CSV files
-        controller.export(SETTINGS.EXPORT_LOCATION, SETTINGS.CSV_DELIMITER);
-
-        // Execute WFS-Transactions
-        controller.update();
-
-        // Statistics
-        controller.printStats();
-
-        // Close Neo4j session
-        controller.registerShutdownHook();
-
-        // Statistics
-        StatBot statBot = new StatBot(SETTINGS.LOG_LOCATION, SETTINGS.EXPORT_LOCATION, SETTINGS.CSV_DELIMITER);
-        statBot.printAllStats();
+    public static void main(String[] args) {
+        CityGMLChangeDetection cityGMLChangeDetection = new CityGMLChangeDetection(args);
+        cityGMLChangeDetection.execute();
     }
 }
