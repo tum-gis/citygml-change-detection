@@ -88,6 +88,10 @@ public class CityGMLChangeDetection {
             e.printStackTrace();
         }
 
+        this.init();
+    }
+
+    private void init() {
         // Check if given folder paths exist, if not they shall be created
         String[] checkPaths = {
                 SETTINGS.DB_LOCATION,
@@ -98,10 +102,6 @@ public class CityGMLChangeDetection {
             FileUtil.createFileOrDirectory(checkPaths[i], true);
         }
 
-        this.init();
-    }
-
-    private void init() {
         this.statBot = new StatBot(SETTINGS.LOG_LOCATION, SETTINGS.EXPORT_LOCATION, SETTINGS.CSV_DELIMITER);
 
         this.oldFilename = SETTINGS.OLD_CITY_MODEL_LOCATION;
