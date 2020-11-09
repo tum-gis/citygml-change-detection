@@ -181,7 +181,7 @@ program.execute();
 ```
 
 The ``config.txt`` file contains all configuration parameters needed by the software. 
-These parameteres are defined [here](config/Default.txt).
+These parameteres are defined [here](config/).
 
 
 ### Run in Command Line

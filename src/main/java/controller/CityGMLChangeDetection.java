@@ -102,8 +102,6 @@ public class CityGMLChangeDetection {
             FileUtil.createFileOrDirectory(checkPaths[i], true);
         }
 
-        this.statBot = new StatBot(SETTINGS.LOG_LOCATION, SETTINGS.EXPORT_LOCATION, SETTINGS.CSV_DELIMITER);
-
         this.oldFilename = SETTINGS.OLD_CITY_MODEL_LOCATION;
         this.newFilename = SETTINGS.NEW_CITY_MODEL_LOCATION;
         this.wfsServerUrl = SETTINGS.WFS_SERVER;
@@ -145,9 +143,6 @@ public class CityGMLChangeDetection {
 
             // Close Neo4j session
             this.registerShutdownHook();
-
-            // Statistics
-            this.statBot.printAllStats();
         } catch (JAXBException e) {
             e.printStackTrace();
         } catch (CityGMLReadException e) {
@@ -464,6 +459,10 @@ public class CityGMLChangeDetection {
 
         logger.info(stats.toString());
         logger.info("END OF LOGFILE.");
+
+        // Statistics
+        this.statBot = new StatBot(SETTINGS.LOG_LOCATION, SETTINGS.EXPORT_LOCATION, SETTINGS.CSV_DELIMITER);
+        this.statBot.printAllStats();
     }
 
     public static void main(String[] args) {
