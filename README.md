@@ -170,7 +170,7 @@ dependencies {
 
 ### 2. Run
 
-### Run in IDE
+##### Run in IDE
 
 After the configuration file has been modified, rebuild the project to download all the dependencies needed.
 Then start the program using the following code:
@@ -184,7 +184,7 @@ The ``config.txt`` file contains all configuration parameters needed by the soft
 These parameteres are defined [here](config/).
 
 
-### Run in Command Line
+##### Run in Command Line
 
 ##### Windows
 
