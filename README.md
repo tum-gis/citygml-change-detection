@@ -151,7 +151,7 @@ Simply add the following lines in the respective option file.
 </dependency>
 ```
 
-##### Maven
+##### Gradle
 
 ```
 dependencies {
