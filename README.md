@@ -180,7 +180,7 @@ CityGMLChangeDetection program = new CityGMLChangeDetection("config.txt");
 program.execute();
 ```
 
-The ``config.txt`` file contains all configuration parameters needed by the software. 
+The ``config.txt`` file contains all configuration parameters needed to run the program. 
 These parameteres are defined [here](config/).
 
 
