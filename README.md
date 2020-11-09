@@ -2,6 +2,8 @@
 
 #### A high-performance graph-based tool for automatic change detection in massive CityGML datasets
 
+<img src="resources/Cover.png" width="100%" title="CityGML Change Detection">
+
 [ ![Download](https://api.bintray.com/packages/tum-gis/maven/citygml-change-detection/images/download.svg) ](https://bintray.com/tum-gis/maven/citygml-change-detection/_latestVersion)
 
 # Publication
