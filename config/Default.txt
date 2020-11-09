@@ -44,7 +44,7 @@ CSV_DELIMITER=;
 WFS_SERVER=http://localhost:8080/citydb-wfs/wfs
 # The location of R-Tree signature images of mapped city models
 # relative to HOME_LOCATION.
-# Must end with ``/``.
+# Must end with /.
 RTREE_IMAGE_LOCATION=output/rtrees/
 
 ##################
