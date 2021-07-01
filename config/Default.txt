@@ -18,9 +18,9 @@ USER_MESSAGE=Run CityGML Change Detection using Default Settings.
 # Otherwise it must end with /.
 HOME_LOCATION=
 # The location of the older dataset relative to the HOME_LOCATION.
-OLD_CITY_MODEL_LOCATION=Polygon_Multi_Interior_0.gml
+OLD_CITY_MODEL_LOCATION=input/Polygon_Multi_Interior_0.gml
 # The location of the newer dataset relative to the HOME_LOCATION.
-NEW_CITY_MODEL_LOCATION=Polygon_Multi_Interior_1.gml
+NEW_CITY_MODEL_LOCATION=input/Polygon_Multi_Interior_1.gml
 # The location of the graph database Neo4j relative to HOME_LOCATION.
 # Must end with /.
 DB_LOCATION=neo4jDB/
