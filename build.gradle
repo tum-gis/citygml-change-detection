@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'tum-gis'
-version = '0.1.5'
+version = '0.1.6'
 description = 'A change detection tool for CityGML datasets using the graph database Neo4j.'
 
 java {
