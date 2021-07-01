@@ -3,6 +3,7 @@
 ### 1.0.0 - Active
 
 ##### NEW
+* This project is now using Gradle instead of Maven and can be built and published to JFrog Artifactory using the Gradle plugin, see [`c43173b`](https://github.com/tum-gis/citygml-change-detection/commit/c43173b44565ade5930d0016de4ba5ca0ce3c324).  
 * Added categorization of detected changes to facilitate more user-friendly reading/interpretation, see [`6ba3c1e`](https://github.com/tum-gis/citygml-change-detection/commit/6ba3c1eb8cf462064ccdd32a0a784d8f6b1799bf). 
 * Added example scripts for running the program using parallel execution (such as for tiles), see [`cbc57d1`](https://github.com/tum-gis/citygml-change-detection/commit/cbc57d1477b3903a55c3c4fc7682e357868cd567). 
 * Added handling of empty city models while exporting RTree images, see [`5e0494e`](https://github.com/tum-gis/citygml-change-detection/commit/5e0494eb3b33716b22af34376066b0a5c2ae9bec).
