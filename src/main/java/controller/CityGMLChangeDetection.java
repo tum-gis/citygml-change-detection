@@ -467,6 +467,8 @@ public class CityGMLChangeDetection {
 
     public static void main(String[] args) {
         CityGMLChangeDetection cityGMLChangeDetection = new CityGMLChangeDetection(args);
+        // CityGMLChangeDetection cityGMLChangeDetection = new CityGMLChangeDetection("config/Default.txt");
+
         cityGMLChangeDetection.execute();
     }
 }
