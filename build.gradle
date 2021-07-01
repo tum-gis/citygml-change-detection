@@ -1,33 +1,33 @@
-import org.apache.tools.ant.filters.ReplaceTokens
-
 plugins {
     id 'java'
     id 'maven-publish'
-    id 'com.jfrog.bintray' version '1.8.4'
+    id 'com.jfrog.artifactory' version '4.21.0'
 }
 
 group = 'tum-gis'
 version = '0.1.5'
 description = 'A change detection tool for CityGML datasets using the graph database Neo4j.'
 
-sourceCompatibility = '1.8'
-
-ext {
-    date = new Date()
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    //withJavadocJar()
+    withSourcesJar()
 }
 
 repositories {
-    mavenLocal()
     maven {
-        url = uri('https://raw.github.com/neo4j-contrib/m2/master/releases')
+        url "https://repo.maven.apache.org/maven2"
+        artifactUrls "https://repo.osgeo.org/repository/release"
     }
     maven {
-        url = uri('https://raw.github.com/neo4j-contrib/m2/master/snapshots')
+        url "https://raw.github.com/neo4j-contrib/m2/master/releases"
     }
     maven {
-        url = uri('https://repo.maven.apache.org/maven2')
+        url "https://raw.github.com/neo4j-contrib/m2/master/snapshots"
     }
-    jcenter()
+    maven {
+        url "https://repo.osgeo.org/repository/release"
+    }
 }
 
 dependencies {
@@ -37,7 +37,19 @@ dependencies {
     implementation 'org.apache.httpcomponents:httpclient:4.5.2'
     implementation 'com.graphaware.neo4j:tx-executor:3.1.0.44'
     implementation 'org.neo4j:neo4j-spatial:0.24.1-neo4j-3.2.5'
+    implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.0'
+    implementation group: 'com.sun.xml.bind', name: 'jaxb-core', version: '2.3.0'
+    implementation group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '2.3.0'
     testImplementation 'junit:junit:4.12'
+}
+
+// https://github.com/gradle/gradle/issues/15538
+//tasks.withType( JavaCompile ).configureEach {
+//    options.forkOptions.jvmArgs.addAll( ['--add-opens', 'jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED'] )
+//}
+
+javadoc {
+    options.addStringOption('Xdoclint:none', '-quiet')
 }
 
 jar {
@@ -48,38 +60,13 @@ jar {
     }
     into('META-INF') {
         from 'LICENSE'
-        from('resources/doc/README.txt') {
-            filter(ReplaceTokens, tokens: [
-                    version  : project.version,
-                    date     : date.format('yyyy-MM-dd'),
-                    copyright: date.format('yyyy')
-            ])
-        }
     }
-}
-
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
-}
-
-tasks.withType(Javadoc).all { enabled = false }
-
-task sourcesJar(type: Jar, dependsOn: classes) {
-    archiveClassifier = 'sources'
-    from sourceSets.main.allSource
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    archiveClassifier = 'javadoc'
-    from javadoc.destinationDir
 }
 
 publishing {
     publications {
         mavenJava(MavenPublication) {
             from components.java
-            artifact sourcesJar
-            artifact javadocJar
             pom {
                 name = project.name
                 description = project.description
@@ -96,6 +83,7 @@ publishing {
                         id = 'son-hnguyen'
                         name = 'Son H. Nguyen'
                         email = 'son.nguyen@tum.de'
+                        roles = ['developer']
                         timezone = '+1'
                     }
                 }
@@ -104,22 +92,17 @@ publishing {
     }
 }
 
-bintray {
-    user = System.getProperty('bintray.user')
-    key = System.getProperty('bintray.key')
-
-    publications = ['mavenJava']
-    pkg {
-        repo = 'maven'
-        userOrg = 'tum-gis'
-        name = project.name
-        desc = project.description
-        websiteUrl = 'https://github.com/tum-gis'
-        vcsUrl = 'https://github.com/tum-gis/citygml-change-detection.git'
-        issueTrackerUrl = 'https://github.com/tum-gis/citygml-change-detection/issues'
-        licenses = ['Apache-2.0']
-        version {
-            name = project.version
+artifactory {
+    contextUrl = project.hasProperty('artifactory_contextUrl') ? project.property('artifactory_contextUrl') : System.getenv('artifactory_contextUrl')
+    publish {
+        repository {
+            repoKey = 'maven'
+            username = project.hasProperty('artifactory_user') ? project.property('artifactory_user') : System.getenv('artifactory_user')
+            password = project.hasProperty('artifactory_password') ? project.property('artifactory_password') : System.getenv('artifactory_password')
+            maven = true
+        }
+        defaults {
+            publications('mavenJava')
         }
     }
 }
