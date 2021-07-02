@@ -4,14 +4,14 @@
 
 <img src="resources/Cover.jpg" width="100%" title="CityGML Change Detection">
 
-### :gift: Introduction
+### :gift: INTRODUCTION
 
 ``citygml-change-detection`` is a **high-performance graph-based** tool developed for automatic **change detection** 
 in arbitrarily large CityGML datasets. 
 The tool is implemented in Java and employs the graph database Neo4j 
 as a central storage for the graph representations of CityGML datasets.
 
-### System Requirements
+### :computer: SYSTEM REQUIREMENTS
 
 The application employs the graph database **Neo4j** as a means
 to store and process CityGML datasets.
@@ -20,7 +20,7 @@ The system must thus meet the **_minimum_** requirements listed in
 
 **IMPORTANT**: **Java 8 is required**!.
 
-### :zap: How to run
+### :zap: HOW TO RUN
 
 1.  Download the JAR file and its dependencies 
     in the [release section](https://github.com/tum-gis/citygml-change-detection/releases).
@@ -32,7 +32,7 @@ The system must thus meet the **_minimum_** requirements listed in
     java -jar citygml-change-detection.jar -SETTINGS="path/to/config.txt"
     ```
     
-### :hammer: Configure Java VM configurations
+### :hammer: CONFIGURE JAVA VM
 
 Some configurations for the local Java VM can also be applied while running the JAR file:
 
@@ -53,7 +53,7 @@ An example of such parameters:
 java -Xms2048m -Xmx8G -XX:+UseG1GC -jar citygml-change-detection.jar -SETTINGS="path/to/config.txt"
 ```
 
-### :rocket: How to build
+### :rocket: HOW TO BUILD
 
 1.  Clone the project:
     ```bash
@@ -95,12 +95,12 @@ java -Xms2048m -Xmx8G -XX:+UseG1GC -jar citygml-change-detection.jar -SETTINGS="
         gradle artifactoryPublish
         ```
 
-### :bulb: How to read results
+### :bulb: HOW TO READ RESULTS
 
 The tool stores the change detection results by default in the directory [output](output). 
 Please refer to the descriptions inside the directory and each of its sub-directories for more details.
 
-### :mag_right: Repository Structure
+### :mag_right: REPOSITORY STRUCTURE
 
 This repository contains the following directories:
 
@@ -116,7 +116,7 @@ This repository contains the following directories:
 
 -----------------------
 
-### :books: Publications
+### :books: PUBLICATIONS
 
 This project is a part of the on-going PhD research of [Son H. Nguyen](https://www.lrg.tum.de/en/gis/our-team/staff/son-h-nguyen/) at the Chair of Geoinformatics, Department of Aerospace and Geodesy, Technical University of Munich.
 For more information on the research, please refer to the following published studies:
@@ -133,14 +133,35 @@ We acknowledge the company [CADFEM](https://www.cadfem.net/de/en/), [Virtual Cit
 the [Bavarian Agency for Digitisation, High-Speed Internet and Surveying (LDBV)](https://www.ldbv.bayern.de/englisch.html) 
 and the [state government of North Rhine-Westphalia](https://www.land.nrw/en) for providing the input datasets.
 
-### :cookie: Background
+### :cookie: BACKGROUND
 
-A city may have multiple CityGML documents recorded at different times or surveyed by different users. To analyse the city’s evolution over a given period of time, as well as to update or edit the city model without negating modifications made by other users, it is of utmost importance to first compare, detect and locate spatio-semantic changes between CityGML datasets. This is however difficult due to the fact that CityGML elements belong to a complex hierarchical structure containing multi-level deep associations, which can basically be considered as a graph. Moreover, CityGML allows multiple syntactic ways to define an object leading to syntactic ambiguities in the exchange format. Furthermore, CityGML is capable of including not only 3D urban objects’ graphical appearances but also their
-semantic properties. Since to date, no known algorithm is capable of detecting spatio-semantic changes in CityGML documents, a frequent approach is to replace the older models completely with the newer ones, which not only costs computational resources, but also loses track of collaborative and chronological changes. Thus, this research proposes an approach capable of comparing two arbitrarily large-sized CityGML documents on both semantic and geometric level. Detected deviations are then attached to their respective sources and can easily be retrieved on demand. As a result, updating a 3D city model using this approach is much more efficient as only real changes are committed. To achieve this, the research employs a graph database as the main data structure for storing and processing CityGML datasets in three major steps: mapping, matching and updating. The mapping process transforms input CityGML documents into respective graph representations. The matching process compares these graphs and attaches edit operations on the fly. Found changes can then be executed using the Web Feature Service (WFS), the standard interface for updating geographical features across the web.
+A city may have multiple CityGML documents recorded at different times or surveyed by different users. 
+To analyse the city’s evolution over a given period of time, as well as to update 
+or edit the city model without negating modifications made by other users, 
+it is of utmost importance to first compare, detect and locate spatio-semantic changes 
+between CityGML datasets. This is however difficult due to the fact that CityGML elements 
+belong to a complex hierarchical structure containing multi-level deep associations, 
+which can basically be considered as a graph. Moreover, CityGML allows multiple syntactic ways 
+to define an object leading to syntactic ambiguities in the exchange format. 
+Furthermore, CityGML is capable of including not only 3D urban objects’ graphical appearances 
+but also their semantic properties. Since to date, no known algorithm is capable of 
+detecting spatio-semantic changes in CityGML documents, a frequent approach is to replace 
+the older models completely with the newer ones, which not only costs computational resources, 
+but also loses track of collaborative and chronological changes. 
+Thus, this research proposes an approach capable of comparing two arbitrarily large-sized CityGML 
+documents on both semantic and geometric level. Detected deviations are then attached 
+to their respective sources and can easily be retrieved on demand. 
+As a result, updating a 3D city model using this approach is much more efficient as 
+only real changes are committed. To achieve this, the research employs a graph database 
+as the main data structure for storing and processing CityGML datasets in three major steps: 
+mapping, matching and updating. The mapping process transforms input CityGML documents 
+into respective graph representations. The matching process compares these graphs and attaches 
+edit operations on the fly. Found changes can then be executed using the Web Feature Service (WFS), 
+the standard interface for updating geographical features across the web.
 
 The (ongoing) implementation of this research is stored and maintained in this repository.
 
-<img src="resources/Broccoli400.png" width="100%">
+<img src="resources/Broccoli400.svg" width="100%">
 
 ### :open_file_folder: License
 
