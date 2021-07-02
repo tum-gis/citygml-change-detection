@@ -2,7 +2,7 @@
 
 ### :mega: Version [0.1.6](https://github.com/tum-gis/citygml-change-detection/releases/tag/v0.1.6) released!
 
-<img src="resources/Cover.png" width="100%" title="CityGML Change Detection">
+<img src="resources/Cover.jpg" width="100%" title="CityGML Change Detection">
 
 ### :gift: Introduction
 
@@ -111,7 +111,8 @@ This repository contains the following directories:
 | [config](config/) | Location of example settings that can be applied for the change detection process, especially the [default settings](config/Default.txt).                                                                                                                                                               |
 | [src](src/)       | Location of the source codes.                                                                                                                                                                                                                                                                           |
 
-<img src="resources/Berlin_M10.png" width="50%" title="Berlin R-tree M = 10"><img src="resources/Berlin_M100.png" width="50%" title="Berlin R-tree M = 100">
+<img src="resources/Berlin_M10.jpg" width="50%" title="Berlin R-tree M = 10">
+<img src="resources/Berlin_M100.jpg" width="50%" title="Berlin R-tree M = 100">
 
 -----------------------
 
