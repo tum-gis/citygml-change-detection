@@ -18,7 +18,7 @@ to store and process CityGML datasets.
 The system must thus meet the **_minimum_** requirements listed in
 [Neo4j Operations Manual](https://neo4j.com/docs/operations-manual/current/installation/requirements/).
 
-**IMPORTANT**: **Java 8 is required**!.
+**IMPORTANT**: **Java 8 is required**!
 
 ### :zap: HOW TO RUN
 
