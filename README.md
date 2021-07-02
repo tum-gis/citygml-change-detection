@@ -111,8 +111,7 @@ This repository contains the following directories:
 | [config](config/) | Location of example settings that can be applied for the change detection process, especially the [default settings](config/Default.txt).                                                                                                                                                               |
 | [src](src/)       | Location of the source codes.                                                                                                                                                                                                                                                                           |
 
-<img src="resources/Berlin_M10.jpg" width="50%" title="Berlin R-tree M = 10">
-<img src="resources/Berlin_M100.jpg" width="50%" title="Berlin R-tree M = 100">
+<img src="resources/Berlin_M10.jpg" width="50%" title="Berlin R-tree M = 10"><img src="resources/Berlin_M100.jpg" width="50%" title="Berlin R-tree M = 100">
 
 -----------------------
 
