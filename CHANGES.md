@@ -1,6 +1,6 @@
 # Change Log
 
-### 1.0.0 - Active
+### 0.1.6
 
 ##### NEW
 * This project is now using Gradle instead of Maven and can be built and published to JFrog Artifactory using the Gradle plugin, see [`c43173b`](https://github.com/tum-gis/citygml-change-detection/commit/c43173b44565ade5930d0016de4ba5ca0ce3c324).  
