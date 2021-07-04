@@ -43,10 +43,12 @@ The following example shows how this can be applied in most simple use cases:
       -v <WORKING_DIR>/config:/citygml-change-detection/config \
       -v <WORKING_DIR>/input:/citygml-change-detection/input \
       -v <WORKING_DIR>/output:/citygml-change-detection/output \
-      citygml-change-detection \
+      sonnguyentum/citygml-change-detection[:Tag] \
       "-SETTINGS=<WORKING_DIR>/config/config.txt"
     ```
     The argument ``--rm`` means that the Docker container is temporary and shall be automatically removed afterwards.
+    The ``[:Tag]`` refers to the [release versions](https://hub.docker.com/repository/docker/sonnguyentum/citygml-change-detection).
+    If ``latest`` was pulled  in the previous step, this can be omitted.
 
 1.  The change detection results are now stored in the directories ``<WORKING_DIR>/output``.
 
