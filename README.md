@@ -20,7 +20,59 @@ The system must thus meet the **_minimum_** requirements listed in
 
 **IMPORTANT**: **Java 8 is required**!
 
-### :zap: HOW TO RUN
+### :whale2: HOW TO RUN USING DOCKER
+
+This tool is available as a [Docker Image](https://hub.docker.com/repository/docker/sonnguyentum/citygml-change-detection).
+The following example shows how this can be applied in most simple use cases:
+
+1.  Create a working directory, such as `<WORKING_DIR>`.
+    This shall be the default project directory in the following steps. 
+
+1.  Create a configuration file:
+    ```bash
+    mkdir <WORKING_DIR>/config
+    touch <WORKING_DIR>/config/config.txt
+    ```
+    The instructions and examples of such configuration files are given [here](config).
+
+1.  Create a directory to store input CityGML datasets:
+    ```bash
+    mkdir <WORKING_DIR>/input
+    ```
+    Then copy the files that need to be matched inside this directory.
+    
+1.  Pull the latest docker image:
+    ```bash
+    docker pull sonnguyentum/citygml-change-detection
+    ```
+    
+1.  Run the Docker container based on the pulled image:
+    ```bash
+    docker run --rm --name citygml-change-detection -it \
+      -v <WORKING_DIR>/config:/citygml-change-detection/config \
+      -v <WORKING_DIR>/input:/citygml-change-detection/input \
+      -v <WORKING_DIR>/output:/citygml-change-detection/output \
+      citygml-change-detection \
+      "-SETTINGS=config/config.txt"
+    ```
+    The argument ``--rm`` means that the Docker container is temporary and shall be automatically removed afterwards.
+
+1.  The change detection results are now stored in the directories ``<WORKING_DIR>/output``.
+
+### :ocean: HOW TO BUILD AND PUBLISH IN DOCKER
+
+The Docker image mentioned above was built using this [Dockerfile](Dockerfile).
+To build the image, change to the project directory and execute the following command:
+```bash
+docker build -t citygml-change-detection .
+```
+OR include a tag to publish in DockerHub:
+```bash
+docker build -t <username>/<repository>[:Tag] .
+docker push <username>/<repository>[:Tag]
+```
+
+### :zap: HOW TO RUN IN JAVA
 
 1.  Download the JAR file and its dependencies 
     in the [release section](https://github.com/tum-gis/citygml-change-detection/releases).
