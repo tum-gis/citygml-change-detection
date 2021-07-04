@@ -52,7 +52,7 @@ The following example shows how this can be applied in most simple use cases:
 
 ### :ocean: HOW TO BUILD AND PUBLISH IN DOCKER
 
-The Docker image mentioned above was built using this [Dockerfile](Dockerfile).
+The [Dockerfile](Dockerfile) used to build the Docker image mentioned above is also included.
 To build the image, change to the project directory and execute the following command:
 ```bash
 docker build -t citygml-change-detection .
