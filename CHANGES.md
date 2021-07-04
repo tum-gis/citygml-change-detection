@@ -1,5 +1,11 @@
 # Change Log
 
+### 0.2.0
+
+##### NEW
+* The tool is now also available as a [Docker Image](https://hub.docker.com/repository/docker/sonnguyentum/citygml-change-detection), 
+  see [`a3a8f9f`](https://github.com/tum-gis/citygml-change-detection/commit/a3a8f9faa08e33efe8ab8e891648cd1ca108fb67).
+
 ### 0.1.6
 
 ##### NEW
