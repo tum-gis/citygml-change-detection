@@ -63,6 +63,8 @@ docker build -t <username>/<repository>[:Tag] .
 docker push <username>/<repository>[:Tag]
 ```
 
+-----------------------
+
 ### :computer: SYSTEM REQUIREMENTS
 
 The application employs the graph database **Neo4j** as a means
@@ -147,6 +149,8 @@ java -Xms2048m -Xmx8G -XX:+UseG1GC -jar citygml-change-detection.jar -SETTINGS="
         ```bash
         gradle artifactoryPublish
         ```
+
+-----------------------
 
 ### :bulb: HOW TO READ RESULTS
 
