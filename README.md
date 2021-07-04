@@ -1,6 +1,6 @@
 # *citygml-change-detection* 
 
-### :mega: Version [0.1.6](https://github.com/tum-gis/citygml-change-detection/releases/tag/v0.1.6) released!
+### :mega: Version [0.2.0](https://github.com/tum-gis/citygml-change-detection/releases/tag/v0.2.0) with support for Docker released!
 
 <img src="resources/Cover.jpg" width="100%" title="CityGML Change Detection">
 
