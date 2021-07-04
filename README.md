@@ -34,9 +34,11 @@ The following example shows how this can be applied in most simple use cases:
     
 1.  Pull the latest docker image:
     ```bash
-    docker pull sonnguyentum/citygml-change-detection
+    docker pull sonnguyentum/citygml-change-detection[:Tag]
     ```
-    
+    where ``[:Tag]`` is the version of the Docker image. 
+    The list of all tags is available 
+    [here](https://hub.docker.com/repository/docker/sonnguyentum/citygml-change-detection/tags?page=1&ordering=last_updated). 
 1.  Run the Docker container based on the pulled image:
     ```bash
     docker run --rm --name citygml-change-detection -it \
@@ -47,8 +49,6 @@ The following example shows how this can be applied in most simple use cases:
       "-SETTINGS=<WORKING_DIR>/config/config.txt"
     ```
     The argument ``--rm`` means that the Docker container is temporary and shall be automatically removed afterwards.
-    The ``[:Tag]`` refers to the [release versions](https://hub.docker.com/repository/docker/sonnguyentum/citygml-change-detection).
-    If ``latest`` was pulled  in the previous step, this can be omitted.
 
 1.  The change detection results are now stored in the directories ``<WORKING_DIR>/output``.
 
