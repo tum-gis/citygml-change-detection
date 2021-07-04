@@ -11,15 +11,6 @@ in arbitrarily large CityGML datasets.
 The tool is implemented in Java and employs the graph database Neo4j 
 as a central storage for the graph representations of CityGML datasets.
 
-### :computer: SYSTEM REQUIREMENTS
-
-The application employs the graph database **Neo4j** as a means
-to store and process CityGML datasets.
-The system must thus meet the **_minimum_** requirements listed in
-[Neo4j Operations Manual](https://neo4j.com/docs/operations-manual/current/installation/requirements/).
-
-**IMPORTANT**: **Java 8 is required**!
-
 ### :whale2: HOW TO RUN USING DOCKER
 
 This tool is available as a [Docker Image](https://hub.docker.com/repository/docker/sonnguyentum/citygml-change-detection).
@@ -71,6 +62,16 @@ OR include a tag to publish in DockerHub:
 docker build -t <username>/<repository>[:Tag] .
 docker push <username>/<repository>[:Tag]
 ```
+
+### :computer: SYSTEM REQUIREMENTS
+
+The application employs the graph database **Neo4j** as a means
+to store and process CityGML datasets.
+To be able to run the program in Java in the following sections, 
+the system must thus meet the **_minimum_** requirements listed in
+[Neo4j Operations Manual](https://neo4j.com/docs/operations-manual/current/installation/requirements/).
+
+**IMPORTANT**: **Java 8 is required**!
 
 ### :zap: HOW TO RUN IN JAVA
 
