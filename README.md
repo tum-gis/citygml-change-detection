@@ -44,7 +44,7 @@ The following example shows how this can be applied in most simple use cases:
       -v <WORKING_DIR>/input:/citygml-change-detection/input \
       -v <WORKING_DIR>/output:/citygml-change-detection/output \
       citygml-change-detection \
-      "-SETTINGS=config/config.txt"
+      "-SETTINGS=<WORKING_DIR>/config/config.txt"
     ```
     The argument ``--rm`` means that the Docker container is temporary and shall be automatically removed afterwards.
 
