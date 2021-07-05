@@ -20,7 +20,10 @@ This tool is available as a [Docker Image](https://hub.docker.com/repository/doc
 The following example shows how this can be applied in most simple use cases:
 
 1.  Create a working directory, such as `<WORKING_DIR>`.
-    This shall be the default project directory in the following steps. 
+    This shall be the default project directory in the following steps.
+    ```bash
+    mkdir <WORKING_DIR>
+    ```
 
 1.  Create a configuration file:
     ```bash
