@@ -1,7 +1,7 @@
 # *citygml-change-detection* 
 
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/tum-gis/citygml-change-detection?style=for-the-badge)
-![Docker Image Version (latest by date)](https://img.shields.io/docker/v/sonnguyentum/citygml-change-detection?style=for-the-badge)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/tum-gis/citygml-change-detection?style=for-the-badge)](https://github.com/tum-gis/citygml-change-detection/releases)
+[![Docker Image Version (latest by date)](https://img.shields.io/docker/v/sonnguyentum/citygml-change-detection?style=for-the-badge)](https://hub.docker.com/repository/docker/sonnguyentum/citygml-change-detection/tags?page=1&ordering=last_updated)
 
 ### :mega: Version [0.2.0](https://github.com/tum-gis/citygml-change-detection/releases/tag/v0.2.0) with support for Docker released!
 
