@@ -19,44 +19,57 @@ as a central storage for the graph representations of CityGML datasets.
 This tool is available as a [Docker Image](https://hub.docker.com/repository/docker/sonnguyentum/citygml-change-detection).
 The following example shows how this can be applied in most simple use cases:
 
-1.  Create a working directory, such as `<WORKING_DIR>`.
+1. Create a working directory, such as `<WORKING_DIR>`.
     This shall be the default project directory in the following steps.
     ```bash
     mkdir <WORKING_DIR>
     ```
 
-1.  Create a configuration file:
+2. Create a configuration file:
     ```bash
     mkdir <WORKING_DIR>/config
     touch <WORKING_DIR>/config/config.txt
     ```
     The instructions and examples of such configuration files are given [here](config).
 
-1.  Create a directory to store input CityGML datasets:
+3. Create a directory to store input CityGML datasets:
     ```bash
     mkdir <WORKING_DIR>/input
     ```
     Then copy the files that need to be matched inside this directory.
     
-1.  Pull the latest docker image:
+4. Pull the latest docker image:
     ```bash
     docker pull sonnguyentum/citygml-change-detection[:Tag]
     ```
     where ``[:Tag]`` is the version of the Docker image. 
     The list of all tags is available 
     [here](https://hub.docker.com/repository/docker/sonnguyentum/citygml-change-detection/tags?page=1&ordering=last_updated). 
-1.  Run the Docker container based on the pulled image:
+5. Run the Docker container based on the pulled image:
     ```bash
     docker run --rm --name citygml-change-detection -it \
-      -v <WORKING_DIR>/config:/citygml-change-detection/config \
-      -v <WORKING_DIR>/input:/citygml-change-detection/input \
-      -v <WORKING_DIR>/output:/citygml-change-detection/output \
+      -v <WORKING_DIR_ABS_PATH>/config:/citygml-change-detection/config \
+      -v <WORKING_DIR_ABS_PATH>/input:/citygml-change-detection/input \
+      -v <WORKING_DIR_ABS_PATH>/output:/citygml-change-detection/output \
       sonnguyentum/citygml-change-detection[:Tag] \
       "-SETTINGS=<WORKING_DIR>/config/config.txt"
     ```
     The argument ``--rm`` means that the Docker container is temporary and shall be automatically removed afterwards.
 
-1.  The change detection results are now stored in the directories ``<WORKING_DIR>/output``.
+    Note: ``<WORKDING_DIR>`` should be an absolute path to the working directory so that it can be recognized by Docker.
+
+    Note: If the neo4j DB instance should also be saved, add the following parameter to the command above:
+    ```bash
+    # Create a directory for the DB
+    mkdir <WORKING_DIR>/neo4jDB
+   
+    # Run Docker container 
+    ...
+    -v <WORKING_DIR_ABS_PATH>/neo4jDB:/citygml-change-detection/neo4jDB \
+    ...
+    ```
+
+8. The change detection results are now stored in the directories ``<WORKING_DIR>/output``.
 
 ### :ocean: HOW TO BUILD AND PUBLISH IN DOCKER
 
