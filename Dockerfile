@@ -8,7 +8,7 @@ RUN apk update && \
     apk upgrade && \
     apk add --no-cache wget tar
 
-# Change to workind directory
+# Change to working directory
 WORKDIR /citygml-change-detection
 
 # Preparations
