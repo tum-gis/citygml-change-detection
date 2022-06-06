@@ -15,7 +15,8 @@ import javax.xml.stream.XMLStreamException;
 import logger.LogUtil;
 import org.apache.http.client.ClientProtocolException;
 import org.citygml4j.CityGMLContext;
-import org.citygml4j.builder.CityGMLBuilder;
+import org.citygml4j.builder.jaxb.CityGMLBuilder;
+import org.citygml4j.builder.jaxb.CityGMLBuilderException;
 import org.citygml4j.model.citygml.CityGMLClass;
 import org.citygml4j.model.citygml.building.AbstractOpening;
 import org.citygml4j.model.citygml.core.Address;
@@ -25,13 +26,9 @@ import org.citygml4j.xml.io.reader.CityGMLReader;
 import org.citygml4j.xml.io.reader.FeatureReadMode;
 import org.citygml4j.xml.io.reader.MissingADESchemaException;
 import org.citygml4j.xml.io.reader.UnmarshalException;
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.Label;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.RelationshipType;
-import org.neo4j.graphdb.Transaction;
-import org.neo4j.graphdb.factory.GraphDatabaseFactory;
-
+import org.neo4j.dbms.api.DatabaseManagementService;
+import org.neo4j.dbms.api.DatabaseManagementServiceBuilder;
+import org.neo4j.graphdb.*;
 import editor.Editor;
 import exporter.EditOperationExporter;
 import mapper.EnumClasses.GMLRelTypes;
@@ -46,6 +43,7 @@ import util.*;
  */
 public class CityGMLChangeDetection {
     // Embedded Neo4j Java API
+    private DatabaseManagementService managementService;
     private GraphDatabaseService graphDb;
     private Node mapperRootNode;
     private Node matcherRootNode;
@@ -114,12 +112,14 @@ public class CityGMLChangeDetection {
         }
 
         // Initialize a new Neo4j graph database
-        graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(new File(SETTINGS.DB_LOCATION));
+        this.managementService = new DatabaseManagementServiceBuilder(new File(SETTINGS.DB_LOCATION))
+                .loadPropertiesFromFile(SETTINGS.NEO4JDB_CONF_LOCATION).build();
+        this.graphDb = this.managementService.database(SETTINGS.DB_NAME);
 
         // Initalize a logger
         this.logger = LogUtil.getLoggerWithSimpleDateFormat(this.getClass().toString(), SETTINGS.LOG_LOCATION);
-        logger.info(SETTINGS.readSettings());
-        logger.info("\n------------------------------"
+        this.logger.info(SETTINGS.readSettings());
+        this.logger.info("\n------------------------------"
                 + "\nINITIALIZING TESTING COMPONENT"
                 + "\n------------------------------");
     }
@@ -128,19 +128,14 @@ public class CityGMLChangeDetection {
         try {
             // Map CityGML instances into a graph database in Neo4j
             this.map();
-
             // Match mapped CityGML instances
             this.match();
-
             // Export edit operations to CSV files
             this.export(SETTINGS.EXPORT_LOCATION, SETTINGS.CSV_DELIMITER);
-
             // Execute WFS-Transactions
             this.update();
-
             // Statistics
             this.printStats();
-
             // Close Neo4j session
             this.registerShutdownHook();
         } catch (JAXBException e) {
@@ -157,40 +152,31 @@ public class CityGMLChangeDetection {
             e.printStackTrace();
         } catch (XMLStreamException e) {
             e.printStackTrace();
+        } catch (CityGMLBuilderException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    // Registers a shutdown hook for the Neo4j instance so that it
-    // shuts down nicely when the VM exits (even if you "Ctrl-C" the
-    // running application).
     private void registerShutdownHook() {
-        // Always write database operations in transactions
-        Transaction tx = graphDb.beginTx();
-        try {
-            Runtime.getRuntime().addShutdownHook(new Thread() {
-                @Override
-                public void run() {
-                    graphDb.shutdown();
-                }
-            });
-            tx.success();
-        } finally {
-            tx.close();
-        }
+        // Registers a shutdown hook for the Neo4j instance so that it
+        // shuts down nicely when the VM exits (even if you "Ctrl-C" the
+        // running application).
+        final DatabaseManagementService managementService = this.managementService;
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                managementService.shutdown();
+            }
+        });
     }
 
     private void cleanNeo4jDatabase() {
         // !!! IMPORTANT: The constructor must have been executed beforehand to
         // initialize a new Neo4j and Logger session. !!!
-
-        // Always write database operations in transactions
-        Transaction tx = graphDb.beginTx();
-        try {
-            logger.info("... deleting existing Neo4j databases ...");
-            graphDb.execute("MATCH (n) DETACH DELETE n");
-            tx.success();
-        } finally {
-            tx.close();
+        logger.info("... deleting existing Neo4j databases ...");
+        try (Transaction tx = graphDb.beginTx();
+             Result result = tx.execute("MATCH (n) DETACH DELETE n")) {
+            System.out.println(result.resultAsString()); // TODO
         }
     }
 
@@ -220,11 +206,11 @@ public class CityGMLChangeDetection {
         return totalTime / 1000;
     }
 
-    private void map() throws JAXBException, CityGMLReadException, InterruptedException, UnmarshalException, MissingADESchemaException {
+    private void map() throws JAXBException, CityGMLReadException, InterruptedException, UnmarshalException, MissingADESchemaException, CityGMLBuilderException {
         long startTime = System.currentTimeMillis();
 
         logger.info("... setting up citygml4j context and JAXB builder ...");
-        CityGMLContext ctx = new CityGMLContext();
+        CityGMLContext ctx = CityGMLContext.getInstance();
         CityGMLBuilder builder = ctx.createCityGMLBuilder();
 
         logger.info("... reading CityGML files feature by feature ...");
@@ -240,13 +226,9 @@ public class CityGMLChangeDetection {
         in.setProperty(CityGMLInputFactory.KEEP_INLINE_APPEARANCE, true);
 
         // Initialize root node
-        // Always write database operations in transactions
-        Transaction tx = graphDb.beginTx();
-        try {
-            mapperRootNode = graphDb.createNode(Label.label("ROOT_MAPPER"));
-            tx.success();
-        } finally {
-            tx.close();
+        try (Transaction tx = graphDb.beginTx()) {
+            mapperRootNode = tx.createNode(Label.label("ROOT_MAPPER"));
+            tx.commit();
         }
 
         // map old city model
@@ -260,25 +242,18 @@ public class CityGMLChangeDetection {
     }
 
     private void mapCityModel(CityGMLInputFactory in, String filename, RelationshipType relType, boolean isOld) throws CityGMLReadException, InterruptedException {
-        // Always write database operations in transactions
         final Mapper mapper;
-        Transaction tx = graphDb.beginTx();
-        try {
-            mapper = new Mapper(graphDb, logger, isOld);
-            tx.success();
-        } finally {
-            tx.close();
+        try (Transaction tx = this.graphDb.beginTx()) {
+            mapper = new Mapper(this.graphDb, this.logger, isOld);
+            tx.commit();
         }
 
         if (filename.isEmpty() || !new File(filename).exists()) {
             // if the city model does not exist -> create a dummy old/new city model node
-            Transaction txx = graphDb.beginTx();
-            try {
+            try (Transaction tx = this.graphDb.beginTx()) {
                 Node targetNode = mapper.createNodeWithLabel(CityGMLClass.CITY_MODEL);
                 mapperRootNode.createRelationshipTo(targetNode, relType);
-                tx.success();
-            } finally {
-                txx.close();
+                tx.commit();
             }
             return;
         }
@@ -301,34 +276,23 @@ public class CityGMLChangeDetection {
         long startTime = System.currentTimeMillis();
 
         // initialize root node for matcher
-        // Always write database operations in transactions
-        Transaction tx = graphDb.beginTx();
-        try {
-            matcherRootNode = graphDb.createNode(Label.label("ROOT_MATCHER"));
-            tx.success();
-        } finally {
-            tx.close();
+        try (Transaction tx = this.graphDb.beginTx()) {
+            matcherRootNode = tx.createNode(Label.label("ROOT_MATCHER"));
+            tx.commit();
         }
 
-        tx = graphDb.beginTx();
-        try {
+        try (Transaction tx = this.graphDb.beginTx()) {
             // matching without mapping again
             if (mapperRootNode == null) {
-                mapperRootNode = graphDb.findNodes(Label.label("ROOT_MAPPER")).next();
+                mapperRootNode = tx.findNodes(Label.label("ROOT_MAPPER")).next();
             }
-
-            tx.success();
-        } finally {
-            tx.close();
+            tx.commit();
         }
 
         Matcher matcher;
-        tx = graphDb.beginTx();
-        try {
+        try (Transaction tx = this.graphDb.beginTx()) {
             matcher = new Matcher(graphDb, logger, this.oldFilename, this.newFilename);
-            tx.success();
-        } finally {
-            tx.close();
+            tx.commit();
         }
 
         matcher.matcherInit(mapperRootNode, matcherRootNode);
@@ -359,23 +323,19 @@ public class CityGMLChangeDetection {
 
     private void update() throws XMLStreamException, InterruptedException, ClientProtocolException, IOException {
         // initialize root node for matcher
-        // Always write database operations in transactions
-        Transaction tx = graphDb.beginTx();
-        try {
-            editorRootNode = graphDb.createNode(Label.label("ROOT_EDITOR"));
+        try (Transaction tx = this.graphDb.beginTx()) {
+            editorRootNode = tx.createNode(Label.label("ROOT_EDITOR"));
 
             // updating without mapping/matching again
             if (mapperRootNode == null) {
-                mapperRootNode = graphDb.findNodes(Label.label("ROOT_MAPPER")).next();
+                mapperRootNode = tx.findNodes(Label.label("ROOT_MAPPER")).next();
             }
 
             if (matcherRootNode == null) {
-                matcherRootNode = graphDb.findNodes(Label.label("ROOT_MATCHER")).next();
+                matcherRootNode = tx.findNodes(Label.label("ROOT_MATCHER")).next();
             }
 
-            tx.success();
-        } finally {
-            tx.close();
+            tx.commit();
         }
 
         Editor editor = new Editor(graphDb, logger, oldFilename, newFilename, wfsServerUrl);
@@ -408,12 +368,9 @@ public class CityGMLChangeDetection {
 
         // Iterator<Entry<String, Long>> it = MapUtil.sortByValue(CityGML2Neo4jMapper.getStats()).entrySet().iterator();
         Iterator<Entry<String, Long>> it = null;
-        Transaction tx = graphDb.beginTx();
-        try {
+        try (Transaction tx = this.graphDb.beginTx()) {
             it = MapUtil.sortByValue(GraphUtil.countAllNodesWithLabels(graphDb, tx, null, editorLabels)).entrySet().iterator();
-            tx.success();
-        } finally {
-            tx.close();
+            tx.commit();
         }
 
         while (it.hasNext()) {
