@@ -31,19 +31,19 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.citygml4j:citygml4j:2.4.4'
-    implementation 'org.neo4j.driver:neo4j-java-driver:1.2.1'
-    implementation 'org.neo4j:neo4j:3.2.5'
-    implementation 'org.apache.httpcomponents:httpclient:4.5.2'
-    implementation 'com.graphaware.neo4j:tx-executor:3.1.0.44'
-    implementation 'org.neo4j:neo4j-spatial:0.24.1-neo4j-3.2.5'
-    implementation "javax.xml.bind:jaxb-api:2.3.0"
-    implementation "javax.activation:activation:1.1"
-    implementation "com.sun.xml.bind:jaxb-impl:2.3.0"
-    implementation "com.sun.xml.bind:jaxb-core:2.3.0"
-    implementation "com.sun.xml.ws:rt:2.3.0"
-    implementation "com.sun.xml.ws:jaxws-rt:2.3.0"
-    testImplementation 'junit:junit:4.12'
+    implementation "org.citygml4j:citygml4j:2.12.0"
+    implementation 'org.neo4j:neo4j-dbms:4.4.6'
+    implementation "org.neo4j.driver:neo4j-java-driver:4.4.5"
+    implementation "org.neo4j:neo4j:4.4.6"
+    implementation 'org.apache.httpcomponents:httpclient:4.5.13'
+    implementation "org.neo4j:neo4j-spatial:0.28.1-neo4j-4.4.3"
+    implementation 'javax.xml.bind:jaxb-api:2.3.1'
+    implementation 'javax.activation:activation:1.1.1'
+    implementation 'com.sun.xml.bind:jaxb-impl:3.0.2'
+    implementation 'com.sun.xml.bind:jaxb-core:3.0.2'
+    implementation 'com.sun.xml.ws:rt:3.0.2'
+    implementation 'com.sun.xml.ws:jaxws-rt:3.0.2'
+    testImplementation 'junit:junit:4.13.2'
 }
 
 // https://github.com/gradle/gradle/issues/15538
