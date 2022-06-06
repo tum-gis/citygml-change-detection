@@ -13,6 +13,8 @@ USER_MESSAGE=Run CityGML Change Detection using Default Settings.
 ###############################
 #DATABASE AND PROGRAM SETTINGS#
 ###############################
+# The location of predefined neo4j configurations
+NEO4JDB_CONF_LOCATION=config/neo4j.conf
 # The working directory for all subsequent paths.
 # Empty means the default project directory will be assumed.
 # Otherwise it must end with /.
@@ -24,6 +26,8 @@ NEW_CITY_MODEL_LOCATION=input/Polygon_Multi_Interior_1.gml
 # The location of the graph database Neo4j relative to HOME_LOCATION.
 # Must end with /.
 DB_LOCATION=neo4jDB/
+# Database name
+DB_NAME=neo4jDB
 # Clean remaining graph databases from previous runs.
 # If true, it will be permanently removed from disk.
 # No will not remove the old database from disk,

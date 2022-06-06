@@ -8,11 +8,13 @@ import java.util.Map;
 public class SETTINGS {
 
     public static final String KEY_USER_MESSAGE = "USER_MESSAGE";
+    public static final String KEY_NEO4JDB_CONF_LOCATION = "NEO4JDB_CONF_LOCATION";
     public static final String KEY_HOME_LOCATION = "HOME_LOCATION";
     public static final String KEY_TEST_DATA_LOCATION = "TEST_DATA_LOCATION";
     public static final String KEY_OLD_CITY_MODEL_LOCATION = "OLD_CITY_MODEL_LOCATION";
     public static final String KEY_NEW_CITY_MODEL_LOCATION = "NEW_CITY_MODEL_LOCATION";
     public static final String KEY_DB_LOCATION = "DB_LOCATION";
+    public static final String KEY_DB_NAME = "DB_NAME";
     public static final String KEY_CLEAN_PREVIOUS_DB = "CLEAN_PREVIOUS_DB";
     public static final String KEY_LOG_LOCATION = "LOG_LOCATION";
     public static final String KEY_EXPORT_LOCATION = "EXPORT_LOCATION";
@@ -58,6 +60,7 @@ public class SETTINGS {
      * Message for later use
      */
     public static final String USER_MESSAGE = getValueWithDefault(KEY_USER_MESSAGE, "Default message.");
+    public static final String NEO4JDB_CONF_LOCATION = getValueWithDefault(KEY_NEO4JDB_CONF_LOCATION, "config/neo4j.conf");
 
     /*
      * Database and Program settings
@@ -69,6 +72,7 @@ public class SETTINGS {
     public static final String NEW_CITY_MODEL_LOCATION = HOME_LOCATION + getValueWithDefault(KEY_NEW_CITY_MODEL_LOCATION, "");
 
     public static final String DB_LOCATION = HOME_LOCATION + getValueWithDefault(KEY_DB_LOCATION, "neo4jDB/");
+    public static final String DB_NAME = getValueWithDefault(KEY_DB_NAME, "neo4jDB");
 
     public static final boolean CLEAN_PREVIOUS_DB = getValueWithDefault(KEY_CLEAN_PREVIOUS_DB, true);
 
@@ -351,7 +355,9 @@ public class SETTINGS {
 
         sb.append(String.format("%-40s", "\t > Home location:") + SETTINGS.HOME_LOCATION + "\n");
 
+        sb.append(String.format("%-40s", "\t > Predefined neo4j conf:") + SETTINGS.NEO4JDB_CONF_LOCATION + "\n");
         sb.append(String.format("%-40s", "\t > Database location:") + SETTINGS.DB_LOCATION + "\n");
+        sb.append(String.format("%-40s", "\t > Database name:") + SETTINGS.DB_NAME + "\n");
 
         sb.append(String.format("%-40s", "\t > Clean previous database:") + SETTINGS.CLEAN_PREVIOUS_DB + "\n");
 
