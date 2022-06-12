@@ -1,25 +1,27 @@
 package util;
 
-import mapper.EnumClasses.GMLRelTypes;
-import mapper.Mapper;
+import components.mapper.NodeFactory;
+import components.mapper.RelationshipFactory;
 import matcher.Matcher;
 import org.citygml4j.model.citygml.CityGML;
 import org.citygml4j.model.citygml.CityGMLClass;
 import org.citygml4j.xml.io.reader.*;
 import org.neo4j.gis.spatial.EditableLayer;
 import org.neo4j.graphdb.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
+import java.beans.IntrospectionException;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Logger;
 
 /**
  * Suggestions, bug reports, etc. please contact: son.nguyen@tum.de
@@ -98,39 +100,30 @@ public class ProducerConsumerUtil {
                         queue.put(new PoisonPillXMLChunk());
                     }
                 }
-            } catch (CityGMLReadException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+            } catch (CityGMLReadException | InterruptedException e) {
+                throw new RuntimeException(e);
             }
         }
     }
 
     public static class XMLChunkConsumer implements Runnable {
+        private final static Logger logger = LoggerFactory.getLogger(XMLChunkConsumer.class);
         private static AtomicInteger count = new AtomicInteger();
         private final BlockingQueue<XMLChunk> queue;
         private final GraphDatabaseService graphDb;
         private final Node mapperRootNode;
-        private final Mapper mapper;
         private final boolean isOld;
-        private final Logger logger;
         private XMLChunkProducer producer;
 
         public XMLChunkConsumer(
                 BlockingQueue<XMLChunk> queue,
                 GraphDatabaseService graphDb,
                 Node mapperRootNode,
-                Mapper mapper,
-                boolean isOld,
-                Logger logger) {
+                boolean isOld) {
             this.queue = queue;
             this.graphDb = graphDb;
             this.mapperRootNode = mapperRootNode;
-            this.mapper = mapper;
             this.isOld = isOld;
-            this.logger = logger;
         }
 
         /**
@@ -146,7 +139,7 @@ public class ProducerConsumerUtil {
             boolean shouldRun = true;
 
             while (shouldRun) {
-                ArrayList<XMLChunk> chunks = new ArrayList<XMLChunk>(SETTINGS.NR_OF_COMMIT_FEATURES);
+                ArrayList<XMLChunk> chunks = new ArrayList<>(SETTINGS.NR_OF_COMMIT_FEATURES);
 
                 for (int i = 0; i < SETTINGS.NR_OF_COMMIT_FEATURES; i++) {
                     XMLChunk chunk = null;
@@ -154,13 +147,11 @@ public class ProducerConsumerUtil {
                     try {
                         chunk = queue.take();
                     } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                        throw new RuntimeException(e);
                     }
 
                     if (chunk instanceof PoisonPillXMLChunk) {
                         countPoisonPills++;
-
                         if (countPoisonPills == SETTINGS.NR_OF_PRODUCERS) {
                             i++;
                             shouldRun = false;
@@ -178,20 +169,12 @@ public class ProducerConsumerUtil {
                     for (int i = 0; i < chunks.size(); i++) {
                         XMLChunk chunk = chunks.get(i);
                         countChunk++;
-
-                        CityGML cityGml = chunk.unmarshal();
-
-                        // if (cityGml.getCityGMLClass().equals(CityGMLClass.BUILDING)) {
-                        // logger.info("Found BUILDING " + ((Building) cityGml).getId());
-                        // } else if (logger.isLoggable(Level.FINE)) {
-                        // logger.log(Level.FINE, "Found " + cityGml.getCityGMLClass());
-                        // }
-
-                        if (cityGml.getCityGMLClass().equals(CityGMLClass.CITY_MODEL)) {
-                            mapper.createNodeSearchHierarchy(cityGml, mapperRootNode, isOld ? GMLRelTypes.OLD_CITY_MODEL : GMLRelTypes.NEW_CITY_MODEL);
+                        CityGML cityObject = chunk.unmarshal();
+                        Node cityObjectNode = NodeFactory.create(cityObject);
+                        if (cityObject.getCityGMLClass().equals(CityGMLClass.CITY_MODEL)) {
+                            mapperRootNode.createRelationshipTo(cityObjectNode,
+                                    isOld ? RelationshipFactory.OLD_CITY_MODEL : RelationshipFactory.NEW_CITY_MODEL);
                             countChunk--;
-                        } else {
-                            mapper.createNodeSearchHierarchy(cityGml, null, GMLRelTypes.HREF_FEATURE);
                         }
                     }
 
@@ -200,12 +183,8 @@ public class ProducerConsumerUtil {
                     }
 
                     tx.commit();
-                } catch (UnmarshalException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (MissingADESchemaException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                } catch (IntrospectionException | UnmarshalException | MissingADESchemaException e) {
+                    throw new RuntimeException(e);
                 }
             }
         }
@@ -393,6 +372,7 @@ public class ProducerConsumerUtil {
     }
 
     public static class BuildingNodeConsumer implements Runnable {
+        private final static Logger logger = LoggerFactory.getLogger(BuildingNodeConsumer.class);
         private static AtomicInteger count = new AtomicInteger();
         private final BlockingQueue<Node> queue;
         private final GraphDatabaseService graphDb;
@@ -400,7 +380,6 @@ public class ProducerConsumerUtil {
         private final Node matcherRootNode;
         private final Matcher matcher;
         private final EditableLayer newBuildingLayer;
-        private final Logger logger;
 
         public BuildingNodeConsumer(
                 BlockingQueue<Node> queue,
@@ -408,15 +387,13 @@ public class ProducerConsumerUtil {
                 Node mapperRootNode,
                 Node matcherRootNode,
                 Matcher matcher,
-                EditableLayer newBuildingLayer,
-                Logger logger) {
+                EditableLayer newBuildingLayer) {
             this.queue = queue;
             this.graphDb = graphDb;
             this.mapperRootNode = mapperRootNode;
             this.matcherRootNode = matcherRootNode;
             this.matcher = matcher;
             this.newBuildingLayer = newBuildingLayer;
-            this.logger = logger;
         }
 
         /**
@@ -434,30 +411,24 @@ public class ProducerConsumerUtil {
             while (shouldRun) {
                 int i = 0;
 
-                ArrayList<Node> chunks = new ArrayList<Node>(SETTINGS.NR_OF_COMMIT_BUILDINGS);
+                ArrayList<Node> chunks = new ArrayList<>(SETTINGS.NR_OF_COMMIT_BUILDINGS);
 
                 for (; i < SETTINGS.NR_OF_COMMIT_BUILDINGS; i++) {
                     Node chunk = null;
-
                     try {
                         chunk = queue.take();
                     } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                        throw new RuntimeException(e);
                     }
-
                     if (chunk instanceof PoisonPillNode) {
                         countPoisonPills++;
-
                         if (countPoisonPills == SETTINGS.NR_OF_PRODUCERS) {
                             i++;
                             shouldRun = false;
                             break;
                         }
-
                         continue;
                     }
-
                     chunks.add(chunk);
                 }
 
@@ -465,7 +436,6 @@ public class ProducerConsumerUtil {
                     i = 0;
                     for (; i < chunks.size(); i++) {
                         Node oldBuildingNode = chunks.get(i);
-
                         Node newBuildingNode = GraphUtil.findBuildingInRTree(oldBuildingNode, newBuildingLayer, logger, graphDb);
 
                         if (newBuildingNode == null) {
@@ -481,12 +451,10 @@ public class ProducerConsumerUtil {
                     }
 
                     tx.commit();
-                } catch (FileNotFoundException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
                 } catch (XMLStreamException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    throw new RuntimeException(e);
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
                 }
             }
         }
