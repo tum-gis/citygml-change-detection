@@ -43,6 +43,7 @@ dependencies {
     implementation 'com.sun.xml.bind:jaxb-core:3.0.2'
     implementation 'com.sun.xml.ws:rt:3.0.2'
     implementation 'com.sun.xml.ws:jaxws-rt:3.0.2'
+    implementation 'ch.qos.logback:logback-classic:1.2.11'
     testImplementation 'junit:junit:4.13.2'
 }
 

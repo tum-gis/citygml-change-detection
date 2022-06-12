@@ -153,7 +153,7 @@ java -Xms2048m -Xmx8G -XX:+UseG1GC -jar citygml-change-detection.jar -SETTINGS="
 4.  The ``main`` function is located in [controller/CityGMLChangeDetection.java](src/main/java/controller/CityGMLChangeDetection.java).
     This basically calls the constructor:
     ```java
-    CityGMLChangeDetection cityGMLChangeDetection = new CityGMLChangeDetection("path/to/config.txt");
+    CityGMLChangeDetection controller = new CityGMLChangeDetection("path/to/config.txt");
     ```
     where ``path/to/config.txt`` is the path to the configuration file required.
     Instructions and examples are given [here](config).
