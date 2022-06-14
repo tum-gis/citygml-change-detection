@@ -1,7 +1,7 @@
 package components.mapper;
 
-import mapper.EnumClasses;
-import org.apache.commons.io.output.ByteArrayOutputStream;
+import components.multithreading.XMLChunkConsumer;
+import components.multithreading.XMLChunkProducer;
 import org.citygml4j.CityGMLContext;
 import org.citygml4j.builder.jaxb.CityGMLBuilder;
 import org.citygml4j.builder.jaxb.CityGMLBuilderException;
@@ -11,33 +11,27 @@ import org.citygml4j.model.citygml.building.AbstractOpening;
 import org.citygml4j.model.citygml.core.Address;
 import org.citygml4j.xml.io.CityGMLInputFactory;
 import org.citygml4j.xml.io.reader.*;
-import org.neo4j.graphdb.*;
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.RelationshipType;
+import org.neo4j.graphdb.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.GraphUtil;
-import util.ProducerConsumerUtil;
 import util.SETTINGS;
 import util.Timer;
 
-import java.beans.IntrospectionException;
 import java.io.File;
-import java.io.PrintStream;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.concurrent.*;
-import java.util.logging.Level;
 
 public class Mapper {
     private final static Logger logger = LoggerFactory.getLogger(Mapper.class);
     private final GraphDatabaseService graphDb;
-    private final NodeFactory nodeFactory;
     private final Timer timer;
     private ExecutorService service;
 
     public Mapper(GraphDatabaseService graphDb) {
         this.graphDb = graphDb;
-        nodeFactory = new NodeFactory(graphDb);
+        NodeFactory.init(graphDb);
         timer = new Timer();
     }
 
@@ -111,18 +105,21 @@ public class Mapper {
         }
 
         try (CityGMLReader reader = in.createCityGMLReader(new File(filename))) {
-            // Pre-processing
             boolean isOld = relType == RelationshipFactory.OLD_CITY_MODEL;
             if (SETTINGS.ENABLE_MULTI_THREADED_MAPPING) {
-                mapperInitMultiThreaded(reader, mapperRootNode, isOld);
                 logger.info("Multi-threading is enabled");
+                runMultiThreaded(reader, mapperRootNode, isOld);
             } else {
-                mapperInitSingleThreaded(reader, mapperRootNode, isOld);
                 logger.info("Multi-threading is disabled, the program shall run in single-threaded mode");
+                runSingleThreaded(reader, mapperRootNode, isOld);
             }
 
+            // ---------------
             // Post-processing
-            nodeFactory.resolveXLinks();
+
+            NodeFactory.resolveXLinks();
+            NodeFactory.dropDbIndexing(); // the label indexing shall be removed after resolving XLinks
+            NodeFactory.initRTreeLayer(isOld); // the spatial indexing shall remain after mapping for querying
             // TODO Other functions here
 
             logger.info("Finished reading city model");
@@ -132,7 +129,7 @@ public class Mapper {
         }
     }
 
-    public void mapperInitMultiThreaded(CityGMLReader reader, Node mapperRootNode, boolean isOld) {
+    public void runMultiThreaded(CityGMLReader reader, Node mapperRootNode, boolean isOld) {
         // Create a fixed thread pool
         int nThreads = Runtime.getRuntime().availableProcessors() * 2;
         service = Executors.newFixedThreadPool(nThreads);
@@ -141,18 +138,18 @@ public class Mapper {
         // TODO ThreadLocal variable here or in Consumer?
         // TODO Momentarily commit to database everytime a top-level feature has been mapped
 
-        ProducerConsumerUtil.XMLChunkConsumer.resetCounter();
+        XMLChunkConsumer.resetCounter();
 
         // The poison pill approach only reliably works in unbounded blocking queues
-        BlockingQueue<XMLChunk> queue = new LinkedBlockingQueue<XMLChunk>(3 * SETTINGS.NR_OF_PRODUCERS * SETTINGS.CONSUMERS_PRO_PRODUCER * SETTINGS.NR_OF_COMMIT_FEATURES);
+        BlockingQueue<XMLChunk> queue = new LinkedBlockingQueue<XMLChunk>(3 * SETTINGS.NR_OF_PRODUCERS * SETTINGS.CONSUMERS_PRO_PRODUCER * SETTINGS.BATCH_SIZE_FEATURES);
 
         for (int i = 0; i < SETTINGS.NR_OF_PRODUCERS; i++) {
-            Thread producer = new Thread(new ProducerConsumerUtil.XMLChunkProducer(reader, queue));
+            Thread producer = new Thread(new XMLChunkProducer(reader, queue));
             service.execute(producer);
 
             for (int j = 0; j < SETTINGS.CONSUMERS_PRO_PRODUCER; j++) {
                 Thread consumer = new Thread(
-                        new ProducerConsumerUtil.XMLChunkConsumer(queue, graphDb, mapperRootNode, isOld));
+                        new XMLChunkConsumer(queue, graphDb, mapperRootNode, isOld));
                 service.execute(consumer);
             }
         }
@@ -168,10 +165,10 @@ public class Mapper {
         logger.debug("Shut down thread pool");
     }
 
-    public void mapperInitSingleThreaded(CityGMLReader reader, Node mapperRootNode, boolean isOld) {
+    public void runSingleThreaded(CityGMLReader reader, Node mapperRootNode, boolean isOld) {
         long countFeatures = 0;
 
-        if (SETTINGS.NR_OF_COMMIT_FEATURES == 0) {
+        if (SETTINGS.BATCH_SIZE_FEATURES == 0) {
             logger.error("NR_OF_COMMIT_FEATURES is 0, abort");
             return;
         }
@@ -180,10 +177,11 @@ public class Mapper {
         try {
             while (reader.hasNext()) {
                 countFeatures--;
-                if (countFeatures % SETTINGS.NR_OF_COMMIT_FEATURES == 0) {
+                if (countFeatures % SETTINGS.BATCH_SIZE_FEATURES == 0) {
                     logger.info((SETTINGS.SPLIT_PER_COLLECTION_MEMBER ? "Buildings" : "Features")
                             + " found: " + countFeatures);
                     tx.commit();
+                    tx.close();
                     tx = graphDb.beginTx();
                 }
 
@@ -195,16 +193,13 @@ public class Mapper {
                 CityGML cityObject;
                 try {
                     cityObject = chunk.unmarshal();
-                    Node node = nodeFactory.create(cityObject);
+                    Node node = NodeFactory.create(cityObject);
                     if (cityObject.getCityGMLClass().equals(CityGMLClass.CITY_MODEL)) {
                         mapperRootNode.createRelationshipTo(node,
                                 isOld ? RelationshipFactory.OLD_CITY_MODEL : RelationshipFactory.NEW_CITY_MODEL);
                     }
                 } catch (UnmarshalException | MissingADESchemaException e) {
                     logger.error("Error while reading input datasets\n{}", e.getMessage());
-                    throw new RuntimeException(e);
-                } catch (IntrospectionException e) {
-                    logger.error("Error while mapping objects to graphs\n{}", e.getMessage());
                     throw new RuntimeException(e);
                 }
             }
@@ -221,6 +216,7 @@ public class Mapper {
         }
     }
 
+    /*
     public void postProcessing(Node mapperRootNode, RelationshipType relType) throws InterruptedException {
 
 
@@ -234,44 +230,13 @@ public class Mapper {
         // mapperTx.close();
         // }
 
-        // if city envelope is missing
-        // -> first iterate through buildings, then create tiles
-        // else create tiles then assign buildings while iterating
-        if (SETTINGS.MATCHING_STRATEGY.equals(SETTINGS.MatchingStrategies.TILES)) {
-            mapperTx = graphDb.beginTx();
-            try {
-                countTrans = 0;
-                examineCityBoundingShape(mapperRootNode);
-
-                if (!cityBoundedByMissing) {
-                    createTiles(mapperRootNode);
-                }
-
-                mapperTx.success();
-            } finally {
-                mapperTx.close();
-            }
-        } else if (SETTINGS.MATCHING_STRATEGY.equals(SETTINGS.MatchingStrategies.RTREE)) {
-            mapperTx = graphDb.beginTx();
-            try {
-                createRTreeLayer();
-
-                mapperTx.success();
-            } finally {
-                mapperTx.close();
-            }
-        }
 
         // also assign buildings to tiles if city envelope is available, else after
         // OR also assign buildings to an RTree
         mapperTx = graphDb.beginTx();
         try {
+            logger.info("Indexing buildings' BBOX in an RTree ---");
             countTrans = 0;
-            if (SETTINGS.MATCHING_STRATEGY.equals(SETTINGS.MatchingStrategies.TILES)) {
-                logger.info("Assigning buildings to their respective tiles ...");
-            } else if (SETTINGS.MATCHING_STRATEGY.equals(SETTINGS.MatchingStrategies.RTREE)) {
-                logger.info("Storing buildings' locations in an RTree for spatial indexing ...");
-            }
 
             calcBoundingShapes(mapperRootNode);
 
@@ -306,22 +271,6 @@ public class Mapper {
         } finally {
             mapperTx.close();
         }
-
-        if (SETTINGS.MATCHING_STRATEGY.equals(SETTINGS.MatchingStrategies.TILES) && cityBoundedByMissing) {
-            mapperTx = graphDb.beginTx();
-            try {
-                countTrans = 0;
-
-                logger.info("Calculated city envelope: [" + cityEnvelopeLowerX + ", " + cityEnvelopeLowerY + " -> " + cityEnvelopeUpperX + ", " + cityEnvelopeUpperY + "]");
-
-                createTiles(mapperRootNode);
-                assignBuildingsToTiles(mapperRootNode);
-
-                mapperTx.success();
-            } finally {
-                mapperTx.close();
-            }
-        }
     }
 
 
@@ -337,7 +286,7 @@ public class Mapper {
 
             countTrans++;
 
-            if (countTrans % SETTINGS.NR_OF_COMMMIT_TRANS == 0) {
+            if (countTrans % SETTINGS.BATCH_SIZE_TRANSACTIONS == 0) {
                 // logger.info("PROCESSED FEATURES: " + countTrans);
                 mapperTx.success();
                 mapperTx.close();
@@ -356,4 +305,5 @@ public class Mapper {
             }
         }
     }
+     */
 }

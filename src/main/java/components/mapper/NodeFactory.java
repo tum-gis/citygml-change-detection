@@ -3,9 +3,15 @@ package components.mapper;
 import org.citygml4j.model.gml.base.AbstractGML;
 import org.citygml4j.model.gml.base.AssociationByRepOrRef;
 import org.citygml4j.model.gml.base.StringOrRef;
+import org.neo4j.gis.spatial.EditableLayer;
+import org.neo4j.gis.spatial.SpatialDatabaseService;
+import org.neo4j.gis.spatial.index.IndexManager;
+import org.neo4j.gis.spatial.rtree.RTreeIndex;
 import org.neo4j.graphdb.*;
 import org.neo4j.graphdb.schema.IndexDefinition;
 import org.neo4j.graphdb.schema.Schema;
+import org.neo4j.internal.kernel.api.security.SecurityContext;
+import org.neo4j.kernel.internal.GraphDatabaseAPI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.SETTINGS;
@@ -17,62 +23,86 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class NodeFactory {
     private final static Logger logger = LoggerFactory.getLogger(NodeFactory.class);
-    private final GraphDatabaseService graphDb;
-    private final IndexDefinition hrefDbIndex;
-    private final IndexDefinition idDbIndex;
-
     // For indexing
-    private final String hrefProperty = "href";
-    private final String idProperty = "id";
-    private final String hrefDbIndexName = "hrefDbIndex";
-    private final String idDbIndexName = "idDbIndex";
-    private final Label[] hrefNodeLabels = {
+    private final static String hrefProperty = "href";
+    private final static String idProperty = "id";
+    private final static String hrefDbIndexName = "hrefDbIndex";
+    private final static String idDbIndexName = "idDbIndex";
+    private final static Label[] hrefNodeLabels = {
             Label.label(AssociationByRepOrRef.class.getName()),
             Label.label(StringOrRef.class.getName())
     };
-    private final Label idNodeLabel = Label.label(AbstractGML.class.getName());
+    private final static Label idNodeLabel = Label.label(AbstractGML.class.getName());
+    private final static String rtreeLayerOld = "oldLayer"; // For all top-level features such as buildings, bridges, etc.
+    private final static String rtreeLayerNew = "newLayer";
+    private static GraphDatabaseService graphDb = null;
+    private static IndexDefinition hrefDbIndex = null;
+    private static IndexDefinition idDbIndex = null;
 
-    public NodeFactory(GraphDatabaseService graphDb) {
-        this.graphDb = graphDb;
-        // Create automatic indexing for attributes "href" and "id" while creating nodes
-        try (Transaction tx = graphDb.beginTx()) {
-            Schema schema = tx.schema();
-            this.hrefDbIndex = schema.indexFor(hrefNodeLabels)
-                    .on(hrefProperty)
-                    .withName(hrefDbIndexName)
-                    .create();
-            this.idDbIndex = schema.indexFor(idNodeLabel)
-                    .on(idProperty)
-                    .withName(idDbIndexName)
-                    .create();
-            tx.commit();
-            logger.info("Created automatic database indexing for XLinks");
+    // This must be called first BEFORE any function can run from this class
+    // If init has already been executed, subsequent calls will do nothing
+    public static void init(GraphDatabaseService graphDb) {
+        if (NodeFactory.graphDb == null) {
+            NodeFactory.graphDb = graphDb;
+        }
+
+        if (hrefDbIndex == null || idDbIndex == null) {
+            // Create automatic indexing for attributes "href" and "id" while creating nodes
+            try (Transaction tx = graphDb.beginTx()) {
+                Schema schema = tx.schema();
+                if (hrefDbIndex == null) {
+                    hrefDbIndex = schema.indexFor(hrefNodeLabels)
+                            .on(hrefProperty)
+                            .withName(hrefDbIndexName)
+                            .create();
+                }
+                if (idDbIndex == null) {
+                    idDbIndex = schema.indexFor(idNodeLabel)
+                            .on(idProperty)
+                            .withName(idDbIndexName)
+                            .create();
+                }
+                tx.commit();
+                logger.info("Created automatic database indexing for XLinks");
+            }
         }
     }
 
-    public Node create(Object object) {
+    public static Node create(Object object) {
         Node result = null;
         try (Transaction tx = graphDb.beginTx()) {
-            // Get the object's class
-            Class objectClass = object.getClass();
+            result = create(object, tx);
+            tx.commit(); // Commit once per (e.g. top-level) object
+        }
+        return result;
+    }
 
-            // Get class hierarchy
-            ArrayList<Label> objectClassHierarchyLabels = new ArrayList<>();
-            Class tmpObjectClass = objectClass;
-            while (tmpObjectClass.getSuperclass() != null) {
-                objectClassHierarchyLabels.add(Label.label(tmpObjectClass.toString()));
-                tmpObjectClass = tmpObjectClass.getSuperclass();
-            }
+    // Recursive auxiliary function
+    // TODO Currently only one commit per object -> Allow batch commit?
+    private static Node create(Object object, Transaction tx) {
+        Node result = null;
+        // Get the object's class
+        Class objectClass = object.getClass();
 
-            // Create a node with labels named after its class hierarchy
-            result = tx.createNode((Label[]) objectClassHierarchyLabels.toArray());
+        // Get class hierarchy
+        ArrayList<Label> objectClassHierarchyLabels = new ArrayList<>();
+        Class tmpObjectClass = objectClass;
+        while (tmpObjectClass.getSuperclass() != null) {
+            objectClassHierarchyLabels.add(Label.label(tmpObjectClass.toString()));
+            tmpObjectClass = tmpObjectClass.getSuperclass();
+        }
 
-            // Get all properties and methods inherited except from Object class
+        // Create a node with labels named after its class hierarchy
+        result = tx.createNode((Label[]) objectClassHierarchyLabels.toArray());
+
+        // Get all properties and methods inherited except from Object class
+        try {
             for (PropertyDescriptor propertyDescriptor
                     : Introspector.getBeanInfo(objectClass, Object.class).getPropertyDescriptors()) {
                 Method getter = propertyDescriptor.getReadMethod();
@@ -85,7 +115,7 @@ public class NodeFactory {
                     String propertyName = getter.getName();
                     Object propertyValue = getter.invoke(object);
                     if (propertyName.equals(hrefProperty) && propertyValue.toString().charAt(0) != '#') {
-                        logger.warn("Element href = {} without prefix '#' detected, this shall be corrected automatically", propertyValue.toString());
+                        logger.warn("Element href = {} without prefix '#' detected, this shall be corrected automatically", propertyValue);
                         result.setProperty(propertyName, "#" + propertyValue);
                     } else {
                         result.setProperty(propertyName, propertyValue);
@@ -136,12 +166,12 @@ public class NodeFactory {
                             = result.createRelationshipTo(childNode, RelationshipType.withName(getter.getName()));
                 }
             }
-
-            tx.commit();
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException | IntrospectionException e) {
-            throw new RuntimeException(e);
+        } catch (IntrospectionException ex) {
+            throw new RuntimeException(ex);
+        } catch (IllegalAccessException ex) {
+            throw new RuntimeException(ex);
+        } catch (InvocationTargetException ex) {
+            throw new RuntimeException(ex);
         }
 
         return result;
@@ -149,8 +179,8 @@ public class NodeFactory {
 
     // This function is called AFTER all hrefs and ids have been stored
     // This function runs in single-threaded mode
-    // At the end the indexings shall be dropped
-    public void resolveXLinks() {
+    // At the end the indexing shall be dropped
+    public static void resolveXLinks() {
         // Wait for indexing to finish
         logger.info("Populating database indices ---");
         try (Transaction tx = graphDb.beginTx()) {
@@ -169,62 +199,291 @@ public class NodeFactory {
         }
 
         logger.info("Resolving XLinks/hrefs ---");
-        if (SETTINGS.ENABLE_INDICES) {
-            int countTransactions = SETTINGS.NR_OF_COMMMIT_TRANS;
-            Transaction tx = graphDb.beginTx();
-            try {
-                for (Label label : hrefNodeLabels) {
-                    // The value href must ALWAYS begin with "#"
-                    try (ResourceIterator<Node> hrefNodes
-                                 = tx.findNodes(label, hrefProperty, "#", StringSearchMode.PREFIX)) {
-                        while (hrefNodes.hasNext()) {
-                            Node hrefNode = hrefNodes.next();
-                            String idValue = hrefNode.getProperty(hrefProperty).toString()
-                                    .replace("#", "");
-                            try (ResourceIterator<Node> idNodes = tx.findNodes(idNodeLabel, idProperty, idValue)) {
-                                int idCount = 0;
-                                while (idNodes.hasNext()) {
-                                    // Periodically commit in batch
-                                    if (countTransactions == 0) {
-                                        tx.commit();
-                                        logger.debug("Committed a batch of {} transactions",
-                                                SETTINGS.NR_OF_COMMMIT_TRANS);
-                                        countTransactions = SETTINGS.NR_OF_COMMMIT_TRANS;
-                                        tx = graphDb.beginTx();
-                                    }
+        int countTransactions = SETTINGS.BATCH_SIZE_TRANSACTIONS;
+        Transaction tx = graphDb.beginTx();
+        try {
+            for (Label label : hrefNodeLabels) {
+                // The value href must ALWAYS begin with "#"
+                try (ResourceIterator<Node> hrefNodes
+                             = tx.findNodes(label, hrefProperty, "#", StringSearchMode.PREFIX)) {
+                    while (hrefNodes.hasNext()) {
+                        Node hrefNode = hrefNodes.next();
+                        String idValue = hrefNode.getProperty(hrefProperty).toString()
+                                .replace("#", "");
+                        try (ResourceIterator<Node> idNodes = tx.findNodes(idNodeLabel, idProperty, idValue)) {
+                            int idCount = 0;
+                            while (idNodes.hasNext()) {
+                                // Periodically commit in batch
+                                if (countTransactions == 0) {
+                                    tx.commit();
+                                    tx.close();
+                                    logger.debug("Committed a batch of {} transactions",
+                                            SETTINGS.BATCH_SIZE_TRANSACTIONS);
+                                    countTransactions = SETTINGS.BATCH_SIZE_TRANSACTIONS;
+                                    tx = graphDb.beginTx();
+                                }
 
-                                    Node idNode = idNodes.next();
-                                    hrefNode.createRelationshipTo(idNode, RelationshipFactory.HREF);
-                                    countTransactions--;
-                                    hrefNode.removeProperty(hrefProperty);
-                                    countTransactions--;
-                                    idCount++;
-                                }
-                                if (idCount == 0) {
-                                    logger.warn("No element with referenced ID = {} found", idValue);
-                                } else if (idCount >= 2) {
-                                    logger.warn("{} elements of the same ID = {} detected", idCount, idValue);
-                                }
+                                Node idNode = idNodes.next();
+                                hrefNode.createRelationshipTo(idNode, RelationshipFactory.HREF);
+                                countTransactions--;
+                                hrefNode.removeProperty(hrefProperty);
+                                countTransactions--;
+                                idCount++;
+                            }
+                            if (idCount == 0) {
+                                logger.warn("No element with referenced ID = {} found", idValue);
+                            } else if (idCount >= 2) {
+                                logger.warn("{} elements of the same ID = {} detected", idCount, idValue);
                             }
                         }
                     }
                 }
-
-                tx.commit();
-            } finally {
-                tx.close();
             }
-        } else {
-            // TODO Without using database indexing
+
+            tx.commit();
+        } finally {
+            tx.close();
         }
 
-        // Remove indexing (in order to not unnecessarily overload the mapping process of new dataset)
+        logger.info("XLinks resolved");
+    }
+
+    // Remove indexing (in order to not unnecessarily overload the mapping process of new dataset)
+    public static void dropDbIndexing() {
         try (Transaction tx = graphDb.beginTx()) {
             hrefDbIndex.drop();
             idDbIndex.drop();
             tx.commit();
         }
-
-        logger.info("XLinks resolved");
     }
+
+    public static void initRTreeLayer(boolean isOld) {
+        try (Transaction tx = graphDb.beginTx()) {
+            // Init an R-Tree layer for each dataset
+            SpatialDatabaseService spatialDb = new SpatialDatabaseService(
+                    new IndexManager((GraphDatabaseAPI) graphDb, SecurityContext.AUTH_DISABLED));
+            EditableLayer buildingLayer = spatialDb.getOrCreateEditableLayer(tx,
+                    (isOld ? rtreeLayerOld : rtreeLayerNew));
+
+            // Set config to this layer
+            Map<String, Object> config = new HashMap<String, Object>();
+            config.put(RTreeIndex.KEY_MAX_NODE_REFERENCES, SETTINGS.MAX_RTREE_NODE_REFERENCES);
+            buildingLayer.getIndex().configure(config);
+
+            tx.commit();
+        }
+    }
+
+    /*
+    // While mapping in chunks, top-level features cannot have their bounding shapes calculated
+    // --> Call this function AFTER mapping is complete
+    public void calcBboxAll() {
+        logger.info("Calculating BBOX of all top-level features ---");
+
+        try (Transaction tx = graphDb.beginTx()) {
+            try (ResourceIterator<Node> buildingNodes = tx.findNodes(Label.label(Building.class.toString()))) {
+                while (buildingNodes.hasNext()) {
+                    Node buildingNode = buildingNodes.next();
+
+                }
+                tx.commit();
+            }
+
+            // get buildings from the old/new city model
+            Node cityModel = GraphUtil.findFirstChildOfNode(mapperRootNode, isOld ? EnumClasses.GMLRelTypes.OLD_CITY_MODEL : EnumClasses.GMLRelTypes.NEW_CITY_MODEL);
+            for (Node buildingNode : GraphUtil.findBuildings(cityModel)) {
+
+                countTrans++;
+
+                if (countTrans % SETTINGS.BATCH_SIZE_TRANSACTIONS == 0) {
+                    // logger.info("Processed buildings: " + countTrans);
+                    mapperTx.success();
+                    mapperTx.close();
+                    mapperTx = graphDb.beginTx();
+                }
+
+                attachBbox(buildingNode, new Building());
+            }
+
+            logger.info("--- Calculated BBOX of all top-level features");
+        }
+    }
+
+    private void attachBbox(Node buildingNode, AbstractBuilding building) {
+        if (GraphUtil.findFirstChildOfNode(buildingNode, EnumClasses.GMLRelTypes.BOUNDED_BY) != null) {
+            buildingNode.setProperty(InternalMappingProperties.BOUNDING_SHAPE_CREATED.toString(), "false");
+
+            // BuildingPart
+            if (buildingNode.hasRelationship(Direction.OUTGOING, EnumClasses.GMLRelTypes.BUILDING_PART)) {
+                for (Node n : GraphUtil.findChildrenOfNode(buildingNode, EnumClasses.GMLRelTypes.BUILDING_PART)) {
+                    // also attach bounding shapes to building parts
+                    attachBbox(GraphUtil.findFirstChildOfNode(n, EnumClasses.GMLRelTypes.OBJECT), new BuildingPart());
+                }
+            }
+        } else {
+            buildingNode.setProperty(InternalMappingProperties.BOUNDING_SHAPE_CREATED.toString(), "true");
+
+            if (logger.isLoggable(Level.FINE)) {
+                logger.log(Level.FINE, "... calculating bounding shape of "
+                        + buildingNode.getLabels().iterator().next().toString() + " "
+                        + buildingNode.getProperty("id").toString() + " ...");
+            }
+
+            // LoD0
+            if (buildingNode.hasRelationship(Direction.OUTGOING, EnumClasses.GMLRelTypes.LOD0_FOOT_PRINT)) {
+                MultiSurfaceProperty lod0FootPrint = BoundingBoxCalculator.createMultiSurfaceProperty(
+                        GraphUtil.findFirstChildOfNode(buildingNode, EnumClasses.GMLRelTypes.LOD0_FOOT_PRINT));
+                building.setLod0FootPrint(lod0FootPrint);
+            }
+
+            if (buildingNode.hasRelationship(Direction.OUTGOING, EnumClasses.GMLRelTypes.LOD0_ROOF_EDGE)) {
+                MultiSurfaceProperty lod0RoofEdge = BoundingBoxCalculator.createMultiSurfaceProperty(
+                        GraphUtil.findFirstChildOfNode(buildingNode, EnumClasses.GMLRelTypes.LOD0_ROOF_EDGE));
+                building.setLod0RoofEdge(lod0RoofEdge);
+            }
+
+            // LoD1-4 Solid
+            if (buildingNode.hasRelationship(Direction.OUTGOING, EnumClasses.GMLRelTypes.LOD1_SOLID)) {
+                SolidProperty lod1Solid = BoundingBoxCalculator.createSolidProperty(
+                        GraphUtil.findFirstChildOfNode(buildingNode, EnumClasses.GMLRelTypes.LOD1_SOLID));
+                building.setLod1Solid(lod1Solid);
+            }
+
+            if (buildingNode.hasRelationship(Direction.OUTGOING, EnumClasses.GMLRelTypes.LOD2_SOLID)) {
+                SolidProperty lod2Solid = BoundingBoxCalculator.createSolidProperty(
+                        GraphUtil.findFirstChildOfNode(buildingNode, EnumClasses.GMLRelTypes.LOD2_SOLID));
+                building.setLod2Solid(lod2Solid);
+            }
+
+            if (buildingNode.hasRelationship(Direction.OUTGOING, EnumClasses.GMLRelTypes.LOD3_SOLID)) {
+                SolidProperty lod3Solid = BoundingBoxCalculator.createSolidProperty(
+                        GraphUtil.findFirstChildOfNode(buildingNode, EnumClasses.GMLRelTypes.LOD3_SOLID));
+                building.setLod3Solid(lod3Solid);
+            }
+
+            if (buildingNode.hasRelationship(Direction.OUTGOING, EnumClasses.GMLRelTypes.LOD4_SOLID)) {
+                SolidProperty lod4Solid = BoundingBoxCalculator.createSolidProperty(
+                        GraphUtil.findFirstChildOfNode(buildingNode, EnumClasses.GMLRelTypes.LOD4_SOLID));
+                building.setLod4Solid(lod4Solid);
+            }
+
+            // LoD1-4 MultiSurface
+            if (buildingNode.hasRelationship(Direction.OUTGOING, EnumClasses.GMLRelTypes.LOD1_MULTI_SURFACE)) {
+                MultiSurfaceProperty lod1MultiSurface = BoundingBoxCalculator.createMultiSurfaceProperty(
+                        GraphUtil.findFirstChildOfNode(buildingNode, EnumClasses.GMLRelTypes.LOD1_MULTI_SURFACE));
+                building.setLod1MultiSurface(lod1MultiSurface);
+            }
+
+            if (buildingNode.hasRelationship(Direction.OUTGOING, EnumClasses.GMLRelTypes.LOD2_MULTI_SURFACE)) {
+                MultiSurfaceProperty lod2MultiSurface = BoundingBoxCalculator.createMultiSurfaceProperty(
+                        GraphUtil.findFirstChildOfNode(buildingNode, EnumClasses.GMLRelTypes.LOD2_MULTI_SURFACE));
+                building.setLod2MultiSurface(lod2MultiSurface);
+            }
+
+            if (buildingNode.hasRelationship(Direction.OUTGOING, EnumClasses.GMLRelTypes.LOD3_MULTI_SURFACE)) {
+                MultiSurfaceProperty lod3MultiSurface = BoundingBoxCalculator.createMultiSurfaceProperty(
+                        GraphUtil.findFirstChildOfNode(buildingNode, EnumClasses.GMLRelTypes.LOD3_MULTI_SURFACE));
+                building.setLod3MultiSurface(lod3MultiSurface);
+            }
+
+            if (buildingNode.hasRelationship(Direction.OUTGOING, EnumClasses.GMLRelTypes.LOD4_MULTI_SURFACE)) {
+                MultiSurfaceProperty lod4MultiSurface = BoundingBoxCalculator.createMultiSurfaceProperty(
+                        GraphUtil.findFirstChildOfNode(buildingNode, EnumClasses.GMLRelTypes.LOD4_MULTI_SURFACE));
+                building.setLod4MultiSurface(lod4MultiSurface);
+            }
+
+            // LoD2-4 MultiCurve
+            if (buildingNode.hasRelationship(Direction.OUTGOING, EnumClasses.GMLRelTypes.LOD2_MULTI_CURVE)) {
+                MultiCurveProperty lod2MultiCurve = BoundingBoxCalculator.createMultiCurveProperty(
+                        GraphUtil.findFirstChildOfNode(buildingNode, EnumClasses.GMLRelTypes.LOD2_MULTI_CURVE));
+                building.setLod2MultiCurve(lod2MultiCurve);
+            }
+
+            if (buildingNode.hasRelationship(Direction.OUTGOING, EnumClasses.GMLRelTypes.LOD3_MULTI_CURVE)) {
+                MultiCurveProperty lod3MultiCurve = BoundingBoxCalculator.createMultiCurveProperty(
+                        GraphUtil.findFirstChildOfNode(buildingNode, EnumClasses.GMLRelTypes.LOD3_MULTI_CURVE));
+                building.setLod3MultiCurve(lod3MultiCurve);
+            }
+
+            if (buildingNode.hasRelationship(Direction.OUTGOING, EnumClasses.GMLRelTypes.LOD4_MULTI_CURVE)) {
+                MultiCurveProperty lod4MultiCurve = BoundingBoxCalculator.createMultiCurveProperty(
+                        GraphUtil.findFirstChildOfNode(buildingNode, EnumClasses.GMLRelTypes.LOD4_MULTI_CURVE));
+                building.setLod4MultiCurve(lod4MultiCurve);
+            }
+
+            // BOUNDED_BY_SURFACE
+            if (buildingNode.hasRelationship(Direction.OUTGOING, EnumClasses.GMLRelTypes.BOUNDED_BY_SURFACE)) {
+                for (Node n : GraphUtil.findChildrenOfNode(buildingNode, EnumClasses.GMLRelTypes.BOUNDED_BY_SURFACE)) {
+                    BoundarySurfaceProperty boundarySurface = BoundingBoxCalculator.createBoundarySurfaceProperty(n);
+                    building.addBoundedBySurface(boundarySurface);
+                }
+            }
+
+            // OuterBuildingInstallation
+            if (buildingNode.hasRelationship(Direction.OUTGOING, EnumClasses.GMLRelTypes.OUTER_BUILDING_INSTALLATION)) {
+                for (Node n : GraphUtil.findChildrenOfNode(buildingNode, EnumClasses.GMLRelTypes.OUTER_BUILDING_INSTALLATION)) {
+                    BuildingInstallationProperty outerBuildingInstallation = BoundingBoxCalculator.createBuildingInstallationProperty(n);
+                    building.addOuterBuildingInstallation(outerBuildingInstallation);
+                }
+            }
+
+            // BuildingPart
+            if (buildingNode.hasRelationship(Direction.OUTGOING, EnumClasses.GMLRelTypes.BUILDING_PART)) {
+                for (Node n : GraphUtil.findChildrenOfNode(buildingNode, EnumClasses.GMLRelTypes.BUILDING_PART)) {
+                    BuildingPartProperty buildingPart = BoundingBoxCalculator.createBuildingPartProperty(n);
+                    building.addConsistsOfBuildingPart(buildingPart);
+
+                    // also attach bounding shapes to building parts
+                    attachBbox(GraphUtil.findFirstChildOfNode(n, EnumClasses.GMLRelTypes.OBJECT), new BuildingPart());
+                }
+            }
+
+            if (!buildingNode.hasRelationship(Direction.OUTGOING, EnumClasses.GMLRelTypes.BOUNDED_BY)) {
+                createNode(building.calcBoundedBy(true), buildingNode, EnumClasses.GMLRelTypes.BOUNDED_BY);
+            }
+        }
+
+        if (building instanceof Building) {// exclude BuildingPart
+
+            Envelope envelope = BoundingBoxCalculator.createBoundingShape(GraphUtil.findFirstChildOfNode(buildingNode, EnumClasses.GMLRelTypes.BOUNDED_BY)).getEnvelope();
+
+            double[][] lowerUpperCorner = GeometryUtil.getLowerUpperCorner(envelope, logger);
+            double[] lowerCorner = lowerUpperCorner[0];
+            double[] upperCorner = lowerUpperCorner[1];
+
+            if (SETTINGS.MATCHING_STRATEGY.equals(MatchingStrategies.TILES)) {
+                // if city envelope is missing, find lower corners while iterating over buildings
+                if (cityBoundedByMissing) {
+                    if (lowerCorner[0] < cityEnvelopeLowerX) {
+                        cityEnvelopeLowerX = lowerCorner[0];
+                    }
+
+                    if (lowerCorner[1] < cityEnvelopeLowerY) {
+                        cityEnvelopeLowerY = lowerCorner[1];
+                    }
+
+                    if (upperCorner[0] > cityEnvelopeUpperX) {
+                        cityEnvelopeUpperX = upperCorner[0];
+                    }
+
+                    if (upperCorner[1] > cityEnvelopeUpperY) {
+                        cityEnvelopeUpperY = upperCorner[1];
+                    }
+                } else {
+                    assignBuildingsWithEnvelopeToTiles(lowerCorner, upperCorner, buildingNode);
+                }
+            } else if (SETTINGS.MATCHING_STRATEGY.equals(MatchingStrategies.RTREE)) {
+                com.vividsolutions.jts.geom.Coordinate lowerCoordinate = new com.vividsolutions.jts.geom.Coordinate(lowerCorner[0], lowerCorner[1]);
+                com.vividsolutions.jts.geom.Coordinate upperCoordinate = new com.vividsolutions.jts.geom.Coordinate(upperCorner[0], upperCorner[1]);
+
+                com.vividsolutions.jts.geom.Envelope bbox = new com.vividsolutions.jts.geom.Envelope(lowerCoordinate, upperCoordinate);
+
+                // add the bounding box of this building to the RTree
+                Node geomNode = buildingLayer.add(buildingLayer.getGeometryFactory().toGeometry(bbox)).getGeomNode();
+                // link the building node to this RTree node to retrieve data later
+                geomNode.createRelationshipTo(buildingNode, Matcher.TmpRelTypes.RTREE_DATA);
+            }
+        }
+    }
+    */
 }
