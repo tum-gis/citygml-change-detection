@@ -5,11 +5,11 @@ plugins {
 }
 
 group = 'tum-gis'
-version = '0.1.6'
+version = '2.0.0'
 description = 'A change detection tool for CityGML datasets using the graph database Neo4j.'
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_11
     //withJavadocJar()
     withSourcesJar()
 }
