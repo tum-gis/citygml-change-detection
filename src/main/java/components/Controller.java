@@ -1,30 +1,23 @@
 package components;
 
-import editor.Editor;
-import exporter.EditOperationExporter;
-import matcher.Matcher;
-import matcher.Matcher.EditOperators;
-import org.citygml4j.builder.jaxb.CityGMLBuilderException;
-import org.citygml4j.xml.io.reader.CityGMLReadException;
-import org.citygml4j.xml.io.reader.MissingADESchemaException;
-import org.citygml4j.xml.io.reader.UnmarshalException;
+import components.mapper.Mapper;
 import org.neo4j.dbms.api.DatabaseManagementService;
 import org.neo4j.dbms.api.DatabaseManagementServiceBuilder;
-import org.neo4j.graphdb.*;
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Result;
+import org.neo4j.graphdb.Transaction;
+import org.neo4j.io.fs.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import stats.StatBot;
-import util.*;
+import util.FileUtil;
+import util.ReadCMDUtil;
+import util.SETTINGS;
 
-import javax.xml.bind.JAXBException;
-import javax.xml.stream.XMLStreamException;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.nio.file.Paths;
+
+import static org.neo4j.configuration.GraphDatabaseSettings.DEFAULT_DATABASE_NAME;
 
 /**
  * Suggestions, bug reports, etc. please contact: son.nguyen@tum.de
@@ -34,7 +27,7 @@ public class Controller {
     // MAIN COMPONENTS
     private final static Logger logger = LoggerFactory.getLogger(Controller.class);
     // TODO mapper, matcher, etc.
-
+    private final long matcherRunTime = 0;
     // ========================
     // AUXILIARY
     // Embedded Neo4j Java API
@@ -43,13 +36,9 @@ public class Controller {
     private Node mapperRootNode;
     private Node matcherRootNode;
     private Node editorRootNode;
-    private EditOperationExporter exporter;
     private String oldFilename;
     private String newFilename;
     private String wfsServerUrl;
-    private long matcherRunTime = 0;
-
-    private StatBot statBot;
 
     public Controller(String configFile) {
         // Read command line arguments if available
@@ -61,7 +50,7 @@ public class Controller {
             e.printStackTrace();
         }
 
-        this.init();
+        init();
     }
 
     public Controller(String[] args) {
@@ -74,7 +63,7 @@ public class Controller {
             e.printStackTrace();
         }
 
-        this.init();
+        init();
     }
 
     public static void main(String[] args) {
@@ -95,21 +84,28 @@ public class Controller {
             FileUtil.createFileOrDirectory(checkPaths[i], true);
         }
 
-        this.oldFilename = SETTINGS.OLD_CITY_MODEL_LOCATION;
-        this.newFilename = SETTINGS.NEW_CITY_MODEL_LOCATION;
-        this.wfsServerUrl = SETTINGS.WFS_SERVER;
+        oldFilename = SETTINGS.OLD_CITY_MODEL_LOCATION;
+        newFilename = SETTINGS.NEW_CITY_MODEL_LOCATION;
+        wfsServerUrl = SETTINGS.WFS_SERVER;
 
         if (SETTINGS.CLEAN_PREVIOUS_DB) {
-            this.cleanNeo4jStorage();
+            try {
+                FileUtils.deleteDirectory(Paths.get(SETTINGS.DB_LOCATION));
+            } catch (IOException e) {
+                logger.error("Could not delete database directory {}\n{}", SETTINGS.DB_LOCATION, e.getMessage());
+                throw new RuntimeException(e);
+            }
         } else {
             // Delete all existing databases from Neo4j to begin a new session
-            this.cleanNeo4jDatabase();
+            cleanNeo4jDatabase();
         }
 
         // Initialize a new Neo4j graph database
-        this.managementService = (new DatabaseManagementServiceBuilder(new File(SETTINGS.DB_LOCATION)))
-                .loadPropertiesFromFile(SETTINGS.NEO4JDB_CONF_LOCATION).build();
-        graphDb = managementService.database(SETTINGS.DB_NAME);
+        managementService = (new DatabaseManagementServiceBuilder(Paths.get(SETTINGS.DB_LOCATION)))
+                //.loadPropertiesFromFile(Paths.get(SETTINGS.NEO4JDB_CONF_LOCATION))
+                .build();
+        graphDb = managementService.database(DEFAULT_DATABASE_NAME);
+        registerShutdownHook(managementService);
 
         // Initalize logger
         // TODO SETTINGS.LOG_LOCATION
@@ -120,41 +116,28 @@ public class Controller {
     }
 
     public void execute() {
-        try {
-            // TODO Uncomment function calls
-            // Map CityGML instances into a graph database in Neo4j
-            map();
+        // TODO Uncomment function calls
+        // Map CityGML instances into a graph database in Neo4j
+        Mapper mapper = new Mapper(graphDb);
+        mapper.map(oldFilename, newFilename);
 
-            // Match mapped CityGML instances
-            //match();
-            // Export edit operations to CSV files
-            //export(SETTINGS.EXPORT_LOCATION, SETTINGS.CSV_DELIMITER);
-            // Execute WFS-Transactions
-            //update();
-            // Statistics
-            printStats();
-            // Close Neo4j session
-            registerShutdownHook();
-        } catch (MissingADESchemaException e) {
-            throw new RuntimeException(e);
-        } catch (UnmarshalException e) {
-            throw new RuntimeException(e);
-        } catch (JAXBException e) {
-            throw new RuntimeException(e);
-        } catch (CityGMLBuilderException e) {
-            throw new RuntimeException(e);
-        } catch (CityGMLReadException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        // Match mapped CityGML instances
+        //match();
+        // Export edit operations to CSV files
+        //export(SETTINGS.EXPORT_LOCATION, SETTINGS.CSV_DELIMITER);
+        // Execute WFS-Transactions
+        //update();
+        // Statistics
+        //printStats();
+        // Close Neo4j session
+
+        shutDown();
     }
 
-    private void registerShutdownHook() {
+    private void registerShutdownHook(final DatabaseManagementService managementService) {
         // Registers a shutdown hook for the Neo4j instance so that it
         // shuts down nicely when the VM exits (even if you "Ctrl-C" the
         // running application).
-        final DatabaseManagementService managementService = managementService;
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {
@@ -163,9 +146,12 @@ public class Controller {
         });
     }
 
+    private void shutDown() {
+        managementService.shutdown();
+        logger.info("Shut down database");
+    }
+
     private void cleanNeo4jDatabase() {
-        // !!! IMPORTANT: The constructor must have been executed beforehand to
-        // initialize a new Neo4j and Logger session. !!!
         logger.info("... deleting existing Neo4j databases ...");
         try (Transaction tx = graphDb.beginTx();
              Result result = tx.execute("MATCH (n) DETACH DELETE n")) {
@@ -173,23 +159,8 @@ public class Controller {
         }
     }
 
-    private void deleteRecursive(File fileOrDir) {
-        if (fileOrDir.isDirectory()) {
-            for (File file : fileOrDir.listFiles()) {
-                deleteRecursive(file);
-            }
-        }
-
-        fileOrDir.delete();
-    }
-
-    private void cleanNeo4jStorage() {
-        // Remove neo4j database from the hard drive
-        File neo4jDb = new File(SETTINGS.DB_LOCATION);
-        deleteRecursive(neo4jDb);
-    }
-
-
+    // TODO Uncomment
+/*
     private void match() throws InterruptedException, FileNotFoundException, XMLStreamException {
         long startTime = System.currentTimeMillis();
 
@@ -339,4 +310,5 @@ public class Controller {
         statBot = new StatBot(SETTINGS.LOG_LOCATION, SETTINGS.EXPORT_LOCATION, SETTINGS.CSV_DELIMITER);
         statBot.printAllStats();
     }
+ */
 }
