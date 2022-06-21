@@ -1,9 +1,9 @@
 package components.multithreading;
 
+import components.Project;
 import org.citygml4j.xml.io.reader.CityGMLReadException;
 import org.citygml4j.xml.io.reader.CityGMLReader;
 import org.citygml4j.xml.io.reader.XMLChunk;
-import util.SETTINGS;
 
 import java.util.concurrent.BlockingQueue;
 
@@ -26,7 +26,8 @@ public class XMLChunkProducer implements Runnable {
 
                 // end signal by having each producer place Nconsumers pills on the queue
                 // and having the consumer stop only when it receives Nproducers pills
-                for (int i = 0; i < SETTINGS.CONSUMERS_PRO_PRODUCER * SETTINGS.NR_OF_PRODUCERS; i++) {
+                for (int i = 0; i < Project.conf.getMultithreading().getConsumers()
+                        + Project.conf.getMultithreading().getProducers(); i++) {
                     queue.put(new PoisonPillXMLChunk());
                 }
             }

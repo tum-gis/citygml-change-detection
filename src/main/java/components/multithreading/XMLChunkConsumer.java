@@ -1,5 +1,6 @@
 package components.multithreading;
 
+import components.Project;
 import components.mapper.NodeFactory;
 import components.mapper.RelationshipFactory;
 import org.citygml4j.model.citygml.CityGML;
@@ -12,7 +13,6 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.SETTINGS;
 
 import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
@@ -51,9 +51,12 @@ public class XMLChunkConsumer implements Runnable {
         boolean shouldRun = true;
 
         while (shouldRun) {
-            ArrayList<XMLChunk> chunks = new ArrayList<>(SETTINGS.BATCH_SIZE_FEATURES);
+            int size = Project.conf.getMultithreading().getSplitTopLevel() ?
+                    Project.conf.getMultithreading().getBatch().getTopLevel() :
+                    Project.conf.getMultithreading().getBatch().getFeature();
+            ArrayList<XMLChunk> chunks = new ArrayList<>(size);
 
-            for (int i = 0; i < SETTINGS.BATCH_SIZE_FEATURES; i++) {
+            for (int i = 0; i < size; i++) {
                 XMLChunk chunk = null;
 
                 try {
@@ -64,7 +67,7 @@ public class XMLChunkConsumer implements Runnable {
 
                 if (chunk instanceof PoisonPillXMLChunk) {
                     countPoisonPills++;
-                    if (countPoisonPills == SETTINGS.NR_OF_PRODUCERS) {
+                    if (countPoisonPills == Project.conf.getMultithreading().getProducers()) {
                         i++;
                         shouldRun = false;
                         break;
@@ -91,7 +94,8 @@ public class XMLChunkConsumer implements Runnable {
                 }
 
                 if (countChunk > 0) {
-                    logger.info((SETTINGS.SPLIT_PER_COLLECTION_MEMBER ? "Buildings" : "Features") + " found: " + count.addAndGet(countChunk));
+                    logger.info((Project.conf.getMultithreading().getSplitTopLevel() ? "Top-level" : "")
+                            + " Features found: " + count.addAndGet(countChunk));
                 }
 
                 tx.commit();
