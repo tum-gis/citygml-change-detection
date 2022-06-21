@@ -1,8 +1,10 @@
 package components.mapper;
 
+import components.Project;
 import org.citygml4j.model.gml.base.AbstractGML;
 import org.citygml4j.model.gml.base.AssociationByRepOrRef;
 import org.citygml4j.model.gml.base.StringOrRef;
+import org.json.JSONObject;
 import org.neo4j.gis.spatial.EditableLayer;
 import org.neo4j.gis.spatial.SpatialDatabaseService;
 import org.neo4j.gis.spatial.index.IndexManager;
@@ -14,11 +16,11 @@ import org.neo4j.internal.kernel.api.security.SecurityContext;
 import org.neo4j.kernel.internal.GraphDatabaseAPI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.SETTINGS;
 
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -32,7 +34,10 @@ public class NodeFactory {
     // For indexing
     private final static String hrefProperty = "href";
     private final static String idProperty = "id";
-    private final static String hrefDbIndexName = "hrefDbIndex";
+    private final static String[] hrefDbIndexNames = {
+            "hrefAssocDbIndex",
+            "hrefStringDbIndex"
+    };
     private final static String idDbIndexName = "idDbIndex";
     private final static Label[] hrefNodeLabels = {
             Label.label(AssociationByRepOrRef.class.getName()),
@@ -41,9 +46,20 @@ public class NodeFactory {
     private final static Label idNodeLabel = Label.label(AbstractGML.class.getName());
     private final static String rtreeLayerOld = "oldLayer"; // For all top-level features such as buildings, bridges, etc.
     private final static String rtreeLayerNew = "newLayer";
+    private static final JSONObject rules; // TODO
     private static GraphDatabaseService graphDb = null;
     private static IndexDefinition hrefDbIndex = null;
     private static IndexDefinition idDbIndex = null;
+
+    static {
+        try {
+            rules = ReflectionUtils.read(Project.conf.getMapper().getRules().getCitygml(),
+                    Project.conf.getMapper().getRules().getGml(),
+                    Project.conf.getMapper().getRules().getXal());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     // This must be called first BEFORE any function can run from this class
     // If init has already been executed, subsequent calls will do nothing
@@ -57,10 +73,12 @@ public class NodeFactory {
             try (Transaction tx = graphDb.beginTx()) {
                 Schema schema = tx.schema();
                 if (hrefDbIndex == null) {
-                    hrefDbIndex = schema.indexFor(hrefNodeLabels)
-                            .on(hrefProperty)
-                            .withName(hrefDbIndexName)
-                            .create();
+                    for (int i = 0; i < hrefNodeLabels.length; i++) {
+                        hrefDbIndex = schema.indexFor(hrefNodeLabels[i])
+                                .on(hrefProperty)
+                                .withName(hrefDbIndexNames[i])
+                                .create();
+                    }
                 }
                 if (idDbIndex == null) {
                     idDbIndex = schema.indexFor(idNodeLabel)
@@ -86,20 +104,35 @@ public class NodeFactory {
     // Recursive auxiliary function
     // TODO Currently only one commit per object -> Allow batch commit?
     private static Node create(Object object, Transaction tx) {
+        if (object == null) {
+            return null;
+        }
+
+        logger.debug("MAPPING " + object.getClass().getName()); // TODO Remove
         Node result = null;
         // Get the object's class
         Class objectClass = object.getClass();
+        String objectClassString = objectClass.getSimpleName();
 
         // Get class hierarchy
         ArrayList<Label> objectClassHierarchyLabels = new ArrayList<>();
         Class tmpObjectClass = objectClass;
         while (tmpObjectClass.getSuperclass() != null) {
-            objectClassHierarchyLabels.add(Label.label(tmpObjectClass.toString()));
+            objectClassHierarchyLabels.add(Label.label(tmpObjectClass.getName()));
             tmpObjectClass = tmpObjectClass.getSuperclass();
         }
 
         // Create a node with labels named after its class hierarchy
-        result = tx.createNode((Label[]) objectClassHierarchyLabels.toArray());
+        result = tx.createNode();
+        for (Label label : objectClassHierarchyLabels) {
+            result.addLabel(label);
+        }
+
+        String str = ""; // TODO Remove
+        for (Label label : objectClassHierarchyLabels) {
+            str += label + " < ";
+        }
+        logger.debug("LABELS " + str); // TODO Remove
 
         // Get all properties and methods inherited except from Object class
         try {
@@ -111,9 +144,27 @@ public class NodeFactory {
                     break;
                 }
 
+                Object childObject = null;
+                try {
+                    childObject = getter.invoke(object);
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    // Private or inaccessible methods -> no mapping
+                    continue;
+                }
+                if (childObject == null) {
+                    continue;
+                }
+
+                // Check if the selected attribute of selected class should be mapped
+                if (!rules.has(objectClass.getName()) || !((JSONObject) rules.get(objectClass.getName())).has(getter.getName())) {
+                    continue;
+                }
+
+                logger.debug("GETTER " + getter.getName()); // TODO Remove
+
                 if (getter.getReturnType().isPrimitive()) {
                     String propertyName = getter.getName();
-                    Object propertyValue = getter.invoke(object);
+                    Object propertyValue = childObject;
                     if (propertyName.equals(hrefProperty) && propertyValue.toString().charAt(0) != '#') {
                         logger.warn("Element href = {} without prefix '#' detected, this shall be corrected automatically", propertyValue);
                         result.setProperty(propertyName, "#" + propertyValue);
@@ -121,57 +172,59 @@ public class NodeFactory {
                         result.setProperty(propertyName, propertyValue);
                     }
                 } else if (getter.getReturnType().isArray()) {
-                    Object[] values = (Object[]) getter.invoke(object);
-                    int count = 0;
-                    for (Object v : values) {
-                        // Recursively map sub-elements
-                        Node vNode = create(v);
-                        Relationship rel
-                                = result.createRelationshipTo(vNode, RelationshipType.withName(getter.getName()));
-                        // Additional metadata
-                        rel.setProperty(PropertyFactory.AGGREGATION_TYPE.toString(),
-                                PropertyFactory.TYPE_ARRAY.toString());
-                        rel.setProperty(PropertyFactory.INDEX.toString(), count++);
+                    if (childObject instanceof Object[]) {
+                        Object[] values = (Object[]) childObject;
+                        int count = 0;
+                        for (Object v : values) {
+                            // Recursively map sub-elements
+                            Node vNode = create(v);
+                            Relationship rel
+                                    = result.createRelationshipTo(vNode, RelationshipType.withName(getter.getName()));
+                            // Additional metadata
+                            rel.setProperty(PropertyFactory.AGGREGATION_TYPE.toString(),
+                                    PropertyFactory.TYPE_ARRAY.toString());
+                            rel.setProperty(PropertyFactory.INDEX.toString(), count++);
+                        }
                     }
                 } else if (Collection.class.isAssignableFrom(getter.getReturnType())) {
-                    Collection<?> values = (Collection<?>) getter.invoke(object);
-                    int count = 0;
-                    for (Object v : values) {
-                        // Recursively map sub-elements
-                        Node vNode = create(v);
-                        Relationship rel
-                                = result.createRelationshipTo(vNode, RelationshipType.withName(getter.getName()));
-                        // Additional metadata
-                        rel.setProperty(PropertyFactory.AGGREGATION_TYPE.toString(),
-                                PropertyFactory.TYPE_COLLECTION.toString());
-                        rel.setProperty(PropertyFactory.INDEX.toString(), count++);
+                    if (childObject instanceof Collection<?>) {
+                        Collection<?> values = (Collection<?>) childObject;
+                        int count = 0;
+                        for (Object v : values) {
+                            // Recursively map sub-elements
+                            Node vNode = create(v);
+                            Relationship rel
+                                    = result.createRelationshipTo(vNode, RelationshipType.withName(getter.getName()));
+                            // Additional metadata
+                            rel.setProperty(PropertyFactory.AGGREGATION_TYPE.toString(),
+                                    PropertyFactory.TYPE_COLLECTION.toString());
+                            rel.setProperty(PropertyFactory.INDEX.toString(), count++);
+                        }
                     }
                 } else if (Map.class.isAssignableFrom(getter.getReturnType())) {
-                    // Fill in the node with map entries
-                    for (Map.Entry<?, ?> entry : ((Map<?, ?>) getter.invoke(object)).entrySet()) {
-                        // TODO Store all entries in one single node if they are of primitive type?
-                        // Recursively map sub-elements
-                        Node entryNode = create(entry.getValue());
-                        Relationship rel
-                                = result.createRelationshipTo(entryNode, RelationshipType.withName(getter.getName()));
-                        // Additional metadata
-                        rel.setProperty(PropertyFactory.AGGREGATION_TYPE.toString(),
-                                PropertyFactory.TYPE_MAP);
-                        rel.setProperty(PropertyFactory.MAP_KEY.toString(), entry.getKey());
+                    if (childObject instanceof Map<?, ?>) {
+                        // Fill in the node with map entries
+                        for (Map.Entry<?, ?> entry : ((Map<?, ?>) childObject).entrySet()) {
+                            // TODO Store all entries in one single node if they are of primitive type?
+                            // Recursively map sub-elements
+                            Node entryNode = create(entry.getValue());
+                            Relationship rel
+                                    = result.createRelationshipTo(entryNode, RelationshipType.withName(getter.getName()));
+                            // Additional metadata
+                            rel.setProperty(PropertyFactory.AGGREGATION_TYPE.toString(),
+                                    PropertyFactory.TYPE_MAP);
+                            rel.setProperty(PropertyFactory.MAP_KEY.toString(), entry.getKey());
+                        }
                     }
                 } else {
                     // Is a complex type
-                    Node childNode = create(getter.invoke(object));
+                    Node childNode = create(childObject);
                     Relationship rel
                             = result.createRelationshipTo(childNode, RelationshipType.withName(getter.getName()));
                 }
             }
-        } catch (IntrospectionException ex) {
-            throw new RuntimeException(ex);
-        } catch (IllegalAccessException ex) {
-            throw new RuntimeException(ex);
-        } catch (InvocationTargetException ex) {
-            throw new RuntimeException(ex);
+        } catch (IntrospectionException e) {
+            throw new RuntimeException(e);
         }
 
         return result;
@@ -199,7 +252,7 @@ public class NodeFactory {
         }
 
         logger.info("Resolving XLinks/hrefs ---");
-        int countTransactions = SETTINGS.BATCH_SIZE_TRANSACTIONS;
+        int countTransactions = Project.conf.getMultithreading().getBatch().getTrans();
         Transaction tx = graphDb.beginTx();
         try {
             for (Label label : hrefNodeLabels) {
@@ -218,8 +271,8 @@ public class NodeFactory {
                                     tx.commit();
                                     tx.close();
                                     logger.debug("Committed a batch of {} transactions",
-                                            SETTINGS.BATCH_SIZE_TRANSACTIONS);
-                                    countTransactions = SETTINGS.BATCH_SIZE_TRANSACTIONS;
+                                            Project.conf.getMultithreading().getBatch().getTrans());
+                                    countTransactions = Project.conf.getMultithreading().getBatch().getTrans();
                                     tx = graphDb.beginTx();
                                 }
 
@@ -267,7 +320,7 @@ public class NodeFactory {
 
             // Set config to this layer
             Map<String, Object> config = new HashMap<String, Object>();
-            config.put(RTreeIndex.KEY_MAX_NODE_REFERENCES, SETTINGS.MAX_RTREE_NODE_REFERENCES);
+            config.put(RTreeIndex.KEY_MAX_NODE_REFERENCES, Project.conf.getRtree().getNodeRef());
             buildingLayer.getIndex().configure(config);
 
             tx.commit();
@@ -281,7 +334,7 @@ public class NodeFactory {
         logger.info("Calculating BBOX of all top-level features ---");
 
         try (Transaction tx = graphDb.beginTx()) {
-            try (ResourceIterator<Node> buildingNodes = tx.findNodes(Label.label(Building.class.toString()))) {
+            try (ResourceIterator<Node> buildingNodes = tx.findNodes(Label.label(Building.class.getName()))) {
                 while (buildingNodes.hasNext()) {
                     Node buildingNode = buildingNodes.next();
 

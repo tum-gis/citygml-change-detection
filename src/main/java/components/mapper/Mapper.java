@@ -1,7 +1,9 @@
 package components.mapper;
 
+import components.Project;
 import components.multithreading.XMLChunkConsumer;
 import components.multithreading.XMLChunkProducer;
+import conf.Multithreading;
 import org.citygml4j.CityGMLContext;
 import org.citygml4j.builder.jaxb.CityGMLBuilder;
 import org.citygml4j.builder.jaxb.CityGMLBuilderException;
@@ -17,9 +19,9 @@ import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.SETTINGS;
-import util.Timer;
+import utils.Timer;
 
+import javax.xml.namespace.QName;
 import java.io.File;
 import java.util.concurrent.*;
 
@@ -51,7 +53,7 @@ public class Mapper {
             throw new RuntimeException(e);
         }
 
-        if (SETTINGS.SPLIT_PER_COLLECTION_MEMBER) {
+        if (Project.conf.getMultithreading().getSplitTopLevel()) {
             in.setProperty(CityGMLInputFactory.FEATURE_READ_MODE, FeatureReadMode.SPLIT_PER_COLLECTION_MEMBER);
             logger.debug("Split CityGML input datasets by top-level features");
         } else {
@@ -59,7 +61,7 @@ public class Mapper {
             logger.debug("Split CityGML input datasets by features");
         }
         in.setProperty(CityGMLInputFactory.EXCLUDE_FROM_SPLITTING,
-                new Class[]{AbstractOpening.class, Address.class}); // To avoid unresolved xlinks
+                new QName[]{new QName(AbstractOpening.class.getName()), new QName(Address.class.getName())}); // To avoid unresolved xlinks
         in.setProperty(CityGMLInputFactory.KEEP_INLINE_APPEARANCE, true);
 
         // Initialize root node
@@ -106,7 +108,7 @@ public class Mapper {
 
         try (CityGMLReader reader = in.createCityGMLReader(new File(filename))) {
             boolean isOld = relType == RelationshipFactory.OLD_CITY_MODEL;
-            if (SETTINGS.ENABLE_MULTI_THREADED_MAPPING) {
+            if (Project.conf.getMultithreading().getEnabled()) {
                 logger.info("Multi-threading is enabled");
                 runMultiThreaded(reader, mapperRootNode, isOld);
             } else {
@@ -140,16 +142,28 @@ public class Mapper {
 
         XMLChunkConsumer.resetCounter();
 
-        // The poison pill approach only reliably works in unbounded blocking queues
-        BlockingQueue<XMLChunk> queue = new LinkedBlockingQueue<XMLChunk>(3 * SETTINGS.NR_OF_PRODUCERS * SETTINGS.CONSUMERS_PRO_PRODUCER * SETTINGS.BATCH_SIZE_FEATURES);
+        Multithreading multithreading = Project.conf.getMultithreading();
 
-        for (int i = 0; i < SETTINGS.NR_OF_PRODUCERS; i++) {
+        // The poison pill approach only reliably works in unbounded blocking queues
+        BlockingQueue<XMLChunk> queue = new LinkedBlockingQueue<>(3
+                * (multithreading.getProducers() + multithreading.getConsumers())
+                * (multithreading.getSplitTopLevel() ?
+                multithreading.getBatch().getTopLevel() :
+                multithreading.getBatch().getFeature()));
+
+        int consumersPerProducer = multithreading.getConsumers() / multithreading.getProducers();
+        for (int i = 0; i < multithreading.getProducers(); i++) {
             Thread producer = new Thread(new XMLChunkProducer(reader, queue));
             service.execute(producer);
-
-            for (int j = 0; j < SETTINGS.CONSUMERS_PRO_PRODUCER; j++) {
-                Thread consumer = new Thread(
-                        new XMLChunkConsumer(queue, graphDb, mapperRootNode, isOld));
+            int size = consumersPerProducer;
+            if (i == multithreading.getProducers() - 1) {
+                // Last loop -> assign all remaning consumers to this producer
+                // (e.g. with 4 producers and 15 consumers, the first 3 producers shall have 3 consumers each
+                // the last producer shall have 3 + (15 % 4) = 6 consumers)
+                size = consumersPerProducer + (multithreading.getConsumers() % multithreading.getProducers());
+            }
+            for (int j = 0; j < size; j++) {
+                Thread consumer = new Thread(new XMLChunkConsumer(queue, graphDb, mapperRootNode, isOld));
                 service.execute(consumer);
             }
         }
@@ -157,7 +171,7 @@ public class Mapper {
         // Wait for all threads to finish
         service.shutdown();
         try {
-            service.awaitTermination(SETTINGS.THREAD_TIME_OUT, TimeUnit.SECONDS);
+            service.awaitTermination(multithreading.getTimeout(), TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             logger.error("Error while waiting for all threads to finish\n{}", e.getMessage());
             throw new RuntimeException(e);
@@ -168,8 +182,12 @@ public class Mapper {
     public void runSingleThreaded(CityGMLReader reader, Node mapperRootNode, boolean isOld) {
         long countFeatures = 0;
 
-        if (SETTINGS.BATCH_SIZE_FEATURES == 0) {
-            logger.error("NR_OF_COMMIT_FEATURES is 0, abort");
+        Multithreading multithreading = Project.conf.getMultithreading();
+
+        int batchSize = multithreading.getSplitTopLevel() ? multithreading.getBatch().getTopLevel() :
+                multithreading.getBatch().getFeature();
+        if (batchSize == 0) {
+            logger.error("Batch size is 0, abort");
             return;
         }
 
@@ -177,9 +195,8 @@ public class Mapper {
         try {
             while (reader.hasNext()) {
                 countFeatures--;
-                if (countFeatures % SETTINGS.BATCH_SIZE_FEATURES == 0) {
-                    logger.info((SETTINGS.SPLIT_PER_COLLECTION_MEMBER ? "Buildings" : "Features")
-                            + " found: " + countFeatures);
+                if (countFeatures % batchSize == 0) {
+                    logger.info((multithreading.getSplitTopLevel() ? "Top-level" : "") + " Features found: " + countFeatures);
                     tx.commit();
                     tx.close();
                     tx = graphDb.beginTx();
@@ -204,8 +221,7 @@ public class Mapper {
                 }
             }
 
-            logger.info((SETTINGS.SPLIT_PER_COLLECTION_MEMBER ? "Buildings" : "Features")
-                    + " found: " + countFeatures);
+            logger.info((multithreading.getSplitTopLevel() ? "Top-level" : "") + " Features found: " + countFeatures);
 
             tx.commit();
         } catch (CityGMLReadException e) {
