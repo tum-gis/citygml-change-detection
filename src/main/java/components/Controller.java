@@ -7,12 +7,9 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Result;
 import org.neo4j.graphdb.Transaction;
-import org.neo4j.io.fs.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.FileUtil;
-import util.ReadCMDUtil;
-import util.SETTINGS;
+import utils.FileUtils;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -33,105 +30,97 @@ public class Controller {
     // Embedded Neo4j Java API
     private DatabaseManagementService managementService;
     private GraphDatabaseService graphDb;
-    private Node mapperRootNode;
+    private Node mapperRootnode;
     private Node matcherRootNode;
     private Node editorRootNode;
     private String oldFilename;
     private String newFilename;
     private String wfsServerUrl;
 
-    public Controller(String configFile) {
-        // Read command line arguments if available
-        try {
-            if (configFile == null || !ReadCMDUtil.readCommandLindArguments(configFile)) {
-                ReadCMDUtil.readCommandLindArguments("config/Default.txt");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        init();
-    }
-
-    public Controller(String[] args) {
-        // Read command line arguments if available
-        try {
-            if (args == null || !ReadCMDUtil.readCommandLindArguments(args)) {
-                ReadCMDUtil.readCommandLindArguments("config/Default.txt");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        init();
-    }
-
     public static void main(String[] args) {
-        Controller controller = new Controller(args);
-        // Controller controller = new Controller("config/Default.txt");
+        Controller controller = new Controller();
+        controller.init();
 
-        controller.execute();
+        // TODO Uncomment function calls
+
+        // Map CityGML instances into a graph database in Neo4j
+        controller.map();
+
+        // Match mapped CityGML instances
+        //match();
+
+        // Export edit operations to CSV files
+        //export(SETTINGS.EXPORT_LOCATION, SETTINGS.CSV_DELIMITER);
+
+        // Execute WFS-Transactions
+        //update();
+
+        // Statistics
+        //printStats();
+
+        // Close neo4j session
+        controller.shutDown();
     }
 
     private void init() {
-        // Check if given folder paths exist, if not they shall be created
-        String[] checkPaths = {
-                SETTINGS.DB_LOCATION,
-                SETTINGS.EXPORT_LOCATION,
-                SETTINGS.RTREE_IMAGE_LOCATION
-        };
-        for (int i = 0; i < checkPaths.length; i++) {
-            FileUtil.createFileOrDirectory(checkPaths[i], true);
+        // Configurations
+        try {
+            // The config file must be found in `conf.json`
+            Project.init("conf.json");
+        } catch (IOException e) {
+            logger.error("Could not read program configurations from `conf.json`\n{}", e.getMessage());
+            throw new RuntimeException(e);
         }
 
-        oldFilename = SETTINGS.OLD_CITY_MODEL_LOCATION;
-        newFilename = SETTINGS.NEW_CITY_MODEL_LOCATION;
-        wfsServerUrl = SETTINGS.WFS_SERVER;
+        // Check if given folder paths exist, if not they shall be created
+        String[] checkPaths = {
+                Project.conf.getDb().getLocation().getNeo4jDB(),
+                Project.conf.getDb().getLocation().getExportDir(),
+                Project.conf.getRtree().getExportDir()
+        };
+        for (int i = 0; i < checkPaths.length; i++) {
+            FileUtils.createFileOrDirectory(checkPaths[i], true);
+        }
 
-        if (SETTINGS.CLEAN_PREVIOUS_DB) {
+        oldFilename = Project.conf.getMapper().getOldFile();
+        newFilename = Project.conf.getMapper().getNewFile();
+
+        // Clean previous database
+        if (Project.conf.getDb().getPurgePrevDb()) {
+            // Physically
             try {
-                FileUtils.deleteDirectory(Paths.get(SETTINGS.DB_LOCATION));
+                org.neo4j.io.fs.FileUtils.deleteDirectory(Paths.get(checkPaths[0]));
             } catch (IOException e) {
-                logger.error("Could not delete database directory {}\n{}", SETTINGS.DB_LOCATION, e.getMessage());
+                logger.error("Could not delete database directory {}\n{}", checkPaths[0], e.getMessage());
                 throw new RuntimeException(e);
             }
+            logger.info("Physically purged existing database in {}", checkPaths[0]);
         } else {
-            // Delete all existing databases from Neo4j to begin a new session
-            cleanNeo4jDatabase();
+            // Store in database logs
+            initDb(checkPaths[0]);
+            try (Transaction tx = graphDb.beginTx();
+                 Result result = tx.execute("MATCH (n) DETACH DELETE n")) {
+                System.out.println(result.resultAsString()); // TODO
+            }
+            shutDown();
+            logger.info("Logically cleared existing database in {}", checkPaths[0]);
         }
 
         // Initialize a new Neo4j graph database
-        managementService = (new DatabaseManagementServiceBuilder(Paths.get(SETTINGS.DB_LOCATION)))
+        initDb(checkPaths[0]);
+    }
+
+    private void initDb(String dir) {
+        managementService = (new DatabaseManagementServiceBuilder(Paths.get(dir)))
                 //.loadPropertiesFromFile(Paths.get(SETTINGS.NEO4JDB_CONF_LOCATION))
                 .build();
         graphDb = managementService.database(DEFAULT_DATABASE_NAME);
         registerShutdownHook(managementService);
-
-        // Initalize logger
-        // TODO SETTINGS.LOG_LOCATION
-        logger.info(SETTINGS.readSettings());
-        logger.info("\n------------------------------"
-                + "\nINITIALIZING TESTING COMPONENT"
-                + "\n------------------------------");
     }
 
-    public void execute() {
-        // TODO Uncomment function calls
-        // Map CityGML instances into a graph database in Neo4j
+    private void map() {
         Mapper mapper = new Mapper(graphDb);
-        mapper.map(oldFilename, newFilename);
-
-        // Match mapped CityGML instances
-        //match();
-        // Export edit operations to CSV files
-        //export(SETTINGS.EXPORT_LOCATION, SETTINGS.CSV_DELIMITER);
-        // Execute WFS-Transactions
-        //update();
-        // Statistics
-        //printStats();
-        // Close Neo4j session
-
-        shutDown();
+        mapperRootnode = mapper.map(oldFilename, newFilename);
     }
 
     private void registerShutdownHook(final DatabaseManagementService managementService) {
@@ -149,14 +138,6 @@ public class Controller {
     private void shutDown() {
         managementService.shutdown();
         logger.info("Shut down database");
-    }
-
-    private void cleanNeo4jDatabase() {
-        logger.info("... deleting existing Neo4j databases ...");
-        try (Transaction tx = graphDb.beginTx();
-             Result result = tx.execute("MATCH (n) DETACH DELETE n")) {
-            System.out.println(result.resultAsString()); // TODO
-        }
     }
 
     // TODO Uncomment
