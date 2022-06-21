@@ -1,0 +1,50 @@
+{
+  "message": "User message",
+  "workingDir": "Working directory, where all data are stored by default",
+  "db": {
+    "location": {
+      "neo4jConf": "Relative location of predefined neo4j configurations",
+      "neo4jDB": "Relative location of neo4j database",
+      "logFile": "Relative location of log file",
+      "exportDir": "Relative location of export directory"
+    },
+    "purgePrevDb": "Purge previous database physically [true] or logically [false] (stored in the database logs)",
+    "csvDelimiter": "Delimiter separating columns in CSV files"
+  },
+  "rtree": {
+    "exportDir": "Relative location of exported RTree images of mapped datasets",
+    "nodeRef": "Maximum number of entries of an internal R-Tree node"
+  },
+  "multithreading": {
+    "enabled": "Run in multi or single-threaded mode [true/false]",
+    "producers": "Number of producer threads, where producers + consumers <= total threads",
+    "consumers": "Number of consumer threads, where producers + consumers <= total threads",
+    "splitTopLevel": "Split CityGML datasets per top-level [true] or features [false]",
+    "batch": {
+      "topLevel": "Batch size of top-level elements to commit",
+      "feature": "Batch size of feature elements to commit",
+      "trans": "Batch size of database transactions to commit",
+      "logTopLevel": "Batch size of top-level elements to log"
+    },
+    "timeout": "Maximum time to wait for threads to finish (seconds)"
+  },
+  "mapper": {
+    "oldFile": "Relative location of older dataset",
+    "newFile": "Relative location of newer dataset",
+    "rules": {
+      "citygml": "Mapping rules for CityGML classes",
+      "gml": "Mapping rules for GML classes",
+      "xal": "Mapping rules for XAL classes"
+    }
+  },
+  "matcher": {
+    "fuzzy": {
+      "length": "Length tolerance (meters)",
+      "angle": "Angle tolerance (radians)",
+      "shared": {
+        "volume": "Match by shared volume [true] or surface [false]",
+        "threshold": "Minimum threshold for the shared geometry (percentage)"
+      }
+    }
+  }
+}
