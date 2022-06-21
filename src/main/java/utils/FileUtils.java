@@ -1,11 +1,11 @@
-package util;
+package utils;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class FileUtil {
+public class FileUtils {
     /**
      * Creates a file or a directory with a given path.
      * If the directories in the path do not exist, they will be created.
