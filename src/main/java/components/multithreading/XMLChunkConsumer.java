@@ -23,18 +23,15 @@ public class XMLChunkConsumer implements Runnable {
     private static AtomicInteger count = new AtomicInteger();
     private final BlockingQueue<XMLChunk> queue;
     private final GraphDatabaseService graphDb;
-    private final Node mapperRootNode;
     private final boolean isOld;
     private XMLChunkProducer producer;
 
     public XMLChunkConsumer(
             BlockingQueue<XMLChunk> queue,
             GraphDatabaseService graphDb,
-            Node mapperRootNode,
             boolean isOld) {
         this.queue = queue;
         this.graphDb = graphDb;
-        this.mapperRootNode = mapperRootNode;
         this.isOld = isOld;
     }
 
@@ -85,10 +82,11 @@ public class XMLChunkConsumer implements Runnable {
                     XMLChunk chunk = chunks.get(i);
                     countChunk++;
                     CityGML cityObject = chunk.unmarshal();
-                    Node cityObjectNode = NodeFactory.create(cityObject);
+                    Node cityObjectNode = NodeFactory.create(graphDb, cityObject);
                     if (cityObject.getCityGMLClass().equals(CityGMLClass.CITY_MODEL)) {
+                        Node mapperRootNode = NodeFactory.getMapperRootNode(tx);
                         mapperRootNode.createRelationshipTo(cityObjectNode,
-                                isOld ? RelationshipFactory.OLD_CITY_MODEL : RelationshipFactory.NEW_CITY_MODEL);
+                                RelationshipFactory.getCityModelRel(isOld));
                         countChunk--;
                     }
                 }
