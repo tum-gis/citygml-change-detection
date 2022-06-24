@@ -1,18 +1,18 @@
 package components;
 
 import components.mapper.Mapper;
+import conf.Bolt;
+import org.neo4j.configuration.connectors.BoltConnector;
+import org.neo4j.configuration.helpers.SocketAddress;
 import org.neo4j.dbms.api.DatabaseManagementService;
 import org.neo4j.dbms.api.DatabaseManagementServiceBuilder;
 import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Result;
-import org.neo4j.graphdb.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.FileUtils;
 
 import java.io.IOException;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 
 import static org.neo4j.configuration.GraphDatabaseSettings.DEFAULT_DATABASE_NAME;
 
@@ -30,12 +30,8 @@ public class Controller {
     // Embedded Neo4j Java API
     private DatabaseManagementService managementService;
     private GraphDatabaseService graphDb;
-    private Node mapperRootnode;
-    private Node matcherRootNode;
-    private Node editorRootNode;
     private String oldFilename;
     private String newFilename;
-    private String wfsServerUrl;
 
     public static void main(String[] args) {
         Controller controller = new Controller();
@@ -58,8 +54,24 @@ public class Controller {
         // Statistics
         //printStats();
 
-        // Close neo4j session
-        controller.shutDown();
+        Bolt bolt = Project.conf.getDb().getBolt();
+        if (bolt.getEnabled()) {
+            logger.info("Bolt is enabled via neo4j://{}:{}", bolt.getAddress(), bolt.getPort());
+            // TODO How to shutdown? Via Cypher?
+            // TODO If bolt is enabled then the Docker container must persist after running
+        } else {
+            // Close neo4j session
+            controller.shutDown();
+        }
+    }
+
+    private static void setDefaultUncaughtExceptionHandler() {
+        try {
+            Thread.setDefaultUncaughtExceptionHandler((t, e)
+                    -> logger.error("Uncaught Exception detected in thread " + t, e));
+        } catch (SecurityException e) {
+            logger.error("Could not set the Default Uncaught Exception Handler", e);
+        }
     }
 
     private void init() {
@@ -86,33 +98,21 @@ public class Controller {
         newFilename = Project.conf.getMapper().getNewFile();
 
         // Clean previous database
-        if (Project.conf.getDb().getPurgePrevDb()) {
-            // Physically
-            try {
-                org.neo4j.io.fs.FileUtils.deleteDirectory(Paths.get(checkPaths[0]));
-            } catch (IOException e) {
-                logger.error("Could not delete database directory {}\n{}", checkPaths[0], e.getMessage());
-                throw new RuntimeException(e);
-            }
-            logger.info("Physically purged existing database in {}", checkPaths[0]);
-        } else {
-            // Store in database logs
-            initDb(checkPaths[0]);
-            try (Transaction tx = graphDb.beginTx();
-                 Result result = tx.execute("MATCH (n) DETACH DELETE n")) {
-                System.out.println(result.resultAsString()); // TODO
-            }
-            shutDown();
-            logger.info("Logically cleared existing database in {}", checkPaths[0]);
+        Path dbPath = Path.of(checkPaths[0]);
+        try {
+            org.neo4j.io.fs.FileUtils.deleteDirectory(dbPath);
+        } catch (IOException e) {
+            logger.error("Could not delete database directory {}\n{}", checkPaths[0], e.getMessage());
+            throw new RuntimeException(e);
         }
+        logger.info("Purged existing database in {}", checkPaths[0]);
 
         // Initialize a new Neo4j graph database
-        initDb(checkPaths[0]);
-    }
-
-    private void initDb(String dir) {
-        managementService = (new DatabaseManagementServiceBuilder(Paths.get(dir)))
+        managementService = (new DatabaseManagementServiceBuilder(dbPath))
                 //.loadPropertiesFromFile(Paths.get(SETTINGS.NEO4JDB_CONF_LOCATION))
+                .setConfig(BoltConnector.enabled, Project.conf.getDb().getBolt().getEnabled())
+                .setConfig(BoltConnector.listen_address, new SocketAddress(Project.conf.getDb().getBolt().getAddress(),
+                        Project.conf.getDb().getBolt().getPort()))
                 .build();
         graphDb = managementService.database(DEFAULT_DATABASE_NAME);
         registerShutdownHook(managementService);
@@ -120,19 +120,14 @@ public class Controller {
 
     private void map() {
         Mapper mapper = new Mapper(graphDb);
-        mapperRootnode = mapper.map(oldFilename, newFilename);
+        mapper.map(oldFilename, newFilename);
     }
 
     private void registerShutdownHook(final DatabaseManagementService managementService) {
         // Registers a shutdown hook for the Neo4j instance so that it
         // shuts down nicely when the VM exits (even if you "Ctrl-C" the
         // running application).
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            @Override
-            public void run() {
-                managementService.shutdown();
-            }
-        });
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> managementService.shutdown()));
     }
 
     private void shutDown() {
