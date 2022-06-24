@@ -8,7 +8,11 @@
       "logFile": "output/logs/run.log",
       "exportDir": "output/results/"
     },
-    "purgePrevDb": false,
+    "bolt": {
+      "enabled": true,
+      "address": "localhost",
+      "port": 7687
+    },
     "csvDelimiter": ";"
   },
   "rtree": {
@@ -16,7 +20,7 @@
     "nodeRef": 10
   },
   "multithreading": {
-    "enabled": true,
+    "enabled": false,
     "producers": 1,
     "consumers": 7,
     "splitTopLevel": true,
@@ -32,9 +36,9 @@
     "oldFile": "input/Polygon_Multi_Interior_0.gml",
     "newFile": "input/Polygon_Multi_Interior_1.gml",
     "rules": {
-      "citygml": "config/mapper/citygml.json",
-      "gml": "config/mapper/gml.json",
-      "xal": "config/mapper/xal.json"
+      "citygml": "src/main/java/components/mapper/rules/citygml.json",
+      "gml": "src/main/java/components/mapper/rules/gml.json",
+      "xal": "src/main/java/components/mapper/rules/xal.json"
     }
   },
   "matcher": {

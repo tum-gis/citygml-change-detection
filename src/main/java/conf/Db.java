@@ -9,7 +9,7 @@ import java.util.Map;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "location",
-        "purgePrevDb",
+        "bolt",
         "csvDelimiter"
 })
 @Generated("jsonschema2pojo")
@@ -17,8 +17,8 @@ public class Db {
 
     @JsonProperty("location")
     private Location location;
-    @JsonProperty("purgePrevDb")
-    private Boolean purgePrevDb;
+    @JsonProperty("bolt")
+    private Bolt bolt;
     @JsonProperty("csvDelimiter")
     private String csvDelimiter;
     @JsonIgnore
@@ -39,18 +39,18 @@ public class Db {
         return this;
     }
 
-    @JsonProperty("purgePrevDb")
-    public Boolean getPurgePrevDb() {
-        return purgePrevDb;
+    @JsonProperty("bolt")
+    public Bolt getBolt() {
+        return bolt;
     }
 
-    @JsonProperty("purgePrevDb")
-    public void setPurgePrevDb(Boolean purgePrevDb) {
-        this.purgePrevDb = purgePrevDb;
+    @JsonProperty("bolt")
+    public void setBolt(Bolt bolt) {
+        this.bolt = bolt;
     }
 
-    public Db withPurgePrevDb(Boolean purgePrevDb) {
-        this.purgePrevDb = purgePrevDb;
+    public Db withBolt(Bolt bolt) {
+        this.bolt = bolt;
         return this;
     }
 
@@ -92,9 +92,9 @@ public class Db {
         sb.append('=');
         sb.append(((this.location == null) ? "<null>" : this.location));
         sb.append(',');
-        sb.append("purgePrevDb");
+        sb.append("bolt");
         sb.append('=');
-        sb.append(((this.purgePrevDb == null) ? "<null>" : this.purgePrevDb));
+        sb.append(((this.bolt == null) ? "<null>" : this.bolt));
         sb.append(',');
         sb.append("csvDelimiter");
         sb.append('=');
@@ -116,8 +116,8 @@ public class Db {
     public int hashCode() {
         int result = 1;
         result = ((result * 31) + ((this.location == null) ? 0 : this.location.hashCode()));
+        result = ((result * 31) + ((this.bolt == null) ? 0 : this.bolt.hashCode()));
         result = ((result * 31) + ((this.additionalProperties == null) ? 0 : this.additionalProperties.hashCode()));
-        result = ((result * 31) + ((this.purgePrevDb == null) ? 0 : this.purgePrevDb.hashCode()));
         result = ((result * 31) + ((this.csvDelimiter == null) ? 0 : this.csvDelimiter.hashCode()));
         return result;
     }
@@ -131,7 +131,7 @@ public class Db {
             return false;
         }
         Db rhs = ((Db) other);
-        return (((((this.location == rhs.location) || ((this.location != null) && this.location.equals(rhs.location))) && ((this.additionalProperties == rhs.additionalProperties) || ((this.additionalProperties != null) && this.additionalProperties.equals(rhs.additionalProperties)))) && ((this.purgePrevDb == rhs.purgePrevDb) || ((this.purgePrevDb != null) && this.purgePrevDb.equals(rhs.purgePrevDb)))) && ((this.csvDelimiter == rhs.csvDelimiter) || ((this.csvDelimiter != null) && this.csvDelimiter.equals(rhs.csvDelimiter))));
+        return (((((this.location == rhs.location) || ((this.location != null) && this.location.equals(rhs.location))) && ((this.bolt == rhs.bolt) || ((this.bolt != null) && this.bolt.equals(rhs.bolt)))) && ((this.additionalProperties == rhs.additionalProperties) || ((this.additionalProperties != null) && this.additionalProperties.equals(rhs.additionalProperties)))) && ((this.csvDelimiter == rhs.csvDelimiter) || ((this.csvDelimiter != null) && this.csvDelimiter.equals(rhs.csvDelimiter))));
     }
 
 }

@@ -34,11 +34,12 @@ repositories {
 dependencies {
     implementation "org.citygml4j:citygml4j:2.12.1"
     implementation 'org.json:json:20220320'
-    implementation 'org.neo4j:neo4j-dbms:4.4.6'
-    implementation "org.neo4j.driver:neo4j-java-driver:4.4.5"
-    implementation "org.neo4j:neo4j:4.4.6"
+    implementation 'org.neo4j:neo4j-dbms:4.4.8'
+    implementation "org.neo4j.driver:neo4j-java-driver:4.4.6"
+    implementation "org.neo4j:neo4j:4.4.8"
     //implementation 'org.apache.httpcomponents:httpclient:4.5.13'
     implementation "org.neo4j:neo4j-spatial:0.28.1-neo4j-4.4.3"
+    implementation 'org.neo4j:neo4j-bolt:4.4.8'
     implementation 'ch.qos.logback:logback-classic:1.2.11'
     implementation 'org.jsonschema2pojo:jsonschema2pojo-core:1.1.2'
     implementation 'com.google.code.gson:gson:2.9.0'

@@ -8,7 +8,11 @@
       "logFile": "Relative location of log file",
       "exportDir": "Relative location of export directory"
     },
-    "purgePrevDb": "Purge previous database physically [true] or logically [false] (stored in the database logs)",
+    "bolt": {
+      "enabled": "Publish this database via Bolt [true/false]",
+      "address": "The address of the host (e.g. localhost)",
+      "port": "The port number assigned for the Bolt connection"
+    },
     "csvDelimiter": "Delimiter separating columns in CSV files"
   },
   "rtree": {
