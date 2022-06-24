@@ -1,21 +1,11 @@
 package components.mapper;
 
 import components.Project;
-import org.citygml4j.model.gml.base.AbstractGML;
-import org.citygml4j.model.gml.base.AssociationByRepOrRef;
-import org.citygml4j.model.gml.base.StringOrRef;
 import org.json.JSONObject;
-import org.neo4j.gis.spatial.EditableLayer;
-import org.neo4j.gis.spatial.SpatialDatabaseService;
-import org.neo4j.gis.spatial.index.IndexManager;
-import org.neo4j.gis.spatial.rtree.RTreeIndex;
 import org.neo4j.graphdb.*;
-import org.neo4j.graphdb.schema.IndexDefinition;
-import org.neo4j.graphdb.schema.Schema;
-import org.neo4j.internal.kernel.api.security.SecurityContext;
-import org.neo4j.kernel.internal.GraphDatabaseAPI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.NodeUtils;
 
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
@@ -25,35 +15,16 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 public class NodeFactory {
     private final static Logger logger = LoggerFactory.getLogger(NodeFactory.class);
-    // For indexing
-    private final static String hrefProperty = "href";
-    private final static String idProperty = "id";
-    private final static String[] hrefDbIndexNames = {
-            "hrefAssocDbIndex",
-            "hrefStringDbIndex"
-    };
-    private final static String idDbIndexName = "idDbIndex";
-    private final static Label[] hrefNodeLabels = {
-            Label.label(AssociationByRepOrRef.class.getName()),
-            Label.label(StringOrRef.class.getName())
-    };
-    private final static Label idNodeLabel = Label.label(AbstractGML.class.getName());
-    private final static String rtreeLayerOld = "oldLayer"; // For all top-level features such as buildings, bridges, etc.
-    private final static String rtreeLayerNew = "newLayer";
-    private static final JSONObject rules; // TODO
-    private static GraphDatabaseService graphDb = null;
-    private static IndexDefinition hrefDbIndex = null;
-    private static IndexDefinition idDbIndex = null;
+
+    private static final JSONObject mappingRules;
 
     static {
         try {
-            rules = ReflectionUtils.read(Project.conf.getMapper().getRules().getCitygml(),
+            mappingRules = ReflectionUtils.read(Project.conf.getMapper().getRules().getCitygml(),
                     Project.conf.getMapper().getRules().getGml(),
                     Project.conf.getMapper().getRules().getXal());
         } catch (IOException e) {
@@ -63,39 +34,28 @@ public class NodeFactory {
 
     // This must be called first BEFORE any function can run from this class
     // If init has already been executed, subsequent calls will do nothing
-    public static void init(GraphDatabaseService graphDb) {
-        if (NodeFactory.graphDb == null) {
-            NodeFactory.graphDb = graphDb;
-        }
-
-        if (hrefDbIndex == null || idDbIndex == null) {
-            // Create automatic indexing for attributes "href" and "id" while creating nodes
-            try (Transaction tx = graphDb.beginTx()) {
-                Schema schema = tx.schema();
-                if (hrefDbIndex == null) {
-                    for (int i = 0; i < hrefNodeLabels.length; i++) {
-                        hrefDbIndex = schema.indexFor(hrefNodeLabels[i])
-                                .on(hrefProperty)
-                                .withName(hrefDbIndexNames[i])
-                                .create();
-                    }
-                }
-                if (idDbIndex == null) {
-                    idDbIndex = schema.indexFor(idNodeLabel)
-                            .on(idProperty)
-                            .withName(idDbIndexName)
-                            .create();
-                }
-                tx.commit();
-                logger.info("Created automatic database indexing for XLinks");
-            }
+    public static void createRootNodes(GraphDatabaseService graphDb) {
+        try (Transaction tx = graphDb.beginTx()) {
+            // Create root nodes
+            tx.createNode(LabelFactory.ROOT_MAPPER);
+            tx.createNode(LabelFactory.ROOT_MATCHER);
+            logger.debug("Created root nodes {} and {}", LabelFactory.ROOT_MAPPER, LabelFactory.ROOT_MATCHER);
+            tx.commit();
         }
     }
 
-    public static Node create(Object object) {
+    public static Node getMapperRootNode(Transaction tx) {
+        return NodeUtils.findFirst(tx, LabelFactory.ROOT_MAPPER);
+    }
+
+    public static Node getMatcherRootNode(Transaction tx) {
+        return NodeUtils.findFirst(tx, LabelFactory.ROOT_MATCHER);
+    }
+
+    public static Node create(GraphDatabaseService graphDb, Object object) {
         Node result = null;
         try (Transaction tx = graphDb.beginTx()) {
-            result = create(object, tx);
+            result = create(tx, object);
             tx.commit(); // Commit once per (e.g. top-level) object
         }
         return result;
@@ -103,12 +63,11 @@ public class NodeFactory {
 
     // Recursive auxiliary function
     // TODO Currently only one commit per object -> Allow batch commit?
-    private static Node create(Object object, Transaction tx) {
+    private static Node create(Transaction tx, Object object) {
         if (object == null) {
             return null;
         }
 
-        logger.debug("MAPPING " + object.getClass().getName()); // TODO Remove
         Node result = null;
         // Get the object's class
         Class objectClass = object.getClass();
@@ -127,12 +86,6 @@ public class NodeFactory {
         for (Label label : objectClassHierarchyLabels) {
             result.addLabel(label);
         }
-
-        String str = ""; // TODO Remove
-        for (Label label : objectClassHierarchyLabels) {
-            str += label + " < ";
-        }
-        logger.debug("LABELS " + str); // TODO Remove
 
         // Get all properties and methods inherited except from Object class
         try {
@@ -156,28 +109,21 @@ public class NodeFactory {
                 }
 
                 // Check if the selected attribute of selected class should be mapped
-                if (!rules.has(objectClass.getName()) || !((JSONObject) rules.get(objectClass.getName())).has(getter.getName())) {
+                if (!mappingRules.has(objectClass.getName()) || !((JSONObject) mappingRules.get(objectClass.getName())).has(getter.getName())) {
                     continue;
                 }
-
-                logger.debug("GETTER " + getter.getName()); // TODO Remove
 
                 if (getter.getReturnType().isPrimitive()) {
                     String propertyName = getter.getName();
                     Object propertyValue = childObject;
-                    if (propertyName.equals(hrefProperty) && propertyValue.toString().charAt(0) != '#') {
-                        logger.warn("Element href = {} without prefix '#' detected, this shall be corrected automatically", propertyValue);
-                        result.setProperty(propertyName, "#" + propertyValue);
-                    } else {
-                        result.setProperty(propertyName, propertyValue);
-                    }
+                    IndexFactory.setHref(tx, propertyName, propertyValue, result);
                 } else if (getter.getReturnType().isArray()) {
                     if (childObject instanceof Object[]) {
                         Object[] values = (Object[]) childObject;
                         int count = 0;
                         for (Object v : values) {
                             // Recursively map sub-elements
-                            Node vNode = create(v);
+                            Node vNode = create(tx, v);
                             Relationship rel
                                     = result.createRelationshipTo(vNode, RelationshipType.withName(getter.getName()));
                             // Additional metadata
@@ -192,7 +138,7 @@ public class NodeFactory {
                         int count = 0;
                         for (Object v : values) {
                             // Recursively map sub-elements
-                            Node vNode = create(v);
+                            Node vNode = create(tx, v);
                             Relationship rel
                                     = result.createRelationshipTo(vNode, RelationshipType.withName(getter.getName()));
                             // Additional metadata
@@ -207,7 +153,7 @@ public class NodeFactory {
                         for (Map.Entry<?, ?> entry : ((Map<?, ?>) childObject).entrySet()) {
                             // TODO Store all entries in one single node if they are of primitive type?
                             // Recursively map sub-elements
-                            Node entryNode = create(entry.getValue());
+                            Node entryNode = create(tx, entry.getValue());
                             Relationship rel
                                     = result.createRelationshipTo(entryNode, RelationshipType.withName(getter.getName()));
                             // Additional metadata
@@ -218,7 +164,7 @@ public class NodeFactory {
                     }
                 } else {
                     // Is a complex type
-                    Node childNode = create(childObject);
+                    Node childNode = create(tx, childObject);
                     Relationship rel
                             = result.createRelationshipTo(childNode, RelationshipType.withName(getter.getName()));
                 }
@@ -230,102 +176,7 @@ public class NodeFactory {
         return result;
     }
 
-    // This function is called AFTER all hrefs and ids have been stored
-    // This function runs in single-threaded mode
-    // At the end the indexing shall be dropped
-    public static void resolveXLinks() {
-        // Wait for indexing to finish
-        logger.info("Populating database indices ---");
-        try (Transaction tx = graphDb.beginTx()) {
-            Schema schema = tx.schema();
-            schema.awaitIndexOnline(hrefDbIndex, 60, TimeUnit.SECONDS);
-            schema.awaitIndexOnline(idDbIndex, 60, TimeUnit.SECONDS);
-        }
-        logger.info("--- Done");
 
-        try (Transaction tx = graphDb.beginTx()) {
-            Schema schema = tx.schema();
-            logger.debug(String.format("Indexing href complete: %1.0f%%",
-                    schema.getIndexPopulationProgress(hrefDbIndex).getCompletedPercentage()));
-            logger.debug(String.format("Indexing id complete: %1.0f%%",
-                    schema.getIndexPopulationProgress(idDbIndex).getCompletedPercentage()));
-        }
-
-        logger.info("Resolving XLinks/hrefs ---");
-        int countTransactions = Project.conf.getMultithreading().getBatch().getTrans();
-        Transaction tx = graphDb.beginTx();
-        try {
-            for (Label label : hrefNodeLabels) {
-                // The value href must ALWAYS begin with "#"
-                try (ResourceIterator<Node> hrefNodes
-                             = tx.findNodes(label, hrefProperty, "#", StringSearchMode.PREFIX)) {
-                    while (hrefNodes.hasNext()) {
-                        Node hrefNode = hrefNodes.next();
-                        String idValue = hrefNode.getProperty(hrefProperty).toString()
-                                .replace("#", "");
-                        try (ResourceIterator<Node> idNodes = tx.findNodes(idNodeLabel, idProperty, idValue)) {
-                            int idCount = 0;
-                            while (idNodes.hasNext()) {
-                                // Periodically commit in batch
-                                if (countTransactions == 0) {
-                                    tx.commit();
-                                    tx.close();
-                                    logger.debug("Committed a batch of {} transactions",
-                                            Project.conf.getMultithreading().getBatch().getTrans());
-                                    countTransactions = Project.conf.getMultithreading().getBatch().getTrans();
-                                    tx = graphDb.beginTx();
-                                }
-
-                                Node idNode = idNodes.next();
-                                hrefNode.createRelationshipTo(idNode, RelationshipFactory.HREF);
-                                countTransactions--;
-                                hrefNode.removeProperty(hrefProperty);
-                                countTransactions--;
-                                idCount++;
-                            }
-                            if (idCount == 0) {
-                                logger.warn("No element with referenced ID = {} found", idValue);
-                            } else if (idCount >= 2) {
-                                logger.warn("{} elements of the same ID = {} detected", idCount, idValue);
-                            }
-                        }
-                    }
-                }
-            }
-
-            tx.commit();
-        } finally {
-            tx.close();
-        }
-
-        logger.info("XLinks resolved");
-    }
-
-    // Remove indexing (in order to not unnecessarily overload the mapping process of new dataset)
-    public static void dropDbIndexing() {
-        try (Transaction tx = graphDb.beginTx()) {
-            hrefDbIndex.drop();
-            idDbIndex.drop();
-            tx.commit();
-        }
-    }
-
-    public static void initRTreeLayer(boolean isOld) {
-        try (Transaction tx = graphDb.beginTx()) {
-            // Init an R-Tree layer for each dataset
-            SpatialDatabaseService spatialDb = new SpatialDatabaseService(
-                    new IndexManager((GraphDatabaseAPI) graphDb, SecurityContext.AUTH_DISABLED));
-            EditableLayer buildingLayer = spatialDb.getOrCreateEditableLayer(tx,
-                    (isOld ? rtreeLayerOld : rtreeLayerNew));
-
-            // Set config to this layer
-            Map<String, Object> config = new HashMap<String, Object>();
-            config.put(RTreeIndex.KEY_MAX_NODE_REFERENCES, Project.conf.getRtree().getNodeRef());
-            buildingLayer.getIndex().configure(config);
-
-            tx.commit();
-        }
-    }
 
     /*
     // While mapping in chunks, top-level features cannot have their bounding shapes calculated
