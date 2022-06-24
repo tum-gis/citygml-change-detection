@@ -33,12 +33,12 @@ public class Mapper {
 
     public Mapper(GraphDatabaseService graphDb) {
         this.graphDb = graphDb;
-        NodeFactory.init(graphDb);
+        NodeFactory.createRootNodes(graphDb);
         timer = new Timer();
     }
 
     // Return a root node for the (acyclic directed) mapped graphs
-    public Node map(String oldFilename, String newFilename) {
+    public void map(String oldFilename, String newFilename) {
         timer.start();
 
         logger.info("Set up citygml4j context and JAXB builder");
@@ -64,20 +64,12 @@ public class Mapper {
                 new QName[]{new QName(AbstractOpening.class.getName()), new QName(Address.class.getName())}); // To avoid unresolved xlinks
         in.setProperty(CityGMLInputFactory.KEEP_INLINE_APPEARANCE, true);
 
-        // Initialize root node
-        Node mapperRootNode = null;
-        try (Transaction tx = graphDb.beginTx()) {
-            mapperRootNode = tx.createNode(LabelFactory.ROOT_MAPPER);
-            logger.debug("Created ROOT_MAPPER");
-            tx.commit();
-        }
-
         // Map old city model
-        mapCityModel(in, mapperRootNode, oldFilename, RelationshipFactory.OLD_CITY_MODEL);
+        mapCityModel(in, oldFilename, RelationshipFactory.OLD_CITY_MODEL);
         logger.debug("Mapped old dataset");
 
         // Map new city model
-        mapCityModel(in, mapperRootNode, newFilename, RelationshipFactory.NEW_CITY_MODEL);
+        mapCityModel(in, newFilename, RelationshipFactory.NEW_CITY_MODEL);
         logger.debug("Mapped new dataset");
 
         long mapperRunTime = 0;
@@ -88,18 +80,16 @@ public class Mapper {
             logger.error("Error while computing run time of mapping\n{}", e.getMessage());
             throw new RuntimeException(e);
         }
-
-        return mapperRootNode;
     }
 
-    private void mapCityModel(CityGMLInputFactory in, Node mapperRootNode,
-                              String filename, RelationshipType relType) {
+    private void mapCityModel(CityGMLInputFactory in, String filename, RelationshipType relType) {
         if (filename.isEmpty() || !new File(filename).exists()) {
             // If the city model does not exist -> create a dummy old/new city model node
             // This is useful to map only one single data set for further analyses without matching
             // TODO Refactor this
             try (Transaction tx = graphDb.beginTx()) {
                 Node targetNode = tx.createNode(LabelFactory.CITY_MODEL);
+                Node mapperRootNode = NodeFactory.getMapperRootNode(tx);
                 mapperRootNode.createRelationshipTo(targetNode, relType);
                 tx.commit();
             }
@@ -107,21 +97,23 @@ public class Mapper {
         }
 
         try (CityGMLReader reader = in.createCityGMLReader(new File(filename))) {
-            boolean isOld = relType == RelationshipFactory.OLD_CITY_MODEL;
+            // Pre-processing
+            IndexFactory.initXLinkIndexing(graphDb);
+
+            // Main process
+            boolean isOld = (relType == RelationshipFactory.OLD_CITY_MODEL);
             if (Project.conf.getMultithreading().getEnabled()) {
                 logger.info("Multi-threading is enabled");
-                runMultiThreaded(reader, mapperRootNode, isOld);
+                runMultiThreaded(reader, isOld);
             } else {
                 logger.info("Multi-threading is disabled, the program shall run in single-threaded mode");
-                runSingleThreaded(reader, mapperRootNode, isOld);
+                runSingleThreaded(reader, isOld);
             }
 
-            // ---------------
             // Post-processing
-
-            NodeFactory.resolveXLinks();
-            NodeFactory.dropDbIndexing(); // the label indexing shall be removed after resolving XLinks
-            NodeFactory.initRTreeLayer(isOld); // the spatial indexing shall remain after mapping for querying
+            IndexFactory.resolveXLinks(graphDb);
+            IndexFactory.dropXLinkIndexing(graphDb); // The label indexing shall be removed after resolving XLinks
+            IndexFactory.initRTreeLayer(graphDb, isOld); // The spatial indexing shall remain after mapping for querying
             // TODO Other functions here
 
             logger.info("Finished reading city model");
@@ -131,7 +123,7 @@ public class Mapper {
         }
     }
 
-    public void runMultiThreaded(CityGMLReader reader, Node mapperRootNode, boolean isOld) {
+    public void runMultiThreaded(CityGMLReader reader, boolean isOld) {
         // Create a fixed thread pool
         int nThreads = Runtime.getRuntime().availableProcessors() * 2;
         service = Executors.newFixedThreadPool(nThreads);
@@ -163,7 +155,7 @@ public class Mapper {
                 size = consumersPerProducer + (multithreading.getConsumers() % multithreading.getProducers());
             }
             for (int j = 0; j < size; j++) {
-                Thread consumer = new Thread(new XMLChunkConsumer(queue, graphDb, mapperRootNode, isOld));
+                Thread consumer = new Thread(new XMLChunkConsumer(queue, graphDb, isOld));
                 service.execute(consumer);
             }
         }
@@ -179,7 +171,7 @@ public class Mapper {
         logger.debug("Shut down thread pool");
     }
 
-    public void runSingleThreaded(CityGMLReader reader, Node mapperRootNode, boolean isOld) {
+    public void runSingleThreaded(CityGMLReader reader, boolean isOld) {
         long countFeatures = 0;
 
         Multithreading multithreading = Project.conf.getMultithreading();
@@ -194,7 +186,7 @@ public class Mapper {
         Transaction tx = graphDb.beginTx();
         try {
             while (reader.hasNext()) {
-                countFeatures--;
+                countFeatures++;
                 if (countFeatures % batchSize == 0) {
                     logger.info((multithreading.getSplitTopLevel() ? "Top-level" : "") + " Features found: " + countFeatures);
                     tx.commit();
@@ -210,10 +202,10 @@ public class Mapper {
                 CityGML cityObject;
                 try {
                     cityObject = chunk.unmarshal();
-                    Node node = NodeFactory.create(cityObject);
+                    Node node = NodeFactory.create(graphDb, cityObject);
                     if (cityObject.getCityGMLClass().equals(CityGMLClass.CITY_MODEL)) {
-                        mapperRootNode.createRelationshipTo(node,
-                                isOld ? RelationshipFactory.OLD_CITY_MODEL : RelationshipFactory.NEW_CITY_MODEL);
+                        Node mapperRootNode = NodeFactory.getMapperRootNode(tx);
+                        mapperRootNode.createRelationshipTo(node, RelationshipFactory.getCityModelRel(isOld));
                     }
                 } catch (UnmarshalException | MissingADESchemaException e) {
                     logger.error("Error while reading input datasets\n{}", e.getMessage());
