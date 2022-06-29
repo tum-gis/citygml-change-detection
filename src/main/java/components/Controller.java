@@ -23,8 +23,9 @@ public class Controller {
     // ========================
     // MAIN COMPONENTS
     private final static Logger logger = LoggerFactory.getLogger(Controller.class);
-    // TODO mapper, matcher, etc.
-    private final long matcherRunTime = 0;
+    private final static String confFilename = "conf.json";
+    private final static String confInfoFilename = "conf_info.json";
+
     // ========================
     // AUXILIARY
     // Embedded Neo4j Java API
@@ -78,7 +79,7 @@ public class Controller {
         // Configurations
         try {
             // The config file must be found in `conf.json`
-            Project.init("conf.json");
+            Project.init(confFilename, confInfoFilename);
         } catch (IOException e) {
             logger.error("Could not read program configurations from `conf.json`\n{}", e.getMessage());
             throw new RuntimeException(e);
