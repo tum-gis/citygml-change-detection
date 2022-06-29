@@ -65,12 +65,14 @@ public class Mapper {
         in.setProperty(CityGMLInputFactory.KEEP_INLINE_APPEARANCE, true);
 
         // Map old city model
+        logger.info("Init mapping old dataset");
         mapCityModel(in, oldFilename, RelationshipFactory.OLD_CITY_MODEL);
-        logger.debug("Mapped old dataset");
+        logger.info("Mapped old dataset");
 
         // Map new city model
+        logger.info("Init mapping new dataset");
         mapCityModel(in, newFilename, RelationshipFactory.NEW_CITY_MODEL);
-        logger.debug("Mapped new dataset");
+        logger.info("Mapped new dataset");
 
         long mapperRunTime = 0;
         try {
