@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import org.neo4j.graphdb.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.MappingRulesUtils;
 import utils.NodeUtils;
 
 import java.beans.IntrospectionException;
@@ -24,7 +25,7 @@ public class NodeFactory {
 
     static {
         try {
-            mappingRules = ReflectionUtils.read(Project.conf.getMapper().getRules().getCitygml(),
+            mappingRules = MappingRulesUtils.read(Project.conf.getMapper().getRules().getCitygml(),
                     Project.conf.getMapper().getRules().getGml(),
                     Project.conf.getMapper().getRules().getXal());
         } catch (IOException e) {
@@ -71,20 +72,19 @@ public class NodeFactory {
         Node result = null;
         // Get the object's class
         Class objectClass = object.getClass();
-        String objectClassString = objectClass.getSimpleName();
 
         // Get class hierarchy
-        ArrayList<Label> objectClassHierarchyLabels = new ArrayList<>();
+        ArrayList<Class> objectClasses = new ArrayList<>();
         Class tmpObjectClass = objectClass;
-        while (tmpObjectClass.getSuperclass() != null) {
-            objectClassHierarchyLabels.add(Label.label(tmpObjectClass.getName()));
+        while (tmpObjectClass != null) {
+            objectClasses.add(tmpObjectClass);
             tmpObjectClass = tmpObjectClass.getSuperclass();
         }
 
         // Create a node with labels named after its class hierarchy
         result = tx.createNode();
-        for (Label label : objectClassHierarchyLabels) {
-            result.addLabel(label);
+        for (Class cl : objectClasses) {
+            result.addLabel(Label.label(cl.getName()));
         }
 
         // Get all properties and methods inherited except from Object class
@@ -109,13 +109,23 @@ public class NodeFactory {
                 }
 
                 // Check if the selected attribute of selected class should be mapped
-                if (!mappingRules.has(objectClass.getName()) || !((JSONObject) mappingRules.get(objectClass.getName())).has(getter.getName())) {
+                boolean getterFound = false;
+                for (Class cl : objectClasses) {
+                    if (mappingRules.has(cl.getName())
+                            && ((JSONObject) mappingRules.get(cl.getName())).has(getter.getName())) {
+                        getterFound = true;
+                        break;
+                    }
+                }
+                if (!getterFound) {
                     continue;
                 }
 
+                logger.debug("Create node ({}):{}", objectClass.getName(), getter.getName());
                 if (getter.getReturnType().isPrimitive()) {
                     String propertyName = getter.getName();
                     Object propertyValue = childObject;
+                    result.setProperty(propertyName, childObject);
                     IndexFactory.setHref(tx, propertyName, propertyValue, result);
                 } else if (getter.getReturnType().isArray()) {
                     if (childObject instanceof Object[]) {
