@@ -31,8 +31,8 @@ public class Controller {
     // Embedded Neo4j Java API
     private DatabaseManagementService managementService;
     private GraphDatabaseService graphDb;
-    private String oldFilename;
-    private String newFilename;
+    private Path pathOld;
+    private Path pathNew;
 
     public static void main(String[] args) {
         Controller controller = new Controller();
@@ -95,8 +95,8 @@ public class Controller {
             FileUtils.createFileOrDirectory(checkPaths[i], true);
         }
 
-        oldFilename = Project.conf.getMapper().getOldFile();
-        newFilename = Project.conf.getMapper().getNewFile();
+        pathOld = Path.of(Project.conf.getMapper().getOldFile());
+        pathNew = Path.of(Project.conf.getMapper().getNewFile());
 
         // Clean previous database
         Path dbPath = Path.of(checkPaths[0]);
@@ -121,7 +121,7 @@ public class Controller {
 
     private void map() {
         Mapper mapper = new Mapper(graphDb);
-        mapper.map(oldFilename, newFilename);
+        mapper.map(pathOld, pathNew);
     }
 
     private void registerShutdownHook(final DatabaseManagementService managementService) {

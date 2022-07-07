@@ -22,7 +22,8 @@ import org.slf4j.LoggerFactory;
 import utils.Timer;
 
 import javax.xml.namespace.QName;
-import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.concurrent.*;
 
 public class Mapper {
@@ -38,7 +39,7 @@ public class Mapper {
     }
 
     // Return a root node for the (acyclic directed) mapped graphs
-    public void map(String oldFilename, String newFilename) {
+    public void map(Path pathOld, Path pathNew) {
         timer.start();
 
         logger.info("Set up citygml4j context and JAXB builder");
@@ -66,12 +67,12 @@ public class Mapper {
 
         // Map old city model
         logger.info("Init mapping old dataset");
-        mapCityModel(in, oldFilename, RelationshipFactory.OLD_CITY_MODEL);
+        mapCityModel(in, pathOld, RelationshipFactory.OLD_CITY_MODEL);
         logger.info("Mapped old dataset");
 
         // Map new city model
         logger.info("Init mapping new dataset");
-        mapCityModel(in, newFilename, RelationshipFactory.NEW_CITY_MODEL);
+        mapCityModel(in, pathNew, RelationshipFactory.NEW_CITY_MODEL);
         logger.info("Mapped new dataset");
 
         long mapperRunTime = 0;
@@ -84,8 +85,8 @@ public class Mapper {
         }
     }
 
-    private void mapCityModel(CityGMLInputFactory in, String filename, RelationshipType relType) {
-        if (filename.isEmpty() || !new File(filename).exists()) {
+    private void mapCityModel(CityGMLInputFactory in, Path path, RelationshipType relType) {
+        if (path == null || !Files.exists(path)) {
             // If the city model does not exist -> create a dummy old/new city model node
             // This is useful to map only one single data set for further analyses without matching
             // TODO Refactor this
@@ -98,7 +99,7 @@ public class Mapper {
             return;
         }
 
-        try (CityGMLReader reader = in.createCityGMLReader(new File(filename))) {
+        try (CityGMLReader reader = in.createCityGMLReader(path.toFile())) {
             // Pre-processing
             IndexFactory.initXLinkIndexing(graphDb);
 
@@ -120,12 +121,12 @@ public class Mapper {
 
             logger.info("Finished reading city model");
         } catch (CityGMLReadException e) {
-            logger.error("Error while opening the input dataset {}\n{}", filename, e.getMessage());
+            logger.error("Error while opening the input dataset {}\n{}", path, e.getMessage());
             throw new RuntimeException(e);
         }
     }
 
-    public void runMultiThreaded(CityGMLReader reader, boolean isOld) {
+    public void runMultiThreaded(CityGMLReader reader, boolean isOld) { // TODO Test
         // Create a fixed thread pool
         int nThreads = Runtime.getRuntime().availableProcessors() * 2;
         service = Executors.newFixedThreadPool(nThreads);
