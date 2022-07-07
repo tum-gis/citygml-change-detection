@@ -51,3 +51,19 @@ run {
     main('components.Controller')
     systemProperty('logback.configurationFile', 'src/main/java/components/logger/logback.xml')
 }
+
+// Run this task to rebuild the mapping rule files citygml.json, gml.json and xal.json
+task createMappingRules(type: JavaExec) {
+    group('utils')
+    description('Build mapping rules in JSON files')
+    classpath(sourceSets.main.runtimeClasspath)
+    main('utils.MappingRulesUtils')
+}
+
+// Run this task to rebuild the config Java classes in case of changed conf.json
+task createConfClasses(type: JavaExec) {
+    group('utils')
+    description('Build config Java classes based on the structure of config JSON files')
+    classpath(sourceSets.main.runtimeClasspath)
+    main('utils.ConfUtils')
+}
