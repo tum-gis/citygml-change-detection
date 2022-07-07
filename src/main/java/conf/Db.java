@@ -1,16 +1,21 @@
+
 package conf;
 
-import com.fasterxml.jackson.annotation.*;
-
-import javax.annotation.processing.Generated;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import javax.annotation.processing.Generated;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "location",
-        "bolt",
-        "csvDelimiter"
+    "location",
+    "bolt",
+    "csvDelimiter"
 })
 @Generated("jsonschema2pojo")
 public class Db {
@@ -90,22 +95,22 @@ public class Db {
         sb.append(Db.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
         sb.append("location");
         sb.append('=');
-        sb.append(((this.location == null) ? "<null>" : this.location));
+        sb.append(((this.location == null)?"<null>":this.location));
         sb.append(',');
         sb.append("bolt");
         sb.append('=');
-        sb.append(((this.bolt == null) ? "<null>" : this.bolt));
+        sb.append(((this.bolt == null)?"<null>":this.bolt));
         sb.append(',');
         sb.append("csvDelimiter");
         sb.append('=');
-        sb.append(((this.csvDelimiter == null) ? "<null>" : this.csvDelimiter));
+        sb.append(((this.csvDelimiter == null)?"<null>":this.csvDelimiter));
         sb.append(',');
         sb.append("additionalProperties");
         sb.append('=');
-        sb.append(((this.additionalProperties == null) ? "<null>" : this.additionalProperties));
+        sb.append(((this.additionalProperties == null)?"<null>":this.additionalProperties));
         sb.append(',');
-        if (sb.charAt((sb.length() - 1)) == ',') {
-            sb.setCharAt((sb.length() - 1), ']');
+        if (sb.charAt((sb.length()- 1)) == ',') {
+            sb.setCharAt((sb.length()- 1), ']');
         } else {
             sb.append(']');
         }
@@ -115,10 +120,10 @@ public class Db {
     @Override
     public int hashCode() {
         int result = 1;
-        result = ((result * 31) + ((this.location == null) ? 0 : this.location.hashCode()));
-        result = ((result * 31) + ((this.bolt == null) ? 0 : this.bolt.hashCode()));
-        result = ((result * 31) + ((this.additionalProperties == null) ? 0 : this.additionalProperties.hashCode()));
-        result = ((result * 31) + ((this.csvDelimiter == null) ? 0 : this.csvDelimiter.hashCode()));
+        result = ((result* 31)+((this.location == null)? 0 :this.location.hashCode()));
+        result = ((result* 31)+((this.bolt == null)? 0 :this.bolt.hashCode()));
+        result = ((result* 31)+((this.additionalProperties == null)? 0 :this.additionalProperties.hashCode()));
+        result = ((result* 31)+((this.csvDelimiter == null)? 0 :this.csvDelimiter.hashCode()));
         return result;
     }
 
@@ -131,7 +136,7 @@ public class Db {
             return false;
         }
         Db rhs = ((Db) other);
-        return (((((this.location == rhs.location) || ((this.location != null) && this.location.equals(rhs.location))) && ((this.bolt == rhs.bolt) || ((this.bolt != null) && this.bolt.equals(rhs.bolt)))) && ((this.additionalProperties == rhs.additionalProperties) || ((this.additionalProperties != null) && this.additionalProperties.equals(rhs.additionalProperties)))) && ((this.csvDelimiter == rhs.csvDelimiter) || ((this.csvDelimiter != null) && this.csvDelimiter.equals(rhs.csvDelimiter))));
+        return (((((this.location == rhs.location)||((this.location!= null)&&this.location.equals(rhs.location)))&&((this.bolt == rhs.bolt)||((this.bolt!= null)&&this.bolt.equals(rhs.bolt))))&&((this.additionalProperties == rhs.additionalProperties)||((this.additionalProperties!= null)&&this.additionalProperties.equals(rhs.additionalProperties))))&&((this.csvDelimiter == rhs.csvDelimiter)||((this.csvDelimiter!= null)&&this.csvDelimiter.equals(rhs.csvDelimiter))));
     }
 
 }

@@ -1,16 +1,22 @@
+
 package conf;
 
-import com.fasterxml.jackson.annotation.*;
-
-import javax.annotation.processing.Generated;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import javax.annotation.processing.Generated;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "oldFile",
-        "newFile",
-        "rules"
+    "oldFile",
+    "newFile",
+    "fullName",
+    "rules"
 })
 @Generated("jsonschema2pojo")
 public class Mapper {
@@ -19,6 +25,8 @@ public class Mapper {
     private String oldFile;
     @JsonProperty("newFile")
     private String newFile;
+    @JsonProperty("fullName")
+    private Boolean fullName;
     @JsonProperty("rules")
     private Rules rules;
     @JsonIgnore
@@ -51,6 +59,21 @@ public class Mapper {
 
     public Mapper withNewFile(String newFile) {
         this.newFile = newFile;
+        return this;
+    }
+
+    @JsonProperty("fullName")
+    public Boolean getFullName() {
+        return fullName;
+    }
+
+    @JsonProperty("fullName")
+    public void setFullName(Boolean fullName) {
+        this.fullName = fullName;
+    }
+
+    public Mapper withFullName(Boolean fullName) {
+        this.fullName = fullName;
         return this;
     }
 
@@ -90,22 +113,26 @@ public class Mapper {
         sb.append(Mapper.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
         sb.append("oldFile");
         sb.append('=');
-        sb.append(((this.oldFile == null) ? "<null>" : this.oldFile));
+        sb.append(((this.oldFile == null)?"<null>":this.oldFile));
         sb.append(',');
         sb.append("newFile");
         sb.append('=');
-        sb.append(((this.newFile == null) ? "<null>" : this.newFile));
+        sb.append(((this.newFile == null)?"<null>":this.newFile));
+        sb.append(',');
+        sb.append("fullName");
+        sb.append('=');
+        sb.append(((this.fullName == null)?"<null>":this.fullName));
         sb.append(',');
         sb.append("rules");
         sb.append('=');
-        sb.append(((this.rules == null) ? "<null>" : this.rules));
+        sb.append(((this.rules == null)?"<null>":this.rules));
         sb.append(',');
         sb.append("additionalProperties");
         sb.append('=');
-        sb.append(((this.additionalProperties == null) ? "<null>" : this.additionalProperties));
+        sb.append(((this.additionalProperties == null)?"<null>":this.additionalProperties));
         sb.append(',');
-        if (sb.charAt((sb.length() - 1)) == ',') {
-            sb.setCharAt((sb.length() - 1), ']');
+        if (sb.charAt((sb.length()- 1)) == ',') {
+            sb.setCharAt((sb.length()- 1), ']');
         } else {
             sb.append(']');
         }
@@ -115,10 +142,11 @@ public class Mapper {
     @Override
     public int hashCode() {
         int result = 1;
-        result = ((result * 31) + ((this.newFile == null) ? 0 : this.newFile.hashCode()));
-        result = ((result * 31) + ((this.oldFile == null) ? 0 : this.oldFile.hashCode()));
-        result = ((result * 31) + ((this.rules == null) ? 0 : this.rules.hashCode()));
-        result = ((result * 31) + ((this.additionalProperties == null) ? 0 : this.additionalProperties.hashCode()));
+        result = ((result* 31)+((this.newFile == null)? 0 :this.newFile.hashCode()));
+        result = ((result* 31)+((this.fullName == null)? 0 :this.fullName.hashCode()));
+        result = ((result* 31)+((this.oldFile == null)? 0 :this.oldFile.hashCode()));
+        result = ((result* 31)+((this.rules == null)? 0 :this.rules.hashCode()));
+        result = ((result* 31)+((this.additionalProperties == null)? 0 :this.additionalProperties.hashCode()));
         return result;
     }
 
@@ -131,7 +159,7 @@ public class Mapper {
             return false;
         }
         Mapper rhs = ((Mapper) other);
-        return (((((this.newFile == rhs.newFile) || ((this.newFile != null) && this.newFile.equals(rhs.newFile))) && ((this.oldFile == rhs.oldFile) || ((this.oldFile != null) && this.oldFile.equals(rhs.oldFile)))) && ((this.rules == rhs.rules) || ((this.rules != null) && this.rules.equals(rhs.rules)))) && ((this.additionalProperties == rhs.additionalProperties) || ((this.additionalProperties != null) && this.additionalProperties.equals(rhs.additionalProperties))));
+        return ((((((this.newFile == rhs.newFile)||((this.newFile!= null)&&this.newFile.equals(rhs.newFile)))&&((this.fullName == rhs.fullName)||((this.fullName!= null)&&this.fullName.equals(rhs.fullName))))&&((this.oldFile == rhs.oldFile)||((this.oldFile!= null)&&this.oldFile.equals(rhs.oldFile))))&&((this.rules == rhs.rules)||((this.rules!= null)&&this.rules.equals(rhs.rules))))&&((this.additionalProperties == rhs.additionalProperties)||((this.additionalProperties!= null)&&this.additionalProperties.equals(rhs.additionalProperties))));
     }
 
 }

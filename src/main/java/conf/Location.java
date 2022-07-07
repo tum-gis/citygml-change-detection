@@ -1,17 +1,22 @@
+
 package conf;
 
-import com.fasterxml.jackson.annotation.*;
-
-import javax.annotation.processing.Generated;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import javax.annotation.processing.Generated;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "neo4jConf",
-        "neo4jDB",
-        "logFile",
-        "exportDir"
+    "neo4jConf",
+    "neo4jDB",
+    "logFile",
+    "exportDir"
 })
 @Generated("jsonschema2pojo")
 public class Location {
@@ -108,26 +113,26 @@ public class Location {
         sb.append(Location.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
         sb.append("neo4jConf");
         sb.append('=');
-        sb.append(((this.neo4jConf == null) ? "<null>" : this.neo4jConf));
+        sb.append(((this.neo4jConf == null)?"<null>":this.neo4jConf));
         sb.append(',');
         sb.append("neo4jDB");
         sb.append('=');
-        sb.append(((this.neo4jDB == null) ? "<null>" : this.neo4jDB));
+        sb.append(((this.neo4jDB == null)?"<null>":this.neo4jDB));
         sb.append(',');
         sb.append("logFile");
         sb.append('=');
-        sb.append(((this.logFile == null) ? "<null>" : this.logFile));
+        sb.append(((this.logFile == null)?"<null>":this.logFile));
         sb.append(',');
         sb.append("exportDir");
         sb.append('=');
-        sb.append(((this.exportDir == null) ? "<null>" : this.exportDir));
+        sb.append(((this.exportDir == null)?"<null>":this.exportDir));
         sb.append(',');
         sb.append("additionalProperties");
         sb.append('=');
-        sb.append(((this.additionalProperties == null) ? "<null>" : this.additionalProperties));
+        sb.append(((this.additionalProperties == null)?"<null>":this.additionalProperties));
         sb.append(',');
-        if (sb.charAt((sb.length() - 1)) == ',') {
-            sb.setCharAt((sb.length() - 1), ']');
+        if (sb.charAt((sb.length()- 1)) == ',') {
+            sb.setCharAt((sb.length()- 1), ']');
         } else {
             sb.append(']');
         }
@@ -137,11 +142,11 @@ public class Location {
     @Override
     public int hashCode() {
         int result = 1;
-        result = ((result * 31) + ((this.neo4jDB == null) ? 0 : this.neo4jDB.hashCode()));
-        result = ((result * 31) + ((this.neo4jConf == null) ? 0 : this.neo4jConf.hashCode()));
-        result = ((result * 31) + ((this.additionalProperties == null) ? 0 : this.additionalProperties.hashCode()));
-        result = ((result * 31) + ((this.exportDir == null) ? 0 : this.exportDir.hashCode()));
-        result = ((result * 31) + ((this.logFile == null) ? 0 : this.logFile.hashCode()));
+        result = ((result* 31)+((this.neo4jDB == null)? 0 :this.neo4jDB.hashCode()));
+        result = ((result* 31)+((this.neo4jConf == null)? 0 :this.neo4jConf.hashCode()));
+        result = ((result* 31)+((this.additionalProperties == null)? 0 :this.additionalProperties.hashCode()));
+        result = ((result* 31)+((this.exportDir == null)? 0 :this.exportDir.hashCode()));
+        result = ((result* 31)+((this.logFile == null)? 0 :this.logFile.hashCode()));
         return result;
     }
 
@@ -154,7 +159,7 @@ public class Location {
             return false;
         }
         Location rhs = ((Location) other);
-        return ((((((this.neo4jDB == rhs.neo4jDB) || ((this.neo4jDB != null) && this.neo4jDB.equals(rhs.neo4jDB))) && ((this.neo4jConf == rhs.neo4jConf) || ((this.neo4jConf != null) && this.neo4jConf.equals(rhs.neo4jConf)))) && ((this.additionalProperties == rhs.additionalProperties) || ((this.additionalProperties != null) && this.additionalProperties.equals(rhs.additionalProperties)))) && ((this.exportDir == rhs.exportDir) || ((this.exportDir != null) && this.exportDir.equals(rhs.exportDir)))) && ((this.logFile == rhs.logFile) || ((this.logFile != null) && this.logFile.equals(rhs.logFile))));
+        return ((((((this.neo4jDB == rhs.neo4jDB)||((this.neo4jDB!= null)&&this.neo4jDB.equals(rhs.neo4jDB)))&&((this.neo4jConf == rhs.neo4jConf)||((this.neo4jConf!= null)&&this.neo4jConf.equals(rhs.neo4jConf))))&&((this.additionalProperties == rhs.additionalProperties)||((this.additionalProperties!= null)&&this.additionalProperties.equals(rhs.additionalProperties))))&&((this.exportDir == rhs.exportDir)||((this.exportDir!= null)&&this.exportDir.equals(rhs.exportDir))))&&((this.logFile == rhs.logFile)||((this.logFile!= null)&&this.logFile.equals(rhs.logFile))));
     }
 
 }

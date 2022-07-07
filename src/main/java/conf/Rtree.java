@@ -1,15 +1,20 @@
+
 package conf;
 
-import com.fasterxml.jackson.annotation.*;
-
-import javax.annotation.processing.Generated;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import javax.annotation.processing.Generated;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "exportDir",
-        "nodeRef"
+    "exportDir",
+    "nodeRef"
 })
 @Generated("jsonschema2pojo")
 public class Rtree {
@@ -72,18 +77,18 @@ public class Rtree {
         sb.append(Rtree.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
         sb.append("exportDir");
         sb.append('=');
-        sb.append(((this.exportDir == null) ? "<null>" : this.exportDir));
+        sb.append(((this.exportDir == null)?"<null>":this.exportDir));
         sb.append(',');
         sb.append("nodeRef");
         sb.append('=');
-        sb.append(((this.nodeRef == null) ? "<null>" : this.nodeRef));
+        sb.append(((this.nodeRef == null)?"<null>":this.nodeRef));
         sb.append(',');
         sb.append("additionalProperties");
         sb.append('=');
-        sb.append(((this.additionalProperties == null) ? "<null>" : this.additionalProperties));
+        sb.append(((this.additionalProperties == null)?"<null>":this.additionalProperties));
         sb.append(',');
-        if (sb.charAt((sb.length() - 1)) == ',') {
-            sb.setCharAt((sb.length() - 1), ']');
+        if (sb.charAt((sb.length()- 1)) == ',') {
+            sb.setCharAt((sb.length()- 1), ']');
         } else {
             sb.append(']');
         }
@@ -93,9 +98,9 @@ public class Rtree {
     @Override
     public int hashCode() {
         int result = 1;
-        result = ((result * 31) + ((this.additionalProperties == null) ? 0 : this.additionalProperties.hashCode()));
-        result = ((result * 31) + ((this.exportDir == null) ? 0 : this.exportDir.hashCode()));
-        result = ((result * 31) + ((this.nodeRef == null) ? 0 : this.nodeRef.hashCode()));
+        result = ((result* 31)+((this.additionalProperties == null)? 0 :this.additionalProperties.hashCode()));
+        result = ((result* 31)+((this.exportDir == null)? 0 :this.exportDir.hashCode()));
+        result = ((result* 31)+((this.nodeRef == null)? 0 :this.nodeRef.hashCode()));
         return result;
     }
 
@@ -108,7 +113,7 @@ public class Rtree {
             return false;
         }
         Rtree rhs = ((Rtree) other);
-        return ((((this.additionalProperties == rhs.additionalProperties) || ((this.additionalProperties != null) && this.additionalProperties.equals(rhs.additionalProperties))) && ((this.exportDir == rhs.exportDir) || ((this.exportDir != null) && this.exportDir.equals(rhs.exportDir)))) && ((this.nodeRef == rhs.nodeRef) || ((this.nodeRef != null) && this.nodeRef.equals(rhs.nodeRef))));
+        return ((((this.additionalProperties == rhs.additionalProperties)||((this.additionalProperties!= null)&&this.additionalProperties.equals(rhs.additionalProperties)))&&((this.exportDir == rhs.exportDir)||((this.exportDir!= null)&&this.exportDir.equals(rhs.exportDir))))&&((this.nodeRef == rhs.nodeRef)||((this.nodeRef!= null)&&this.nodeRef.equals(rhs.nodeRef))));
     }
 
 }

@@ -1,19 +1,24 @@
+
 package conf;
 
-import com.fasterxml.jackson.annotation.*;
-
-import javax.annotation.processing.Generated;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import javax.annotation.processing.Generated;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "enabled",
-        "producers",
-        "consumers",
-        "splitTopLevel",
-        "batch",
-        "timeout"
+    "enabled",
+    "producers",
+    "consumers",
+    "splitTopLevel",
+    "batch",
+    "timeout"
 })
 @Generated("jsonschema2pojo")
 public class Multithreading {
@@ -144,34 +149,34 @@ public class Multithreading {
         sb.append(Multithreading.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
         sb.append("enabled");
         sb.append('=');
-        sb.append(((this.enabled == null) ? "<null>" : this.enabled));
+        sb.append(((this.enabled == null)?"<null>":this.enabled));
         sb.append(',');
         sb.append("producers");
         sb.append('=');
-        sb.append(((this.producers == null) ? "<null>" : this.producers));
+        sb.append(((this.producers == null)?"<null>":this.producers));
         sb.append(',');
         sb.append("consumers");
         sb.append('=');
-        sb.append(((this.consumers == null) ? "<null>" : this.consumers));
+        sb.append(((this.consumers == null)?"<null>":this.consumers));
         sb.append(',');
         sb.append("splitTopLevel");
         sb.append('=');
-        sb.append(((this.splitTopLevel == null) ? "<null>" : this.splitTopLevel));
+        sb.append(((this.splitTopLevel == null)?"<null>":this.splitTopLevel));
         sb.append(',');
         sb.append("batch");
         sb.append('=');
-        sb.append(((this.batch == null) ? "<null>" : this.batch));
+        sb.append(((this.batch == null)?"<null>":this.batch));
         sb.append(',');
         sb.append("timeout");
         sb.append('=');
-        sb.append(((this.timeout == null) ? "<null>" : this.timeout));
+        sb.append(((this.timeout == null)?"<null>":this.timeout));
         sb.append(',');
         sb.append("additionalProperties");
         sb.append('=');
-        sb.append(((this.additionalProperties == null) ? "<null>" : this.additionalProperties));
+        sb.append(((this.additionalProperties == null)?"<null>":this.additionalProperties));
         sb.append(',');
-        if (sb.charAt((sb.length() - 1)) == ',') {
-            sb.setCharAt((sb.length() - 1), ']');
+        if (sb.charAt((sb.length()- 1)) == ',') {
+            sb.setCharAt((sb.length()- 1), ']');
         } else {
             sb.append(']');
         }
@@ -181,13 +186,13 @@ public class Multithreading {
     @Override
     public int hashCode() {
         int result = 1;
-        result = ((result * 31) + ((this.batch == null) ? 0 : this.batch.hashCode()));
-        result = ((result * 31) + ((this.consumers == null) ? 0 : this.consumers.hashCode()));
-        result = ((result * 31) + ((this.additionalProperties == null) ? 0 : this.additionalProperties.hashCode()));
-        result = ((result * 31) + ((this.splitTopLevel == null) ? 0 : this.splitTopLevel.hashCode()));
-        result = ((result * 31) + ((this.enabled == null) ? 0 : this.enabled.hashCode()));
-        result = ((result * 31) + ((this.timeout == null) ? 0 : this.timeout.hashCode()));
-        result = ((result * 31) + ((this.producers == null) ? 0 : this.producers.hashCode()));
+        result = ((result* 31)+((this.batch == null)? 0 :this.batch.hashCode()));
+        result = ((result* 31)+((this.consumers == null)? 0 :this.consumers.hashCode()));
+        result = ((result* 31)+((this.additionalProperties == null)? 0 :this.additionalProperties.hashCode()));
+        result = ((result* 31)+((this.splitTopLevel == null)? 0 :this.splitTopLevel.hashCode()));
+        result = ((result* 31)+((this.enabled == null)? 0 :this.enabled.hashCode()));
+        result = ((result* 31)+((this.timeout == null)? 0 :this.timeout.hashCode()));
+        result = ((result* 31)+((this.producers == null)? 0 :this.producers.hashCode()));
         return result;
     }
 
@@ -200,7 +205,7 @@ public class Multithreading {
             return false;
         }
         Multithreading rhs = ((Multithreading) other);
-        return ((((((((this.batch == rhs.batch) || ((this.batch != null) && this.batch.equals(rhs.batch))) && ((this.consumers == rhs.consumers) || ((this.consumers != null) && this.consumers.equals(rhs.consumers)))) && ((this.additionalProperties == rhs.additionalProperties) || ((this.additionalProperties != null) && this.additionalProperties.equals(rhs.additionalProperties)))) && ((this.splitTopLevel == rhs.splitTopLevel) || ((this.splitTopLevel != null) && this.splitTopLevel.equals(rhs.splitTopLevel)))) && ((this.enabled == rhs.enabled) || ((this.enabled != null) && this.enabled.equals(rhs.enabled)))) && ((this.timeout == rhs.timeout) || ((this.timeout != null) && this.timeout.equals(rhs.timeout)))) && ((this.producers == rhs.producers) || ((this.producers != null) && this.producers.equals(rhs.producers))));
+        return ((((((((this.batch == rhs.batch)||((this.batch!= null)&&this.batch.equals(rhs.batch)))&&((this.consumers == rhs.consumers)||((this.consumers!= null)&&this.consumers.equals(rhs.consumers))))&&((this.additionalProperties == rhs.additionalProperties)||((this.additionalProperties!= null)&&this.additionalProperties.equals(rhs.additionalProperties))))&&((this.splitTopLevel == rhs.splitTopLevel)||((this.splitTopLevel!= null)&&this.splitTopLevel.equals(rhs.splitTopLevel))))&&((this.enabled == rhs.enabled)||((this.enabled!= null)&&this.enabled.equals(rhs.enabled))))&&((this.timeout == rhs.timeout)||((this.timeout!= null)&&this.timeout.equals(rhs.timeout))))&&((this.producers == rhs.producers)||((this.producers!= null)&&this.producers.equals(rhs.producers))));
     }
 
 }

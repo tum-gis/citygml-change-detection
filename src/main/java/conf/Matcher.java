@@ -1,14 +1,19 @@
+
 package conf;
 
-import com.fasterxml.jackson.annotation.*;
-
-import javax.annotation.processing.Generated;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import javax.annotation.processing.Generated;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "fuzzy"
+    "fuzzy"
 })
 @Generated("jsonschema2pojo")
 public class Matcher {
@@ -54,14 +59,14 @@ public class Matcher {
         sb.append(Matcher.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
         sb.append("fuzzy");
         sb.append('=');
-        sb.append(((this.fuzzy == null) ? "<null>" : this.fuzzy));
+        sb.append(((this.fuzzy == null)?"<null>":this.fuzzy));
         sb.append(',');
         sb.append("additionalProperties");
         sb.append('=');
-        sb.append(((this.additionalProperties == null) ? "<null>" : this.additionalProperties));
+        sb.append(((this.additionalProperties == null)?"<null>":this.additionalProperties));
         sb.append(',');
-        if (sb.charAt((sb.length() - 1)) == ',') {
-            sb.setCharAt((sb.length() - 1), ']');
+        if (sb.charAt((sb.length()- 1)) == ',') {
+            sb.setCharAt((sb.length()- 1), ']');
         } else {
             sb.append(']');
         }
@@ -71,8 +76,8 @@ public class Matcher {
     @Override
     public int hashCode() {
         int result = 1;
-        result = ((result * 31) + ((this.fuzzy == null) ? 0 : this.fuzzy.hashCode()));
-        result = ((result * 31) + ((this.additionalProperties == null) ? 0 : this.additionalProperties.hashCode()));
+        result = ((result* 31)+((this.fuzzy == null)? 0 :this.fuzzy.hashCode()));
+        result = ((result* 31)+((this.additionalProperties == null)? 0 :this.additionalProperties.hashCode()));
         return result;
     }
 
@@ -85,7 +90,7 @@ public class Matcher {
             return false;
         }
         Matcher rhs = ((Matcher) other);
-        return (((this.fuzzy == rhs.fuzzy) || ((this.fuzzy != null) && this.fuzzy.equals(rhs.fuzzy))) && ((this.additionalProperties == rhs.additionalProperties) || ((this.additionalProperties != null) && this.additionalProperties.equals(rhs.additionalProperties))));
+        return (((this.fuzzy == rhs.fuzzy)||((this.fuzzy!= null)&&this.fuzzy.equals(rhs.fuzzy)))&&((this.additionalProperties == rhs.additionalProperties)||((this.additionalProperties!= null)&&this.additionalProperties.equals(rhs.additionalProperties))));
     }
 
 }

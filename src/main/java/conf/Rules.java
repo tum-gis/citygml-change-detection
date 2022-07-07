@@ -1,16 +1,21 @@
+
 package conf;
 
-import com.fasterxml.jackson.annotation.*;
-
-import javax.annotation.processing.Generated;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import javax.annotation.processing.Generated;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "citygml",
-        "gml",
-        "xal"
+    "citygml",
+    "gml",
+    "xal"
 })
 @Generated("jsonschema2pojo")
 public class Rules {
@@ -90,22 +95,22 @@ public class Rules {
         sb.append(Rules.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
         sb.append("citygml");
         sb.append('=');
-        sb.append(((this.citygml == null) ? "<null>" : this.citygml));
+        sb.append(((this.citygml == null)?"<null>":this.citygml));
         sb.append(',');
         sb.append("gml");
         sb.append('=');
-        sb.append(((this.gml == null) ? "<null>" : this.gml));
+        sb.append(((this.gml == null)?"<null>":this.gml));
         sb.append(',');
         sb.append("xal");
         sb.append('=');
-        sb.append(((this.xal == null) ? "<null>" : this.xal));
+        sb.append(((this.xal == null)?"<null>":this.xal));
         sb.append(',');
         sb.append("additionalProperties");
         sb.append('=');
-        sb.append(((this.additionalProperties == null) ? "<null>" : this.additionalProperties));
+        sb.append(((this.additionalProperties == null)?"<null>":this.additionalProperties));
         sb.append(',');
-        if (sb.charAt((sb.length() - 1)) == ',') {
-            sb.setCharAt((sb.length() - 1), ']');
+        if (sb.charAt((sb.length()- 1)) == ',') {
+            sb.setCharAt((sb.length()- 1), ']');
         } else {
             sb.append(']');
         }
@@ -115,10 +120,10 @@ public class Rules {
     @Override
     public int hashCode() {
         int result = 1;
-        result = ((result * 31) + ((this.xal == null) ? 0 : this.xal.hashCode()));
-        result = ((result * 31) + ((this.citygml == null) ? 0 : this.citygml.hashCode()));
-        result = ((result * 31) + ((this.additionalProperties == null) ? 0 : this.additionalProperties.hashCode()));
-        result = ((result * 31) + ((this.gml == null) ? 0 : this.gml.hashCode()));
+        result = ((result* 31)+((this.xal == null)? 0 :this.xal.hashCode()));
+        result = ((result* 31)+((this.citygml == null)? 0 :this.citygml.hashCode()));
+        result = ((result* 31)+((this.additionalProperties == null)? 0 :this.additionalProperties.hashCode()));
+        result = ((result* 31)+((this.gml == null)? 0 :this.gml.hashCode()));
         return result;
     }
 
@@ -131,7 +136,7 @@ public class Rules {
             return false;
         }
         Rules rhs = ((Rules) other);
-        return (((((this.xal == rhs.xal) || ((this.xal != null) && this.xal.equals(rhs.xal))) && ((this.citygml == rhs.citygml) || ((this.citygml != null) && this.citygml.equals(rhs.citygml)))) && ((this.additionalProperties == rhs.additionalProperties) || ((this.additionalProperties != null) && this.additionalProperties.equals(rhs.additionalProperties)))) && ((this.gml == rhs.gml) || ((this.gml != null) && this.gml.equals(rhs.gml))));
+        return (((((this.xal == rhs.xal)||((this.xal!= null)&&this.xal.equals(rhs.xal)))&&((this.citygml == rhs.citygml)||((this.citygml!= null)&&this.citygml.equals(rhs.citygml))))&&((this.additionalProperties == rhs.additionalProperties)||((this.additionalProperties!= null)&&this.additionalProperties.equals(rhs.additionalProperties))))&&((this.gml == rhs.gml)||((this.gml!= null)&&this.gml.equals(rhs.gml))));
     }
 
 }

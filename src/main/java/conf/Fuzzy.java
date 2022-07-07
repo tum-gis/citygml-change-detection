@@ -1,16 +1,21 @@
+
 package conf;
 
-import com.fasterxml.jackson.annotation.*;
-
-import javax.annotation.processing.Generated;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import javax.annotation.processing.Generated;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "length",
-        "angle",
-        "shared"
+    "length",
+    "angle",
+    "shared"
 })
 @Generated("jsonschema2pojo")
 public class Fuzzy {
@@ -90,22 +95,22 @@ public class Fuzzy {
         sb.append(Fuzzy.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
         sb.append("length");
         sb.append('=');
-        sb.append(((this.length == null) ? "<null>" : this.length));
+        sb.append(((this.length == null)?"<null>":this.length));
         sb.append(',');
         sb.append("angle");
         sb.append('=');
-        sb.append(((this.angle == null) ? "<null>" : this.angle));
+        sb.append(((this.angle == null)?"<null>":this.angle));
         sb.append(',');
         sb.append("shared");
         sb.append('=');
-        sb.append(((this.shared == null) ? "<null>" : this.shared));
+        sb.append(((this.shared == null)?"<null>":this.shared));
         sb.append(',');
         sb.append("additionalProperties");
         sb.append('=');
-        sb.append(((this.additionalProperties == null) ? "<null>" : this.additionalProperties));
+        sb.append(((this.additionalProperties == null)?"<null>":this.additionalProperties));
         sb.append(',');
-        if (sb.charAt((sb.length() - 1)) == ',') {
-            sb.setCharAt((sb.length() - 1), ']');
+        if (sb.charAt((sb.length()- 1)) == ',') {
+            sb.setCharAt((sb.length()- 1), ']');
         } else {
             sb.append(']');
         }
@@ -115,10 +120,10 @@ public class Fuzzy {
     @Override
     public int hashCode() {
         int result = 1;
-        result = ((result * 31) + ((this.length == null) ? 0 : this.length.hashCode()));
-        result = ((result * 31) + ((this.angle == null) ? 0 : this.angle.hashCode()));
-        result = ((result * 31) + ((this.shared == null) ? 0 : this.shared.hashCode()));
-        result = ((result * 31) + ((this.additionalProperties == null) ? 0 : this.additionalProperties.hashCode()));
+        result = ((result* 31)+((this.length == null)? 0 :this.length.hashCode()));
+        result = ((result* 31)+((this.angle == null)? 0 :this.angle.hashCode()));
+        result = ((result* 31)+((this.shared == null)? 0 :this.shared.hashCode()));
+        result = ((result* 31)+((this.additionalProperties == null)? 0 :this.additionalProperties.hashCode()));
         return result;
     }
 
@@ -131,7 +136,7 @@ public class Fuzzy {
             return false;
         }
         Fuzzy rhs = ((Fuzzy) other);
-        return (((((this.length == rhs.length) || ((this.length != null) && this.length.equals(rhs.length))) && ((this.angle == rhs.angle) || ((this.angle != null) && this.angle.equals(rhs.angle)))) && ((this.shared == rhs.shared) || ((this.shared != null) && this.shared.equals(rhs.shared)))) && ((this.additionalProperties == rhs.additionalProperties) || ((this.additionalProperties != null) && this.additionalProperties.equals(rhs.additionalProperties))));
+        return (((((this.length == rhs.length)||((this.length!= null)&&this.length.equals(rhs.length)))&&((this.angle == rhs.angle)||((this.angle!= null)&&this.angle.equals(rhs.angle))))&&((this.shared == rhs.shared)||((this.shared!= null)&&this.shared.equals(rhs.shared))))&&((this.additionalProperties == rhs.additionalProperties)||((this.additionalProperties!= null)&&this.additionalProperties.equals(rhs.additionalProperties))));
     }
 
 }

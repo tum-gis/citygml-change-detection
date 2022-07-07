@@ -35,6 +35,7 @@
   "mapper": {
     "oldFile": "input/Polygon_Multi_Interior_0.gml",
     "newFile": "input/Polygon_Multi_Interior_1.gml",
+    "fullName": true,
     "rules": {
       "citygml": "src/main/java/components/mapper/rules/citygml.json",
       "gml": "src/main/java/components/mapper/rules/gml.json",
