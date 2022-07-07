@@ -1,5 +1,7 @@
-package components.mapper;
+package utils;
 
+import components.Project;
+import conf.Rules;
 import org.citygml4j.model.citygml.CityGML;
 import org.citygml4j.model.citygml.CityGMLClass;
 import org.citygml4j.model.common.base.ModelClassEnum;
@@ -18,7 +20,20 @@ import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class ReflectionUtils {
+public class MappingRulesUtils {
+
+    private static final String[] citygmlExclude = {
+
+    };
+    private static final String[] gmlExclude = {
+            "getParent",
+            "isSetParent"
+    };
+    private static final String[] xalExclude = {
+            "getParent",
+            "isSetParent"
+    };
+
 
     // Export all accessible attribute names and methods to JSON
     public static <T> void classesToJson(String citygmlJson, String gmlJson, String xalJson)
@@ -44,7 +59,13 @@ public class ReflectionUtils {
             Class<? extends CityGML> modelClass = ele.getModelClass();
             if (modelClass != null) {
                 JSONObject tmp = fillJson((Class<? extends ModelClassEnum>) modelClass);
-                result.put(modelClass.getName(), tmp);
+                for (String exclude : citygmlExclude) {
+                    if (tmp.has(exclude)) {
+                        tmp.remove(exclude);
+                    }
+                }
+                result.put(Project.conf.getMapper().getFullName() ? modelClass.getName()
+                        : modelClass.getSimpleName(), tmp);
             }
         }
         return result;
@@ -56,7 +77,13 @@ public class ReflectionUtils {
             Class<? extends GML> modelClass = ele.getModelClass();
             if (modelClass != null) {
                 JSONObject tmp = fillJson((Class<? extends ModelClassEnum>) modelClass);
-                result.put(modelClass.getName(), tmp);
+                for (String exclude : gmlExclude) {
+                    if (tmp.has(exclude)) {
+                        tmp.remove(exclude);
+                    }
+                }
+                result.put(Project.conf.getMapper().getFullName() ? modelClass.getName()
+                        : modelClass.getSimpleName(), tmp);
             }
         }
         return result;
@@ -68,7 +95,13 @@ public class ReflectionUtils {
             Class<? extends XAL> modelClass = ele.getModelClass();
             if (modelClass != null) {
                 JSONObject tmp = fillJson((Class<? extends ModelClassEnum>) modelClass);
-                result.put(modelClass.getName(), tmp);
+                for (String exclude : xalExclude) {
+                    if (tmp.has(exclude)) {
+                        tmp.remove(exclude);
+                    }
+                }
+                result.put(Project.conf.getMapper().getFullName() ? modelClass.getName()
+                        : modelClass.getSimpleName(), tmp);
             }
         }
         return result;
@@ -101,8 +134,9 @@ public class ReflectionUtils {
         return merged;
     }
 
-    public static void main(String[] args) throws IntrospectionException {
-        String base = "config/mapper";
-        classesToJson(base + "citygml.json", base + "gml.json", base + "xal.json");
+    public static void main(String[] args) throws IntrospectionException, IOException {
+        Project.init("conf.json", "conf_info.json");
+        Rules rules = Project.conf.getMapper().getRules();
+        classesToJson(rules.getCitygml(), rules.getGml(), rules.getXal());
     }
 }
