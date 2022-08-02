@@ -61,8 +61,9 @@ public class Mapper {
             in.setProperty(CityGMLInputFactory.FEATURE_READ_MODE, FeatureReadMode.SPLIT_PER_FEATURE);
             logger.debug("Split CityGML input datasets by features");
         }
+        // Avoid unresolved xlinks
         in.setProperty(CityGMLInputFactory.EXCLUDE_FROM_SPLITTING,
-                new QName[]{new QName(AbstractOpening.class.getName()), new QName(Address.class.getName())}); // To avoid unresolved xlinks
+                new QName[]{new QName(AbstractOpening.class.getName()), new QName(Address.class.getName())});
         in.setProperty(CityGMLInputFactory.KEEP_INLINE_APPEARANCE, true);
 
         // Map old city model
@@ -114,8 +115,8 @@ public class Mapper {
             }
 
             // Post-processing
-            IndexFactory.resolveXLinks(graphDb);
-            IndexFactory.dropXLinkIndexing(graphDb); // The label indexing shall be removed after resolving XLinks
+            IndexFactory.resolveXLinks(graphDb, isOld);
+            IndexFactory.dropHrefs(graphDb, isOld); // The label indexing shall be removed after resolving XLinks
             IndexFactory.initRTreeLayer(graphDb, isOld); // The spatial indexing shall remain after mapping for querying
             // TODO Other functions here
 
@@ -143,8 +144,8 @@ public class Mapper {
         BlockingQueue<XMLChunk> queue = new LinkedBlockingQueue<>(3
                 * (multithreading.getProducers() + multithreading.getConsumers())
                 * (multithreading.getSplitTopLevel() ?
-                multithreading.getBatch().getTopLevel() :
-                multithreading.getBatch().getFeature()));
+                Project.conf.getBatch().getTopLevel() :
+                Project.conf.getBatch().getFeature()));
 
         int consumersPerProducer = multithreading.getConsumers() / multithreading.getProducers();
         for (int i = 0; i < multithreading.getProducers(); i++) {
@@ -177,10 +178,8 @@ public class Mapper {
     public void runSingleThreaded(CityGMLReader reader, boolean isOld) {
         long countFeatures = 0;
 
-        Multithreading multithreading = Project.conf.getMultithreading();
-
-        int batchSize = multithreading.getSplitTopLevel() ? multithreading.getBatch().getTopLevel() :
-                multithreading.getBatch().getFeature();
+        int batchSize = Project.conf.getMultithreading().getSplitTopLevel() ? Project.conf.getBatch().getTopLevel() :
+                Project.conf.getBatch().getFeature();
         if (batchSize == 0) {
             logger.error("Batch size is 0, abort");
             return;
@@ -191,7 +190,8 @@ public class Mapper {
             while (reader.hasNext()) {
                 countFeatures++;
                 if (countFeatures % batchSize == 0) {
-                    logger.info((multithreading.getSplitTopLevel() ? "Top-level" : "") + " Features found: " + countFeatures);
+                    logger.info((Project.conf.getMultithreading().getSplitTopLevel() ? "Top-level" : "")
+                            + " Features found: " + countFeatures);
                     tx.commit();
                     tx.close();
                     tx = graphDb.beginTx();
@@ -205,7 +205,7 @@ public class Mapper {
                 CityGML cityObject;
                 try {
                     cityObject = chunk.unmarshal();
-                    Node node = NodeFactory.create(graphDb, cityObject);
+                    Node node = NodeFactory.create(graphDb, cityObject, isOld);
                     if (cityObject.getCityGMLClass().equals(CityGMLClass.CITY_MODEL)) {
                         Node mapperRootNode = NodeFactory.getMapperRootNode(tx);
                         mapperRootNode.createRelationshipTo(node, RelationshipFactory.getCityModelRel(isOld));
@@ -216,7 +216,8 @@ public class Mapper {
                 }
             }
 
-            logger.info((multithreading.getSplitTopLevel() ? "Top-level" : "") + " Features found: " + countFeatures);
+            logger.info((Project.conf.getMultithreading().getSplitTopLevel() ? "Top-level" : "")
+                    + " Features found: " + countFeatures);
 
             tx.commit();
         } catch (CityGMLReadException e) {

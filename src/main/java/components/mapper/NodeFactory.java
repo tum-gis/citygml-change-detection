@@ -1,6 +1,7 @@
 package components.mapper;
 
 import components.Project;
+import org.citygml4j.model.gml.feature.AbstractFeature;
 import org.json.JSONObject;
 import org.neo4j.graphdb.*;
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
@@ -53,10 +55,11 @@ public class NodeFactory {
         return NodeUtils.findFirst(tx, LabelFactory.ROOT_MATCHER);
     }
 
-    public static Node create(GraphDatabaseService graphDb, Object object) {
+    public static Node create(GraphDatabaseService graphDb, Object object, boolean isOld) {
         Node result = null;
         try (Transaction tx = graphDb.beginTx()) {
-            result = create(tx, object);
+            ArrayList<Object> mapped = new ArrayList<>(); // TODO Make sure this is emptied after each commit
+            result = create(tx, object, isOld, mapped);
             tx.commit(); // Commit once per (e.g. top-level) object
         }
         return result;
@@ -64,7 +67,7 @@ public class NodeFactory {
 
     // Recursive auxiliary function
     // TODO Currently only one commit per object -> Allow batch commit?
-    private static Node create(Transaction tx, Object object) {
+    private static Node create(Transaction tx, Object object, boolean isOld, ArrayList<Object> mapped) {
         if (object == null) {
             return null;
         }
@@ -76,117 +79,131 @@ public class NodeFactory {
         // Get class hierarchy
         ArrayList<Class> objectClasses = new ArrayList<>();
         Class tmpObjectClass = objectClass;
-        while (tmpObjectClass != null) {
+        while (tmpObjectClass != null && !tmpObjectClass.equals(Object.class)) {
             objectClasses.add(tmpObjectClass);
             tmpObjectClass = tmpObjectClass.getSuperclass();
         }
 
         // Create a node with labels named after its class hierarchy
+        if (object instanceof AbstractFeature) {
+            logger.debug("Create node {}", objectClass.getSimpleName());
+        }
         result = tx.createNode();
         for (Class cl : objectClasses) {
-            result.addLabel(Label.label(cl.getName()));
+            result.addLabel(Label.label(getClassName(cl)));
         }
 
         // Get all properties and methods inherited except from Object class
         try {
-            for (PropertyDescriptor propertyDescriptor
-                    : Introspector.getBeanInfo(objectClass, Object.class).getPropertyDescriptors()) {
-                Method getter = propertyDescriptor.getReadMethod();
-                if (getter == null) {
-                    // The current property does not have an accessible getter
-                    break;
-                }
-
-                Object childObject = null;
-                try {
-                    childObject = getter.invoke(object);
-                } catch (IllegalAccessException | InvocationTargetException e) {
-                    // Private or inaccessible methods -> no mapping
-                    continue;
-                }
-                if (childObject == null) {
-                    continue;
-                }
-
-                // Check if the selected attribute of selected class should be mapped
-                boolean getterFound = false;
-                for (Class cl : objectClasses) {
-                    if (mappingRules.has(cl.getName())
-                            && ((JSONObject) mappingRules.get(cl.getName())).has(getter.getName())) {
-                        getterFound = true;
+            for (Class cl : objectClasses) {
+                for (PropertyDescriptor propertyDescriptor
+                        : Introspector.getBeanInfo(cl, cl.getSuperclass()).getPropertyDescriptors()) {
+                    Method getter = propertyDescriptor.getReadMethod();
+                    if (getter == null) {
+                        // The current property does not have an accessible getter
                         break;
                     }
-                }
-                if (!getterFound) {
-                    continue;
-                }
 
-                logger.debug("Create node ({}):{}", objectClass.getName(), getter.getName());
-                if (getter.getReturnType().isPrimitive()) {
-                    String propertyName = getter.getName();
-                    Object propertyValue = childObject;
-                    result.setProperty(propertyName, childObject);
-                    IndexFactory.setHref(tx, propertyName, propertyValue, result);
-                } else if (getter.getReturnType().isArray()) {
-                    if (childObject instanceof Object[]) {
-                        Object[] values = (Object[]) childObject;
-                        int count = 0;
-                        for (Object v : values) {
-                            // Recursively map sub-elements
-                            Node vNode = create(tx, v);
+                    Object childObject = null;
+                    try {
+                        childObject = getter.invoke(object);
+                    } catch (IllegalAccessException | InvocationTargetException e) {
+                        // Private or inaccessible methods -> no mapping
+                        continue;
+                    }
+                    if (childObject == null) {
+                        continue;
+                    }
+
+                    // Mapped objects are prioritized based on their class hierarchy
+                    // Objects "nearer" to the lowest class shall be prioritized over those of superclasses
+                    // This way, endless loops can be avoided (i.e. same objects are mapped over and over again)
+                    if (mapped.contains(childObject)) {
+                        continue;
+                    } else {
+                        mapped.add(childObject);
+                    }
+
+                    // Check if the selected attribute of selected class should be mapped
+                    if (mappingRules.has(getClassName(cl))
+                            && ((JSONObject) mappingRules.get(getClassName(cl))).has(getter.getName())) {
+                        if (isPrintable(getter.getReturnType())) {
+                            String propertyName = getter.getName();
+                            String propertyValue = childObject.toString();
+                            result.setProperty(propertyName, propertyValue);
+                            IndexFactory.setHrefId(tx, propertyName, propertyValue, isOld, result);
+                        } else if (getter.getReturnType().isArray()) {
+                            if (childObject instanceof Object[]) {
+                                Object[] values = (Object[]) childObject;
+                                int count = 0;
+                                for (Object v : values) {
+                                    // Recursively map sub-elements
+                                    Node vNode = create(tx, v, isOld, mapped);
+                                    Relationship rel = result.createRelationshipTo(vNode,
+                                            RelationshipType.withName(getter.getName()));
+                                    // Additional metadata
+                                    rel.setProperty(PropertyFactory.AGGREGATION_TYPE.toString(),
+                                            PropertyFactory.TYPE_ARRAY.toString());
+                                    rel.setProperty(PropertyFactory.INDEX.toString(), count++);
+                                }
+                            }
+                        } else if (Collection.class.isAssignableFrom(getter.getReturnType())) {
+                            if (childObject instanceof Collection<?>) {
+                                Collection<?> values = (Collection<?>) childObject;
+                                int count = 0;
+                                for (Object v : values) {
+                                    // Recursively map sub-elements
+                                    Node vNode = create(tx, v, isOld, mapped);
+                                    Relationship rel = result.createRelationshipTo(vNode,
+                                            RelationshipType.withName(getter.getName()));
+                                    // Additional metadata
+                                    rel.setProperty(PropertyFactory.AGGREGATION_TYPE.toString(),
+                                            PropertyFactory.TYPE_COLLECTION.toString());
+                                    rel.setProperty(PropertyFactory.INDEX.toString(), count++);
+                                }
+                            }
+                        } else if (Map.class.isAssignableFrom(getter.getReturnType())) {
+                            if (childObject instanceof Map<?, ?>) {
+                                // Fill in the node with map entries
+                                for (Map.Entry<?, ?> entry : ((Map<?, ?>) childObject).entrySet()) {
+                                    // TODO Store all entries in one single node if they are of primitive type?
+                                    // Recursively map sub-elements
+                                    Node entryNode = create(tx, entry.getValue(), isOld, mapped);
+                                    Relationship rel = result.createRelationshipTo(entryNode,
+                                            RelationshipType.withName(getter.getName()));
+                                    // Additional metadata
+                                    rel.setProperty(PropertyFactory.AGGREGATION_TYPE.toString(),
+                                            PropertyFactory.TYPE_MAP);
+                                    rel.setProperty(PropertyFactory.MAP_KEY.toString(), entry.getKey());
+                                }
+                            }
+                        } else {
+                            // Is a complex type
+                            Node childNode = create(tx, childObject, isOld, mapped);
                             Relationship rel
-                                    = result.createRelationshipTo(vNode, RelationshipType.withName(getter.getName()));
-                            // Additional metadata
-                            rel.setProperty(PropertyFactory.AGGREGATION_TYPE.toString(),
-                                    PropertyFactory.TYPE_ARRAY.toString());
-                            rel.setProperty(PropertyFactory.INDEX.toString(), count++);
+                                    = result.createRelationshipTo(childNode, RelationshipType.withName(getter.getName()));
                         }
                     }
-                } else if (Collection.class.isAssignableFrom(getter.getReturnType())) {
-                    if (childObject instanceof Collection<?>) {
-                        Collection<?> values = (Collection<?>) childObject;
-                        int count = 0;
-                        for (Object v : values) {
-                            // Recursively map sub-elements
-                            Node vNode = create(tx, v);
-                            Relationship rel
-                                    = result.createRelationshipTo(vNode, RelationshipType.withName(getter.getName()));
-                            // Additional metadata
-                            rel.setProperty(PropertyFactory.AGGREGATION_TYPE.toString(),
-                                    PropertyFactory.TYPE_COLLECTION.toString());
-                            rel.setProperty(PropertyFactory.INDEX.toString(), count++);
-                        }
-                    }
-                } else if (Map.class.isAssignableFrom(getter.getReturnType())) {
-                    if (childObject instanceof Map<?, ?>) {
-                        // Fill in the node with map entries
-                        for (Map.Entry<?, ?> entry : ((Map<?, ?>) childObject).entrySet()) {
-                            // TODO Store all entries in one single node if they are of primitive type?
-                            // Recursively map sub-elements
-                            Node entryNode = create(tx, entry.getValue());
-                            Relationship rel
-                                    = result.createRelationshipTo(entryNode, RelationshipType.withName(getter.getName()));
-                            // Additional metadata
-                            rel.setProperty(PropertyFactory.AGGREGATION_TYPE.toString(),
-                                    PropertyFactory.TYPE_MAP);
-                            rel.setProperty(PropertyFactory.MAP_KEY.toString(), entry.getKey());
-                        }
-                    }
-                } else {
-                    // Is a complex type
-                    Node childNode = create(tx, childObject);
-                    Relationship rel
-                            = result.createRelationshipTo(childNode, RelationshipType.withName(getter.getName()));
                 }
             }
         } catch (IntrospectionException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
 
         return result;
     }
 
+    private static String getClassName(Class cl) {
+        return Project.conf.getMapper().getFullName() ? cl.getName() : cl.getSimpleName();
+    }
 
+    private static boolean isPrintable(Class cl) throws NoSuchMethodException {
+        return cl.isPrimitive()
+                || cl.equals(String.class)
+                || cl.equals(ZonedDateTime.class);
+    }
 
     /*
     // While mapping in chunks, top-level features cannot have their bounding shapes calculated

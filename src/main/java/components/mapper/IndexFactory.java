@@ -24,7 +24,7 @@ public class IndexFactory {
     private final static Logger logger = LoggerFactory.getLogger(IndexFactory.class);
 
     // Indexing hrefs
-    private final static String hrefProperty = "href";
+    private final static String hrefProperty = "getHref";
     private final static String[] hrefIndexNames = {
             "index_href_assoc",
             "index_href_string"
@@ -32,12 +32,16 @@ public class IndexFactory {
     private final static Label idNodeLabel = Label.label(AbstractGML.class.getName());
 
     // Indexing ids
-    private final static String idProperty = "id";
+    private final static String idProperty = "getId";
     private final static String idIndexName = "index_id";
     private final static Label[] hrefNodeLabels = {
             Label.label(AssociationByRepOrRef.class.getName()),
             Label.label(StringOrRef.class.getName())
     };
+
+    // Auxiliary prefixes for href/id to indicate their origin (needed for resolving XLinks, will be removed after)
+    private final static String prefixOld = "*old*";
+    private final static String prefixNew = "*new*";
 
     // Spatial layers for all top-level features such as buildings, bridges, etc.
     private final static String rtreeLayerOld = "oldLayer";
@@ -49,7 +53,7 @@ public class IndexFactory {
             Schema schema = tx.schema();
             // Indexing hrefs
             for (int i = 0; i < hrefNodeLabels.length; i++) {
-                IndexDefinition ind = schema.indexFor(hrefNodeLabels[i])
+                schema.indexFor(hrefNodeLabels[i])
                         .on(hrefProperty)
                         .withName(hrefIndexNames[i])
                         .create();
@@ -66,12 +70,18 @@ public class IndexFactory {
 
     // Check if the property is href and whether the value has prefix `#`
     // Then store this href in the node
-    public static void setHref(Transaction tx, String propertyName, Object propertyValue, Node node) {
-        if (propertyName.equals(hrefProperty) && propertyValue.toString().charAt(0) != '#') {
-            logger.warn("Element href = {} without prefix '#' detected, this shall be corrected automatically", propertyValue);
-            node.setProperty(propertyName, "#" + propertyValue);
-        } else {
-            node.setProperty(propertyName, propertyValue);
+    public static void setHrefId(Transaction tx, String propertyName, Object propertyValue, boolean isOld, Node node) {
+        String stringValue = "";
+        if ((propertyName.equals(hrefProperty)) && (propertyValue.toString().charAt(0) != '#')) {
+            logger.warn("Element getHref = {} without prefix '#' detected, this shall be corrected automatically", propertyValue);
+            stringValue = "#" + propertyValue;
+        }
+
+        // To indicate whether the elements are from old/new city model
+        // -> add prefix e.g. *old*... OR *new*... to href/id
+        if ((propertyName.equals(hrefProperty)) || (propertyName.equals(idProperty))) {
+            stringValue = (isOld ? prefixOld : prefixNew) + propertyValue;
+            node.setProperty(propertyName, stringValue);
         }
     }
 
@@ -93,22 +103,26 @@ public class IndexFactory {
     // This function is called AFTER all hrefs and ids have been stored
     // This function runs in single-threaded mode
     // At the end the indexing shall be dropped
-    public static void resolveXLinks(GraphDatabaseService graphDb) {
+    public static void resolveXLinks(GraphDatabaseService graphDb, boolean isOld) {
         // Wait for indexing to finish
         wait(graphDb);
 
         logger.info("Resolving XLinks/hrefs ---");
-        int countTransactions = Project.conf.getMultithreading().getBatch().getTrans();
+        int countTransactions = Project.conf.getBatch().getTrans();
         Transaction tx = graphDb.beginTx();
         try {
             for (Label label : hrefNodeLabels) {
-                // The value href must ALWAYS begin with "#"
+                // The value href must ALWAYS begin with prefix + "#"
+                String prefix = (isOld ? prefixOld : prefixNew);
                 try (ResourceIterator<Node> hrefNodes
-                             = tx.findNodes(label, hrefProperty, "#", StringSearchMode.PREFIX)) {
+                             = tx.findNodes(label, hrefProperty, prefix + "#", StringSearchMode.PREFIX)) {
                     while (hrefNodes.hasNext()) {
                         Node hrefNode = hrefNodes.next();
-                        String idValue = hrefNode.getProperty(hrefProperty).toString().replace("#", "");
-                        try (ResourceIterator<Node> idNodes = tx.findNodes(idNodeLabel, idProperty, idValue)) {
+                        String idValue = hrefNode.getProperty(hrefProperty).toString()
+                                .replace(prefix + "#", "");
+                        try (ResourceIterator<Node> idNodes
+                                     = tx.findNodes(idNodeLabel, idProperty, prefix + idValue,
+                                StringSearchMode.EXACT)) {
                             int idCount = 0;
                             while (idNodes.hasNext()) {
                                 // Periodically commit in batch
@@ -116,15 +130,18 @@ public class IndexFactory {
                                     tx.commit();
                                     tx.close();
                                     logger.debug("Committed a batch of {} transactions",
-                                            Project.conf.getMultithreading().getBatch().getTrans());
-                                    countTransactions = Project.conf.getMultithreading().getBatch().getTrans();
+                                            Project.conf.getBatch().getTrans());
+                                    countTransactions = Project.conf.getBatch().getTrans();
                                     tx = graphDb.beginTx();
                                 }
 
+                                // Connect href parent with id node
                                 Node idNode = idNodes.next();
-                                hrefNode.createRelationshipTo(idNode, RelationshipFactory.HREF);
-                                countTransactions--;
-                                hrefNode.removeProperty(hrefProperty);
+                                Relationship hrefRel = hrefNode.getRelationships(Direction.INCOMING).iterator().next();
+                                Node hrefParentNode = hrefRel.getStartNode();
+                                hrefParentNode.createRelationshipTo(idNode, hrefRel.getType());
+                                // Remove auxiliary prefix from id
+                                idNode.setProperty(idProperty, idValue);
                                 countTransactions--;
                                 idCount++;
                             }
@@ -139,7 +156,7 @@ public class IndexFactory {
             }
 
             tx.commit();
-            logger.info("--- XLinks resolved");
+            logger.info("--- Done");
         } finally {
             tx.close();
         }
@@ -161,15 +178,59 @@ public class IndexFactory {
     }
 
     // Remove indexing (in order to not unnecessarily overload the mapping process of new dataset)
-    public static void dropXLinkIndexing(GraphDatabaseService graphDb) {
-        try (Transaction tx = graphDb.beginTx()) {
-            for (IndexDefinition index : getHrefIndices(tx)) {
+    public static void dropHrefs(GraphDatabaseService graphDb, boolean isOld) {
+        logger.info("Dropping href nodes and indexing");
+        int countTransactions = Project.conf.getBatch().getTrans();
+        Transaction tx = graphDb.beginTx();
+        try {
+            // Remove href nodes
+            for (Label label : hrefNodeLabels) {
+                // The value href must ALWAYS begin with prefix + "#"
+                String prefix = (isOld ? prefixOld : prefixNew);
+                try (ResourceIterator<Node> hrefNodes
+                             = tx.findNodes(label, hrefProperty, prefix + "#", StringSearchMode.PREFIX)) {
+                    while (hrefNodes.hasNext()) {
+                        // Periodically commit in batch
+                        if (countTransactions == 0) {
+                            tx.commit();
+                            tx.close();
+                            logger.debug("Committed a batch of {} transactions",
+                                    Project.conf.getBatch().getTrans());
+                            countTransactions = Project.conf.getBatch().getTrans();
+                            tx = graphDb.beginTx();
+                        }
+
+                        Node hrefNode = hrefNodes.next();
+                        // Only one incoming edge
+                        Relationship hrefRel = hrefNode.getRelationships(Direction.INCOMING).iterator().next();
+                        hrefRel.delete();
+                        // Might be multiple outgoing edges (e.g. getAssociationClass)
+                        for (Relationship rel : hrefNode.getRelationships(Direction.OUTGOING)) {
+                            Node endNode = rel.getEndNode();
+                            rel.delete();
+                            endNode.delete();
+                        }
+                        hrefNode.delete();
+                        countTransactions--;
+                    }
+                }
+            }
+            tx.commit();
+        } finally {
+            tx.close();
+        }
+
+        // Separate transaction for schema operations
+        try (Transaction txIndex = graphDb.beginTx()) {
+            // Drop indexing for hrefs
+            for (IndexDefinition index : getHrefIndices(txIndex)) {
                 index.drop();
             }
-            getIdIndex(tx).drop();
-            tx.commit();
-            logger.info("Dropped indexing for XLinks");
+            getIdIndex(txIndex).drop();
+            txIndex.commit();
         }
+
+        logger.info("--- Done");
     }
 
     public static void initRTreeLayer(GraphDatabaseService graphDb, boolean isOld) {

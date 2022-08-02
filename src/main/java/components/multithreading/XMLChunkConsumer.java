@@ -49,8 +49,7 @@ public class XMLChunkConsumer implements Runnable {
 
         while (shouldRun) {
             int size = Project.conf.getMultithreading().getSplitTopLevel() ?
-                    Project.conf.getMultithreading().getBatch().getTopLevel() :
-                    Project.conf.getMultithreading().getBatch().getFeature();
+                    Project.conf.getBatch().getTopLevel() : Project.conf.getBatch().getFeature();
             ArrayList<XMLChunk> chunks = new ArrayList<>(size);
 
             for (int i = 0; i < size; i++) {
@@ -82,7 +81,7 @@ public class XMLChunkConsumer implements Runnable {
                     XMLChunk chunk = chunks.get(i);
                     countChunk++;
                     CityGML cityObject = chunk.unmarshal();
-                    Node cityObjectNode = NodeFactory.create(graphDb, cityObject);
+                    Node cityObjectNode = NodeFactory.create(graphDb, cityObject, isOld);
                     if (cityObject.getCityGMLClass().equals(CityGMLClass.CITY_MODEL)) {
                         Node mapperRootNode = NodeFactory.getMapperRootNode(tx);
                         mapperRootNode.createRelationshipTo(cityObjectNode,
