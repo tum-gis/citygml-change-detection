@@ -35,7 +35,7 @@
   "mapper": {
     "oldFile": "Relative location of older dataset",
     "newFile": "Relative location of newer dataset",
-    "fullName": "Store full name (e.g. org.com.Class) of classes and properties [true/false]",
+    "fullName": "Store full class names (e.g. org.com.Class instead of Class) [true/false]",
     "rules": {
       "citygml": "Mapping rules for CityGML classes",
       "gml": "Mapping rules for GML classes",

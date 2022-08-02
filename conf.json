@@ -19,22 +19,22 @@
     "exportDir": "output/rtrees/",
     "nodeRef": 10
   },
+  "batch": {
+    "topLevel": 10,
+    "feature": 100,
+    "trans": 5000,
+    "logTopLevel": 100
+  },
   "multithreading": {
     "enabled": false,
     "producers": 1,
     "consumers": 7,
     "splitTopLevel": true,
-    "batch": {
-      "topLevel": 10,
-      "feature": 100,
-      "trans": 5000,
-      "logTopLevel": 100
-    },
     "timeout": 3600
   },
   "mapper": {
-    "oldFile": "input/Polygon_Multi_Interior_0.gml",
-    "newFile": "input/Polygon_Multi_Interior_1.gml",
+    "oldFile": "input/building_xs_0.xml",
+    "newFile": "input/building_xs_1.xml",
     "fullName": true,
     "rules": {
       "citygml": "src/main/java/components/mapper/rules/citygml.json",

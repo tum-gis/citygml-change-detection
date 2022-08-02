@@ -17,7 +17,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "producers",
     "consumers",
     "splitTopLevel",
-    "batch",
     "timeout"
 })
 @Generated("jsonschema2pojo")
@@ -31,8 +30,6 @@ public class Multithreading {
     private Integer consumers;
     @JsonProperty("splitTopLevel")
     private Boolean splitTopLevel;
-    @JsonProperty("batch")
-    private Batch batch;
     @JsonProperty("timeout")
     private Integer timeout;
     @JsonIgnore
@@ -98,21 +95,6 @@ public class Multithreading {
         return this;
     }
 
-    @JsonProperty("batch")
-    public Batch getBatch() {
-        return batch;
-    }
-
-    @JsonProperty("batch")
-    public void setBatch(Batch batch) {
-        this.batch = batch;
-    }
-
-    public Multithreading withBatch(Batch batch) {
-        this.batch = batch;
-        return this;
-    }
-
     @JsonProperty("timeout")
     public Integer getTimeout() {
         return timeout;
@@ -163,10 +145,6 @@ public class Multithreading {
         sb.append('=');
         sb.append(((this.splitTopLevel == null)?"<null>":this.splitTopLevel));
         sb.append(',');
-        sb.append("batch");
-        sb.append('=');
-        sb.append(((this.batch == null)?"<null>":this.batch));
-        sb.append(',');
         sb.append("timeout");
         sb.append('=');
         sb.append(((this.timeout == null)?"<null>":this.timeout));
@@ -186,7 +164,6 @@ public class Multithreading {
     @Override
     public int hashCode() {
         int result = 1;
-        result = ((result* 31)+((this.batch == null)? 0 :this.batch.hashCode()));
         result = ((result* 31)+((this.consumers == null)? 0 :this.consumers.hashCode()));
         result = ((result* 31)+((this.additionalProperties == null)? 0 :this.additionalProperties.hashCode()));
         result = ((result* 31)+((this.splitTopLevel == null)? 0 :this.splitTopLevel.hashCode()));
@@ -205,7 +182,7 @@ public class Multithreading {
             return false;
         }
         Multithreading rhs = ((Multithreading) other);
-        return ((((((((this.batch == rhs.batch)||((this.batch!= null)&&this.batch.equals(rhs.batch)))&&((this.consumers == rhs.consumers)||((this.consumers!= null)&&this.consumers.equals(rhs.consumers))))&&((this.additionalProperties == rhs.additionalProperties)||((this.additionalProperties!= null)&&this.additionalProperties.equals(rhs.additionalProperties))))&&((this.splitTopLevel == rhs.splitTopLevel)||((this.splitTopLevel!= null)&&this.splitTopLevel.equals(rhs.splitTopLevel))))&&((this.enabled == rhs.enabled)||((this.enabled!= null)&&this.enabled.equals(rhs.enabled))))&&((this.timeout == rhs.timeout)||((this.timeout!= null)&&this.timeout.equals(rhs.timeout))))&&((this.producers == rhs.producers)||((this.producers!= null)&&this.producers.equals(rhs.producers))));
+        return (((((((this.consumers == rhs.consumers)||((this.consumers!= null)&&this.consumers.equals(rhs.consumers)))&&((this.additionalProperties == rhs.additionalProperties)||((this.additionalProperties!= null)&&this.additionalProperties.equals(rhs.additionalProperties))))&&((this.splitTopLevel == rhs.splitTopLevel)||((this.splitTopLevel!= null)&&this.splitTopLevel.equals(rhs.splitTopLevel))))&&((this.enabled == rhs.enabled)||((this.enabled!= null)&&this.enabled.equals(rhs.enabled))))&&((this.timeout == rhs.timeout)||((this.timeout!= null)&&this.timeout.equals(rhs.timeout))))&&((this.producers == rhs.producers)||((this.producers!= null)&&this.producers.equals(rhs.producers))));
     }
 
 }

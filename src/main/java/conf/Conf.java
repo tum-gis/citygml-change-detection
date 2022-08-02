@@ -17,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "workingDir",
     "db",
     "rtree",
+    "batch",
     "multithreading",
     "mapper",
     "matcher"
@@ -32,6 +33,8 @@ public class Conf {
     private Db db;
     @JsonProperty("rtree")
     private Rtree rtree;
+    @JsonProperty("batch")
+    private Batch batch;
     @JsonProperty("multithreading")
     private Multithreading multithreading;
     @JsonProperty("mapper")
@@ -98,6 +101,21 @@ public class Conf {
 
     public Conf withRtree(Rtree rtree) {
         this.rtree = rtree;
+        return this;
+    }
+
+    @JsonProperty("batch")
+    public Batch getBatch() {
+        return batch;
+    }
+
+    @JsonProperty("batch")
+    public void setBatch(Batch batch) {
+        this.batch = batch;
+    }
+
+    public Conf withBatch(Batch batch) {
+        this.batch = batch;
         return this;
     }
 
@@ -181,6 +199,10 @@ public class Conf {
         sb.append('=');
         sb.append(((this.rtree == null)?"<null>":this.rtree));
         sb.append(',');
+        sb.append("batch");
+        sb.append('=');
+        sb.append(((this.batch == null)?"<null>":this.batch));
+        sb.append(',');
         sb.append("multithreading");
         sb.append('=');
         sb.append(((this.multithreading == null)?"<null>":this.multithreading));
@@ -209,6 +231,7 @@ public class Conf {
     public int hashCode() {
         int result = 1;
         result = ((result* 31)+((this.workingDir == null)? 0 :this.workingDir.hashCode()));
+        result = ((result* 31)+((this.batch == null)? 0 :this.batch.hashCode()));
         result = ((result* 31)+((this.multithreading == null)? 0 :this.multithreading.hashCode()));
         result = ((result* 31)+((this.mapper == null)? 0 :this.mapper.hashCode()));
         result = ((result* 31)+((this.additionalProperties == null)? 0 :this.additionalProperties.hashCode()));
@@ -228,7 +251,7 @@ public class Conf {
             return false;
         }
         Conf rhs = ((Conf) other);
-        return (((((((((this.workingDir == rhs.workingDir)||((this.workingDir!= null)&&this.workingDir.equals(rhs.workingDir)))&&((this.multithreading == rhs.multithreading)||((this.multithreading!= null)&&this.multithreading.equals(rhs.multithreading))))&&((this.mapper == rhs.mapper)||((this.mapper!= null)&&this.mapper.equals(rhs.mapper))))&&((this.additionalProperties == rhs.additionalProperties)||((this.additionalProperties!= null)&&this.additionalProperties.equals(rhs.additionalProperties))))&&((this.message == rhs.message)||((this.message!= null)&&this.message.equals(rhs.message))))&&((this.rtree == rhs.rtree)||((this.rtree!= null)&&this.rtree.equals(rhs.rtree))))&&((this.matcher == rhs.matcher)||((this.matcher!= null)&&this.matcher.equals(rhs.matcher))))&&((this.db == rhs.db)||((this.db!= null)&&this.db.equals(rhs.db))));
+        return ((((((((((this.workingDir == rhs.workingDir)||((this.workingDir!= null)&&this.workingDir.equals(rhs.workingDir)))&&((this.batch == rhs.batch)||((this.batch!= null)&&this.batch.equals(rhs.batch))))&&((this.multithreading == rhs.multithreading)||((this.multithreading!= null)&&this.multithreading.equals(rhs.multithreading))))&&((this.mapper == rhs.mapper)||((this.mapper!= null)&&this.mapper.equals(rhs.mapper))))&&((this.additionalProperties == rhs.additionalProperties)||((this.additionalProperties!= null)&&this.additionalProperties.equals(rhs.additionalProperties))))&&((this.message == rhs.message)||((this.message!= null)&&this.message.equals(rhs.message))))&&((this.rtree == rhs.rtree)||((this.rtree!= null)&&this.rtree.equals(rhs.rtree))))&&((this.matcher == rhs.matcher)||((this.matcher!= null)&&this.matcher.equals(rhs.matcher))))&&((this.db == rhs.db)||((this.db!= null)&&this.db.equals(rhs.db))));
     }
 
 }
