@@ -4,7 +4,6 @@ import components.Project;
 import conf.Rules;
 import org.citygml4j.model.citygml.CityGML;
 import org.citygml4j.model.citygml.CityGMLClass;
-import org.citygml4j.model.common.base.ModelClassEnum;
 import org.citygml4j.model.gml.GML;
 import org.citygml4j.model.gml.GMLClass;
 import org.citygml4j.model.xal.XAL;
@@ -19,21 +18,19 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 public class MappingRulesUtils {
-
-    private static final String[] citygmlExclude = {
-
-    };
-    private static final String[] gmlExclude = {
+    private static final String[] excluded = {
+            "getAssociableClass",
+            "getCityGMLClass",
+            "getGMLClass",
+            "getModule",
+            "getObject",
+            "isSetObject",
             "getParent",
             "isSetParent"
     };
-    private static final String[] xalExclude = {
-            "getParent",
-            "isSetParent"
-    };
-
 
     // Export all accessible attribute names and methods to JSON
     public static <T> void classesToJson(String citygmlJson, String gmlJson, String xalJson)
@@ -57,16 +54,7 @@ public class MappingRulesUtils {
         JSONObject result = new JSONObject();
         for (CityGMLClass ele : CityGMLClass.values()) {
             Class<? extends CityGML> modelClass = ele.getModelClass();
-            if (modelClass != null) {
-                JSONObject tmp = fillJson((Class<? extends ModelClassEnum>) modelClass);
-                for (String exclude : citygmlExclude) {
-                    if (tmp.has(exclude)) {
-                        tmp.remove(exclude);
-                    }
-                }
-                result.put(Project.conf.getMapper().getFullName() ? modelClass.getName()
-                        : modelClass.getSimpleName(), tmp);
-            }
+            fill(modelClass, result);
         }
         return result;
     }
@@ -75,16 +63,7 @@ public class MappingRulesUtils {
         JSONObject result = new JSONObject();
         for (GMLClass ele : GMLClass.values()) {
             Class<? extends GML> modelClass = ele.getModelClass();
-            if (modelClass != null) {
-                JSONObject tmp = fillJson((Class<? extends ModelClassEnum>) modelClass);
-                for (String exclude : gmlExclude) {
-                    if (tmp.has(exclude)) {
-                        tmp.remove(exclude);
-                    }
-                }
-                result.put(Project.conf.getMapper().getFullName() ? modelClass.getName()
-                        : modelClass.getSimpleName(), tmp);
-            }
+            fill(modelClass, result);
         }
         return result;
     }
@@ -93,32 +72,35 @@ public class MappingRulesUtils {
         JSONObject result = new JSONObject();
         for (XALClass ele : XALClass.values()) {
             Class<? extends XAL> modelClass = ele.getModelClass();
-            if (modelClass != null) {
-                JSONObject tmp = fillJson((Class<? extends ModelClassEnum>) modelClass);
-                for (String exclude : xalExclude) {
-                    if (tmp.has(exclude)) {
-                        tmp.remove(exclude);
-                    }
-                }
-                result.put(Project.conf.getMapper().getFullName() ? modelClass.getName()
-                        : modelClass.getSimpleName(), tmp);
-            }
+            fill(modelClass, result);
         }
         return result;
     }
 
-    private static JSONObject fillJson(Class<? extends ModelClassEnum> modelClass) throws IntrospectionException {
-        JSONObject result = new JSONObject();
-        for (PropertyDescriptor propertyDescriptor
-                : Introspector.getBeanInfo(modelClass).getPropertyDescriptors()) {
-            Method getter = propertyDescriptor.getReadMethod();
-            // Only consider classes where attributes are directly declared
-            if (getter != null && getter.getDeclaringClass().equals(modelClass)) {
-                Class<?> type = getter.getReturnType();
-                result.put(getter.getName(), type.getName());
+    private static void fill(Class<?> modelClass, JSONObject jsonObject) throws IntrospectionException {
+        if (modelClass != null) {
+            JSONObject tmp = new JSONObject();
+            for (PropertyDescriptor propertyDescriptor
+                    : Introspector.getBeanInfo(modelClass).getPropertyDescriptors()) {
+                Method getter = propertyDescriptor.getReadMethod();
+                // Only consider classes where attributes are directly declared
+                if (getter != null && getter.getDeclaringClass().equals(modelClass)) {
+                    Class<?> type = getter.getReturnType();
+                    tmp.put(getter.getName(), type.getName());
+                }
             }
+            for (String exclude : excluded) {
+                if (tmp.has(exclude)) {
+                    tmp.remove(exclude);
+                }
+            }
+            jsonObject.put(Project.conf.getMapper().getFullName() ? modelClass.getName()
+                    : modelClass.getSimpleName(), tmp);
         }
-        return result;
+    }
+
+    public static boolean isExcluded(String getter) {
+        return Arrays.stream(excluded).anyMatch(n -> n.equals(getter));
     }
 
     // Return a single JSON object merged from all JSON files

@@ -1,59 +1,46 @@
 {
     "org.citygml4j.model.citygml.building.InteriorWallSurface": {
         "getGenericApplicationPropertyOfInteriorWallSurface": "java.util.List",
-        "isSetGenericApplicationPropertyOfInteriorWallSurface": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass"
+        "isSetGenericApplicationPropertyOfInteriorWallSurface": "boolean"
     },
     "org.citygml4j.model.citygml.appearance.TexCoordGen": {
         "getWorldToTexture": "org.citygml4j.model.citygml.appearance.WorldToTexture",
         "isSetGenericApplicationPropertyOfTexCoordGen": "boolean",
         "getGenericApplicationPropertyOfTexCoordGen": "java.util.List",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetWorldToTexture": "boolean"
     },
     "org.citygml4j.model.citygml.bridge.GroundSurface": {
         "isSetGenericApplicationPropertyOfGroundSurface": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "getGenericApplicationPropertyOfGroundSurface": "java.util.List"
     },
     "org.citygml4j.model.citygml.building.ClosureSurface": {
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetGenericApplicationPropertyOfClosureSurface": "boolean",
         "getGenericApplicationPropertyOfClosureSurface": "java.util.List"
     },
     "org.citygml4j.model.citygml.tunnel.InteriorHollowSpaceProperty": {
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
-        "getAssociableClass": "java.lang.Class",
         "getHollowSpace": "org.citygml4j.model.citygml.tunnel.HollowSpace",
         "isSetHollowSpace": "boolean"
     },
     "org.citygml4j.model.citygml.building.CeilingSurface": {
         "getGenericApplicationPropertyOfCeilingSurface": "java.util.List",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetGenericApplicationPropertyOfCeilingSurface": "boolean"
     },
     "org.citygml4j.model.citygml.transportation.Road": {
         "getGenericApplicationPropertyOfRoad": "java.util.List",
-        "isSetGenericApplicationPropertyOfRoad": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass"
+        "isSetGenericApplicationPropertyOfRoad": "boolean"
     },
     "org.citygml4j.model.citygml.core.AbstractSite": {
         "getGenericApplicationPropertyOfSite": "java.util.List",
         "isSetGenericApplicationPropertyOfSite": "boolean"
     },
-    "org.citygml4j.model.citygml.texturedsurface._TextureType": {
-        "getValue": "java.lang.String",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass"
-    },
+    "org.citygml4j.model.citygml.texturedsurface._TextureType": {"getValue": "java.lang.String"},
     "org.citygml4j.model.citygml.appearance.TexCoordList": {
         "isSetTextureCoordinates": "boolean",
         "getTextureCoordinates": "java.util.List",
         "getGenericApplicationPropertyOfTexCoordList": "java.util.List",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetGenericApplicationPropertyOfTexCoordList": "boolean"
     },
     "org.citygml4j.model.citygml.building.OuterCeilingSurface": {
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetGenericApplicationPropertyOfOuterCeilingSurface": "boolean",
         "getGenericApplicationPropertyOfOuterCeilingSurface": "java.util.List"
     },
@@ -62,14 +49,12 @@
         "getLodRepresentation": "org.citygml4j.model.citygml.core.LodRepresentation",
         "isSetGrid": "boolean",
         "getGrid": "org.citygml4j.model.citygml.relief.GridProperty",
-        "isSetGenericApplicationPropertyOfRasterRelief": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass"
+        "isSetGenericApplicationPropertyOfRasterRelief": "boolean"
     },
     "org.citygml4j.model.citygml.vegetation.SolitaryVegetationObject": {
         "getLod4ImplicitRepresentation": "org.citygml4j.model.citygml.core.ImplicitRepresentationProperty",
         "isSetFunction": "boolean",
         "isSetLod4Geometry": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetLod3Geometry": "boolean",
         "isSetLod1ImplicitRepresentation": "boolean",
         "getLod1ImplicitRepresentation": "org.citygml4j.model.citygml.core.ImplicitRepresentationProperty",
@@ -103,20 +88,14 @@
     },
     "org.citygml4j.model.citygml.bridge.RoofSurface": {
         "isSetGenericApplicationPropertyOfRoofSurface": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "getGenericApplicationPropertyOfRoofSurface": "java.util.List"
     },
     "org.citygml4j.model.citygml.generics.AbstractGenericAttribute": {
-        "getParent": "org.citygml4j.model.common.base.ModelObject",
         "getName": "java.lang.String",
-        "isSetParent": "boolean",
         "isSetName": "boolean"
     },
     "org.citygml4j.model.citygml.core.TransformationMatrix4x4": {
-        "getParent": "org.citygml4j.model.common.base.ModelObject",
         "getMatrix": "org.citygml4j.geometry.Matrix",
-        "isSetParent": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetMatrix": "boolean"
     },
     "org.citygml4j.model.citygml.vegetation.PlantCover": {
@@ -124,7 +103,6 @@
         "isSetFunction": "boolean",
         "getLod4MultiSurface": "org.citygml4j.model.gml.geometry.aggregates.MultiSurfaceProperty",
         "isSetGenericApplicationPropertyOfPlantCover": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "getLod3MultiSurface": "org.citygml4j.model.gml.geometry.aggregates.MultiSurfaceProperty",
         "getLod2MultiSurface": "org.citygml4j.model.gml.geometry.aggregates.MultiSurfaceProperty",
         "getLod3MultiSolid": "org.citygml4j.model.gml.geometry.aggregates.MultiSolidProperty",
@@ -151,8 +129,6 @@
     },
     "org.citygml4j.model.citygml.transportation.TrafficAreaProperty": {
         "getTrafficArea": "org.citygml4j.model.citygml.transportation.TrafficArea",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
-        "getAssociableClass": "java.lang.Class",
         "isSetTrafficArea": "boolean"
     },
     "org.citygml4j.model.citygml.texturedsurface._Material": {
@@ -160,7 +136,6 @@
         "isSetTransparency": "boolean",
         "isSetEmissiveColor": "boolean",
         "getDiffuseColor": "org.citygml4j.model.citygml.texturedsurface._Color",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetSpecularColor": "boolean",
         "getSpecularColor": "org.citygml4j.model.citygml.texturedsurface._Color",
         "getTransparency": "java.lang.Double",
@@ -181,7 +156,6 @@
         "getGenericApplicationPropertyOfBridgeFurniture": "java.util.List",
         "isSetLod4Geometry": "boolean",
         "isSetClazz": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "getUsage": "java.util.List",
         "isSetLod4ImplicitRepresentation": "boolean",
         "getLod4Geometry": "org.citygml4j.model.gml.geometry.GeometryProperty"
@@ -195,7 +169,6 @@
         "getLod4MultiSurface": "org.citygml4j.model.gml.geometry.aggregates.MultiSurfaceProperty",
         "isSetClazz": "boolean",
         "isSetLod4MultiSurface": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "getGenericApplicationPropertyOfTrafficArea": "java.util.List",
         "isSetLod3MultiSurface": "boolean",
         "isSetSurfaceMaterial": "boolean",
@@ -208,8 +181,6 @@
     },
     "org.citygml4j.model.citygml.tunnel.TunnelPartProperty": {
         "isSetTunnelPart": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
-        "getAssociableClass": "java.lang.Class",
         "getTunnelPart": "org.citygml4j.model.citygml.tunnel.TunnelPart"
     },
     "org.citygml4j.model.citygml.relief.AbstractReliefComponent": {
@@ -224,20 +195,16 @@
         "getLod": "int",
         "isSetLod": "boolean",
         "isSetGenericApplicationPropertyOfReliefFeature": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetReliefComponent": "boolean",
         "getReliefComponent": "java.util.List",
         "getGenericApplicationPropertyOfReliefFeature": "java.util.List"
     },
     "org.citygml4j.model.citygml.relief.ReliefComponentProperty": {
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetReliefComponent": "boolean",
-        "getAssociableClass": "java.lang.Class",
         "getReliefComponent": "org.citygml4j.model.citygml.relief.AbstractReliefComponent"
     },
     "org.citygml4j.model.citygml.tunnel.GroundSurface": {
         "isSetGenericApplicationPropertyOfGroundSurface": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "getGenericApplicationPropertyOfGroundSurface": "java.util.List"
     },
     "org.citygml4j.model.citygml.building.AbstractOpening": {
@@ -255,20 +222,15 @@
     },
     "org.citygml4j.model.citygml.bridge.BridgePart": {
         "getGenericApplicationPropertyOfBridgePart": "java.util.List",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetGenericApplicationPropertyOfBridgePart": "boolean"
     },
     "org.citygml4j.model.citygml.core.ImplicitRepresentationProperty": {
         "getImplicitGeometry": "org.citygml4j.model.citygml.core.ImplicitGeometry",
-        "isSetImplicitGeometry": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
-        "getAssociableClass": "java.lang.Class"
+        "isSetImplicitGeometry": "boolean"
     },
     "org.citygml4j.model.citygml.bridge.BridgePartProperty": {
         "getBridgePart": "org.citygml4j.model.citygml.bridge.BridgePart",
-        "isSetBridgePart": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
-        "getAssociableClass": "java.lang.Class"
+        "isSetBridgePart": "boolean"
     },
     "org.citygml4j.model.citygml.tunnel.AbstractOpening": {
         "getLod3ImplicitRepresentation": "org.citygml4j.model.citygml.core.ImplicitRepresentationProperty",
@@ -285,8 +247,6 @@
     },
     "org.citygml4j.model.citygml.relief.TinProperty": {
         "getTriangulatedSurface": "org.citygml4j.model.gml.geometry.primitives.TriangulatedSurface",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
-        "getAssociableClass": "java.lang.Class",
         "isSetTriangulatedSurface": "boolean"
     },
     "org.citygml4j.model.citygml.building.BuildingFurniture": {
@@ -298,7 +258,6 @@
         "getFunction": "java.util.List",
         "isSetLod4Geometry": "boolean",
         "isSetClazz": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetGenericApplicationPropertyOfBuildingFurniture": "boolean",
         "getUsage": "java.util.List",
         "isSetLod4ImplicitRepresentation": "boolean",
@@ -307,39 +266,30 @@
     },
     "org.citygml4j.model.citygml.generics.IntAttribute": {
         "getValue": "java.lang.Integer",
-        "isSetValue": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass"
+        "isSetValue": "boolean"
     },
     "org.citygml4j.model.citygml.tunnel.OuterFloorSurface": {
         "isSetGenericApplicationPropertyOfOuterFloorSurface": "boolean",
-        "getGenericApplicationPropertyOfOuterFloorSurface": "java.util.List",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass"
+        "getGenericApplicationPropertyOfOuterFloorSurface": "java.util.List"
     },
     "org.citygml4j.model.citygml.bridge.BridgeConstructionElementProperty": {
         "isSetBridgeConstructionElement": "boolean",
-        "getBridgeConstructionElement": "org.citygml4j.model.citygml.bridge.BridgeConstructionElement",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
-        "getAssociableClass": "java.lang.Class"
+        "getBridgeConstructionElement": "org.citygml4j.model.citygml.bridge.BridgeConstructionElement"
     },
     "org.citygml4j.model.citygml.bridge.BridgeInstallationProperty": {
         "getBridgeInstallation": "org.citygml4j.model.citygml.bridge.BridgeInstallation",
-        "isSetBridgeInstallation": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
-        "getAssociableClass": "java.lang.Class"
+        "isSetBridgeInstallation": "boolean"
     },
     "org.citygml4j.model.citygml.tunnel.WallSurface": {
         "isSetGenericApplicationPropertyOfWallSurface": "boolean",
-        "getGenericApplicationPropertyOfWallSurface": "java.util.List",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass"
+        "getGenericApplicationPropertyOfWallSurface": "java.util.List"
     },
     "org.citygml4j.model.citygml.building.WallSurface": {
         "isSetGenericApplicationPropertyOfWallSurface": "boolean",
-        "getGenericApplicationPropertyOfWallSurface": "java.util.List",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass"
+        "getGenericApplicationPropertyOfWallSurface": "java.util.List"
     },
     "org.citygml4j.model.citygml.tunnel.Door": {
         "isSetGenericApplicationPropertyOfDoor": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "getGenericApplicationPropertyOfDoor": "java.util.List"
     },
     "org.citygml4j.model.citygml.generics.GenericCityObject": {
@@ -351,7 +301,6 @@
         "isSetLod4TerrainIntersection": "boolean",
         "isSetLod3TerrainIntersection": "boolean",
         "isSetLod4Geometry": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetLod3Geometry": "boolean",
         "isSetLod1ImplicitRepresentation": "boolean",
         "getLod1ImplicitRepresentation": "org.citygml4j.model.citygml.core.ImplicitRepresentationProperty",
@@ -386,9 +335,7 @@
         "isSetAppearance": "boolean",
         "getAppearance": "org.citygml4j.model.citygml.texturedsurface._AbstractAppearance",
         "isSetOrientation": "boolean",
-        "getOrientation": "org.citygml4j.model.gml.geometry.primitives.Sign",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
-        "getAssociableClass": "java.lang.Class"
+        "getOrientation": "org.citygml4j.model.gml.geometry.primitives.Sign"
     },
     "org.citygml4j.model.citygml.transportation.AbstractTransportationObject": {
         "getGenericApplicationPropertyOfTransportationObject": "java.util.List",
@@ -407,24 +354,19 @@
     },
     "org.citygml4j.model.citygml.tunnel.TunnelInstallationProperty": {
         "getTunnelInstallation": "org.citygml4j.model.citygml.tunnel.TunnelInstallation",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
-        "getAssociableClass": "java.lang.Class",
         "isSetTunnelInstallation": "boolean"
     },
     "org.citygml4j.model.citygml.bridge.Bridge": {
         "isSetGenericApplicationPropertyOfBridge": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "getGenericApplicationPropertyOfBridge": "java.util.List"
     },
     "org.citygml4j.model.citygml.bridge.OuterCeilingSurface": {
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetGenericApplicationPropertyOfOuterCeilingSurface": "boolean",
         "getGenericApplicationPropertyOfOuterCeilingSurface": "java.util.List"
     },
     "org.citygml4j.model.citygml.building.Window": {
         "isSetGenericApplicationPropertyOfWindow": "boolean",
-        "getGenericApplicationPropertyOfWindow": "java.util.List",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass"
+        "getGenericApplicationPropertyOfWindow": "java.util.List"
     },
     "org.citygml4j.model.citygml.bridge.AbstractBridge": {
         "isSetIsMovable": "boolean",
@@ -489,20 +431,14 @@
     },
     "org.citygml4j.model.citygml.cityobjectgroup.CityObjectGroupParent": {
         "getCityObject": "org.citygml4j.model.citygml.core.AbstractCityObject",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
-        "getAssociableClass": "java.lang.Class",
         "isSetCityObject": "boolean"
     },
     "org.citygml4j.model.citygml.waterbody.BoundedByWaterSurfaceProperty": {
         "isSetWaterBoundarySurface": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
-        "getAssociableClass": "java.lang.Class",
         "getWaterBoundarySurface": "org.citygml4j.model.citygml.waterbody.AbstractWaterBoundarySurface"
     },
     "org.citygml4j.model.citygml.bridge.OpeningProperty": {
         "getOpening": "org.citygml4j.model.citygml.bridge.AbstractOpening",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
-        "getAssociableClass": "java.lang.Class",
         "isSetOpening": "boolean"
     },
     "org.citygml4j.model.citygml.cityfurniture.CityFurniture": {
@@ -514,7 +450,6 @@
         "isSetLod4TerrainIntersection": "boolean",
         "isSetLod3TerrainIntersection": "boolean",
         "isSetLod4Geometry": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetLod3Geometry": "boolean",
         "getGenericApplicationPropertyOfCityFurniture": "java.util.List",
         "isSetLod1ImplicitRepresentation": "boolean",
@@ -543,14 +478,12 @@
     },
     "org.citygml4j.model.citygml.transportation.Square": {
         "getGenericApplicationPropertyOfSquare": "java.util.List",
-        "isSetGenericApplicationPropertyOfSquare": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass"
+        "isSetGenericApplicationPropertyOfSquare": "boolean"
     },
     "org.citygml4j.model.citygml.waterbody.WaterBody": {
         "getLod1Solid": "org.citygml4j.model.gml.geometry.primitives.SolidProperty",
         "isSetFunction": "boolean",
         "isSetLod2Solid": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "getBoundedBySurface": "java.util.List",
         "getLod0MultiSurface": "org.citygml4j.model.gml.geometry.aggregates.MultiSurfaceProperty",
         "getLod2Solid": "org.citygml4j.model.gml.geometry.primitives.SolidProperty",
@@ -584,65 +517,46 @@
         "isSetReferencePoint": "boolean",
         "isSetRelativeGMLGeometry": "boolean",
         "getReferencePoint": "org.citygml4j.model.gml.geometry.primitives.PointProperty",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "getLibraryObject": "java.lang.String",
         "isSetMimeType": "boolean",
         "isSetLibraryObject": "boolean"
     },
     "org.citygml4j.model.citygml.core.ExternalObject": {
-        "getParent": "org.citygml4j.model.common.base.ModelObject",
         "getName": "java.lang.String",
-        "isSetParent": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetUri": "boolean",
         "isSetName": "boolean",
         "getUri": "java.lang.String"
     },
     "org.citygml4j.model.citygml.core.TransformationMatrix3x4": {
-        "getParent": "org.citygml4j.model.common.base.ModelObject",
         "getMatrix": "org.citygml4j.geometry.Matrix",
-        "isSetParent": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetMatrix": "boolean"
     },
     "org.citygml4j.model.citygml.bridge.InteriorBridgeRoomProperty": {
         "getBridgeRoom": "org.citygml4j.model.citygml.bridge.BridgeRoom",
-        "isSetBridgeRoom": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
-        "getAssociableClass": "java.lang.Class"
+        "isSetBridgeRoom": "boolean"
     },
     "org.citygml4j.model.citygml.bridge.Window": {
         "isSetGenericApplicationPropertyOfWindow": "boolean",
-        "getGenericApplicationPropertyOfWindow": "java.util.List",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass"
+        "getGenericApplicationPropertyOfWindow": "java.util.List"
     },
     "org.citygml4j.model.citygml.core.ExternalReference": {
         "getExternalObject": "org.citygml4j.model.citygml.core.ExternalObject",
-        "getParent": "org.citygml4j.model.common.base.ModelObject",
         "isSetExternalObject": "boolean",
-        "isSetParent": "boolean",
         "getInformationSystem": "java.lang.String",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetInformationSystem": "boolean"
     },
     "org.citygml4j.model.citygml.texturedsurface._Color": {
-        "getParent": "org.citygml4j.model.common.base.ModelObject",
         "getGreen": "java.lang.Double",
         "getRed": "java.lang.Double",
-        "isSetParent": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "getBlue": "java.lang.Double"
     },
     "org.citygml4j.model.citygml.relief.GridProperty": {
         "isSetRectifiedGridCoverage": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
-        "getAssociableClass": "java.lang.Class",
         "getRectifiedGridCoverage": "org.citygml4j.model.gml.coverage.RectifiedGridCoverage"
     },
     "org.citygml4j.model.citygml.bridge.WallSurface": {
         "isSetGenericApplicationPropertyOfWallSurface": "boolean",
-        "getGenericApplicationPropertyOfWallSurface": "java.util.List",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass"
+        "getGenericApplicationPropertyOfWallSurface": "java.util.List"
     },
     "org.citygml4j.model.citygml.cityobjectgroup.CityObjectGroup": {
         "isSetUsage": "boolean",
@@ -655,7 +569,6 @@
         "isSetGenericApplicationPropertyOfCityObjectGroup": "boolean",
         "isSetClazz": "boolean",
         "getGeometry": "org.citygml4j.model.gml.geometry.GeometryProperty",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetGroupParent": "boolean",
         "getUsage": "java.util.List",
         "getGenericApplicationPropertyOfCityObjectGroup": "java.util.List",
@@ -663,15 +576,10 @@
         "getGroupParent": "org.citygml4j.model.citygml.cityobjectgroup.CityObjectGroupParent"
     },
     "org.citygml4j.model.citygml.building.BuildingPartProperty": {
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
-        "getAssociableClass": "java.lang.Class",
         "getBuildingPart": "org.citygml4j.model.citygml.building.BuildingPart",
         "isSetBuildingPart": "boolean"
     },
-    "org.citygml4j.model.citygml.appearance.TextureType": {
-        "getValue": "java.lang.String",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass"
-    },
+    "org.citygml4j.model.citygml.appearance.TextureType": {"getValue": "java.lang.String"},
     "org.citygml4j.model.citygml.core.AbstractCityObject": {
         "getGeneralizesTo": "java.util.List",
         "isSetAppearance": "boolean",
@@ -704,7 +612,6 @@
         "getLod4MultiSurface": "org.citygml4j.model.gml.geometry.aggregates.MultiSurfaceProperty",
         "isSetClazz": "boolean",
         "isSetLod4MultiSurface": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetLod3MultiSurface": "boolean",
         "isSetSurfaceMaterial": "boolean",
         "getLod3MultiSurface": "org.citygml4j.model.gml.geometry.aggregates.MultiSurfaceProperty",
@@ -715,11 +622,8 @@
         "isSetGenericApplicationPropertyOfAuxiliaryTrafficArea": "boolean"
     },
     "org.citygml4j.model.citygml.appearance.Color": {
-        "getParent": "org.citygml4j.model.common.base.ModelObject",
         "getGreen": "java.lang.Double",
         "getRed": "java.lang.Double",
-        "isSetParent": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "getBlue": "java.lang.Double"
     },
     "org.citygml4j.model.citygml.relief.BreaklineRelief": {
@@ -729,105 +633,77 @@
         "getGenericApplicationPropertyOfBreaklineRelief": "java.util.List",
         "getLodRepresentation": "org.citygml4j.model.citygml.core.LodRepresentation",
         "isSetGenericApplicationPropertyOfBreaklineRelief": "boolean",
-        "getRidgeOrValleyLines": "org.citygml4j.model.gml.geometry.aggregates.MultiCurveProperty",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass"
+        "getRidgeOrValleyLines": "org.citygml4j.model.gml.geometry.aggregates.MultiCurveProperty"
     },
     "org.citygml4j.model.citygml.bridge.InteriorFurnitureProperty": {
         "isSetBridgeFurniture": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
-        "getAssociableClass": "java.lang.Class",
         "getBridgeFurniture": "org.citygml4j.model.citygml.bridge.BridgeFurniture"
     },
     "org.citygml4j.model.citygml.tunnel.ClosureSurface": {
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetGenericApplicationPropertyOfClosureSurface": "boolean",
         "getGenericApplicationPropertyOfClosureSurface": "java.util.List"
     },
     "org.citygml4j.model.citygml.waterbody.WaterClosureSurface": {
         "getGenericApplicationPropertyOfWaterClosureSurface": "java.util.List",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetGenericApplicationPropertyOfWaterClosureSurface": "boolean"
     },
     "org.citygml4j.model.citygml.core.AddressProperty": {
         "getAddress": "org.citygml4j.model.citygml.core.Address",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
-        "getAssociableClass": "java.lang.Class",
         "isSetAddress": "boolean"
     },
-    "org.citygml4j.model.citygml.core.RelativeToTerrain": {
-        "getValue": "java.lang.String",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass"
-    },
+    "org.citygml4j.model.citygml.core.RelativeToTerrain": {"getValue": "java.lang.String"},
     "org.citygml4j.model.citygml.generics.GenericAttributeSet": {
         "getCodeSpace": "java.lang.String",
         "isSetCodeSpace": "boolean",
         "getGenericAttribute": "java.util.List",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetGenericAttribute": "boolean"
     },
     "org.citygml4j.model.citygml.appearance.TextureAssociation": {
         "getTextureParameterization": "org.citygml4j.model.citygml.appearance.AbstractTextureParameterization",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetUri": "boolean",
-        "getAssociableClass": "java.lang.Class",
         "isSetTextureParameterization": "boolean",
         "getUri": "java.lang.String"
     },
     "org.citygml4j.model.citygml.building.RoofSurface": {
         "isSetGenericApplicationPropertyOfRoofSurface": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "getGenericApplicationPropertyOfRoofSurface": "java.util.List"
     },
     "org.citygml4j.model.citygml.cityobjectgroup.CityObjectGroupMember": {
         "getGroupRole": "java.lang.String",
         "isSetGroupRole": "boolean",
         "getCityObject": "org.citygml4j.model.citygml.core.AbstractCityObject",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
-        "getAssociableClass": "java.lang.Class",
         "isSetCityObject": "boolean"
     },
     "org.citygml4j.model.citygml.building.BuildingInstallationProperty": {
         "getBuildingInstallation": "org.citygml4j.model.citygml.building.BuildingInstallation",
-        "isSetBuildingInstallation": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
-        "getAssociableClass": "java.lang.Class"
+        "isSetBuildingInstallation": "boolean"
     },
     "org.citygml4j.model.citygml.generics.StringAttribute": {
         "getValue": "java.lang.String",
-        "isSetValue": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass"
+        "isSetValue": "boolean"
     },
     "org.citygml4j.model.citygml.building.InteriorFurnitureProperty": {
         "isSetBuildingFurniture": "boolean",
-        "getBuildingFurniture": "org.citygml4j.model.citygml.building.BuildingFurniture",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
-        "getAssociableClass": "java.lang.Class"
+        "getBuildingFurniture": "org.citygml4j.model.citygml.building.BuildingFurniture"
     },
     "org.citygml4j.model.citygml.appearance.ColorPlusOpacity": {
         "getOpacity": "java.lang.Double",
-        "getParent": "org.citygml4j.model.common.base.ModelObject",
         "getGreen": "java.lang.Double",
         "getRed": "java.lang.Double",
-        "isSetParent": "boolean",
         "getColor": "org.citygml4j.model.citygml.appearance.Color",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "getBlue": "java.lang.Double"
     },
     "org.citygml4j.model.citygml.bridge.CeilingSurface": {
         "getGenericApplicationPropertyOfCeilingSurface": "java.util.List",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetGenericApplicationPropertyOfCeilingSurface": "boolean"
     },
     "org.citygml4j.model.citygml.tunnel.FloorSurface": {
         "getGenericApplicationPropertyOfFloorSurface": "java.util.List",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetGenericApplicationPropertyOfFloorSurface": "boolean"
     },
     "org.citygml4j.model.citygml.bridge.IntBridgeInstallationProperty": {
         "isSetIntBridgeInstallation": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
-        "getIntBridgeInstallation": "org.citygml4j.model.citygml.bridge.IntBridgeInstallation",
-        "getAssociableClass": "java.lang.Class"
+        "getIntBridgeInstallation": "org.citygml4j.model.citygml.bridge.IntBridgeInstallation"
     },
     "org.citygml4j.model.citygml.building.AbstractBuilding": {
         "getLod1Solid": "org.citygml4j.model.gml.geometry.primitives.SolidProperty",
@@ -904,8 +780,7 @@
     },
     "org.citygml4j.model.citygml.building.Building": {
         "getGenericApplicationPropertyOfBuilding": "java.util.List",
-        "isSetGenericApplicationPropertyOfBuilding": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass"
+        "isSetGenericApplicationPropertyOfBuilding": "boolean"
     },
     "org.citygml4j.model.citygml.vegetation.AbstractVegetationObject": {
         "getGenericApplicationPropertyOfVegetationObject": "java.util.List",
@@ -915,7 +790,6 @@
         "getLodRepresentation": "org.citygml4j.model.citygml.core.LodRepresentation",
         "isSetGenericApplicationPropertyOfTinRelief": "boolean",
         "getGenericApplicationPropertyOfTinRelief": "java.util.List",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "getTin": "org.citygml4j.model.citygml.relief.TinProperty",
         "isSetTin": "boolean"
     },
@@ -928,7 +802,6 @@
         "getLod4MultiSurface": "org.citygml4j.model.gml.geometry.aggregates.MultiSurfaceProperty",
         "isSetClazz": "boolean",
         "isSetLod4MultiSurface": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "getGenericApplicationPropertyOfTransportationComplex": "java.util.List",
         "isSetLod3MultiSurface": "boolean",
         "getLod3MultiSurface": "org.citygml4j.model.gml.geometry.aggregates.MultiSurfaceProperty",
@@ -961,7 +834,6 @@
     "org.citygml4j.model.citygml.bridge.Door": {
         "getAddress": "java.util.List",
         "isSetGenericApplicationPropertyOfDoor": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "getGenericApplicationPropertyOfDoor": "java.util.List",
         "isSetAddress": "boolean"
     },
@@ -976,21 +848,17 @@
         "getFunction": "java.util.List",
         "isSetLod4Geometry": "boolean",
         "isSetClazz": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "getUsage": "java.util.List",
         "isSetLod4ImplicitRepresentation": "boolean",
         "getLod4Geometry": "org.citygml4j.model.gml.geometry.GeometryProperty"
     },
     "org.citygml4j.model.citygml.generics.MeasureAttribute": {
         "getValue": "org.citygml4j.model.gml.basicTypes.Measure",
-        "isSetValue": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass"
+        "isSetValue": "boolean"
     },
     "org.citygml4j.model.citygml.bridge.BoundarySurfaceProperty": {
         "isSetBoundarySurface": "boolean",
-        "getBoundarySurface": "org.citygml4j.model.citygml.bridge.AbstractBoundarySurface",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
-        "getAssociableClass": "java.lang.Class"
+        "getBoundarySurface": "org.citygml4j.model.citygml.bridge.AbstractBoundarySurface"
     },
     "org.citygml4j.model.citygml.tunnel.HollowSpace": {
         "isSetUsage": "boolean",
@@ -1001,7 +869,6 @@
         "getLod4MultiSurface": "org.citygml4j.model.gml.geometry.aggregates.MultiSurfaceProperty",
         "isSetClazz": "boolean",
         "isSetLod4MultiSurface": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "getGenericApplicationPropertyOfHollowSpace": "java.util.List",
         "getInteriorFurniture": "java.util.List",
         "getHollowSpaceInstallation": "java.util.List",
@@ -1016,7 +883,6 @@
     },
     "org.citygml4j.model.citygml.waterbody.WaterGroundSurface": {
         "getGenericApplicationPropertyOfWaterGroundSurface": "java.util.List",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetGenericApplicationPropertyOfWaterGroundSurface": "boolean"
     },
     "org.citygml4j.model.citygml.appearance.AbstractTexture": {
@@ -1037,22 +903,16 @@
         "isSetTarget": "boolean",
         "getGenericApplicationPropertyOfParameterizedTexture": "java.util.List",
         "getTarget": "java.util.List",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetGenericApplicationPropertyOfParameterizedTexture": "boolean"
     },
-    "org.citygml4j.model.citygml.core.RelativeToWater": {
-        "getValue": "java.lang.String",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass"
-    },
+    "org.citygml4j.model.citygml.core.RelativeToWater": {"getValue": "java.lang.String"},
     "org.citygml4j.model.citygml.bridge.OuterFloorSurface": {
         "isSetGenericApplicationPropertyOfOuterFloorSurface": "boolean",
-        "getGenericApplicationPropertyOfOuterFloorSurface": "java.util.List",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass"
+        "getGenericApplicationPropertyOfOuterFloorSurface": "java.util.List"
     },
     "org.citygml4j.model.citygml.transportation.Railway": {
         "getGenericApplicationPropertyOfRailway": "java.util.List",
-        "isSetGenericApplicationPropertyOfRailway": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass"
+        "isSetGenericApplicationPropertyOfRailway": "boolean"
     },
     "org.citygml4j.model.citygml.ade.ADEComponent": {"getADEClass": "org.citygml4j.model.citygml.ade.ADEClass"},
     "org.citygml4j.model.citygml.tunnel.TunnelInstallation": {
@@ -1069,7 +929,6 @@
         "getLod2Geometry": "org.citygml4j.model.gml.geometry.GeometryProperty",
         "isSetLod4Geometry": "boolean",
         "isSetClazz": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetLod3Geometry": "boolean",
         "getBoundedBySurface": "java.util.List",
         "getUsage": "java.util.List",
@@ -1083,16 +942,13 @@
     },
     "org.citygml4j.model.citygml.appearance.AppearanceProperty": {
         "isSetAppearance": "boolean",
-        "getAppearance": "org.citygml4j.model.citygml.appearance.Appearance",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
-        "getAssociableClass": "java.lang.Class"
+        "getAppearance": "org.citygml4j.model.citygml.appearance.Appearance"
     },
     "org.citygml4j.model.citygml.core.Address": {
         "getGenericApplicationPropertyOfAddress": "java.util.List",
         "isSetMultiPoint": "boolean",
         "isSetXalAddress": "boolean",
         "getSpatialRepresentation": "org.citygml4j.model.gml.feature.SpatialRepresentation",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "getMultiPoint": "org.citygml4j.model.gml.geometry.aggregates.MultiPointProperty",
         "isSetGenericApplicationPropertyOfAddress": "boolean",
         "getXalAddress": "org.citygml4j.model.citygml.core.XalAddressProperty"
@@ -1105,7 +961,6 @@
         "isSetTarget": "boolean",
         "getDiffuseColor": "org.citygml4j.model.citygml.appearance.Color",
         "getGenericApplicationPropertyOfX3DMaterial": "java.util.List",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetSpecularColor": "boolean",
         "getSpecularColor": "org.citygml4j.model.citygml.appearance.Color",
         "getTransparency": "java.lang.Double",
@@ -1130,7 +985,6 @@
         "getLod2Geometry": "org.citygml4j.model.gml.geometry.GeometryProperty",
         "isSetLod4Geometry": "boolean",
         "isSetClazz": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "getGenericApplicationPropertyOfBuildingInstallation": "java.util.List",
         "isSetGenericApplicationPropertyOfBuildingInstallation": "boolean",
         "isSetLod3Geometry": "boolean",
@@ -1147,21 +1001,15 @@
     "org.citygml4j.model.citygml.waterbody.WaterSurface": {
         "getWaterLevel": "org.citygml4j.model.gml.basicTypes.Code",
         "getGenericApplicationPropertyOfWaterSurface": "java.util.List",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetGenericApplicationPropertyOfWaterSurface": "boolean",
         "isSetWaterLevel": "boolean"
     },
     "org.citygml4j.model.citygml.tunnel.IntTunnelInstallationProperty": {
         "getIntTunnelInstallation": "org.citygml4j.model.citygml.tunnel.IntTunnelInstallation",
-        "isSetIntTunnelInstallation": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
-        "getAssociableClass": "java.lang.Class"
+        "isSetIntTunnelInstallation": "boolean"
     },
     "org.citygml4j.model.citygml.core.TransformationMatrix2x2": {
-        "getParent": "org.citygml4j.model.common.base.ModelObject",
         "getMatrix": "org.citygml4j.geometry.Matrix",
-        "isSetParent": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetMatrix": "boolean"
     },
     "org.citygml4j.model.citygml.building.AbstractBoundarySurface": {
@@ -1186,7 +1034,6 @@
         "getLod4MultiSurface": "org.citygml4j.model.gml.geometry.aggregates.MultiSurfaceProperty",
         "isSetClazz": "boolean",
         "isSetLod4MultiSurface": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "getInteriorFurniture": "java.util.List",
         "getBoundedBySurface": "java.util.List",
         "isSetGenericApplicationPropertyOfRoom": "boolean",
@@ -1209,7 +1056,6 @@
         "getFunction": "java.util.List",
         "isSetLod4Geometry": "boolean",
         "isSetClazz": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "getBoundedBySurface": "java.util.List",
         "getUsage": "java.util.List",
         "isSetBoundedBySurface": "boolean",
@@ -1235,22 +1081,17 @@
         "getSrsName": "java.lang.String",
         "getAxisLabels": "java.util.List",
         "getSrsDimension": "java.lang.Integer",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetSrsDimension": "boolean",
-        "getGMLClass": "org.citygml4j.model.gml.GMLClass",
         "isSetSrsName": "boolean",
         "isSetUomLabels": "boolean",
         "getUomLabels": "java.util.List"
     },
     "org.citygml4j.model.citygml.building.BuildingPart": {
         "isSetGenericApplicationPropertyOfBuildingPart": "boolean",
-        "getGenericApplicationPropertyOfBuildingPart": "java.util.List",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass"
+        "getGenericApplicationPropertyOfBuildingPart": "java.util.List"
     },
     "org.citygml4j.model.citygml.building.IntBuildingInstallationProperty": {
         "isSetIntBuildingInstallation": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
-        "getAssociableClass": "java.lang.Class",
         "getIntBuildingInstallation": "org.citygml4j.model.citygml.building.IntBuildingInstallation"
     },
     "org.citygml4j.model.citygml.bridge.BridgeConstructionElement": {
@@ -1261,7 +1102,6 @@
         "isSetLod4TerrainIntersection": "boolean",
         "isSetLod3TerrainIntersection": "boolean",
         "isSetLod4Geometry": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetLod3Geometry": "boolean",
         "getBoundedBySurface": "java.util.List",
         "isSetLod1ImplicitRepresentation": "boolean",
@@ -1293,14 +1133,11 @@
     },
     "org.citygml4j.model.citygml.building.InteriorRoomProperty": {
         "isSetRoom": "boolean",
-        "getRoom": "org.citygml4j.model.citygml.building.Room",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
-        "getAssociableClass": "java.lang.Class"
+        "getRoom": "org.citygml4j.model.citygml.building.Room"
     },
     "org.citygml4j.model.citygml.core.CityModel": {
         "getGenericApplicationPropertyOfCityModel": "java.util.List",
         "getCityObjectMember": "java.util.List",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetAppearanceMember": "boolean",
         "getAppearanceMember": "java.util.List",
         "isSetGenericApplicationPropertyOfCityModel": "boolean",
@@ -1316,7 +1153,6 @@
         "getLod4MultiSurface": "org.citygml4j.model.gml.geometry.aggregates.MultiSurfaceProperty",
         "isSetClazz": "boolean",
         "isSetLod4MultiSurface": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetLod3MultiSurface": "boolean",
         "getLod3MultiSurface": "org.citygml4j.model.gml.geometry.aggregates.MultiSurfaceProperty",
         "getUsage": "java.util.List",
@@ -1336,9 +1172,7 @@
     },
     "org.citygml4j.model.citygml.transportation.AuxiliaryTrafficAreaProperty": {
         "isSetAuxiliaryTrafficArea": "boolean",
-        "getAuxiliaryTrafficArea": "org.citygml4j.model.citygml.transportation.AuxiliaryTrafficArea",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
-        "getAssociableClass": "java.lang.Class"
+        "getAuxiliaryTrafficArea": "org.citygml4j.model.citygml.transportation.AuxiliaryTrafficArea"
     },
     "org.citygml4j.model.citygml.bridge.AbstractOpening": {
         "getLod3ImplicitRepresentation": "org.citygml4j.model.citygml.core.ImplicitRepresentationProperty",
@@ -1355,23 +1189,19 @@
     },
     "org.citygml4j.model.citygml.building.GroundSurface": {
         "isSetGenericApplicationPropertyOfGroundSurface": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "getGenericApplicationPropertyOfGroundSurface": "java.util.List"
     },
     "org.citygml4j.model.citygml.building.Door": {
         "getAddress": "java.util.List",
         "isSetGenericApplicationPropertyOfDoor": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "getGenericApplicationPropertyOfDoor": "java.util.List",
         "isSetAddress": "boolean"
     },
     "org.citygml4j.model.citygml.bridge.InteriorWallSurface": {
         "getGenericApplicationPropertyOfInteriorWallSurface": "java.util.List",
-        "isSetGenericApplicationPropertyOfInteriorWallSurface": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass"
+        "isSetGenericApplicationPropertyOfInteriorWallSurface": "boolean"
     },
     "org.citygml4j.model.citygml.transportation.Track": {
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetGenericApplicationPropertyOfTrack": "boolean",
         "getGenericApplicationPropertyOfTrack": "java.util.List"
     },
@@ -1380,35 +1210,27 @@
         "getGenericApplicationPropertyOfMassPointRelief": "java.util.List",
         "getReliefPoints": "org.citygml4j.model.gml.geometry.aggregates.MultiPointProperty",
         "isSetReliefPoints": "boolean",
-        "isSetGenericApplicationPropertyOfMassPointRelief": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass"
+        "isSetGenericApplicationPropertyOfMassPointRelief": "boolean"
     },
-    "org.citygml4j.model.citygml.appearance.AppearanceMember": {"getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass"},
+    "org.citygml4j.model.citygml.appearance.AppearanceMember": {},
     "org.citygml4j.model.citygml.building.FloorSurface": {
         "getGenericApplicationPropertyOfFloorSurface": "java.util.List",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetGenericApplicationPropertyOfFloorSurface": "boolean"
     },
     "org.citygml4j.model.citygml.tunnel.BoundarySurfaceProperty": {
         "isSetBoundarySurface": "boolean",
-        "getBoundarySurface": "org.citygml4j.model.citygml.tunnel.AbstractBoundarySurface",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
-        "getAssociableClass": "java.lang.Class"
+        "getBoundarySurface": "org.citygml4j.model.citygml.tunnel.AbstractBoundarySurface"
     },
     "org.citygml4j.model.citygml.building.BoundarySurfaceProperty": {
         "isSetBoundarySurface": "boolean",
-        "getBoundarySurface": "org.citygml4j.model.citygml.building.AbstractBoundarySurface",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
-        "getAssociableClass": "java.lang.Class"
+        "getBoundarySurface": "org.citygml4j.model.citygml.building.AbstractBoundarySurface"
     },
     "org.citygml4j.model.citygml.generics.DoubleAttribute": {
         "getValue": "java.lang.Double",
-        "isSetValue": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass"
+        "isSetValue": "boolean"
     },
     "org.citygml4j.model.citygml.tunnel.Tunnel": {
         "getGenericApplicationPropertyOfTunnel": "java.util.List",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetGenericApplicationPropertyOfTunnel": "boolean"
     },
     "org.citygml4j.model.citygml.bridge.BridgeRoom": {
@@ -1422,7 +1244,6 @@
         "isSetClazz": "boolean",
         "isSetGenericApplicationPropertyOfBridgeRoom": "boolean",
         "isSetLod4MultiSurface": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "getInteriorFurniture": "java.util.List",
         "getBoundedBySurface": "java.util.List",
         "getUsage": "java.util.List",
@@ -1436,12 +1257,9 @@
     "org.citygml4j.model.citygml.texturedsurface._AbstractAppearance": {},
     "org.citygml4j.model.citygml.appearance.TextureCoordinates": {
         "getValue": "java.util.List",
-        "getParent": "org.citygml4j.model.common.base.ModelObject",
         "getRing": "java.lang.String",
-        "isSetParent": "boolean",
         "isSetValue": "boolean",
-        "isSetRing": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass"
+        "isSetRing": "boolean"
     },
     "org.citygml4j.model.citygml.bridge.BridgeInstallation": {
         "getLod2ImplicitRepresentation": "org.citygml4j.model.citygml.core.ImplicitRepresentationProperty",
@@ -1455,7 +1273,6 @@
         "getLod2Geometry": "org.citygml4j.model.gml.geometry.GeometryProperty",
         "isSetLod4Geometry": "boolean",
         "isSetClazz": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetLod3Geometry": "boolean",
         "getGenericApplicationPropertyOfBridgeInstallation": "java.util.List",
         "getBoundedBySurface": "java.util.List",
@@ -1471,49 +1288,37 @@
     },
     "org.citygml4j.model.citygml.core.CityObjectMember": {
         "getCityObject": "org.citygml4j.model.citygml.core.AbstractCityObject",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
-        "getAssociableClass": "java.lang.Class",
         "isSetCityObject": "boolean"
     },
     "org.citygml4j.model.citygml.tunnel.TunnelPart": {
         "isSetGenericApplicationPropertyOfTunnelPart": "boolean",
-        "getGenericApplicationPropertyOfTunnelPart": "java.util.List",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass"
+        "getGenericApplicationPropertyOfTunnelPart": "java.util.List"
     },
     "org.citygml4j.model.citygml.tunnel.RoofSurface": {
         "isSetGenericApplicationPropertyOfRoofSurface": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "getGenericApplicationPropertyOfRoofSurface": "java.util.List"
     },
     "org.citygml4j.model.citygml.tunnel.OuterCeilingSurface": {
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetGenericApplicationPropertyOfOuterCeilingSurface": "boolean",
         "getGenericApplicationPropertyOfOuterCeilingSurface": "java.util.List"
     },
     "org.citygml4j.model.citygml.generics.UriAttribute": {
         "getValue": "java.lang.String",
-        "isSetValue": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass"
+        "isSetValue": "boolean"
     },
     "org.citygml4j.model.citygml.tunnel.InteriorFurnitureProperty": {
         "isSetTunnelFurniture": "boolean",
-        "getTunnelFurniture": "org.citygml4j.model.citygml.tunnel.TunnelFurniture",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
-        "getAssociableClass": "java.lang.Class"
+        "getTunnelFurniture": "org.citygml4j.model.citygml.tunnel.TunnelFurniture"
     },
     "org.citygml4j.model.citygml.tunnel.Window": {
         "isSetGenericApplicationPropertyOfWindow": "boolean",
-        "getGenericApplicationPropertyOfWindow": "java.util.List",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass"
+        "getGenericApplicationPropertyOfWindow": "java.util.List"
     },
     "org.citygml4j.model.citygml.core.XalAddressProperty": {
         "isSetAddressDetails": "boolean",
-        "getAddressDetails": "org.citygml4j.model.xal.AddressDetails",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
-        "getAssociableClass": "java.lang.Class"
+        "getAddressDetails": "org.citygml4j.model.xal.AddressDetails"
     },
     "org.citygml4j.model.citygml.appearance.AbstractTextureParameterization": {
-        "getModule": "org.citygml4j.model.module.Module",
         "isSetModule": "boolean",
         "getGenericADEElement": "java.util.List",
         "isSetGenericApplicationPropertyOfTextureParameterization": "boolean",
@@ -1522,24 +1327,18 @@
     },
     "org.citygml4j.model.citygml.tunnel.InteriorWallSurface": {
         "getGenericApplicationPropertyOfInteriorWallSurface": "java.util.List",
-        "isSetGenericApplicationPropertyOfInteriorWallSurface": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass"
+        "isSetGenericApplicationPropertyOfInteriorWallSurface": "boolean"
     },
     "org.citygml4j.model.citygml.tunnel.OpeningProperty": {
         "getOpening": "org.citygml4j.model.citygml.tunnel.AbstractOpening",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
-        "getAssociableClass": "java.lang.Class",
         "isSetOpening": "boolean"
     },
     "org.citygml4j.model.citygml.core.GeneralizationRelation": {
         "getCityObject": "org.citygml4j.model.citygml.core.AbstractCityObject",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
-        "getAssociableClass": "java.lang.Class",
         "isSetCityObject": "boolean"
     },
     "org.citygml4j.model.citygml.bridge.FloorSurface": {
         "getGenericApplicationPropertyOfFloorSurface": "java.util.List",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetGenericApplicationPropertyOfFloorSurface": "boolean"
     },
     "org.citygml4j.model.citygml.waterbody.AbstractWaterObject": {
@@ -1548,30 +1347,23 @@
     },
     "org.citygml4j.model.citygml.generics.DateAttribute": {
         "getValue": "java.time.LocalDate",
-        "isSetValue": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass"
+        "isSetValue": "boolean"
     },
     "org.citygml4j.model.citygml.tunnel.CeilingSurface": {
         "getGenericApplicationPropertyOfCeilingSurface": "java.util.List",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetGenericApplicationPropertyOfCeilingSurface": "boolean"
     },
     "org.citygml4j.model.citygml.building.OuterFloorSurface": {
         "isSetGenericApplicationPropertyOfOuterFloorSurface": "boolean",
-        "getGenericApplicationPropertyOfOuterFloorSurface": "java.util.List",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass"
+        "getGenericApplicationPropertyOfOuterFloorSurface": "java.util.List"
     },
     "org.citygml4j.model.citygml.building.OpeningProperty": {
         "getOpening": "org.citygml4j.model.citygml.building.AbstractOpening",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
-        "getAssociableClass": "java.lang.Class",
         "isSetOpening": "boolean"
     },
     "org.citygml4j.model.citygml.texturedsurface._TexturedSurface": {
         "isSetAppearance": "boolean",
-        "getAppearance": "java.util.List",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
-        "getGMLClass": "org.citygml4j.model.gml.GMLClass"
+        "getAppearance": "java.util.List"
     },
     "org.citygml4j.model.citygml.appearance.Appearance": {
         "isSetSurfaceDataMember": "boolean",
@@ -1579,7 +1371,6 @@
         "getGenericApplicationPropertyOfAppearance": "java.util.List",
         "isSetGenericApplicationPropertyOfAppearance": "boolean",
         "isSetTheme": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "getSurfaceDataMember": "java.util.List"
     },
     "org.citygml4j.model.citygml.texturedsurface._SimpleTexture": {
@@ -1590,19 +1381,13 @@
         "getTextureCoordinates": "java.util.List",
         "getTextureType": "org.citygml4j.model.citygml.texturedsurface._TextureType",
         "isSetTextureType": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetTextureMap": "boolean"
     },
     "org.citygml4j.model.citygml.appearance.SurfaceDataProperty": {
         "getSurfaceData": "org.citygml4j.model.citygml.appearance.AbstractSurfaceData",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
-        "getAssociableClass": "java.lang.Class",
         "isSetSurfaceData": "boolean"
     },
-    "org.citygml4j.model.citygml.appearance.WrapMode": {
-        "getValue": "java.lang.String",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass"
-    },
+    "org.citygml4j.model.citygml.appearance.WrapMode": {"getValue": "java.lang.String"},
     "org.citygml4j.model.citygml.appearance.GeoreferencedTexture": {
         "isSetTarget": "boolean",
         "isSetOrientation": "boolean",
@@ -1612,7 +1397,6 @@
         "isSetGenericApplicationPropertyOfGeoreferencedTexture": "boolean",
         "isSetReferencePoint": "boolean",
         "getReferencePoint": "org.citygml4j.model.gml.geometry.primitives.PointProperty",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "getPreferWorldFile": "java.lang.Boolean",
         "isSetPreferWorldFile": "boolean"
     },
@@ -1625,7 +1409,6 @@
         "getFunction": "java.util.List",
         "isSetLod4Geometry": "boolean",
         "isSetClazz": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "getBoundedBySurface": "java.util.List",
         "getUsage": "java.util.List",
         "isSetBoundedBySurface": "boolean",
@@ -1635,7 +1418,6 @@
         "isSetGenericApplicationPropertyOfIntBridgeInstallation": "boolean"
     },
     "org.citygml4j.model.citygml.bridge.ClosureSurface": {
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "isSetGenericApplicationPropertyOfClosureSurface": "boolean",
         "getGenericApplicationPropertyOfClosureSurface": "java.util.List"
     },
@@ -1649,7 +1431,6 @@
         "isSetLod4Geometry": "boolean",
         "getGenericApplicationPropertyOfIntBuildingInstallation": "java.util.List",
         "isSetClazz": "boolean",
-        "getCityGMLClass": "org.citygml4j.model.citygml.CityGMLClass",
         "getBoundedBySurface": "java.util.List",
         "isSetGenericApplicationPropertyOfIntBuildingInstallation": "boolean",
         "getUsage": "java.util.List",
