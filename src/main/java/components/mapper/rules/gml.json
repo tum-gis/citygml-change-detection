@@ -1,836 +1,459 @@
 {
-    "org.citygml4j.model.gml.geometry.aggregates.MultiLineString": {
-        "getLineStringMember": "java.util.List",
-        "isSetLineStringMember": "boolean"
-    },
+    "org.citygml4j.model.gml.geometry.aggregates.MultiLineString": {"lineStringMember": "java.util.List"},
     "org.citygml4j.model.gml.geometry.primitives.Point": {
-        "isSetPos": "boolean",
-        "getPos": "org.citygml4j.model.gml.geometry.primitives.DirectPosition",
-        "isSetCoord": "boolean",
-        "isSetCoordinates": "boolean",
-        "getCoord": "org.citygml4j.model.gml.geometry.primitives.Coord",
-        "getCoordinates": "org.citygml4j.model.gml.basicTypes.Coordinates"
+        "coord": "org.citygml4j.model.gml.geometry.primitives.Coord",
+        "pos": "org.citygml4j.model.gml.geometry.primitives.DirectPosition",
+        "coordinates": "org.citygml4j.model.gml.basicTypes.Coordinates"
     },
     "org.citygml4j.model.gml.measures.Length": {},
-    "org.citygml4j.model.gml.xlink.XLinkActuate": {"getValue": "java.lang.String"},
+    "org.citygml4j.model.gml.xlink.XLinkActuate": {"value": "java.lang.String"},
     "org.citygml4j.model.gml.geometry.primitives.GeometricPositionGroup": {
-        "getPointProperty": "org.citygml4j.model.gml.geometry.primitives.PointProperty",
-        "isSetPointProperty": "boolean",
-        "isSetPos": "boolean",
-        "getPos": "org.citygml4j.model.gml.geometry.primitives.DirectPosition"
+        "pointProperty": "org.citygml4j.model.gml.geometry.primitives.PointProperty",
+        "pos": "org.citygml4j.model.gml.geometry.primitives.DirectPosition"
     },
     "org.citygml4j.model.gml.geometry.primitives.LineStringSegment": {
-        "getPosOrPointPropertyOrPointRep": "java.util.List",
-        "getPosList": "org.citygml4j.model.gml.geometry.primitives.DirectPositionList",
-        "getInterpolation": "org.citygml4j.model.gml.geometry.primitives.CurveInterpolation",
-        "isSetPosOrPointPropertyOrPointRep": "boolean",
-        "isSetCoordinates": "boolean",
-        "isSetInterpolation": "boolean",
-        "getCoordinates": "org.citygml4j.model.gml.basicTypes.Coordinates",
-        "isSetPosList": "boolean"
+        "interpolation": "org.citygml4j.model.gml.geometry.primitives.CurveInterpolation",
+        "posOrPointPropertyOrPointRep": "java.util.List",
+        "coordinates": "org.citygml4j.model.gml.basicTypes.Coordinates",
+        "posList": "org.citygml4j.model.gml.geometry.primitives.DirectPositionList"
     },
     "org.citygml4j.model.gml.basicTypes.MeasureList": {
-        "getValue": "java.util.List",
-        "isSetUom": "boolean",
-        "getUom": "java.lang.String",
-        "isSetValue": "boolean"
+        "uom": "java.lang.String",
+        "value": "java.util.List"
     },
     "org.citygml4j.model.gml.geometry.primitives.AbstractSolid": {},
     "org.citygml4j.model.gml.geometry.primitives.Solid": {
-        "isSetExterior": "boolean",
-        "getExterior": "org.citygml4j.model.gml.geometry.primitives.SurfaceProperty",
-        "isSetInterior": "boolean",
-        "getInterior": "java.util.List"
+        "exterior": "org.citygml4j.model.gml.geometry.primitives.SurfaceProperty",
+        "interior": "java.util.List"
     },
     "org.citygml4j.model.gml.valueObjects.CategoryExtent": {},
     "org.citygml4j.model.gml.measures.Area": {},
     "org.citygml4j.model.gml.base.AssociationByRepOrRef": {
-        "getRemoteSchema": "java.lang.String",
-        "getHref": "java.lang.String",
-        "isSetArcrole": "boolean",
-        "getArcrole": "java.lang.String",
-        "getRole": "java.lang.String",
-        "getActuate": "org.citygml4j.model.gml.xlink.XLinkActuate",
-        "isSetRole": "boolean",
-        "isSetType": "boolean",
-        "isSetRemoteSchema": "boolean",
-        "getTitle": "java.lang.String",
-        "isSetShow": "boolean",
-        "getType": "org.citygml4j.model.gml.xlink.XLinkType",
-        "getShow": "org.citygml4j.model.gml.xlink.XLinkShow",
-        "isSetTitle": "boolean",
-        "isSetActuate": "boolean",
-        "isSetHref": "boolean"
+        "role": "java.lang.String",
+        "arcrole": "java.lang.String",
+        "show": "org.citygml4j.model.gml.xlink.XLinkShow",
+        "actuate": "org.citygml4j.model.gml.xlink.XLinkActuate",
+        "href": "java.lang.String",
+        "remoteSchema": "java.lang.String",
+        "title": "java.lang.String",
+        "type": "org.citygml4j.model.gml.xlink.XLinkType"
     },
     "org.citygml4j.model.gml.coverage.RangeSet": {
-        "isSetDataBlock": "boolean",
-        "isSetScalarValueList": "boolean",
-        "getDataBlock": "org.citygml4j.model.gml.coverage.DataBlock",
-        "isSetValueArray": "boolean",
-        "getScalarValueList": "java.util.List",
-        "getFile": "org.citygml4j.model.gml.coverage.File",
-        "getValueArray": "java.util.List",
-        "isSetFile": "boolean"
+        "scalarValueList": "java.util.List",
+        "file": "org.citygml4j.model.gml.coverage.File",
+        "dataBlock": "org.citygml4j.model.gml.coverage.DataBlock",
+        "valueArray": "java.util.List"
     },
-    "org.citygml4j.model.gml.geometry.complexes.CompositeSurfaceProperty": {
-        "isSetCompositeSurface": "boolean",
-        "getCompositeSurface": "org.citygml4j.model.gml.geometry.complexes.CompositeSurface"
-    },
+    "org.citygml4j.model.gml.geometry.complexes.CompositeSurfaceProperty": {"compositeSurface": "org.citygml4j.model.gml.geometry.complexes.CompositeSurface"},
     "org.citygml4j.model.gml.geometry.primitives.DirectPositionList": {
-        "getSrsDimension": "java.lang.Integer",
-        "getUomLabels": "java.util.List",
-        "isSetAxisLabels": "boolean",
-        "getValue": "java.util.List",
-        "getSrsName": "java.lang.String",
-        "getAxisLabels": "java.util.List",
-        "isSetValue": "boolean",
-        "isSetSrsDimension": "boolean",
-        "getCount": "java.lang.Integer",
-        "isSetCount": "boolean",
-        "isSetSrsName": "boolean",
-        "isSetUomLabels": "boolean"
+        "srsName": "java.lang.String",
+        "srsDimension": "java.lang.Integer",
+        "axisLabels": "java.util.List",
+        "uomLabels": "java.util.List",
+        "count": "java.lang.Integer",
+        "value": "java.util.List"
     },
     "org.citygml4j.model.gml.geometry.primitives.AbstractGeometricPrimitive": {},
-    "org.citygml4j.model.gml.geometry.primitives.CurveArrayProperty": {
-        "isSetCurve": "boolean",
-        "getCurve": "java.util.List"
-    },
-    "org.citygml4j.model.gml.coverage.RectifiedGridDomain": {
-        "getRectifiedGrid": "org.citygml4j.model.gml.grids.RectifiedGrid",
-        "isSetRectifiedGrid": "boolean"
-    },
-    "org.citygml4j.model.gml.geometry.aggregates.MultiCurveProperty": {
-        "isSetMultiCurve": "boolean",
-        "getMultiCurve": "org.citygml4j.model.gml.geometry.aggregates.MultiCurve"
-    },
-    "org.citygml4j.model.gml.geometry.primitives.SolidArrayProperty": {
-        "getSolid": "java.util.List",
-        "isSetSolid": "boolean"
-    },
+    "org.citygml4j.model.gml.geometry.primitives.CurveArrayProperty": {"curve": "java.util.List"},
+    "org.citygml4j.model.gml.coverage.RectifiedGridDomain": {"rectifiedGrid": "org.citygml4j.model.gml.grids.RectifiedGrid"},
+    "org.citygml4j.model.gml.geometry.aggregates.MultiCurveProperty": {"multiCurve": "org.citygml4j.model.gml.geometry.aggregates.MultiCurve"},
+    "org.citygml4j.model.gml.geometry.primitives.SolidArrayProperty": {"solid": "java.util.List"},
     "org.citygml4j.model.gml.basicTypes.NameOrNull": {
-        "isSetNull": "boolean",
-        "getName": "java.lang.String",
-        "isSetName": "boolean",
-        "getNull": "org.citygml4j.model.gml.basicTypes.Null"
+        "null": "org.citygml4j.model.gml.basicTypes.Null",
+        "name": "java.lang.String"
     },
-    "org.citygml4j.model.gml.geometry.primitives.LineStringSegmentArrayProperty": {
-        "getLineStringSegment": "java.util.List",
-        "isSetLineStringSegment": "boolean"
-    },
+    "org.citygml4j.model.gml.geometry.primitives.LineStringSegmentArrayProperty": {"lineStringSegment": "java.util.List"},
     "org.citygml4j.model.gml.coverage.SequenceRule": {
-        "getValue": "org.citygml4j.model.gml.coverage.SequenceRuleNames",
-        "isSetOrder": "boolean",
-        "isSetValue": "boolean",
-        "getOrder": "org.citygml4j.model.gml.coverage.IncrementOrder"
+        "value": "org.citygml4j.model.gml.coverage.SequenceRuleNames",
+        "order": "org.citygml4j.model.gml.coverage.IncrementOrder"
     },
     "org.citygml4j.model.gml.base.ArrayAssociation": {},
-    "org.citygml4j.model.gml.geometry.complexes.CompositeSolid": {
-        "isSetSolidMember": "boolean",
-        "getSolidMember": "java.util.List"
-    },
+    "org.citygml4j.model.gml.geometry.complexes.CompositeSolid": {"solidMember": "java.util.List"},
     "org.citygml4j.model.gml.geometry.primitives.Triangle": {
-        "isSetExterior": "boolean",
-        "getExterior": "org.citygml4j.model.gml.geometry.primitives.AbstractRingProperty",
-        "getInterpolation": "org.citygml4j.model.gml.geometry.primitives.SurfaceInterpolation"
+        "interpolation": "org.citygml4j.model.gml.geometry.primitives.SurfaceInterpolation",
+        "exterior": "org.citygml4j.model.gml.geometry.primitives.AbstractRingProperty"
     },
     "org.citygml4j.model.gml.valueObjects.ScalarValue": {
-        "getQuantity": "org.citygml4j.model.gml.basicTypes.Measure",
-        "isSetBoolean": "boolean",
-        "getCategory": "org.citygml4j.model.gml.basicTypes.Code",
-        "getBoolean": "java.lang.Boolean",
-        "isSetQuantity": "boolean",
-        "getCount": "java.lang.Integer",
-        "isSetCount": "boolean",
-        "isSetCategory": "boolean"
+        "boolean": "java.lang.Boolean",
+        "quantity": "org.citygml4j.model.gml.basicTypes.Measure",
+        "count": "java.lang.Integer",
+        "category": "org.citygml4j.model.gml.basicTypes.Code"
     },
-    "org.citygml4j.model.gml.geometry.aggregates.MultiPolygonProperty": {
-        "isSetMultiPolygon": "boolean",
-        "getMultiPolygon": "org.citygml4j.model.gml.geometry.aggregates.MultiPolygon"
-    },
+    "org.citygml4j.model.gml.geometry.aggregates.MultiPolygonProperty": {"multiPolygon": "org.citygml4j.model.gml.geometry.aggregates.MultiPolygon"},
     "org.citygml4j.model.gml.measures.GridLength": {},
-    "org.citygml4j.model.gml.geometry.aggregates.MultiPolygon": {
-        "getPolygonMember": "java.util.List",
-        "isSetPolygonMember": "boolean"
-    },
-    "org.citygml4j.model.gml.geometry.primitives.GeometricPrimitiveProperty": {
-        "isSetGeometricPrimitive": "boolean",
-        "getGeometricPrimitive": "org.citygml4j.model.gml.geometry.primitives.AbstractGeometricPrimitive"
-    },
+    "org.citygml4j.model.gml.geometry.aggregates.MultiPolygon": {"polygonMember": "java.util.List"},
+    "org.citygml4j.model.gml.geometry.primitives.GeometricPrimitiveProperty": {"geometricPrimitive": "org.citygml4j.model.gml.geometry.primitives.AbstractGeometricPrimitive"},
     "org.citygml4j.model.gml.geometry.primitives.AbstractRing": {},
     "org.citygml4j.model.gml.base.MetaData": {
-        "isSetContent": "boolean",
-        "getPrefix": "java.lang.String",
-        "getLocalName": "java.lang.String",
-        "getContent": "org.w3c.dom.Element",
-        "getNamespaceURI": "java.lang.String"
+        "localName": "java.lang.String",
+        "prefix": "java.lang.String",
+        "namespaceURI": "java.lang.String",
+        "content": "org.w3c.dom.Element"
     },
-    "org.citygml4j.model.gml.geometry.primitives.AbstractRingProperty": {
-        "getRing": "org.citygml4j.model.gml.geometry.primitives.AbstractRing",
-        "isSetRing": "boolean"
-    },
-    "org.citygml4j.model.gml.grids.GridLimits": {
-        "getGridEnvelope": "org.citygml4j.model.gml.grids.GridEnvelope",
-        "isSetGridEnvelope": "boolean"
-    },
+    "org.citygml4j.model.gml.geometry.primitives.AbstractRingProperty": {"ring": "org.citygml4j.model.gml.geometry.primitives.AbstractRing"},
+    "org.citygml4j.model.gml.grids.GridLimits": {"gridEnvelope": "org.citygml4j.model.gml.grids.GridEnvelope"},
     "org.citygml4j.model.gml.feature.FeatureMember": {},
     "org.citygml4j.model.gml.geometry.primitives.Envelope": {
-        "getSrsDimension": "java.lang.Integer",
-        "getCoordinates": "org.citygml4j.model.gml.basicTypes.Coordinates",
-        "getUomLabels": "java.util.List",
-        "getUpperCorner": "org.citygml4j.model.gml.geometry.primitives.DirectPosition",
-        "isSetAxisLabels": "boolean",
-        "getSrsName": "java.lang.String",
-        "getAxisLabels": "java.util.List",
-        "isSetLowerCorner": "boolean",
-        "isSetPos": "boolean",
-        "getPos": "java.util.List",
-        "getInheritedSrsName": "java.lang.String",
-        "isNull": "boolean",
-        "isSetCoord": "boolean",
-        "isSetCoordinates": "boolean",
-        "getCoord": "java.util.List",
-        "isSetSrsDimension": "boolean",
-        "getLowerCorner": "org.citygml4j.model.gml.geometry.primitives.DirectPosition",
-        "isSetUpperCorner": "boolean",
-        "isSetSrsName": "boolean",
-        "isSetUomLabels": "boolean"
+        "srsDimension": "java.lang.Integer",
+        "axisLabels": "java.util.List",
+        "coordinates": "org.citygml4j.model.gml.basicTypes.Coordinates",
+        "upperCorner": "org.citygml4j.model.gml.geometry.primitives.DirectPosition",
+        "lowerCorner": "org.citygml4j.model.gml.geometry.primitives.DirectPosition",
+        "srsName": "java.lang.String",
+        "coord": "java.util.List",
+        "ull": "boolean",
+        "pos": "java.util.List",
+        "inheritedSrsName": "java.lang.String",
+        "uomLabels": "java.util.List"
     },
     "org.citygml4j.model.gml.coverage.File": {
-        "getCompression": "java.lang.String",
-        "getMimeType": "java.lang.String",
-        "isSetFileStructure": "boolean",
-        "isSetMimeType": "boolean",
-        "isSetCompression": "boolean",
-        "isSetFileName": "boolean",
-        "getFileStructure": "org.citygml4j.model.gml.coverage.FileValueModel",
-        "getRangeParameters": "org.citygml4j.model.gml.coverage.RangeParameters",
-        "getFileName": "java.lang.String",
-        "isSetRangeParameters": "boolean"
+        "fileName": "java.lang.String",
+        "fileStructure": "org.citygml4j.model.gml.coverage.FileValueModel",
+        "mimeType": "java.lang.String",
+        "compression": "java.lang.String",
+        "rangeParameters": "org.citygml4j.model.gml.coverage.RangeParameters"
     },
     "org.citygml4j.model.gml.geometry.primitives.OrientableSurface": {
-        "isSetOrientation": "boolean",
-        "getOrientation": "org.citygml4j.model.gml.geometry.primitives.Sign",
-        "isSetBaseSurface": "boolean",
-        "getBaseSurface": "org.citygml4j.model.gml.geometry.primitives.SurfaceProperty"
+        "orientation": "org.citygml4j.model.gml.geometry.primitives.Sign",
+        "baseSurface": "org.citygml4j.model.gml.geometry.primitives.SurfaceProperty"
     },
     "org.citygml4j.model.gml.basicTypes.DoubleOrNull": {
-        "isSetNull": "boolean",
-        "isSetDouble": "boolean",
-        "getDouble": "java.lang.Double",
-        "getNull": "org.citygml4j.model.gml.basicTypes.Null"
+        "null": "org.citygml4j.model.gml.basicTypes.Null",
+        "double": "java.lang.Double"
     },
     "org.citygml4j.model.gml.feature.FeatureArrayProperty": {
-        "isSetFeature": "boolean",
-        "getGenericADEElement": "java.util.List",
-        "isSetGenericADEElement": "boolean",
-        "getFeature": "java.util.List"
+        "genericADEElement": "java.util.List",
+        "feature": "java.util.List"
     },
     "org.citygml4j.model.gml.valueObjects.ScalarValueList": {
-        "isSetCategoryList": "boolean",
-        "getBooleanList": "org.citygml4j.model.gml.basicTypes.BooleanOrNullList",
-        "isSetQuantityList": "boolean",
-        "getCategoryList": "org.citygml4j.model.gml.basicTypes.CodeOrNullList",
-        "isSetBooleanList": "boolean",
-        "isSetCountList": "boolean",
-        "getCountList": "org.citygml4j.model.gml.basicTypes.IntegerOrNullList",
-        "getQuantityList": "org.citygml4j.model.gml.basicTypes.MeasureOrNullList"
+        "countList": "org.citygml4j.model.gml.basicTypes.IntegerOrNullList",
+        "categoryList": "org.citygml4j.model.gml.basicTypes.CodeOrNullList",
+        "quantityList": "org.citygml4j.model.gml.basicTypes.MeasureOrNullList",
+        "booleanList": "org.citygml4j.model.gml.basicTypes.BooleanOrNullList"
     },
     "org.citygml4j.model.gml.geometry.primitives.Interior": {},
     "org.citygml4j.model.gml.basicTypes.BooleanOrNull": {
-        "isSetNull": "boolean",
-        "isSetBoolean": "boolean",
-        "getBoolean": "java.lang.Boolean",
-        "getNull": "org.citygml4j.model.gml.basicTypes.Null"
+        "boolean": "java.lang.Boolean",
+        "null": "org.citygml4j.model.gml.basicTypes.Null"
     },
     "org.citygml4j.model.gml.geometry.primitives.DirectPosition": {
-        "getSrsDimension": "java.lang.Integer",
-        "getUomLabels": "java.util.List",
-        "isSetAxisLabels": "boolean",
-        "getValue": "java.util.List",
-        "getSrsName": "java.lang.String",
-        "getAxisLabels": "java.util.List",
-        "isSetValue": "boolean",
-        "isSetSrsDimension": "boolean",
-        "isSetSrsName": "boolean",
-        "isSetUomLabels": "boolean"
+        "srsName": "java.lang.String",
+        "srsDimension": "java.lang.Integer",
+        "axisLabels": "java.util.List",
+        "uomLabels": "java.util.List",
+        "value": "java.util.List"
     },
     "org.citygml4j.model.gml.geometry.complexes.GeometricComplexProperty": {
-        "isSetCompositeCurve": "boolean",
-        "isSetGeometricComplex": "boolean",
-        "getGeometricComplex": "org.citygml4j.model.gml.geometry.complexes.GeometricComplex",
-        "isSetCompositeSolid": "boolean",
-        "isSetCompositeSurface": "boolean",
-        "getCompositeSolid": "org.citygml4j.model.gml.geometry.complexes.CompositeSolid",
-        "getCompositeCurve": "org.citygml4j.model.gml.geometry.complexes.CompositeCurve",
-        "getCompositeSurface": "org.citygml4j.model.gml.geometry.complexes.CompositeSurface"
+        "compositeCurve": "org.citygml4j.model.gml.geometry.complexes.CompositeCurve",
+        "geometricComplex": "org.citygml4j.model.gml.geometry.complexes.GeometricComplex",
+        "compositeSolid": "org.citygml4j.model.gml.geometry.complexes.CompositeSolid",
+        "compositeSurface": "org.citygml4j.model.gml.geometry.complexes.CompositeSurface"
     },
     "org.citygml4j.model.gml.grids.GridEnvelope": {
-        "isSetLow": "boolean",
-        "getLow": "java.util.List",
-        "isSetHigh": "boolean",
-        "getHigh": "java.util.List"
+        "high": "java.util.List",
+        "low": "java.util.List"
     },
     "org.citygml4j.model.gml.measures.Angle": {},
-    "org.citygml4j.model.gml.geometry.primitives.PointProperty": {
-        "getPoint": "org.citygml4j.model.gml.geometry.primitives.Point",
-        "isSetPoint": "boolean"
-    },
+    "org.citygml4j.model.gml.geometry.primitives.PointProperty": {"point": "org.citygml4j.model.gml.geometry.primitives.Point"},
     "org.citygml4j.model.gml.valueObjects.ValueObject": {
-        "isSetScalarValueList": "boolean",
-        "isSetValueExtent": "boolean",
-        "getValueExtent": "org.citygml4j.model.gml.valueObjects.ValueExtent",
-        "getCompositeValue": "org.citygml4j.model.gml.valueObjects.CompositeValue",
-        "getScalarValueList": "org.citygml4j.model.gml.valueObjects.ScalarValueList",
-        "isSetCompositeValue": "boolean",
-        "isSetScalarValue": "boolean",
-        "getScalarValue": "org.citygml4j.model.gml.valueObjects.ScalarValue"
+        "scalarValueList": "org.citygml4j.model.gml.valueObjects.ScalarValueList",
+        "valueExtent": "org.citygml4j.model.gml.valueObjects.ValueExtent",
+        "compositeValue": "org.citygml4j.model.gml.valueObjects.CompositeValue",
+        "scalarValue": "org.citygml4j.model.gml.valueObjects.ScalarValue"
     },
-    "org.citygml4j.model.gml.geometry.primitives.LinearRingProperty": {
-        "getLinearRing": "org.citygml4j.model.gml.geometry.primitives.LinearRing",
-        "isSetLinearRing": "boolean"
-    },
-    "org.citygml4j.model.gml.xlink.XLinkType": {"getValue": "java.lang.String"},
+    "org.citygml4j.model.gml.geometry.primitives.LinearRingProperty": {"linearRing": "org.citygml4j.model.gml.geometry.primitives.LinearRing"},
+    "org.citygml4j.model.gml.xlink.XLinkType": {"value": "java.lang.String"},
     "org.citygml4j.model.gml.geometry.primitives.OrientableCurve": {
-        "isSetOrientation": "boolean",
-        "getOrientation": "org.citygml4j.model.gml.geometry.primitives.Sign",
-        "getBaseCurve": "org.citygml4j.model.gml.geometry.primitives.CurveProperty",
-        "isSetBaseCurve": "boolean"
+        "orientation": "org.citygml4j.model.gml.geometry.primitives.Sign",
+        "baseCurve": "org.citygml4j.model.gml.geometry.primitives.CurveProperty"
     },
-    "org.citygml4j.model.gml.geometry.primitives.LineStringProperty": {
-        "getLineString": "org.citygml4j.model.gml.geometry.primitives.LineString",
-        "isSetLineString": "boolean"
-    },
+    "org.citygml4j.model.gml.geometry.primitives.LineStringProperty": {"lineString": "org.citygml4j.model.gml.geometry.primitives.LineString"},
     "org.citygml4j.model.gml.geometry.aggregates.MultiSolid": {
-        "isSetSolidMember": "boolean",
-        "getSolidMember": "java.util.List",
-        "isSetSolidMembers": "boolean",
-        "getSolidMembers": "org.citygml4j.model.gml.geometry.primitives.SolidArrayProperty"
+        "solidMember": "java.util.List",
+        "solidMembers": "org.citygml4j.model.gml.geometry.primitives.SolidArrayProperty"
     },
     "org.citygml4j.model.gml.feature.LocationProperty": {
-        "isSetNull": "boolean",
-        "isSetLocationString": "boolean",
-        "isSetLocationKeyWord": "boolean",
-        "getLocationString": "org.citygml4j.model.gml.base.StringOrRef",
-        "getLocationKeyWord": "org.citygml4j.model.gml.basicTypes.Code",
-        "getNull": "org.citygml4j.model.gml.basicTypes.Null"
+        "null": "org.citygml4j.model.gml.basicTypes.Null",
+        "locationKeyWord": "org.citygml4j.model.gml.basicTypes.Code",
+        "locationString": "org.citygml4j.model.gml.base.StringOrRef"
     },
     "org.citygml4j.model.gml.geometry.aggregates.MultiPoint": {
-        "getPointMembers": "org.citygml4j.model.gml.geometry.primitives.PointArrayProperty",
-        "isSetPointMember": "boolean",
-        "isSetPointMembers": "boolean",
-        "getPointMember": "java.util.List"
+        "pointMembers": "org.citygml4j.model.gml.geometry.primitives.PointArrayProperty",
+        "pointMember": "java.util.List"
     },
     "org.citygml4j.model.gml.valueObjects.CompositeValue": {
-        "isSetValueComponents": "boolean",
-        "getValueComponents": "org.citygml4j.model.gml.valueObjects.ValueArrayProperty",
-        "getValueComponent": "java.util.List",
-        "isSetValueComponent": "boolean"
+        "valueComponents": "org.citygml4j.model.gml.valueObjects.ValueArrayProperty",
+        "valueComponent": "java.util.List"
     },
     "org.citygml4j.model.gml.base.AbstractGML": {
-        "getName": "java.util.List",
-        "isSetMetaDataProperty": "boolean",
-        "getMetaDataProperty": "java.util.List",
-        "isSetDescription": "boolean",
-        "getId": "java.lang.String",
-        "getDescription": "org.citygml4j.model.gml.base.StringOrRef",
-        "isSetName": "boolean",
-        "isSetId": "boolean"
+        "metaDataProperty": "java.util.List",
+        "name": "java.util.List",
+        "description": "org.citygml4j.model.gml.base.StringOrRef",
+        "id": "java.lang.String"
     },
     "org.citygml4j.model.gml.geometry.primitives.Rectangle": {
-        "isSetExterior": "boolean",
-        "getExterior": "org.citygml4j.model.gml.geometry.primitives.AbstractRingProperty",
-        "getInterpolation": "org.citygml4j.model.gml.geometry.primitives.SurfaceInterpolation"
+        "interpolation": "org.citygml4j.model.gml.geometry.primitives.SurfaceInterpolation",
+        "exterior": "org.citygml4j.model.gml.geometry.primitives.AbstractRingProperty"
     },
     "org.citygml4j.model.gml.coverage.AbstractCoverage": {
-        "isSetRangeSet": "boolean",
-        "isSetDimension": "boolean",
-        "getRangeSet": "org.citygml4j.model.gml.coverage.RangeSet",
-        "getDimension": "java.lang.Integer"
+        "rangeSet": "org.citygml4j.model.gml.coverage.RangeSet",
+        "dimension": "java.lang.Integer"
     },
     "org.citygml4j.model.gml.geometry.primitives.PosOrPointPropertyOrPointRepOrCoord": {
-        "getPointProperty": "org.citygml4j.model.gml.geometry.primitives.PointProperty",
-        "getPointRep": "org.citygml4j.model.gml.geometry.primitives.PointRep",
-        "isSetPointProperty": "boolean",
-        "isSetPos": "boolean",
-        "getPos": "org.citygml4j.model.gml.geometry.primitives.DirectPosition",
-        "isSetCoord": "boolean",
-        "isSetPointRep": "boolean",
-        "getCoord": "org.citygml4j.model.gml.geometry.primitives.Coord"
+        "coord": "org.citygml4j.model.gml.geometry.primitives.Coord",
+        "pointProperty": "org.citygml4j.model.gml.geometry.primitives.PointProperty",
+        "pointRep": "org.citygml4j.model.gml.geometry.primitives.PointRep",
+        "pos": "org.citygml4j.model.gml.geometry.primitives.DirectPosition"
     },
-    "org.citygml4j.model.gml.geometry.InlineGeometryProperty": {
-        "isSetGeometry": "boolean",
-        "getGeometry": "org.citygml4j.model.gml.geometry.AbstractGeometry"
-    },
+    "org.citygml4j.model.gml.geometry.InlineGeometryProperty": {"geometry": "org.citygml4j.model.gml.geometry.AbstractGeometry"},
     "org.citygml4j.model.gml.geometry.aggregates.AbstractGeometricAggregate": {},
-    "org.citygml4j.model.gml.geometry.primitives.SurfaceArrayProperty": {
-        "getSurface": "java.util.List",
-        "isSetSurface": "boolean"
-    },
-    "org.citygml4j.model.gml.geometry.primitives.Ring": {
-        "getCurveMember": "java.util.List",
-        "isSetCurveMember": "boolean"
-    },
+    "org.citygml4j.model.gml.geometry.primitives.SurfaceArrayProperty": {"surface": "java.util.List"},
+    "org.citygml4j.model.gml.geometry.primitives.Ring": {"curveMember": "java.util.List"},
     "org.citygml4j.model.gml.valueObjects.CountExtent": {},
-    "org.citygml4j.model.gml.geometry.aggregates.MultiSolidProperty": {
-        "getMultiSolid": "org.citygml4j.model.gml.geometry.aggregates.MultiSolid",
-        "isSetMultiSolid": "boolean"
-    },
+    "org.citygml4j.model.gml.geometry.aggregates.MultiSolidProperty": {"multiSolid": "org.citygml4j.model.gml.geometry.aggregates.MultiSolid"},
     "org.citygml4j.model.gml.geometry.primitives.AbstractSurfacePatch": {},
     "org.citygml4j.model.gml.base.MetaDataProperty": {
-        "isSetMetaData": "boolean",
-        "getAbout": "java.lang.String",
-        "getMetaData": "org.citygml4j.model.gml.base.MetaData",
-        "isSetAbout": "boolean"
+        "metaData": "org.citygml4j.model.gml.base.MetaData",
+        "about": "java.lang.String"
     },
-    "org.citygml4j.model.gml.basicTypes.IntegerOrNullList": {
-        "isSetIntegerOrNull": "boolean",
-        "getIntegerOrNull": "java.util.List"
-    },
+    "org.citygml4j.model.gml.basicTypes.IntegerOrNullList": {"integerOrNull": "java.util.List"},
     "org.citygml4j.model.gml.valueObjects.Value": {
-        "isSetNull": "boolean",
-        "isSetValueObject": "boolean",
-        "isSetGeometry": "boolean",
-        "isSetGenericValueObject": "boolean",
-        "getGeometry": "org.citygml4j.model.gml.geometry.AbstractGeometry",
-        "getValueObject": "org.citygml4j.model.gml.valueObjects.ValueObject",
-        "getNull": "org.citygml4j.model.gml.basicTypes.Null",
-        "getGenericValueObject": "org.citygml4j.model.gml.valueObjects.GenericValueObject"
+        "valueObject": "org.citygml4j.model.gml.valueObjects.ValueObject",
+        "null": "org.citygml4j.model.gml.basicTypes.Null",
+        "geometry": "org.citygml4j.model.gml.geometry.AbstractGeometry",
+        "genericValueObject": "org.citygml4j.model.gml.valueObjects.GenericValueObject"
     },
     "org.citygml4j.model.gml.geometry.primitives.ControlPoint": {
-        "isSetGeometricPositionGroup": "boolean",
-        "getPosList": "org.citygml4j.model.gml.geometry.primitives.DirectPositionList",
-        "isSetPosList": "boolean",
-        "getGeometricPositionGroup": "java.util.List"
+        "geometricPositionGroup": "java.util.List",
+        "posList": "org.citygml4j.model.gml.geometry.primitives.DirectPositionList"
     },
     "org.citygml4j.model.gml.valueObjects.ValueExtent": {
-        "isSetCategoryExtent": "boolean",
-        "isSetQuantityExtent": "boolean",
-        "getCategoryExtent": "org.citygml4j.model.gml.valueObjects.CategoryExtent",
-        "getCountExtent": "org.citygml4j.model.gml.valueObjects.CountExtent",
-        "isSetCountExtent": "boolean",
-        "getQuantityExtent": "org.citygml4j.model.gml.valueObjects.QuantityExtent"
+        "countExtent": "org.citygml4j.model.gml.valueObjects.CountExtent",
+        "quantityExtent": "org.citygml4j.model.gml.valueObjects.QuantityExtent",
+        "categoryExtent": "org.citygml4j.model.gml.valueObjects.CategoryExtent"
     },
-    "org.citygml4j.model.gml.geometry.primitives.PolygonPatchArrayProperty": {
-        "isSetPolygonPatch": "boolean",
-        "getPolygonPatch": "java.util.List"
-    },
+    "org.citygml4j.model.gml.geometry.primitives.PolygonPatchArrayProperty": {"polygonPatch": "java.util.List"},
     "org.citygml4j.model.gml.geometry.primitives.Tin": {
-        "getStopLines": "java.util.List",
-        "getMaxLength": "org.citygml4j.model.gml.measures.Length",
-        "isSetControlPoint": "boolean",
-        "isSetMaxLength": "boolean",
-        "getBreakLines": "java.util.List",
-        "getControlPoint": "org.citygml4j.model.gml.geometry.primitives.ControlPoint",
-        "isSetStopLines": "boolean",
-        "isSetBreakLines": "boolean"
+        "breakLines": "java.util.List",
+        "stopLines": "java.util.List",
+        "controlPoint": "org.citygml4j.model.gml.geometry.primitives.ControlPoint",
+        "maxLength": "org.citygml4j.model.gml.measures.Length"
     },
-    "org.citygml4j.model.gml.geometry.GeometryProperty": {
-        "isSetGeometry": "boolean",
-        "getGeometry": "org.citygml4j.model.gml.geometry.AbstractGeometry"
-    },
-    "org.citygml4j.model.gml.geometry.complexes.CompositeCurveProperty": {
-        "isSetCompositeCurve": "boolean",
-        "getCompositeCurve": "org.citygml4j.model.gml.geometry.complexes.CompositeCurve"
-    },
+    "org.citygml4j.model.gml.geometry.GeometryProperty": {"geometry": "org.citygml4j.model.gml.geometry.AbstractGeometry"},
+    "org.citygml4j.model.gml.geometry.complexes.CompositeCurveProperty": {"compositeCurve": "org.citygml4j.model.gml.geometry.complexes.CompositeCurve"},
     "org.citygml4j.model.gml.geometry.primitives.Polygon": {
-        "isSetExterior": "boolean",
-        "getExterior": "org.citygml4j.model.gml.geometry.primitives.AbstractRingProperty",
-        "isSetInterior": "boolean",
-        "getInterior": "java.util.List"
+        "exterior": "org.citygml4j.model.gml.geometry.primitives.AbstractRingProperty",
+        "interior": "java.util.List"
     },
     "org.citygml4j.model.gml.valueObjects.ValueArray": {
-        "isSetUom": "boolean",
-        "getUom": "java.lang.String",
-        "getCodeSpace": "java.lang.String",
-        "isSetCodeSpace": "boolean"
+        "uom": "java.lang.String",
+        "codeSpace": "java.lang.String"
     },
     "org.citygml4j.model.gml.coverage.CoverageFunction": {
-        "getMappingRule": "org.citygml4j.model.gml.base.StringOrRef",
-        "isSetGridFunction": "boolean",
-        "isSetMappingRule": "boolean",
-        "getGridFunction": "org.citygml4j.model.gml.coverage.GridFunction"
+        "mappingRule": "org.citygml4j.model.gml.base.StringOrRef",
+        "gridFunction": "org.citygml4j.model.gml.coverage.GridFunction"
     },
-    "org.citygml4j.model.gml.xlink.XLinkShow": {"getValue": "java.lang.String"},
-    "org.citygml4j.model.gml.basicTypes.BooleanOrNullList": {
-        "getBooleanOrNull": "java.util.List",
-        "isSetBooleanOrNull": "boolean"
-    },
-    "org.citygml4j.model.gml.geometry.aggregates.MultiPointProperty": {
-        "isSetMultiPoint": "boolean",
-        "getMultiPoint": "org.citygml4j.model.gml.geometry.aggregates.MultiPoint"
-    },
-    "org.citygml4j.model.gml.geometry.complexes.GeometricComplex": {
-        "getElement": "java.util.List",
-        "isSetElement": "boolean"
-    },
+    "org.citygml4j.model.gml.xlink.XLinkShow": {"value": "java.lang.String"},
+    "org.citygml4j.model.gml.basicTypes.BooleanOrNullList": {"booleanOrNull": "java.util.List"},
+    "org.citygml4j.model.gml.geometry.aggregates.MultiPointProperty": {"multiPoint": "org.citygml4j.model.gml.geometry.aggregates.MultiPoint"},
+    "org.citygml4j.model.gml.geometry.complexes.GeometricComplex": {"element": "java.util.List"},
     "org.citygml4j.model.gml.measures.Volume": {},
     "org.citygml4j.model.gml.geometry.primitives.AbstractCurveSegment": {
-        "isSetNumDerivativeInterior": "boolean",
-        "isSetNumDerivativesAtStart": "boolean",
-        "isSetNumDerivativesAtEnd": "boolean",
-        "getNumDerivativeInterior": "java.lang.Integer",
-        "getNumDerivativesAtEnd": "java.lang.Integer",
-        "getNumDerivativesAtStart": "java.lang.Integer"
+        "numDerivativesAtEnd": "java.lang.Integer",
+        "numDerivativeInterior": "java.lang.Integer",
+        "numDerivativesAtStart": "java.lang.Integer"
     },
-    "org.citygml4j.model.gml.geometry.primitives.CurveInterpolation": {"getValue": "java.lang.String"},
-    "org.citygml4j.model.gml.coverage.AbstractDiscreteCoverage": {
-        "isSetCoverageFunction": "boolean",
-        "getCoverageFunction": "org.citygml4j.model.gml.coverage.CoverageFunction"
-    },
-    "org.citygml4j.model.gml.geometry.primitives.SurfaceProperty": {
-        "getSurface": "org.citygml4j.model.gml.geometry.primitives.AbstractSurface",
-        "isSetSurface": "boolean"
-    },
-    "org.citygml4j.model.gml.feature.PriorityLocationProperty": {
-        "isSetPriority": "boolean",
-        "getPriority": "java.lang.String"
-    },
+    "org.citygml4j.model.gml.geometry.primitives.CurveInterpolation": {"value": "java.lang.String"},
+    "org.citygml4j.model.gml.coverage.AbstractDiscreteCoverage": {"coverageFunction": "org.citygml4j.model.gml.coverage.CoverageFunction"},
+    "org.citygml4j.model.gml.geometry.primitives.SurfaceProperty": {"surface": "org.citygml4j.model.gml.geometry.primitives.AbstractSurface"},
+    "org.citygml4j.model.gml.feature.PriorityLocationProperty": {"priority": "java.lang.String"},
     "org.citygml4j.model.gml.basicTypes.CodeOrNullList": {
-        "getCodeSpace": "java.lang.String",
-        "getNameOrNull": "java.util.List",
-        "isSetCodeSpace": "boolean",
-        "isSetNameOrNull": "boolean"
+        "nameOrNull": "java.util.List",
+        "codeSpace": "java.lang.String"
     },
-    "org.citygml4j.model.gml.basicTypes.MeasureOrNullList": {
-        "isSetUom": "boolean",
-        "getUom": "java.lang.String"
-    },
-    "org.citygml4j.model.gml.coverage.SequenceRuleNames": {"getValue": "java.lang.String"},
-    "org.citygml4j.model.gml.geometry.GeometryArrayProperty": {
-        "isSetGeometry": "boolean",
-        "getGeometry": "java.util.List"
-    },
+    "org.citygml4j.model.gml.basicTypes.MeasureOrNullList": {"uom": "java.lang.String"},
+    "org.citygml4j.model.gml.coverage.SequenceRuleNames": {"value": "java.lang.String"},
+    "org.citygml4j.model.gml.geometry.GeometryArrayProperty": {"geometry": "java.util.List"},
     "org.citygml4j.model.gml.base.Reference": {
-        "getRemoteSchema": "java.lang.String",
-        "getHref": "java.lang.String",
-        "isSetArcrole": "boolean",
-        "getArcrole": "java.lang.String",
-        "getRole": "java.lang.String",
-        "getActuate": "org.citygml4j.model.gml.xlink.XLinkActuate",
-        "isSetRole": "boolean",
-        "isSetType": "boolean",
-        "isSetRemoteSchema": "boolean",
-        "getTitle": "java.lang.String",
-        "isSetShow": "boolean",
-        "getType": "org.citygml4j.model.gml.xlink.XLinkType",
-        "getShow": "org.citygml4j.model.gml.xlink.XLinkShow",
-        "isSetTitle": "boolean",
-        "isSetActuate": "boolean",
-        "isSetHref": "boolean"
+        "role": "java.lang.String",
+        "arcrole": "java.lang.String",
+        "show": "org.citygml4j.model.gml.xlink.XLinkShow",
+        "actuate": "org.citygml4j.model.gml.xlink.XLinkActuate",
+        "href": "java.lang.String",
+        "remoteSchema": "java.lang.String",
+        "title": "java.lang.String",
+        "type": "org.citygml4j.model.gml.xlink.XLinkType"
     },
     "org.citygml4j.model.gml.geometry.primitives.LinearRing": {
-        "getPosOrPointPropertyOrPointRep": "java.util.List",
-        "getPosList": "org.citygml4j.model.gml.geometry.primitives.DirectPositionList",
-        "isSetCoord": "boolean",
-        "isSetPosOrPointPropertyOrPointRep": "boolean",
-        "isSetCoordinates": "boolean",
-        "getCoord": "java.util.List",
-        "getCoordinates": "org.citygml4j.model.gml.basicTypes.Coordinates",
-        "isSetPosList": "boolean"
+        "coord": "java.util.List",
+        "posOrPointPropertyOrPointRep": "java.util.List",
+        "coordinates": "org.citygml4j.model.gml.basicTypes.Coordinates",
+        "posList": "org.citygml4j.model.gml.geometry.primitives.DirectPositionList"
     },
     "org.citygml4j.model.gml.geometry.primitives.Vector": {
-        "getSrsDimension": "java.lang.Integer",
-        "getUomLabels": "java.util.List",
-        "isSetAxisLabels": "boolean",
-        "getValue": "java.util.List",
-        "getSrsName": "java.lang.String",
-        "getAxisLabels": "java.util.List",
-        "isSetValue": "boolean",
-        "isSetSrsDimension": "boolean",
-        "isSetSrsName": "boolean",
-        "isSetUomLabels": "boolean"
+        "srsName": "java.lang.String",
+        "srsDimension": "java.lang.Integer",
+        "axisLabels": "java.util.List",
+        "uomLabels": "java.util.List",
+        "value": "java.util.List"
     },
-    "org.citygml4j.model.gml.basicTypes.DoubleOrNullList": {
-        "isSetDoubleOrNull": "boolean",
-        "getDoubleOrNull": "java.util.List"
-    },
+    "org.citygml4j.model.gml.basicTypes.DoubleOrNullList": {"doubleOrNull": "java.util.List"},
     "org.citygml4j.model.gml.basicTypes.Code": {
-        "getValue": "java.lang.String",
-        "getCodeSpace": "java.lang.String",
-        "isSetValue": "boolean",
-        "isSetCodeSpace": "boolean"
+        "value": "java.lang.String",
+        "codeSpace": "java.lang.String"
     },
-    "org.citygml4j.model.gml.valueObjects.ValueProperty": {
-        "getValue": "org.citygml4j.model.gml.valueObjects.Value",
-        "isSetValue": "boolean"
-    },
-    "org.citygml4j.model.gml.coverage.FileValueModel": {"getValue": "java.lang.String"},
-    "org.citygml4j.model.gml.geometry.primitives.PointArrayProperty": {
-        "getPoint": "java.util.List",
-        "isSetPoint": "boolean"
-    },
+    "org.citygml4j.model.gml.valueObjects.ValueProperty": {"value": "org.citygml4j.model.gml.valueObjects.Value"},
+    "org.citygml4j.model.gml.coverage.FileValueModel": {"value": "java.lang.String"},
+    "org.citygml4j.model.gml.geometry.primitives.PointArrayProperty": {"point": "java.util.List"},
     "org.citygml4j.model.gml.geometry.primitives.TriangulatedSurface": {
-        "isSetTrianglePatches": "boolean",
-        "getTrianglePatches": "org.citygml4j.model.gml.geometry.primitives.TrianglePatchArrayProperty",
-        "getPatches": "org.citygml4j.model.gml.geometry.primitives.TrianglePatchArrayProperty"
+        "trianglePatches": "org.citygml4j.model.gml.geometry.primitives.TrianglePatchArrayProperty",
+        "patches": "org.citygml4j.model.gml.geometry.primitives.TrianglePatchArrayProperty"
     },
     "org.citygml4j.model.gml.base.StringOrRef": {
-        "getRemoteSchema": "java.lang.String",
-        "getHref": "java.lang.String",
-        "isSetArcrole": "boolean",
-        "getArcrole": "java.lang.String",
-        "getRole": "java.lang.String",
-        "getActuate": "org.citygml4j.model.gml.xlink.XLinkActuate",
-        "isSetRole": "boolean",
-        "isSetType": "boolean",
-        "getValue": "java.lang.String",
-        "isSetRemoteSchema": "boolean",
-        "getTitle": "java.lang.String",
-        "isSetShow": "boolean",
-        "getType": "org.citygml4j.model.gml.xlink.XLinkType",
-        "isSetValue": "boolean",
-        "getShow": "org.citygml4j.model.gml.xlink.XLinkShow",
-        "isSetTitle": "boolean",
-        "isSetActuate": "boolean",
-        "isSetHref": "boolean"
+        "role": "java.lang.String",
+        "arcrole": "java.lang.String",
+        "show": "org.citygml4j.model.gml.xlink.XLinkShow",
+        "actuate": "org.citygml4j.model.gml.xlink.XLinkActuate",
+        "href": "java.lang.String",
+        "remoteSchema": "java.lang.String",
+        "title": "java.lang.String",
+        "type": "org.citygml4j.model.gml.xlink.XLinkType",
+        "value": "java.lang.String"
     },
     "org.citygml4j.model.gml.geometry.primitives.Exterior": {},
-    "org.citygml4j.model.gml.geometry.aggregates.MultiGeometryProperty": {
-        "getGeometricAggregate": "org.citygml4j.model.gml.geometry.aggregates.AbstractGeometricAggregate",
-        "isSetGeometricAggregate": "boolean"
-    },
-    "org.citygml4j.model.gml.geometry.primitives.SolidProperty": {
-        "getSolid": "org.citygml4j.model.gml.geometry.primitives.AbstractSolid",
-        "isSetSolid": "boolean"
-    },
+    "org.citygml4j.model.gml.geometry.aggregates.MultiGeometryProperty": {"geometricAggregate": "org.citygml4j.model.gml.geometry.aggregates.AbstractGeometricAggregate"},
+    "org.citygml4j.model.gml.geometry.primitives.SolidProperty": {"solid": "org.citygml4j.model.gml.geometry.primitives.AbstractSolid"},
     "org.citygml4j.model.gml.basicTypes.Measure": {
-        "getValue": "double",
-        "isSetUom": "boolean",
-        "getUom": "java.lang.String",
-        "isSetValue": "boolean"
+        "uom": "java.lang.String",
+        "value": "double"
     },
-    "org.citygml4j.model.gml.geometry.primitives.CurveSegmentArrayProperty": {
-        "isSetCurveSegment": "boolean",
-        "getCurveSegment": "java.util.List"
-    },
+    "org.citygml4j.model.gml.geometry.primitives.CurveSegmentArrayProperty": {"curveSegment": "java.util.List"},
     "org.citygml4j.model.gml.base.AssociationByRep": {},
     "org.citygml4j.model.gml.grids.Grid": {
-        "getLimits": "org.citygml4j.model.gml.grids.GridLimits",
-        "isSetDimension": "boolean",
-        "getDimension": "java.lang.Integer",
-        "getAxisName": "java.util.List",
-        "isSetAxisName": "boolean",
-        "isSetLimits": "boolean"
+        "axisName": "java.util.List",
+        "dimension": "java.lang.Integer",
+        "limits": "org.citygml4j.model.gml.grids.GridLimits"
     },
     "org.citygml4j.model.gml.coverage.GridFunction": {
-        "isSetSequenceRule": "boolean",
-        "getStartPoint": "java.util.List",
-        "getSequenceRule": "org.citygml4j.model.gml.coverage.SequenceRule",
-        "isSetStartPoint": "boolean"
+        "startPoint": "java.util.List",
+        "sequenceRule": "org.citygml4j.model.gml.coverage.SequenceRule"
     },
     "org.citygml4j.model.gml.geometry.primitives.PointRep": {},
-    "org.citygml4j.model.gml.geometry.primitives.PolygonProperty": {
-        "isSetPolygon": "boolean",
-        "getPolygon": "org.citygml4j.model.gml.geometry.primitives.Polygon"
-    },
+    "org.citygml4j.model.gml.geometry.primitives.PolygonProperty": {"polygon": "org.citygml4j.model.gml.geometry.primitives.Polygon"},
     "org.citygml4j.model.gml.geometry.primitives.AbstractSurface": {},
-    "org.citygml4j.model.gml.coverage.IncrementOrder": {"getValue": "java.lang.String"},
-    "org.citygml4j.model.gml.coverage.RangeParameters": {
-        "isSetValueObject": "boolean",
-        "getValueObject": "org.citygml4j.model.gml.valueObjects.ValueObject"
-    },
-    "org.citygml4j.model.gml.valueObjects.ValueArrayProperty": {
-        "getValue": "java.util.List",
-        "isSetValue": "boolean"
-    },
+    "org.citygml4j.model.gml.coverage.IncrementOrder": {"value": "java.lang.String"},
+    "org.citygml4j.model.gml.coverage.RangeParameters": {"valueObject": "org.citygml4j.model.gml.valueObjects.ValueObject"},
+    "org.citygml4j.model.gml.valueObjects.ValueArrayProperty": {"value": "java.util.List"},
     "org.citygml4j.model.gml.feature.FeatureProperty": {
-        "isSetFeature": "boolean",
-        "getGenericADEElement": "org.citygml4j.model.citygml.ade.generic.ADEGenericElement",
-        "isSetGenericADEElement": "boolean",
-        "getFeature": "org.citygml4j.model.gml.feature.AbstractFeature"
+        "genericADEElement": "org.citygml4j.model.citygml.ade.generic.ADEGenericElement",
+        "feature": "org.citygml4j.model.gml.feature.AbstractFeature"
     },
-    "org.citygml4j.model.gml.geometry.complexes.CompositeCurve": {
-        "getCurveMember": "java.util.List",
-        "isSetCurveMember": "boolean"
-    },
-    "org.citygml4j.model.gml.geometry.aggregates.MultiLineStringProperty": {
-        "isSetMultiLineString": "boolean",
-        "getMultiLineString": "org.citygml4j.model.gml.geometry.aggregates.MultiLineString"
-    },
+    "org.citygml4j.model.gml.geometry.complexes.CompositeCurve": {"curveMember": "java.util.List"},
+    "org.citygml4j.model.gml.geometry.aggregates.MultiLineStringProperty": {"multiLineString": "org.citygml4j.model.gml.geometry.aggregates.MultiLineString"},
     "org.citygml4j.model.gml.measures.Speed": {},
     "org.citygml4j.model.gml.measures.Scale": {},
-    "org.citygml4j.model.gml.geometry.complexes.CompositeSurface": {
-        "getSurfaceMember": "java.util.List",
-        "isSetSurfaceMember": "boolean"
-    },
+    "org.citygml4j.model.gml.geometry.complexes.CompositeSurface": {"surfaceMember": "java.util.List"},
     "org.citygml4j.model.gml.valueObjects.QuantityExtent": {},
-    "org.citygml4j.model.gml.geometry.primitives.CurveProperty": {
-        "isSetCurve": "boolean",
-        "getCurve": "org.citygml4j.model.gml.geometry.primitives.AbstractCurve"
-    },
+    "org.citygml4j.model.gml.geometry.primitives.CurveProperty": {"curve": "org.citygml4j.model.gml.geometry.primitives.AbstractCurve"},
     "org.citygml4j.model.gml.grids.RectifiedGrid": {
-        "getOrigin": "org.citygml4j.model.gml.geometry.primitives.PointProperty",
-        "isSetOrigin": "boolean",
-        "getOffsetVector": "java.util.List",
-        "isSetOffsetVector": "boolean"
+        "origin": "org.citygml4j.model.gml.geometry.primitives.PointProperty",
+        "offsetVector": "java.util.List"
     },
-    "org.citygml4j.model.gml.geometry.primitives.SurfaceInterpolation": {"getValue": "java.lang.String"},
-    "org.citygml4j.model.gml.geometry.primitives.SurfacePatchArrayProperty": {
-        "isSetSurfacePatch": "boolean",
-        "getSurfacePatch": "java.util.List"
-    },
+    "org.citygml4j.model.gml.geometry.primitives.SurfaceInterpolation": {"value": "java.lang.String"},
+    "org.citygml4j.model.gml.geometry.primitives.SurfacePatchArrayProperty": {"surfacePatch": "java.util.List"},
     "org.citygml4j.model.gml.geometry.primitives.InnerBoundaryIs": {},
     "org.citygml4j.model.gml.basicTypes.IntegerOrNull": {
-        "isSetNull": "boolean",
-        "isSetInteger": "boolean",
-        "getInteger": "java.lang.Integer",
-        "getNull": "org.citygml4j.model.gml.basicTypes.Null"
+        "null": "org.citygml4j.model.gml.basicTypes.Null",
+        "integer": "java.lang.Integer"
     },
     "org.citygml4j.model.gml.coverage.DataBlock": {
-        "getTupleList": "org.citygml4j.model.gml.basicTypes.Coordinates",
-        "getRangeParameters": "org.citygml4j.model.gml.coverage.RangeParameters",
-        "isSetTupleList": "boolean",
-        "getDoubleOrNullTupleList": "org.citygml4j.model.gml.basicTypes.DoubleOrNullList",
-        "isSetDoubleOrNullTupleList": "boolean",
-        "isSetRangeParameters": "boolean"
+        "tupleList": "org.citygml4j.model.gml.basicTypes.Coordinates",
+        "doubleOrNullTupleList": "org.citygml4j.model.gml.basicTypes.DoubleOrNullList",
+        "rangeParameters": "org.citygml4j.model.gml.coverage.RangeParameters"
     },
     "org.citygml4j.model.gml.basicTypes.Coordinates": {
-        "getDecimal": "java.lang.String",
-        "getValue": "java.lang.String",
-        "isSetCs": "boolean",
-        "isSetValue": "boolean",
-        "isSetTs": "boolean",
-        "getCs": "java.lang.String",
-        "getTs": "java.lang.String",
-        "isSetDecimal": "boolean"
+        "cs": "java.lang.String",
+        "decimal": "java.lang.String",
+        "value": "java.lang.String",
+        "ts": "java.lang.String"
     },
     "org.citygml4j.model.gml.measures.Time": {},
     "org.citygml4j.model.gml.geometry.primitives.Coord": {
-        "getX": "java.lang.Double",
-        "getY": "java.lang.Double",
-        "getZ": "java.lang.Double",
-        "isSetX": "boolean",
-        "isSetY": "boolean",
-        "isSetZ": "boolean"
+        "x": "java.lang.Double",
+        "y": "java.lang.Double",
+        "z": "java.lang.Double"
     },
-    "org.citygml4j.model.gml.geometry.aggregates.MultiSurfaceProperty": {
-        "isSetMultiSurface": "boolean",
-        "getMultiSurface": "org.citygml4j.model.gml.geometry.aggregates.MultiSurface"
-    },
+    "org.citygml4j.model.gml.geometry.aggregates.MultiSurfaceProperty": {"multiSurface": "org.citygml4j.model.gml.geometry.aggregates.MultiSurface"},
     "org.citygml4j.model.gml.geometry.AbstractGeometry": {
-        "isSetAxisLabels": "boolean",
-        "getSrsName": "java.lang.String",
-        "getAxisLabels": "java.util.List",
-        "getGid": "java.lang.String",
-        "isSetGid": "boolean",
-        "getSrsDimension": "java.lang.Integer",
-        "isSetSrsDimension": "boolean",
-        "isSetSrsName": "boolean",
-        "isSetUomLabels": "boolean",
-        "getUomLabels": "java.util.List"
+        "srsName": "java.lang.String",
+        "srsDimension": "java.lang.Integer",
+        "gid": "java.lang.String",
+        "axisLabels": "java.util.List",
+        "uomLabels": "java.util.List"
     },
     "org.citygml4j.model.gml.geometry.primitives.LineString": {
-        "getPosList": "org.citygml4j.model.gml.geometry.primitives.DirectPositionList",
-        "isSetPosOrPointPropertyOrPointRepOrCoord": "boolean",
-        "getPosOrPointPropertyOrPointRepOrCoord": "java.util.List",
-        "isSetCoordinates": "boolean",
-        "getCoordinates": "org.citygml4j.model.gml.basicTypes.Coordinates",
-        "isSetPosList": "boolean"
+        "posOrPointPropertyOrPointRepOrCoord": "java.util.List",
+        "coordinates": "org.citygml4j.model.gml.basicTypes.Coordinates",
+        "posList": "org.citygml4j.model.gml.geometry.primitives.DirectPositionList"
     },
-    "org.citygml4j.model.gml.geometry.primitives.Sign": {"getValue": "java.lang.String"},
-    "org.citygml4j.model.gml.geometry.primitives.Curve": {
-        "isSetSegments": "boolean",
-        "getSegments": "org.citygml4j.model.gml.geometry.primitives.CurveSegmentArrayProperty"
-    },
+    "org.citygml4j.model.gml.geometry.primitives.Sign": {"value": "java.lang.String"},
+    "org.citygml4j.model.gml.geometry.primitives.Curve": {"segments": "org.citygml4j.model.gml.geometry.primitives.CurveSegmentArrayProperty"},
     "org.citygml4j.model.gml.geometry.primitives.PosOrPointPropertyOrPointRep": {
-        "getPointProperty": "org.citygml4j.model.gml.geometry.primitives.PointProperty",
-        "getPointRep": "org.citygml4j.model.gml.geometry.primitives.PointRep",
-        "isSetPointProperty": "boolean",
-        "isSetPos": "boolean",
-        "getPos": "org.citygml4j.model.gml.geometry.primitives.DirectPosition",
-        "isSetPointRep": "boolean"
+        "pointProperty": "org.citygml4j.model.gml.geometry.primitives.PointProperty",
+        "pointRep": "org.citygml4j.model.gml.geometry.primitives.PointRep",
+        "pos": "org.citygml4j.model.gml.geometry.primitives.DirectPosition"
     },
     "org.citygml4j.model.gml.geometry.SRSReferenceGroup": {
-        "getSrsName": "java.lang.String",
-        "getInheritedSrsName": "java.lang.String",
-        "getSrsDimension": "java.lang.Integer",
-        "isSetSrsDimension": "boolean",
-        "isSetSrsName": "boolean"
+        "srsName": "java.lang.String",
+        "srsDimension": "java.lang.Integer",
+        "inheritedSrsName": "java.lang.String"
     },
-    "org.citygml4j.model.gml.geometry.complexes.CompositeSolidProperty": {
-        "isSetCompositeSolid": "boolean",
-        "getCompositeSolid": "org.citygml4j.model.gml.geometry.complexes.CompositeSolid"
-    },
+    "org.citygml4j.model.gml.geometry.complexes.CompositeSolidProperty": {"compositeSolid": "org.citygml4j.model.gml.geometry.complexes.CompositeSolid"},
     "org.citygml4j.model.gml.feature.AbstractFeatureCollection": {
-        "getFeatureMember": "java.util.List",
-        "getFeatureMembers": "org.citygml4j.model.gml.feature.FeatureArrayProperty",
-        "isSetFeatureMember": "boolean",
-        "isSetFeatureMembers": "boolean"
+        "featureMember": "java.util.List",
+        "featureMembers": "org.citygml4j.model.gml.feature.FeatureArrayProperty"
     },
     "org.citygml4j.model.gml.feature.BoundingShape": {
-        "isSetNull": "boolean",
-        "isSetEnvelope": "boolean",
-        "isEmpty": "boolean",
-        "getEnvelope": "org.citygml4j.model.gml.geometry.primitives.Envelope",
-        "getNull": "org.citygml4j.model.gml.basicTypes.Null"
+        "envelope": "org.citygml4j.model.gml.geometry.primitives.Envelope",
+        "null": "org.citygml4j.model.gml.basicTypes.Null",
+        "mpty": "boolean"
     },
-    "org.citygml4j.model.citygml.texturedsurface._TexturedSurface": {
-        "isSetAppearance": "boolean",
-        "getAppearance": "java.util.List"
-    },
-    "org.citygml4j.model.gml.geometry.primitives.Surface": {
-        "isSetPatches": "boolean",
-        "getPatches": "org.citygml4j.model.gml.geometry.primitives.SurfacePatchArrayProperty"
-    },
-    "org.citygml4j.model.gml.basicTypes.Null": {
-        "getValue": "java.lang.String",
-        "isSetValue": "boolean"
-    },
+    "org.citygml4j.model.citygml.texturedsurface._TexturedSurface": {"appearance": "java.util.List"},
+    "org.citygml4j.model.gml.geometry.primitives.Surface": {"patches": "org.citygml4j.model.gml.geometry.primitives.SurfacePatchArrayProperty"},
+    "org.citygml4j.model.gml.basicTypes.Null": {"value": "java.lang.String"},
     "org.citygml4j.model.gml.valueObjects.GenericValueObject": {
-        "isSetContent": "boolean",
-        "getPrefix": "java.lang.String",
-        "getLocalName": "java.lang.String",
-        "getContent": "org.w3c.dom.Element",
-        "getNamespaceURI": "java.lang.String"
+        "localName": "java.lang.String",
+        "prefix": "java.lang.String",
+        "namespaceURI": "java.lang.String",
+        "content": "org.w3c.dom.Element"
     },
     "org.citygml4j.model.gml.geometry.aggregates.MultiCurve": {
-        "isSetCurveMembers": "boolean",
-        "getCurveMembers": "org.citygml4j.model.gml.geometry.primitives.CurveArrayProperty",
-        "getCurveMember": "java.util.List",
-        "isSetCurveMember": "boolean"
+        "curveMember": "java.util.List",
+        "curveMembers": "org.citygml4j.model.gml.geometry.primitives.CurveArrayProperty"
     },
     "org.citygml4j.model.gml.geometry.primitives.AbstractCurve": {},
-    "org.citygml4j.model.gml.coverage.IndexMap": {
-        "isSetLookUpTable": "boolean",
-        "getLookUpTable": "java.util.List"
-    },
-    "org.citygml4j.model.gml.geometry.primitives.TrianglePatchArrayProperty": {
-        "isSetTriangle": "boolean",
-        "getTriangle": "java.util.List"
-    },
+    "org.citygml4j.model.gml.coverage.IndexMap": {"lookUpTable": "java.util.List"},
+    "org.citygml4j.model.gml.geometry.primitives.TrianglePatchArrayProperty": {"triangle": "java.util.List"},
     "org.citygml4j.model.gml.feature.AbstractFeature": {
-        "isSetModule": "boolean",
-        "getLocation": "org.citygml4j.model.gml.feature.LocationProperty",
-        "getGenericADEElement": "java.util.List",
-        "getSpatialRepresentation": "org.citygml4j.model.gml.feature.SpatialRepresentation",
-        "isSetGenericADEElement": "boolean",
-        "isSetLocation": "boolean",
-        "getBoundedBy": "org.citygml4j.model.gml.feature.BoundingShape",
-        "isSetBoundedBy": "boolean"
+        "genericADEElement": "java.util.List",
+        "boundedBy": "org.citygml4j.model.gml.feature.BoundingShape",
+        "spatialRepresentation": "org.citygml4j.model.gml.feature.SpatialRepresentation",
+        "location": "org.citygml4j.model.gml.feature.LocationProperty"
     },
     "org.citygml4j.model.gml.geometry.aggregates.MultiGeometry": {
-        "getGeometryMember": "java.util.List",
-        "isSetGeometryMember": "boolean",
-        "isSetGeometryMembers": "boolean",
-        "getGeometryMembers": "org.citygml4j.model.gml.geometry.GeometryArrayProperty"
+        "geometryMember": "java.util.List",
+        "geometryMembers": "org.citygml4j.model.gml.geometry.GeometryArrayProperty"
     },
     "org.citygml4j.model.gml.geometry.aggregates.MultiSurface": {
-        "isSetSurfaceMembers": "boolean",
-        "getSurfaceMember": "java.util.List",
-        "isSetSurfaceMember": "boolean",
-        "getSurfaceMembers": "org.citygml4j.model.gml.geometry.primitives.SurfaceArrayProperty"
+        "surfaceMember": "java.util.List",
+        "surfaceMembers": "org.citygml4j.model.gml.geometry.primitives.SurfaceArrayProperty"
     },
-    "org.citygml4j.model.gml.coverage.RectifiedGridCoverage": {
-        "getRectifiedGridDomain": "org.citygml4j.model.gml.coverage.RectifiedGridDomain",
-        "isSetRectifiedGridDomain": "boolean"
-    },
+    "org.citygml4j.model.gml.coverage.RectifiedGridCoverage": {"rectifiedGridDomain": "org.citygml4j.model.gml.coverage.RectifiedGridDomain"},
     "org.citygml4j.model.gml.coverage.DomainSet": {},
     "org.citygml4j.model.gml.geometry.primitives.OuterBoundaryIs": {},
     "org.citygml4j.model.gml.geometry.primitives.PolygonPatch": {
-        "isSetExterior": "boolean",
-        "getExterior": "org.citygml4j.model.gml.geometry.primitives.AbstractRingProperty",
-        "getInterpolation": "org.citygml4j.model.gml.geometry.primitives.SurfaceInterpolation",
-        "isSetInterior": "boolean",
-        "getInterior": "java.util.List"
+        "interpolation": "org.citygml4j.model.gml.geometry.primitives.SurfaceInterpolation",
+        "exterior": "org.citygml4j.model.gml.geometry.primitives.AbstractRingProperty",
+        "interior": "java.util.List"
     }
 }

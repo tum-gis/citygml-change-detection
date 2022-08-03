@@ -24,7 +24,7 @@ public class IndexFactory {
     private final static Logger logger = LoggerFactory.getLogger(IndexFactory.class);
 
     // Indexing hrefs
-    private final static String hrefProperty = "getHref";
+    private final static String hrefProperty = "href";
     private final static String[] hrefIndexNames = {
             "index_href_assoc",
             "index_href_string"
@@ -32,7 +32,7 @@ public class IndexFactory {
     private final static Label idNodeLabel = Label.label(AbstractGML.class.getName());
 
     // Indexing ids
-    private final static String idProperty = "getId";
+    private final static String idProperty = "id";
     private final static String idIndexName = "index_id";
     private final static Label[] hrefNodeLabels = {
             Label.label(AssociationByRepOrRef.class.getName()),
@@ -73,7 +73,7 @@ public class IndexFactory {
     public static void setHrefId(Transaction tx, String propertyName, Object propertyValue, boolean isOld, Node node) {
         String stringValue = "";
         if ((propertyName.equals(hrefProperty)) && (propertyValue.toString().charAt(0) != '#')) {
-            logger.warn("Element getHref = {} without prefix '#' detected, this shall be corrected automatically", propertyValue);
+            logger.warn("Element {} = {} without prefix '#' detected, this shall be corrected automatically", propertyName, propertyValue);
             stringValue = "#" + propertyValue;
         }
 
@@ -238,12 +238,13 @@ public class IndexFactory {
             // Init an R-Tree layer for each dataset
             SpatialDatabaseService spatialDb = new SpatialDatabaseService(
                     new IndexManager((GraphDatabaseAPI) graphDb, SecurityContext.AUTH_DISABLED));
-            EditableLayer buildingLayer = spatialDb.getOrCreateEditableLayer(tx,
+            EditableLayer rtreeLayer = spatialDb.getOrCreateEditableLayer(tx,
                     (isOld ? rtreeLayerOld : rtreeLayerNew));
             // Set config to this layer
             Map<String, Object> config = new HashMap<>();
             config.put(RTreeIndex.KEY_MAX_NODE_REFERENCES, Project.conf.getRtree().getNodeRef());
-            buildingLayer.getIndex().configure(config);
+            rtreeLayer.getIndex().configure(config);
+            // TODO Add bbox to layer
             tx.commit();
             logger.info("Initiated RTree layers");
         }

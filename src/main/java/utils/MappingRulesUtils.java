@@ -22,14 +22,12 @@ import java.util.Arrays;
 
 public class MappingRulesUtils {
     private static final String[] excluded = {
-            "getAssociableClass",
-            "getCityGMLClass",
-            "getGMLClass",
-            "getModule",
-            "getObject",
-            "isSetObject",
-            "getParent",
-            "isSetParent"
+            "associableClass",
+            "cityGMLClass",
+            "gMLClass",
+            "module",
+            "object",
+            "parent"
     };
 
     // Export all accessible attribute names and methods to JSON
@@ -85,8 +83,11 @@ public class MappingRulesUtils {
                 Method getter = propertyDescriptor.getReadMethod();
                 // Only consider classes where attributes are directly declared
                 if (getter != null && getter.getDeclaringClass().equals(modelClass)) {
+                    if (!Project.conf.getMapper().getIsSet() && getter.getName().startsWith("isSet")) {
+                        continue;
+                    }
                     Class<?> type = getter.getReturnType();
-                    tmp.put(getter.getName(), type.getName());
+                    tmp.put(getAttributeName(getter.getName()), type.getName());
                 }
             }
             for (String exclude : excluded) {
@@ -94,9 +95,15 @@ public class MappingRulesUtils {
                     tmp.remove(exclude);
                 }
             }
-            jsonObject.put(Project.conf.getMapper().getFullName() ? modelClass.getName()
+            jsonObject.put(Project.conf.getMapper().getFullClassName() ? modelClass.getName()
                     : modelClass.getSimpleName(), tmp);
         }
+    }
+
+    // getAttributeOne -> attributeOne
+    public static String getAttributeName(String getter) {
+        int index = "get".length();
+        return getter.substring(index, index + 1).toLowerCase() + getter.substring(index + 1);
     }
 
     public static boolean isExcluded(String getter) {
