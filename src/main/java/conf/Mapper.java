@@ -15,7 +15,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonPropertyOrder({
     "oldFile",
     "newFile",
-    "fullName",
+    "fullClassName",
+    "isSet",
     "rules"
 })
 @Generated("jsonschema2pojo")
@@ -25,8 +26,10 @@ public class Mapper {
     private String oldFile;
     @JsonProperty("newFile")
     private String newFile;
-    @JsonProperty("fullName")
-    private Boolean fullName;
+    @JsonProperty("fullClassName")
+    private Boolean fullClassName;
+    @JsonProperty("isSet")
+    private Boolean isSet;
     @JsonProperty("rules")
     private Rules rules;
     @JsonIgnore
@@ -62,18 +65,33 @@ public class Mapper {
         return this;
     }
 
-    @JsonProperty("fullName")
-    public Boolean getFullName() {
-        return fullName;
+    @JsonProperty("fullClassName")
+    public Boolean getFullClassName() {
+        return fullClassName;
     }
 
-    @JsonProperty("fullName")
-    public void setFullName(Boolean fullName) {
-        this.fullName = fullName;
+    @JsonProperty("fullClassName")
+    public void setFullClassName(Boolean fullClassName) {
+        this.fullClassName = fullClassName;
     }
 
-    public Mapper withFullName(Boolean fullName) {
-        this.fullName = fullName;
+    public Mapper withFullClassName(Boolean fullClassName) {
+        this.fullClassName = fullClassName;
+        return this;
+    }
+
+    @JsonProperty("isSet")
+    public Boolean getIsSet() {
+        return isSet;
+    }
+
+    @JsonProperty("isSet")
+    public void setIsSet(Boolean isSet) {
+        this.isSet = isSet;
+    }
+
+    public Mapper withIsSet(Boolean isSet) {
+        this.isSet = isSet;
         return this;
     }
 
@@ -119,9 +137,13 @@ public class Mapper {
         sb.append('=');
         sb.append(((this.newFile == null)?"<null>":this.newFile));
         sb.append(',');
-        sb.append("fullName");
+        sb.append("fullClassName");
         sb.append('=');
-        sb.append(((this.fullName == null)?"<null>":this.fullName));
+        sb.append(((this.fullClassName == null)?"<null>":this.fullClassName));
+        sb.append(',');
+        sb.append("isSet");
+        sb.append('=');
+        sb.append(((this.isSet == null)?"<null>":this.isSet));
         sb.append(',');
         sb.append("rules");
         sb.append('=');
@@ -142,9 +164,10 @@ public class Mapper {
     @Override
     public int hashCode() {
         int result = 1;
-        result = ((result* 31)+((this.newFile == null)? 0 :this.newFile.hashCode()));
-        result = ((result* 31)+((this.fullName == null)? 0 :this.fullName.hashCode()));
         result = ((result* 31)+((this.oldFile == null)? 0 :this.oldFile.hashCode()));
+        result = ((result* 31)+((this.fullClassName == null)? 0 :this.fullClassName.hashCode()));
+        result = ((result* 31)+((this.isSet == null)? 0 :this.isSet.hashCode()));
+        result = ((result* 31)+((this.newFile == null)? 0 :this.newFile.hashCode()));
         result = ((result* 31)+((this.rules == null)? 0 :this.rules.hashCode()));
         result = ((result* 31)+((this.additionalProperties == null)? 0 :this.additionalProperties.hashCode()));
         return result;
@@ -159,7 +182,7 @@ public class Mapper {
             return false;
         }
         Mapper rhs = ((Mapper) other);
-        return ((((((this.newFile == rhs.newFile)||((this.newFile!= null)&&this.newFile.equals(rhs.newFile)))&&((this.fullName == rhs.fullName)||((this.fullName!= null)&&this.fullName.equals(rhs.fullName))))&&((this.oldFile == rhs.oldFile)||((this.oldFile!= null)&&this.oldFile.equals(rhs.oldFile))))&&((this.rules == rhs.rules)||((this.rules!= null)&&this.rules.equals(rhs.rules))))&&((this.additionalProperties == rhs.additionalProperties)||((this.additionalProperties!= null)&&this.additionalProperties.equals(rhs.additionalProperties))));
+        return (((((((this.oldFile == rhs.oldFile)||((this.oldFile!= null)&&this.oldFile.equals(rhs.oldFile)))&&((this.fullClassName == rhs.fullClassName)||((this.fullClassName!= null)&&this.fullClassName.equals(rhs.fullClassName))))&&((this.isSet == rhs.isSet)||((this.isSet!= null)&&this.isSet.equals(rhs.isSet))))&&((this.newFile == rhs.newFile)||((this.newFile!= null)&&this.newFile.equals(rhs.newFile))))&&((this.rules == rhs.rules)||((this.rules!= null)&&this.rules.equals(rhs.rules))))&&((this.additionalProperties == rhs.additionalProperties)||((this.additionalProperties!= null)&&this.additionalProperties.equals(rhs.additionalProperties))));
     }
 
 }

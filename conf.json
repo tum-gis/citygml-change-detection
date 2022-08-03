@@ -35,7 +35,8 @@
   "mapper": {
     "oldFile": "input/building_xs_0.xml",
     "newFile": "input/building_xs_1.xml",
-    "fullName": true,
+    "fullClassName": true,
+    "isSet": false,
     "rules": {
       "citygml": "src/main/java/components/mapper/rules/citygml.json",
       "gml": "src/main/java/components/mapper/rules/gml.json",
