@@ -1,0 +1,11 @@
+{
+    "java.lang.Float": {"value": "java.lang.Float"},
+    "java.lang.Character": {"value": "java.lang.Character"},
+    "java.lang.Long": {"value": "java.lang.Long"},
+    "java.lang.Double": {"value": "java.lang.Double"},
+    "java.lang.Short": {"value": "java.lang.Short"},
+    "java.lang.Boolean": {"value": "java.lang.Boolean"},
+    "java.lang.String": {"value": "java.lang.String"},
+    "java.lang.Byte": {"value": "java.lang.Byte"},
+    "java.lang.Integer": {"value": "java.lang.Integer"}
+}

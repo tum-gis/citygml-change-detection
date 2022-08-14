@@ -31,11 +31,14 @@ public class MappingRulesUtils {
     };
 
     // Export all accessible attribute names and methods to JSON
-    public static <T> void classesToJson(String citygmlJson, String gmlJson, String xalJson)
-            throws IntrospectionException {
+    public static <T> void classesToJson(String citygmlJson, String gmlJson, String xalJson,
+                                         String printableJson, String genericAttributeJson)
+            throws IntrospectionException, NoSuchFieldException {
         write(citygmlJson(), citygmlJson);
         write(gmlJson(), gmlJson);
         write(xalJson(), xalJson);
+        write(printableJson(), printableJson);
+        write(genericAttributeJson(), genericAttributeJson);
     }
 
     private static void write(JSONObject json, String filename) {
@@ -75,7 +78,25 @@ public class MappingRulesUtils {
         return result;
     }
 
-    private static void fill(Class<?> modelClass, JSONObject jsonObject) throws IntrospectionException {
+    private static JSONObject printableJson() throws IntrospectionException {
+        JSONObject result = new JSONObject();
+        for (PrintableClass ele : PrintableClass.values()) {
+            Class<?> modelClass = ele.getModelClass();
+            fillPrintable(modelClass, result);
+        }
+        return result;
+    }
+
+    private static JSONObject genericAttributeJson() throws IntrospectionException, NoSuchFieldException {
+        JSONObject result = new JSONObject();
+        for (GenericAttributeClass ele : GenericAttributeClass.values()) {
+            Class<?> modelClass = ele.getModelClass();
+            fillGenericAttribute(modelClass, result);
+        }
+        return result;
+    }
+
+    private static void fill(Class<?> modelClass, JSONObject jsonObject) {
         if (modelClass != null) {
             JSONObject tmp = new JSONObject();
             for (PropertyDescriptor propertyDescriptor
@@ -100,14 +121,24 @@ public class MappingRulesUtils {
         }
     }
 
-    // getAttributeOne -> attributeOne
-    public static String getAttributeName(String getter) {
-        int index = "get".length();
-        return getter.substring(index, index + 1).toLowerCase() + getter.substring(index + 1);
+    private static void fillPrintable(Class<?> modelClass, JSONObject jsonObject) {
+        if (modelClass != null) {
+            JSONObject tmp = new JSONObject();
+            tmp.put(PropertyNameFactory.value.toString(), modelClass.getName());
+            jsonObject.put(Project.conf.getMapper().getFullClassName() ? modelClass.getName()
+                    : modelClass.getSimpleName(), tmp);
+        }
     }
 
-    public static boolean isExcluded(String getter) {
-        return Arrays.stream(excluded).anyMatch(n -> n.equals(getter));
+    private static void fillGenericAttribute(Class<?> modelClass, JSONObject jsonObject) throws NoSuchFieldException {
+        if (modelClass != null) {
+            JSONObject tmp = new JSONObject();
+            tmp.put(PropertyNameFactory.name.toString(), String.class);
+            tmp.put(PropertyNameFactory.value.toString(),
+                    modelClass.getDeclaredField(PropertyNameFactory.value.toString()).getType());
+            jsonObject.put(Project.conf.getMapper().getFullClassName() ? modelClass.getName()
+                    : modelClass.getSimpleName(), tmp);
+        }
     }
 
     // Return a single JSON object merged from all JSON files
@@ -123,9 +154,10 @@ public class MappingRulesUtils {
         return merged;
     }
 
-    public static void main(String[] args) throws IntrospectionException, IOException {
+    public static void main(String[] args) throws IntrospectionException, IOException, NoSuchFieldException {
         Project.init("conf.json", "conf_info.json");
         Rules rules = Project.conf.getMapper().getRules();
-        classesToJson(rules.getCitygml(), rules.getGml(), rules.getXal());
+        classesToJson(rules.getCitygml(), rules.getGml(), rules.getXal(),
+                rules.getPrintable(), rules.getGeneric());
     }
 }

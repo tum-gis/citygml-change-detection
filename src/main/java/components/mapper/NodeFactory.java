@@ -29,7 +29,9 @@ public class NodeFactory {
         try {
             mappingRules = MappingRulesUtils.read(Project.conf.getMapper().getRules().getCitygml(),
                     Project.conf.getMapper().getRules().getGml(),
-                    Project.conf.getMapper().getRules().getXal());
+                    Project.conf.getMapper().getRules().getXal(),
+                    Project.conf.getMapper().getRules().getGeneric(),
+                    Project.conf.getMapper().getRules().getPrintable());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

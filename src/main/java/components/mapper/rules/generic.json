@@ -1,0 +1,26 @@
+{
+    "org.citygml4j.model.citygml.generics.DoubleAttribute": {
+        "name": "class java.lang.String",
+        "value": "class java.lang.Double"
+    },
+    "org.citygml4j.model.citygml.generics.IntAttribute": {
+        "name": "class java.lang.String",
+        "value": "class java.lang.Integer"
+    },
+    "org.citygml4j.model.citygml.generics.UriAttribute": {
+        "name": "class java.lang.String",
+        "value": "class java.lang.String"
+    },
+    "org.citygml4j.model.citygml.generics.MeasureAttribute": {
+        "name": "class java.lang.String",
+        "value": "class org.citygml4j.model.gml.basicTypes.Measure"
+    },
+    "org.citygml4j.model.citygml.generics.DateAttribute": {
+        "name": "class java.lang.String",
+        "value": "class java.time.LocalDate"
+    },
+    "org.citygml4j.model.citygml.generics.StringAttribute": {
+        "name": "class java.lang.String",
+        "value": "class java.lang.String"
+    }
+}

@@ -15,7 +15,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonPropertyOrder({
     "citygml",
     "gml",
-    "xal"
+    "xal",
+    "printable",
+    "generic"
 })
 @Generated("jsonschema2pojo")
 public class Rules {
@@ -26,6 +28,10 @@ public class Rules {
     private String gml;
     @JsonProperty("xal")
     private String xal;
+    @JsonProperty("printable")
+    private String printable;
+    @JsonProperty("generic")
+    private String generic;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new LinkedHashMap<String, Object>();
 
@@ -74,6 +80,36 @@ public class Rules {
         return this;
     }
 
+    @JsonProperty("printable")
+    public String getPrintable() {
+        return printable;
+    }
+
+    @JsonProperty("printable")
+    public void setPrintable(String printable) {
+        this.printable = printable;
+    }
+
+    public Rules withPrintable(String printable) {
+        this.printable = printable;
+        return this;
+    }
+
+    @JsonProperty("generic")
+    public String getGeneric() {
+        return generic;
+    }
+
+    @JsonProperty("generic")
+    public void setGeneric(String generic) {
+        this.generic = generic;
+    }
+
+    public Rules withGeneric(String generic) {
+        this.generic = generic;
+        return this;
+    }
+
     @JsonAnyGetter
     public Map<String, Object> getAdditionalProperties() {
         return this.additionalProperties;
@@ -105,6 +141,14 @@ public class Rules {
         sb.append('=');
         sb.append(((this.xal == null)?"<null>":this.xal));
         sb.append(',');
+        sb.append("printable");
+        sb.append('=');
+        sb.append(((this.printable == null)?"<null>":this.printable));
+        sb.append(',');
+        sb.append("generic");
+        sb.append('=');
+        sb.append(((this.generic == null)?"<null>":this.generic));
+        sb.append(',');
         sb.append("additionalProperties");
         sb.append('=');
         sb.append(((this.additionalProperties == null)?"<null>":this.additionalProperties));
@@ -121,9 +165,11 @@ public class Rules {
     public int hashCode() {
         int result = 1;
         result = ((result* 31)+((this.xal == null)? 0 :this.xal.hashCode()));
+        result = ((result* 31)+((this.gml == null)? 0 :this.gml.hashCode()));
         result = ((result* 31)+((this.citygml == null)? 0 :this.citygml.hashCode()));
         result = ((result* 31)+((this.additionalProperties == null)? 0 :this.additionalProperties.hashCode()));
-        result = ((result* 31)+((this.gml == null)? 0 :this.gml.hashCode()));
+        result = ((result* 31)+((this.printable == null)? 0 :this.printable.hashCode()));
+        result = ((result* 31)+((this.generic == null)? 0 :this.generic.hashCode()));
         return result;
     }
 
@@ -136,7 +182,7 @@ public class Rules {
             return false;
         }
         Rules rhs = ((Rules) other);
-        return (((((this.xal == rhs.xal)||((this.xal!= null)&&this.xal.equals(rhs.xal)))&&((this.citygml == rhs.citygml)||((this.citygml!= null)&&this.citygml.equals(rhs.citygml))))&&((this.additionalProperties == rhs.additionalProperties)||((this.additionalProperties!= null)&&this.additionalProperties.equals(rhs.additionalProperties))))&&((this.gml == rhs.gml)||((this.gml!= null)&&this.gml.equals(rhs.gml))));
+        return (((((((this.xal == rhs.xal)||((this.xal!= null)&&this.xal.equals(rhs.xal)))&&((this.gml == rhs.gml)||((this.gml!= null)&&this.gml.equals(rhs.gml))))&&((this.citygml == rhs.citygml)||((this.citygml!= null)&&this.citygml.equals(rhs.citygml))))&&((this.additionalProperties == rhs.additionalProperties)||((this.additionalProperties!= null)&&this.additionalProperties.equals(rhs.additionalProperties))))&&((this.printable == rhs.printable)||((this.printable!= null)&&this.printable.equals(rhs.printable))))&&((this.generic == rhs.generic)||((this.generic!= null)&&this.generic.equals(rhs.generic))));
     }
 
 }
