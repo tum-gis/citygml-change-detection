@@ -66,6 +66,9 @@ public class Mapper {
                 new QName[]{new QName(AbstractOpening.class.getName()), new QName(Address.class.getName())});
         in.setProperty(CityGMLInputFactory.KEEP_INLINE_APPEARANCE, true);
 
+        // Global indexing for both datasets
+        IndexFactory.initGlobalIndexing(graphDb);
+
         // Map old city model
         logger.info("Init mapping old dataset");
         mapCityModel(in, pathOld, RelationshipFactory.OLD_CITY_MODEL);
@@ -210,7 +213,8 @@ public class Mapper {
                         Node mapperRootNode = NodeFactory.getMapperRootNode(tx);
                         mapperRootNode.createRelationshipTo(node, RelationshipFactory.getCityModelRel(isOld));
                     }
-                } catch (UnmarshalException | MissingADESchemaException e) {
+                } catch (UnmarshalException | MissingADESchemaException | NoSuchMethodException |
+                         IllegalAccessException e) {
                     logger.error("Error while reading input datasets\n{}", e.getMessage());
                     throw new RuntimeException(e);
                 }
