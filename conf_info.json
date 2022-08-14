@@ -40,7 +40,9 @@
     "rules": {
       "citygml": "Mapping rules for CityGML classes",
       "gml": "Mapping rules for GML classes",
-      "xal": "Mapping rules for XAL classes"
+      "xal": "Mapping rules for XAL classes",
+      "printable": "Mapping rules for primitive, wrapper and string classes",
+      "generic": "Mapping rules for generic atrtibute classes"
     }
   },
   "matcher": {

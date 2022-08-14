@@ -40,7 +40,9 @@
     "rules": {
       "citygml": "src/main/java/components/mapper/rules/citygml.json",
       "gml": "src/main/java/components/mapper/rules/gml.json",
-      "xal": "src/main/java/components/mapper/rules/xal.json"
+      "xal": "src/main/java/components/mapper/rules/xal.json",
+      "printable": "src/main/java/components/mapper/rules/printable.json",
+      "generic": "src/main/java/components/mapper/rules/generic.json"
     }
   },
   "matcher": {
