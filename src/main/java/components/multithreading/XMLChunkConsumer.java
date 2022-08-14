@@ -96,7 +96,8 @@ public class XMLChunkConsumer implements Runnable {
                 }
 
                 tx.commit();
-            } catch (UnmarshalException | MissingADESchemaException e) {
+            } catch (UnmarshalException | MissingADESchemaException | NoSuchMethodException |
+                     IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
         }
