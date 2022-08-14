@@ -1,7 +1,11 @@
 package utils;
 
 import components.Project;
+import components.mapper.GenericAttributeClass;
+import components.mapper.PrintableClass;
+import components.mapper.PropertyNameFactory;
 import conf.Rules;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.citygml4j.model.citygml.CityGML;
 import org.citygml4j.model.citygml.CityGMLClass;
 import org.citygml4j.model.gml.GML;
@@ -11,24 +15,22 @@ import org.citygml4j.model.xal.XALClass;
 import org.json.JSONObject;
 
 import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Method;
+import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.List;
 
 public class MappingRulesUtils {
-    private static final String[] excluded = {
+    private static final List<String> excluded = Arrays.asList(
             "associableClass",
             "cityGMLClass",
             "gMLClass",
             "module",
-            "object",
             "parent"
-    };
+    );
 
     // Export all accessible attribute names and methods to JSON
     public static <T> void classesToJson(String citygmlJson, String gmlJson, String xalJson,
@@ -99,21 +101,12 @@ public class MappingRulesUtils {
     private static void fill(Class<?> modelClass, JSONObject jsonObject) {
         if (modelClass != null) {
             JSONObject tmp = new JSONObject();
-            for (PropertyDescriptor propertyDescriptor
-                    : Introspector.getBeanInfo(modelClass).getPropertyDescriptors()) {
-                Method getter = propertyDescriptor.getReadMethod();
+            for (Field field : FieldUtils.getAllFieldsList(modelClass)) {
                 // Only consider classes where attributes are directly declared
-                if (getter != null && getter.getDeclaringClass().equals(modelClass)) {
-                    if (!Project.conf.getMapper().getIsSet() && getter.getName().startsWith("isSet")) {
-                        continue;
+                if (field.getDeclaringClass().equals(modelClass)) {
+                    if (!excluded.contains(field.getName())) {
+                        tmp.put(field.getName(), field.getType());
                     }
-                    Class<?> type = getter.getReturnType();
-                    tmp.put(getAttributeName(getter.getName()), type.getName());
-                }
-            }
-            for (String exclude : excluded) {
-                if (tmp.has(exclude)) {
-                    tmp.remove(exclude);
                 }
             }
             jsonObject.put(Project.conf.getMapper().getFullClassName() ? modelClass.getName()
