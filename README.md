@@ -14,6 +14,8 @@ in arbitrarily large CityGML datasets.
 The tool is implemented in Java and employs the graph database Neo4j 
 as a central storage for the graph representations of CityGML datasets.
 
+**Note**: The current version supports only the building module in CityGML. Support for other types of top-level features (such as bridges, tunnels, etc.) will be published in the future releases.
+
 ### :whale2: HOW TO RUN USING DOCKER
 
 This tool is available as a [Docker Image](https://hub.docker.com/repository/docker/sonnguyentum/citygml-change-detection).
